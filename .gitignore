@@ -3,7 +3,6 @@
 /android/gen
 /android/.settings
 /android/bin
-/android/.DS_Store
-/android/res/.DS_Store
-/android/src/.DS_Store
-/.DS_Store
+.DS_Store
+.properties
+

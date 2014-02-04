@@ -1,8 +1,4 @@
-package com.sims.topaz.gui;
-
-import com.sims.topaz.R;
-import com.sims.topaz.R.layout;
-import com.sims.topaz.R.menu;
+package com.sims.topaz;
 
 import android.os.Bundle;
 import android.app.Activity;

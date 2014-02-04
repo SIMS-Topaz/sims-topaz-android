@@ -1,10 +1,11 @@
 package com.sims.topaz;
-
+import com.google.android.gms.maps.GoogleMap;
 import android.os.Bundle;
 import android.app.Activity;
 
 public class MainActivity extends Activity {
 
+	private GoogleMap mMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

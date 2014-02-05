@@ -20,7 +20,7 @@
 	        android:choiceMode="singleChoice"
 	        android:divider="@android:color/transparent"
 	        android:dividerHeight="0dp"
-	        android:background="@color/white"/>
+	        android:background="@color/light_gray"/>
 	</android.support.v4.widget.DrawerLayout>
 
 </RelativeLayout>

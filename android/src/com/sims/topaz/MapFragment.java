@@ -26,14 +26,18 @@ public class MapFragment extends Fragment{
         	
 			mView = inflater.inflate(R.layout.fragment_map, container, false);
 	        //set map and location 
-	        mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-	        mMap.setMyLocationEnabled(true);
+			setMapIfNeeded();
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
         return mView;
 
-
+    }
+    
+    private void setMapIfNeeded(){
+    	mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+        if(mMap != null)
+        	mMap.setMyLocationEnabled(true);
     }
 
 }

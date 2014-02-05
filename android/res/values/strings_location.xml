@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- User interface labels and strings -->
+
+    <!-- Address format -->
+    <string name="address_output_string">%1$s %2$s %3$s</string>
+
+    <!-- Latitude, longitude format -->
+    <string name="latitude_longitude">%1$.8f, %2$.8f</string>
+
+
+    <!-- Labels -->
+    <string name="latlng">Lat/Long:</string>
+    <string name="address">Adresse:</string>
+
+    <!-- Messages -->
+    <string name="connected">Client connecté</string>
+    <string name="connection_error_code_unknown">Erreur de connection pas connue:  %1$d</string>
+    <string name="connection_failed">Erreur de connection</string>
+    <string name="disconnected">Client déconecté</string>
+    <string name="get_address">Obtenir l\'adresse</string>
+    <string name="get_location">Obtenir la location</string>
+    <string name="illegal_argument_exception">
+        Arguments erronées: Latitude %1$.8f Longitude %2$.8f
+    </string>
+    <string name="invalid_action">L\'action de l\'intent est erronée %1$s</string>
+    <string name="invalid_integer_id">L\'ID de la démande est erroné: %1$s</string>
+    <string name="IO_Exception_getFromLocation">IO Exception en Geocoder.getFromLocation()</string>
+    <string name="location_requested">Updates périodiques démandés</string>
+    <string name="location_updated">La location a été updaté</string>
+    <string name="location_update_error">Erreur de update de location</string>
+    <string name="location_update_error_detail">
+        Erreur de update de location. code %1$d message %2$s
+    </string>
+    <string name="location_update_missing_update">
+        Erreur de update de location. Pas de location.
+    </string>
+    <string name="location_updates_stopped">Les updates périodiques démandés sont arreté</string>
+    <string name="log_new_location">Nouvelle location: %1$s</string>
+    <string name="no_address_found">Pas d\'adresse de location trouvée</string>
+    <string name="no_connection">No connection: Cannot request location</string>
+    
+    <string name="no_geocoder_available">Cannot get address. No geocoder available.</string>
+    <string name="no_location_available">Location not available</string>
+    <string name="resolved">Error resolved. Please re-try operation.</string>
+    <string name="no_resolution">Google Play services: unable to resolve connection error.</string>
+    <string name="periodic_update_stop">Stopping periodic updates</string>
+    <string name="play_services_available">Google Play services is available</string>
+    <string name="request_location_updates_in_progress">
+        Can\'t request location updates, previous request hasn\'t finished
+    </string>
+    <string name="start_updates">Start Updates</string>
+    <string name="stop_updates">Stop Updates</string>
+    <string name="unknown">--Unknown--</string>
+    <string name="unknown_activity_request_code">
+        Received an unknown activity request code %1$d in onActivityResult.
+    </string>
+</resources>
+   

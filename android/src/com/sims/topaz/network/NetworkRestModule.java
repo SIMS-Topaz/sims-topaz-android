@@ -26,13 +26,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
-public class Module {
+public class NetworkRestModule {
 	
 	public static final String SERVER_URL = "http://topaz1.apiary.io/";
 	
 	private NetworkDelegate delegate;
 	
-	public Module(NetworkDelegate delegate) {
+	public NetworkRestModule(NetworkDelegate delegate) {
 		this.delegate = delegate;
 	}
 	
@@ -56,6 +56,7 @@ public class Module {
 					Message message = mapper.readValue(response, Message.class);
 					delegate.displayMessage(message);
 				} catch (Exception e) {
+					delegate.networkError();
 					e.printStackTrace();
 				}
 				
@@ -65,6 +66,7 @@ public class Module {
 					List<Preview> list = mapper.readValue(response, new TypeReference<List<Preview>>(){});
 					delegate.displayPreviews(list);
 				} catch (Exception e) {
+					delegate.networkError();
 					e.printStackTrace();
 				}
 				break;	
@@ -99,10 +101,10 @@ public class Module {
 			params.add(new BasicNameValuePair(name, value));
 	    }
 		
-		private Module module;
+		private NetworkRestModule module;
 		private String url;
 		private TypeRequest typeRequest;
-		public RESTTask(Module module, String url, TypeRequest typeRequest) {
+		public RESTTask(NetworkRestModule module, String url, TypeRequest typeRequest) {
 			this.module = module;
 			this.url = url;
 			this.typeRequest = typeRequest;

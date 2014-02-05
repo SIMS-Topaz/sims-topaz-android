@@ -9,5 +9,6 @@ public interface NetworkDelegate {
 
 	public void displayMessage(Message message);
 	public void displayPreviews(List<Preview> list);
+	public void networkError();
 	
 }

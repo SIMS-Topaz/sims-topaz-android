@@ -9,8 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MapFragment extends Fragment {
-	//I extend FragmentActivity and not Activity in order to have Support MapFragment
+public class MapFragment extends Fragment{
 	private GoogleMap mMap;
     private static View mView;
     @Override
@@ -25,7 +24,7 @@ public class MapFragment extends Fragment {
 		}
         try {
         	
-			mView = inflater.inflate(R.layout.activity_map, container, false);
+			mView = inflater.inflate(R.layout.fragment_map, container, false);
 	        //set map and location 
 	        mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 	        mMap.setMyLocationEnabled(true);
@@ -36,9 +35,5 @@ public class MapFragment extends Fragment {
 
 
     }
-    
- 
-
-    
 
 }

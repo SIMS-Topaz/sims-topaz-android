@@ -1,4 +1,7 @@
 package com.sims.topaz;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -11,7 +14,13 @@ import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.sims.topaz.network.NetworkDelegate;
+import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.modele.Message;
+import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.LocationUtils;
 
 import android.content.Intent;
@@ -31,7 +40,8 @@ implements OnMapLongClickListener,
 LocationListener,
 GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
-OnCameraChangeListener{
+OnCameraChangeListener,
+NetworkDelegate{
 	
 	private GoogleMap mMap;
     private static View mView;
@@ -39,6 +49,10 @@ OnCameraChangeListener{
     private LocationRequest mLocationRequest;
     // Stores the current instantiation of the location client in this object
     private LocationClient mLocationClient;
+    
+    private List<Marker> mDisplayedMarkers;
+    private NetworkRestModule mNetworkModule;
+    
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +73,9 @@ OnCameraChangeListener{
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
+        
+        mDisplayedMarkers = new ArrayList<Marker>();
+        mNetworkModule = new NetworkRestModule(this);
         return mView;
 
     }
@@ -86,15 +103,15 @@ OnCameraChangeListener{
     
 	@Override
 	public void onMapLongClick(LatLng point) {
-		// TODO Auto-generated method stub
-		Toast.makeText(getActivity().getApplicationContext(), "LOL", Toast.LENGTH_SHORT).show();
 		getFragmentManager().beginTransaction().replace(R.id.map, 
 				new EditMessageFragment()).commit();
 	}
 
 	@Override
 	public void onConnectionFailed(ConnectionResult arg0) {
-		// TODO Auto-generated method stub
+		Toast.makeText(getActivity()
+				, getResources().getString(R.string.connection_error_code)
+				,Toast.LENGTH_SHORT).show();
 		
 	}
 
@@ -113,15 +130,11 @@ OnCameraChangeListener{
 	}
 
 	@Override
-	public void onLocationChanged(Location arg0) {
-		// TODO call to find ou the new pins positions
-		
+	public void onLocationChanged(Location location) {
+		mNetworkModule.initGetPreviews(location.getLatitude(),location.getLongitude());
+
 	}
 	
-    /*
-     * Called when the Activity is no longer visible at all.
-     * Stop updates and disconnect.
-     */
     @Override
     public void onStop() {
 
@@ -135,42 +148,24 @@ OnCameraChangeListener{
         }
         super.onStop();
     }
-    /*
-     * Called when the Activity is going into the background.
-     * Parts of the UI may be visible, but the Activity is inactive.
-     */
+
     @Override
     public void onPause() {
         super.onPause();
     }
-    /*
-     * Called when the Activity is restarted, even before it becomes visible.
-     */
+
     @Override
     public void onStart() {
         super.onStart();
-        /*
-         * Connect the client. Don't re-start any requests here;
-         * instead, wait for onResume()
-         */
         if(mLocationClient!=null)
         	mLocationClient.connect();
     }
-    /*
-     * Called when the system detects that this Activity is now visible.
-     */
+
     @Override
     public void onResume() {
         super.onResume();
     }
 
-    /*
-     * Handle results returned to this Activity by other Activities started with
-     * startActivityForResult(). In particular, the method onConnectionFailed() in
-     * LocationUpdateRemover and LocationUpdateRequester may call startResolutionForResult() to
-     * start an Activity that handles Google Play services problems. The result of this
-     * call returns here, to onActivityResult.
-     */
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         // Choose what to do based on the request code
@@ -188,24 +183,52 @@ OnCameraChangeListener{
         }
     }
     
-    /**
-     * In response to a request to start updates, send a request
-     * to Location Services
-     */
     private void startPeriodicUpdates() {
         mLocationClient.requestLocationUpdates(mLocationRequest, this);
     }
-    /**
-     * In response to a request to stop updates, send a request to
-     * Location Services
-     */
+
     private void stopPeriodicUpdates() {
         mLocationClient.removeLocationUpdates(this);
     }
 
 	@Override
-	public void onCameraChange(CameraPosition arg0) {
-		// TODO call to find ou the new pins positions
+	public void onCameraChange(CameraPosition camera) {
+		mNetworkModule.initGetPreviews(camera.target.latitude,
+										camera.target.longitude);
+		
+	}
+
+	@Override
+	public void displayMessage(Message message) {
+		Marker m = mMap.addMarker(new MarkerOptions()
+		                          .position(new LatLng(message.getLatitude(),
+		                        		  message.getLongitude()))
+		                          .rotation((float) 90.0)
+		                          .anchor((float) 0.5, (float) 0.5)
+		                          .title(String.valueOf(message.getTimestamp()))
+		                          .snippet(message.getText()));
+		mDisplayedMarkers.add(m);
+	}
+
+	@Override
+	public void displayPreviews(List<Preview> list) {
+		for(Preview p:list){
+			Marker m = mMap.addMarker(new MarkerOptions()
+								        .position(new LatLng(p.getLatitude(),
+								      		  p.getLongitude()))
+								        .rotation((float) 90.0)
+								        .anchor((float) 0.5, (float) 0.5)
+								        .title(String.valueOf(p.getTimestamp()))
+								        .snippet(p.getText()));
+			mDisplayedMarkers.add(m);
+		}	
+	}
+
+	@Override
+	public void networkError() {
+		Toast.makeText(getActivity(),
+				getResources().getString(R.string.network_error),
+				Toast.LENGTH_SHORT).show();
 		
 	}
     

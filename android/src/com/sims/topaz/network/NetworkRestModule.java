@@ -82,6 +82,8 @@ public class NetworkRestModule {
 		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE
 	}
 	
+	
+	
 	class RESTTask extends AsyncTask<String, Integer, String> {
 
 		private static final String LOG_TAG = "RESTTask";
@@ -104,6 +106,8 @@ public class NetworkRestModule {
 		private NetworkRestModule module;
 		private String url;
 		private TypeRequest typeRequest;
+		
+		
 		public RESTTask(NetworkRestModule module, String url, TypeRequest typeRequest) {
 			this.module = module;
 			this.url = url;

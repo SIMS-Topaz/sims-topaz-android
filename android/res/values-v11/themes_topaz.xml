@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="Topaz" parent="@style/_Topaz"/>
+
+  <style name="_Topaz" parent="android:Theme.Holo.Light">
+
+    <item name="android:editTextBackground">@drawable/topaz_edit_text_holo_light</item>
+
+    <item name="android:textColorHighlight">#99ff8800</item>
+    <item name="android:textSelectHandleLeft">@drawable/topaz_text_select_handle_left</item>
+    <item name="android:textSelectHandleRight">@drawable/topaz_text_select_handle_right</item>
+    <item name="android:textSelectHandle">@drawable/topaz_text_select_handle_middle</item>
+
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewTopaz</item>
+
+    <item name="android:listChoiceIndicatorMultiple">@drawable/topaz_btn_check_holo_light</item>
+
+    <item name="android:listChoiceIndicatorSingle">@drawable/topaz_btn_radio_holo_light</item>
+
+    <item name="android:buttonStyle">@style/ButtonTopaz</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonTopaz</item>
+
+    <item name="android:dropDownSpinnerStyle">@style/SpinnerTopaz</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarTopaz</item>
+
+    <item name="android:seekBarStyle">@style/SeekBarTopaz</item>
+
+    <item name="android:ratingBarStyle">@style/RatingBarTopaz</item>
+
+    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigTopaz</item>
+
+    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallTopaz</item>
+
+    <item name="android:buttonStyleToggle">@style/ToggleTopaz</item>
+
+    <item name="android:listChoiceBackgroundIndicator">@drawable/topaz_list_selector_holo_light</item>
+
+    <item name="android:activatedBackgroundIndicator">@drawable/topaz_activated_background_holo_light</item>
+
+    <item name="android:fastScrollThumbDrawable">@drawable/topaz_fastscroll_thumb_holo</item>
+
+  </style>
+
+</resources>

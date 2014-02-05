@@ -13,6 +13,7 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+
 public class MapFragment extends Fragment implements OnMapLongClickListener {
 	//I extend FragmentActivity and not Activity in order to have Support MapFragment
 	private GoogleMap mMap;
@@ -29,7 +30,7 @@ public class MapFragment extends Fragment implements OnMapLongClickListener {
 		}
         try {
         	
-			mView = inflater.inflate(R.layout.activity_map, container, false);
+			mView = inflater.inflate(R.layout.fragment_map, container, false);
 	        //set map and location 
 	        mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 	        if(mMap!=null) {
@@ -43,6 +44,7 @@ public class MapFragment extends Fragment implements OnMapLongClickListener {
 
 
     }
+    
 	@Override
 	public void onMapLongClick(LatLng point) {
 		// TODO Auto-generated method stub
@@ -50,11 +52,6 @@ public class MapFragment extends Fragment implements OnMapLongClickListener {
 		getFragmentManager().beginTransaction().replace(R.id.map, 
 				new EditMessageFragment()).commit();
 	}
-    
-    
-    
- 
-
     
 
 }

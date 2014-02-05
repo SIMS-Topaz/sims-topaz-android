@@ -1,5 +1,7 @@
 package com.sims.topaz;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import android.os.Bundle;
@@ -7,9 +9,11 @@ import android.support.v4.app.Fragment;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMapLongClickListener {
 	//I extend FragmentActivity and not Activity in order to have Support MapFragment
 	private GoogleMap mMap;
     private static View mView;
@@ -28,7 +32,10 @@ public class MapFragment extends Fragment {
 			mView = inflater.inflate(R.layout.activity_map, container, false);
 	        //set map and location 
 	        mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-	        mMap.setMyLocationEnabled(true);
+	        if(mMap!=null) {
+	        	mMap.setMyLocationEnabled(true);	
+	        	mMap.setOnMapLongClickListener(this);
+	        }
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
@@ -36,6 +43,15 @@ public class MapFragment extends Fragment {
 
 
     }
+	@Override
+	public void onMapLongClick(LatLng point) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getActivity().getApplicationContext(), "LOL", Toast.LENGTH_SHORT).show();
+		getFragmentManager().beginTransaction().replace(R.id.map, 
+				new EditMessageFragment()).commit();
+	}
+    
+    
     
  
 

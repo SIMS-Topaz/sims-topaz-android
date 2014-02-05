@@ -30,9 +30,21 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         
+        <!--  Alina 
         <meta-data
 	    android:name="com.google.android.maps.v2.API_KEY"
 	    android:value="AIzaSyBa0RIEneZIxNjK1Ul0SC2W70nNAhNOPMs"/>
+        -->
+        
+        <!--  Jean-Baptiste -->
+        <meta-data
+	    android:name="com.google.android.maps.v2.API_KEY"
+	    android:value="AIzaSyDMf9eJ6y2gKtzelyypLwepjVyxQiqJXTY"/>
+        
+        
+        <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" />
  
         <activity
             android:name="com.sims.topaz.DrawerActivity"

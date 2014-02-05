@@ -94,7 +94,7 @@ public class DrawerActivity extends FragmentActivity{
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            selectItem(0);
+           selectItem(0);
         }
     }
     
@@ -108,8 +108,6 @@ public class DrawerActivity extends FragmentActivity{
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -134,12 +132,28 @@ public class DrawerActivity extends FragmentActivity{
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void selectItem(int position) {
-        // update the main content by replacing fragments
     	FragmentManager fragmentManager = getSupportFragmentManager();
-		fragmentManager
-		.beginTransaction()
-		.replace(R.id.content_frame, new MapFragment())
-		.commit();
+    	switch (position) {
+		case 0:
+			fragmentManager
+			.beginTransaction()
+			.replace(R.id.content_frame, new MapFragment())
+			.commit();			
+			break;
+		case 1:
+			fragmentManager
+			.beginTransaction()
+			.replace(R.id.content_frame, new SettingsFragment())
+			.commit();		
+		case 2:
+			fragmentManager
+			.beginTransaction()
+			.replace(R.id.content_frame, new AboutFragment())
+			.commit();	
+		default:
+			break;
+		}
+
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);

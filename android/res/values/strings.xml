@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- App -->
     <string name="app_name">Topaz</string>
+    <string name="todo">TODO</string>
+    <!-- Drawer -->
     <string name="action_settings">Paramètres</string>
     <string-array name="views_array">
-        <item>Zone géographique (à proximité)</item>
-        <item>Par contexte/thème (selon des mots clés)</item>
-        <item>Par abonnement à des flux ("suivre" des profils")</item>
+        <item>La carte</item>
+        <item>Paramètres</item>
+        <item>Au sujet de l\'equipe :D</item>
     </string-array>
     <string name="drawer_open">Ouvrir le navigation drawer</string>
     <string name="drawer_close">Fermer le navigation drawer</string>
     <string name="app_not_available">Le navigateur n\'est pas disponible.</string>
+    <!-- About -->
+    <string name="about_text">L\'equipe Topaz est géniale!:p\nAlina Gherman,\nBenjamin Bouchardon,\nHugo Muller,\nAlexandre Jablon,\nXiaoyu Feng,\nJean-Baptiste Ghoul</string>
+	<!-- Settings -->
 </resources>

@@ -4,8 +4,12 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.sims.topaz.utils.LocationUtils;
@@ -18,7 +22,6 @@ import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -27,7 +30,8 @@ public class MapFragment extends Fragment
 implements OnMapLongClickListener,
 LocationListener,
 GooglePlayServicesClient.ConnectionCallbacks,
-GooglePlayServicesClient.OnConnectionFailedListener{
+GooglePlayServicesClient.OnConnectionFailedListener,
+OnCameraChangeListener{
 	
 	private GoogleMap mMap;
     private static View mView;
@@ -64,6 +68,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
         if(mMap!=null) {
         	mMap.setMyLocationEnabled(true);	
         	mMap.setOnMapLongClickListener(this);
+        	mMap.setOnCameraChangeListener(this);
         }
         // Create a new global location parameters object
         mLocationRequest = LocationRequest.create();
@@ -95,8 +100,10 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		// TODO Auto-generated method stub
-		
+		Location location = mLocationClient.getLastLocation();
+	    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+	    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+	    mMap.animateCamera(cameraUpdate);	
 	}
 
 	@Override
@@ -107,7 +114,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 	@Override
 	public void onLocationChanged(Location arg0) {
-		// TODO Auto-generated method stub
+		// TODO call to find ou the new pins positions
 		
 	}
 	
@@ -136,7 +143,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
     public void onPause() {
         super.onPause();
     }
-
     /*
      * Called when the Activity is restarted, even before it becomes visible.
      */
@@ -149,7 +155,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
          */
         if(mLocationClient!=null)
         	mLocationClient.connect();
-
     }
     /*
      * Called when the system detects that this Activity is now visible.
@@ -197,6 +202,12 @@ GooglePlayServicesClient.OnConnectionFailedListener{
     private void stopPeriodicUpdates() {
         mLocationClient.removeLocationUpdates(this);
     }
+
+	@Override
+	public void onCameraChange(CameraPosition arg0) {
+		// TODO call to find ou the new pins positions
+		
+	}
     
 
 }

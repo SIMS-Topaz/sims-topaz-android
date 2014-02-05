@@ -174,4 +174,6 @@ public class DrawerActivity extends FragmentActivity{
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+    
+
 }

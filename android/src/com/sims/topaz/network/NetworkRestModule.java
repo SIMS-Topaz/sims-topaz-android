@@ -4,17 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -22,6 +20,7 @@ import org.apache.http.params.HttpParams;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sims.topaz.network.modele.Message;
@@ -37,14 +36,27 @@ public class NetworkRestModule {
 	}
 	
 	public void initGetMessage(Long id) {
-		RESTTask rest = new RESTTask(this, SERVER_URL + "get_message" + id, TypeRequest.GET_MESSAGE);
+		String url = SERVER_URL + "get_message/" + id;
+		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_MESSAGE);
 		rest.execute();
 	}
 	
 	public void initGetPreviews(Double latitude, Double longitude) {
-		RESTTask rest = new RESTTask(this, SERVER_URL + "get_previews", TypeRequest.GET_PREVIEW);
-		rest.addParam("latitude", latitude.toString());
-		rest.addParam("longitude", longitude.toString());
+		String url = SERVER_URL + "get_previews/" + latitude.toString() + "/" + longitude.toString();
+		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
+		rest.execute();
+	}
+	
+	public void postMessage(Message message) {
+		String url = SERVER_URL + "post_message";
+		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			rest.setJSONParam(mapper.writeValueAsString(message));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		rest.execute();
 	}
 	
@@ -54,7 +66,7 @@ public class NetworkRestModule {
 			case GET_MESSAGE:
 				try {
 					Message message = mapper.readValue(response, Message.class);
-					delegate.displayMessage(message);
+					delegate.afterGetMessage(message);
 				} catch (Exception e) {
 					delegate.networkError();
 					e.printStackTrace();
@@ -64,14 +76,20 @@ public class NetworkRestModule {
 			case GET_PREVIEW:
 				try {
 					List<Preview> list = mapper.readValue(response, new TypeReference<List<Preview>>(){});
-					delegate.displayPreviews(list);
+					delegate.afterGetPreviews(list);
 				} catch (Exception e) {
 					delegate.networkError();
 					e.printStackTrace();
 				}
 				break;	
 			case POST_MESSAGE:
-				
+				try {
+					Message message = mapper.readValue(response, Message.class);
+					delegate.afterPostMessage(message);
+				} catch (Exception e) {
+					delegate.networkError();
+					e.printStackTrace();
+				}	
 				break;
 			default:
 				break;
@@ -93,12 +111,15 @@ public class NetworkRestModule {
 		private static final int SOCKET_TIMEOUT = 5000;
 
 		private Boolean isPost = false;
+		
+		/*
+		 * JSON object for POST
+		 */
+		private String objectParam = "";
 
-		private ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-
-		public void addParam(String name, String value) {
+		public void setJSONParam(String object) {
 			isPost = true;
-			params.add(new BasicNameValuePair(name, value));
+			objectParam = object;
 	    }
 		
 		private NetworkRestModule module;
@@ -112,12 +133,11 @@ public class NetworkRestModule {
 		
 		@Override
 		protected void onPreExecute() {
-			// TODO init progress bar ...
+			// TODO handle pre action ?
 		}
 
 		@Override
 		protected void onPostExecute(String response) {
-			Log.d(LOG_TAG, "onPostExecute response=" + response);
 			module.handleResponse(typeRequest, response);
 		}
 
@@ -132,6 +152,7 @@ public class NetworkRestModule {
 			} else {
 				try {
 					result = inputStreamToString(response.getEntity().getContent());
+					Log.e(LOG_TAG, "doInBackground = " + result);
 				} catch (IllegalStateException e) {
 					Log.e(LOG_TAG, e.getLocalizedMessage(), e);
 
@@ -159,7 +180,8 @@ public class NetworkRestModule {
 			try {
 				if(isPost) {
 					HttpPost httppost = new HttpPost(url);
-					httppost.setEntity(new UrlEncodedFormEntity(params));
+					httppost.setEntity((HttpEntity) new StringEntity(objectParam, "UTF8"));
+					httppost.setHeader("Content-type", "application/json");
 					response = httpclient.execute(httppost);
 				} else {
 					HttpGet httpget = new HttpGet(url);

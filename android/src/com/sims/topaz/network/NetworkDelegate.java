@@ -7,8 +7,9 @@ import com.sims.topaz.network.modele.Preview;
 
 public interface NetworkDelegate {
 
-	public void displayMessage(Message message);
-	public void displayPreviews(List<Preview> list);
+	public void afterPostMessage(Message message);
+	public void afterGetMessage(Message message);
+	public void afterGetPreviews(List<Preview> list);
 	public void networkError();
 	
 }

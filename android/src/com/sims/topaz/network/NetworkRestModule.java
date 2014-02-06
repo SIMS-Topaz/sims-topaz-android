@@ -35,18 +35,34 @@ public class NetworkRestModule {
 		this.delegate = delegate;
 	}
 	
-	public void initGetMessage(Long id) {
+	/**
+	 * Envoi une requete get_message pour récupérer un message
+	 * La fin de la requête appelera afterGetMessage() (interface NetworkDelegate)
+	 * @param id : l'id du message
+	 */
+	public void getMessage(Long id) {
 		String url = SERVER_URL + "get_message/" + id;
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_MESSAGE);
 		rest.execute();
 	}
 	
-	public void initGetPreviews(Double latitude, Double longitude) {
+	/**
+	 * Envoi une requete get_previews pour récupérer les previews autour d'une zone
+	 * La fin de la requête appelera afterGetPreviews() (interface NetworkDelegate)
+	 * @param latitude : latitude de la zone
+	 * @param longitude : longitude de la zone
+	 */
+	public void getPreviews(Double latitude, Double longitude) {
 		String url = SERVER_URL + "get_previews/" + latitude.toString() + "/" + longitude.toString();
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
 		rest.execute();
 	}
 	
+	/**
+	 * Poste un message
+	 * La fin de la requête appelera afterPostMessage() (interface NetworkDelegate)
+	 * @param message le message à poster
+	 */
 	public void postMessage(Message message) {
 		String url = SERVER_URL + "post_message";
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
@@ -60,7 +76,7 @@ public class NetworkRestModule {
 		rest.execute();
 	}
 	
-	public void handleResponse(TypeRequest type, String response) {
+	private void handleResponse(TypeRequest type, String response) {
 		ObjectMapper mapper = new ObjectMapper();
 		switch (type) {
 			case GET_MESSAGE:

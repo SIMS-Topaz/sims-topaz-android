@@ -13,8 +13,7 @@ public class SettingsFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_settings, container, false);        
-		return v;
+		return inflater.inflate(R.layout.fragment_settings, container, false);
     }
     
     public void onToggleCameraMovementClicked(View view){

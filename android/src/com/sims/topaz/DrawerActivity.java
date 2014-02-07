@@ -1,6 +1,7 @@
 package com.sims.topaz;
 
 
+import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.utils.SimsContext;
 
 import android.support.v4.app.FragmentManager;
@@ -18,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
@@ -53,7 +53,7 @@ public class DrawerActivity extends FragmentActivity{
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+        mDrawerList.setAdapter(new DrawerAdapter(this,
                 R.layout.drawer_list_item, mViewsTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -143,9 +143,15 @@ public class DrawerActivity extends FragmentActivity{
 		case 1:
 			fragmentManager
 			.beginTransaction()
+			.replace(R.id.content_frame, new MapFragment())
+			.commit();			
+			break;
+		case 2:
+			fragmentManager
+			.beginTransaction()
 			.replace(R.id.content_frame, new SettingsFragment())
 			.commit();		
-		case 2:
+		case 3:
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.content_frame, new AboutFragment())

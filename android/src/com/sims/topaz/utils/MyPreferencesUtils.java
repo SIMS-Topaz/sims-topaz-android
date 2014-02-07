@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class MyPreferencesUtils {
-	   private static MyPreferencesUtils INSTANCE= null;;
+	   private static MyPreferencesUtils INSTANCE;
 	   private SharedPreferences mPrefs;
 	   private SharedPreferences.Editor mEditor;
 	   

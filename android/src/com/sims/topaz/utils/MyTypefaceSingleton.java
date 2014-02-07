@@ -4,20 +4,19 @@ import android.graphics.Typeface;
 
 public class MyTypefaceSingleton {
     private static Typeface mTypeFace = null;
-    private static MyTypefaceSingleton instance = null;
+    private static MyTypefaceSingleton instance;
 
-    private MyTypefaceSingleton() {
-        mTypeFace = Typeface.createFromAsset(SimsContext.getContext().getAssets(), "fonts/Roboto-Light.ttf");
-    }
+    private MyTypefaceSingleton() {}
 
-    public static synchronized MyTypefaceSingleton getInstance() {
+    public static MyTypefaceSingleton getInstance() {
         if (instance == null) {
+        	mTypeFace = Typeface.createFromAsset(SimsContext.getContext().getAssets(), "fonts/Roboto-Light.ttf");
             instance = new MyTypefaceSingleton();
         }
         return instance;
     }
 
-    public static Typeface getTypeFace() {
+    public Typeface getTypeFace() {
         return mTypeFace;
     }
 }

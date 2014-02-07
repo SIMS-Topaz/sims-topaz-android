@@ -118,9 +118,12 @@ NetworkDelegate{
 	@Override
 	public void onConnected(Bundle arg0) {
 		Location location = mLocationClient.getLastLocation();
-	    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-	    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-	    mMap.animateCamera(cameraUpdate);	
+		// TODO si location null ?
+		if(location != null) {
+		    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+		    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+		    mMap.animateCamera(cameraUpdate);
+		}
 	}
 
 	@Override

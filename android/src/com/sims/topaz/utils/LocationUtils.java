@@ -1,5 +1,10 @@
 package com.sims.topaz.utils;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.R;
 
 import android.content.Context;
@@ -69,4 +74,21 @@ public class LocationUtils {
             return EMPTY_STRING;
         }
     }
+    
+    
+    public static boolean IsOnTheScreen(LatLng point, GoogleMap mMap){
+		LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;		
+		return bounds.contains(point);	
+    }
+    
+    public static void onChangeCameraZoom(Location location, Integer mZoomLevel, GoogleMap mMap){
+		if(location != null) {
+		    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+		    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, mZoomLevel);
+		    mMap.animateCamera(cameraUpdate);
+		}
+    }
+    
+
+    
 }

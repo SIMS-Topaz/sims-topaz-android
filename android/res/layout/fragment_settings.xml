@@ -28,29 +28,6 @@
             style="@style/text_black_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|left"
-            android:text="@string/settings_nb_results" />
-
-        <EditText
-            style="@style/text_gray_normal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:hint="@string/settings_nb_results_hint" 
-            android:inputType="number"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal" >
-
-        <TextView
-            style="@style/text_black_normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="@string/settings_camera_movement" />
 
@@ -58,7 +35,7 @@
             android:id="@+id/settings_togglebutton_camera_movement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onToggleClicked"
+            android:onClick="onToggleCameraMovementClicked"
             android:textOff="@string/settings_on"
             android:textOn="@string/settings_off" />
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_pins">Tags</string>
+    <string name="settings_camera_movement">Camera movement: </string>
+    <string name="settings_on">ON</string>
+    <string name="settings_off">OFF</string>
+</resources>

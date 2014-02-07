@@ -1,27 +1,30 @@
 package com.sims.topaz;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.sims.topaz.adapter.BulleAdapter;
 import com.sims.topaz.network.NetworkDelegate;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.LocationUtils;
+import com.sims.topaz.utils.TagUtils;
 
 import android.content.Intent;
 import android.location.Location;
@@ -41,7 +44,9 @@ LocationListener,
 GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
 OnCameraChangeListener,
-NetworkDelegate{
+NetworkDelegate,//when called to the server
+OnInfoWindowClickListener //when clicked on the marker
+{
 	
 	private GoogleMap mMap;
     private static View mView;
@@ -50,14 +55,19 @@ NetworkDelegate{
     // Stores the current instantiation of the location client in this object
     private LocationClient mLocationClient;
     
-    private List<Marker> mDisplayedMarkers;
+    private Map<Marker, Preview> mDisplayedMarkers;
     private NetworkRestModule mNetworkModule;
     
+    //bulle
+    private Marker mMarkerMessage; //stores the marker for wich the user asked for the whole text
+    private BulleAdapter mBulleAdapter; 
+    
+    //constants
+    private int mZoomLevel = 12; // the zoom of the map (initially)
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
 		//create a new map or use the one that is exists
 		if (mView != null) {
 			ViewGroup parent = (ViewGroup) mView.getParent();
@@ -68,25 +78,28 @@ NetworkDelegate{
         try {
 			mView = inflater.inflate(R.layout.fragment_map, container, false);
 	        //set map and location 
-			setMapIfNeeded();
+			setMapIfNeeded(inflater);
 
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
         
-        mDisplayedMarkers = new ArrayList<Marker>();
+        mDisplayedMarkers = new HashMap<Marker, Preview>();;
         mNetworkModule = new NetworkRestModule(this);
         return mView;
 
     }
     
-    private void setMapIfNeeded(){
+    private void setMapIfNeeded(LayoutInflater inflater){
     	mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         if(mMap!=null) {
         	mMap.setMyLocationEnabled(true);	
         	mMap.setOnMapLongClickListener(this);
         	mMap.setOnCameraChangeListener(this);
+        	mBulleAdapter = new BulleAdapter(inflater);
+        	mMap.setInfoWindowAdapter(mBulleAdapter);
         }
+        
         // Create a new global location parameters object
         mLocationRequest = LocationRequest.create();
         //Set the update interval
@@ -119,11 +132,7 @@ NetworkDelegate{
 	public void onConnected(Bundle arg0) {
 		Location location = mLocationClient.getLastLocation();
 		// TODO si location null ?
-		if(location != null) {
-		    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-		    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
-		    mMap.animateCamera(cameraUpdate);
-		}
+		LocationUtils.onChangeCameraZoom(location, mZoomLevel, mMap);
 	}
 
 	@Override
@@ -217,31 +226,36 @@ NetworkDelegate{
 
 	@Override
 	public void afterGetMessage(Message message) {
-
-		Marker m = mMap.addMarker(new MarkerOptions()
-        .position(new LatLng(message.getLatitude(),
-      		  message.getLongitude()))
-        .rotation((float) 90.0)
-        .anchor((float) 0.5, (float) 0.5)
-        .title(String.valueOf(message.getTimestamp()))
-        .snippet(message.getText()));
-		mDisplayedMarkers.add(m);
-		
+		//If I have to change the bulle to mMarkerMessage
+		if(mMarkerMessage.getPosition().latitude == message.getLatitude() 
+				&& mMarkerMessage.getPosition().longitude == message.getLongitude()){
+			mBulleAdapter.setAllText(message.getText());
+		}
 	}
 
 	@Override
-	public void afterGetPreviews(List<Preview> list) {
-		for(Preview p:list){
-			Marker m = mMap.addMarker(new MarkerOptions()
-								        .position(new LatLng(p.getLatitude(),
-								      		  p.getLongitude()))
-								        .anchor((float) 0.5, (float) 0.5)
-								        .title(String.valueOf(p.getTimestamp()))
-								        .snippet(p.getText()));
-			mDisplayedMarkers.add(m);
-		}	
-		
+	public void afterGetPreviews(List<Preview> list) {		
+			for(Preview p:list){
+				String text = p.getText();
+				String tag = text.substring(text.lastIndexOf("#")+1);
+				Marker m = mMap.addMarker(new MarkerOptions()
+									        .position(new LatLng(p.getLatitude(),
+									      		  p.getLongitude()))
+									        .anchor((float) 0.5, (float) 0.5)
+									        .title(String.valueOf(p.getTimestamp()))
+									        .snippet(p.getText())
+									        .icon(BitmapDescriptorFactory.fromResource(TagUtils.getDrawableForString(tag))));
+				
+				mDisplayedMarkers.put(m, p);
+			}	
+			
+	}
+	@Override
+	public void onInfoWindowClick(Marker marker) {
+		Preview p = mDisplayedMarkers.get(marker);
+		//get All Message
+		mMarkerMessage = marker;
+		mNetworkModule.getMessage(p.getId());
 	}
     
-
 }

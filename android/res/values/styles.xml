@@ -21,8 +21,18 @@
        <item name="android:textSize">@dimen/text_size_big</item>
        <item name="android:padding">4dp</item>
   	</style>
+  	    <style name="text_black_big">
+       <item name="android:textColor">@color/black</item>
+       <item name="android:textSize">@dimen/text_size_big</item>
+       <item name="android:padding">4dp</item>
+  	</style>
   	<style name="text_gray_normal">
        <item name="android:textColor">@color/gray</item>
+       <item name="android:textSize">@dimen/text_size_normal</item>
+       <item name="android:padding">4dp</item>
+  	</style>
+  	  	<style name="text_black_normal">
+       <item name="android:textColor">@color/black</item>
        <item name="android:textSize">@dimen/text_size_normal</item>
        <item name="android:padding">4dp</item>
   	</style>

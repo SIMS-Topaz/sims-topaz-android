@@ -36,8 +36,8 @@ public class NetworkRestModule {
 	}
 	
 	/**
-	 * Envoi une requete get_message pour récupérer un message
-	 * La fin de la requête appelera afterGetMessage() (interface NetworkDelegate)
+	 * Envoi une requete get_message pour recuperer un message
+	 * La fin de la requete appelera afterGetMessage() (interface NetworkDelegate)
 	 * @param id : l'id du message
 	 */
 	public void getMessage(Long id) {
@@ -47,8 +47,8 @@ public class NetworkRestModule {
 	}
 	
 	/**
-	 * Envoi une requete get_previews pour récupérer les previews autour d'une zone
-	 * La fin de la requête appelera afterGetPreviews() (interface NetworkDelegate)
+	 * Envoi une requete get_previews pour recuperer les previews autour d'une zone
+	 * La fin de la requete appelera afterGetPreviews() (interface NetworkDelegate)
 	 * @param latitude : latitude de la zone
 	 * @param longitude : longitude de la zone
 	 */
@@ -60,8 +60,8 @@ public class NetworkRestModule {
 	
 	/**
 	 * Poste un message
-	 * La fin de la requête appelera afterPostMessage() (interface NetworkDelegate)
-	 * @param message le message à poster
+	 * La fin de la requete appelera afterPostMessage() (interface NetworkDelegate)
+	 * @param message le message ÔøΩ poster
 	 */
 	public void postMessage(Message message) {
 		String url = SERVER_URL + "post_message";
@@ -70,7 +70,6 @@ public class NetworkRestModule {
 		try {
 			rest.setJSONParam(mapper.writeValueAsString(message));
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		rest.execute();

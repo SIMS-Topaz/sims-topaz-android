@@ -15,6 +15,6 @@
     <string name="drawer_close">Fermer le navigation drawer</string>
     <string name="app_not_available">Le navigateur n\'est pas disponible.</string>
     <!-- About -->
-    <string name="about_text">L\'equipe Topaz est géniale!:p\nAlina Gherman,\nBenjamin Bouchardon,\nHugo Muller,\nAlexandre Jablon,\nXiaoyu Feng,\nJean-Baptiste Ghoul</string>
+    <string name="about_text">L\'equipe Topaz est géniale!:p\n\n\nAlina Gherman,\nBenjamin Bouchardon,\nHugo Muller,\nAlexandre Jablon,\nXiaoyu Feng,\nJean-Baptiste Ghoul</string>
 	<!-- Settings -->
 </resources>

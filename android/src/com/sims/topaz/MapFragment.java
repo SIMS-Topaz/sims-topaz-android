@@ -121,7 +121,7 @@ NetworkDelegate{
 		// TODO si location null ?
 		if(location != null) {
 		    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-		    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+		    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
 		    mMap.animateCamera(cameraUpdate);
 		}
 	}
@@ -134,7 +134,7 @@ NetworkDelegate{
 
 	@Override
 	public void onLocationChanged(Location location) {
-		mNetworkModule.initGetPreviews(location.getLatitude(),location.getLongitude());
+		mNetworkModule.getPreviews(location.getLatitude(),location.getLongitude());
 
 	}
 	
@@ -196,42 +196,50 @@ NetworkDelegate{
 
 	@Override
 	public void onCameraChange(CameraPosition camera) {
-		mNetworkModule.initGetPreviews(camera.target.latitude,
+		mNetworkModule.getPreviews(camera.target.latitude,
 										camera.target.longitude);
 		
 	}
 
-	@Override
-	public void displayMessage(Message message) {
-		Marker m = mMap.addMarker(new MarkerOptions()
-		                          .position(new LatLng(message.getLatitude(),
-		                        		  message.getLongitude()))
-		                          .rotation((float) 90.0)
-		                          .anchor((float) 0.5, (float) 0.5)
-		                          .title(String.valueOf(message.getTimestamp()))
-		                          .snippet(message.getText()));
-		mDisplayedMarkers.add(m);
-	}
 
-	@Override
-	public void displayPreviews(List<Preview> list) {
-		for(Preview p:list){
-			Marker m = mMap.addMarker(new MarkerOptions()
-								        .position(new LatLng(p.getLatitude(),
-								      		  p.getLongitude()))
-								        .rotation((float) 90.0)
-								        .anchor((float) 0.5, (float) 0.5)
-								        .title(String.valueOf(p.getTimestamp()))
-								        .snippet(p.getText()));
-			mDisplayedMarkers.add(m);
-		}	
-	}
 
 	@Override
 	public void networkError() {
 		Toast.makeText(getActivity(),
 				getResources().getString(R.string.network_error),
 				Toast.LENGTH_SHORT).show();
+		
+	}
+
+	@Override
+	public void afterPostMessage(Message message) {
+	}
+
+	@Override
+	public void afterGetMessage(Message message) {
+
+		Marker m = mMap.addMarker(new MarkerOptions()
+        .position(new LatLng(message.getLatitude(),
+      		  message.getLongitude()))
+        .rotation((float) 90.0)
+        .anchor((float) 0.5, (float) 0.5)
+        .title(String.valueOf(message.getTimestamp()))
+        .snippet(message.getText()));
+		mDisplayedMarkers.add(m);
+		
+	}
+
+	@Override
+	public void afterGetPreviews(List<Preview> list) {
+		for(Preview p:list){
+			Marker m = mMap.addMarker(new MarkerOptions()
+								        .position(new LatLng(p.getLatitude(),
+								      		  p.getLongitude()))
+								        .anchor((float) 0.5, (float) 0.5)
+								        .title(String.valueOf(p.getTimestamp()))
+								        .snippet(p.getText()));
+			mDisplayedMarkers.add(m);
+		}	
 		
 	}
     

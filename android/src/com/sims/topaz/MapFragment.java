@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -116,8 +117,10 @@ OnInfoWindowClickListener //when clicked on the marker
     
 	@Override
 	public void onMapLongClick(LatLng point) {
-		getFragmentManager().beginTransaction().replace(R.id.map, 
-				new EditMessageFragment()).commit();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.map, new EditMessageFragment());
+		transaction.addToBackStack(null);
+		transaction.commit();
 	}
 
 	@Override

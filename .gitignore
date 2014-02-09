@@ -5,4 +5,5 @@
 /android/bin
 .DS_Store
 .properties
+google.xml
 

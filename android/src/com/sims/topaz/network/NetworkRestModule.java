@@ -27,7 +27,7 @@ import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 public class NetworkRestModule {
 	
-	public static final String SERVER_URL = "http://topaz1.apiary.io/";
+	public static final String SERVER_URL = "http://topaz1.apiary.io/api/";
 	
 	private NetworkDelegate delegate;
 	

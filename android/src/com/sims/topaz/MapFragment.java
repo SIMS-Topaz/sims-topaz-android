@@ -311,7 +311,12 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
 	}
 	@Override
 	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {
-		Toast.makeText(getActivity(), "show smhbh 3", Toast.LENGTH_SHORT).show();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
+				R.drawable.animation_bottom_down);
+		transaction.replace(R.id.edit_text, new CommentFragment());
+		transaction.addToBackStack(null);
+		transaction.commit();	
 	}
 	@Override
 	public boolean onClusterItemClick(PreviewClusterItem item) {

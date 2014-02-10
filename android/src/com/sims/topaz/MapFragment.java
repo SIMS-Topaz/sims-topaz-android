@@ -48,7 +48,11 @@ LocationListener,
 GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
 OnCameraChangeListener,
-NetworkDelegate //when called to the server
+NetworkDelegate, //when called to the server
+ClusterManager.OnClusterInfoWindowClickListener<PreviewClusterItem>, 
+ClusterManager.OnClusterItemInfoWindowClickListener<PreviewClusterItem>,
+ClusterManager.OnClusterClickListener<PreviewClusterItem>,
+ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
 {
 	
 	private GoogleMap mMap;
@@ -89,28 +93,30 @@ NetworkDelegate //when called to the server
 			ViewGroup parent = (ViewGroup) mView.getParent();
 			if (parent != null)
 				parent.removeView(mView);
-		}
-		
+		}		
         try {
 			mView = inflater.inflate(R.layout.fragment_map, container, false);
 	        //set map and location 
 			setMapIfNeeded(inflater);
-
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
-        
-        
-        
-        // Cluster manager
-        mClusterManager = new ClusterManager<PreviewClusterItem>(this.getActivity(), mMap);
-        mClusterManager.setRenderer(new PreviewRenderer());
-        mClusterManager.onCameraChange(mCurrentCameraPosition); 
-
+        setClusterManager();
         return mView;
 
     }
-    
+    private void setClusterManager(){
+        mClusterManager = new ClusterManager<PreviewClusterItem>(this.getActivity(), mMap);
+        mClusterManager.setRenderer(new PreviewRenderer());
+        mClusterManager.onCameraChange(mCurrentCameraPosition); 
+        mMap.setOnMarkerClickListener(mClusterManager);
+        mMap.setOnInfoWindowClickListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
+        mClusterManager.setOnClusterClickListener(this);
+        mClusterManager.setOnClusterInfoWindowClickListener(this);
+        mClusterManager.setOnClusterItemClickListener(this);
+        mClusterManager.setOnClusterItemInfoWindowClickListener(this);   	
+    }
     private void setMapIfNeeded(LayoutInflater inflater){
     	mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
         if(mMap!=null) {
@@ -257,7 +263,7 @@ NetworkDelegate //when called to the server
 		//If I have to change the bulle to mMarkerMessage
 		if(mMarkerMessage.getPosition().latitude == message.getLatitude() 
 				&& mMarkerMessage.getPosition().longitude == message.getLongitude()){
-			mBulleAdapter.setAllText(message.getText());
+			//TODO show in comment fragment
 		}
 	}
 
@@ -286,7 +292,9 @@ NetworkDelegate //when called to the server
         @Override
         protected void onBeforeClusterItemRendered(PreviewClusterItem item, MarkerOptions markerOptions) {
             BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(TagUtils.getDrawableForString(item.getTag()));
-            markerOptions.icon(icon).title(item.getPreview().getTimestamp().toString()).snippet(item.getPreview().getText());
+            markerOptions.icon(icon)
+            .title(item.getPreview().getTimestamp().toString())
+            .snippet(item.getPreview().getText());
             
         }
 
@@ -296,4 +304,29 @@ NetworkDelegate //when called to the server
             return cluster.getSize() > 1;
         }
     }
+
+	@Override
+	public void onClusterInfoWindowClick(Cluster<PreviewClusterItem> cluster) {
+		Toast.makeText(getActivity(), "show smhbh 1", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
+		if(mZoomLevel>1){
+			mZoomLevel--;
+			LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
+		}
+		mBulleAdapter.setIsCluster(true);
+		return false;
+	}
+	@Override
+	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {
+		Toast.makeText(getActivity(), "show smhbh 3", Toast.LENGTH_SHORT).show();
+	}
+	@Override
+	public boolean onClusterItemClick(PreviewClusterItem item) {
+		mBulleAdapter.setIsCluster(false);
+		return false;
+	}
+
 }

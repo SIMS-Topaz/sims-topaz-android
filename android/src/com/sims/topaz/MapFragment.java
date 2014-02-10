@@ -36,6 +36,7 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 
@@ -118,7 +119,9 @@ OnInfoWindowClickListener //when clicked on the marker
 	@Override
 	public void onMapLongClick(LatLng point) {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.map, new EditMessageFragment());
+		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
+				R.drawable.animation_bottom_down);
+		transaction.replace(R.id.edit_text, new EditMessageFragment());
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}

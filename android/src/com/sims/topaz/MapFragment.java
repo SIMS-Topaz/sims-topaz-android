@@ -49,7 +49,6 @@ GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
 OnCameraChangeListener,
 NetworkDelegate, //when called to the server
-ClusterManager.OnClusterInfoWindowClickListener<PreviewClusterItem>, 
 ClusterManager.OnClusterItemInfoWindowClickListener<PreviewClusterItem>,
 ClusterManager.OnClusterClickListener<PreviewClusterItem>,
 ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
@@ -113,7 +112,6 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
         mMap.setOnInfoWindowClickListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
         mClusterManager.setOnClusterClickListener(this);
-        mClusterManager.setOnClusterInfoWindowClickListener(this);
         mClusterManager.setOnClusterItemClickListener(this);
         mClusterManager.setOnClusterItemInfoWindowClickListener(this);   	
     }
@@ -305,17 +303,9 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
         }
     }
 
-	@Override
-	public void onClusterInfoWindowClick(Cluster<PreviewClusterItem> cluster) {
-		Toast.makeText(getActivity(), "show smhbh 1", Toast.LENGTH_SHORT).show();
-	}
 
 	@Override
 	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
-		if(mZoomLevel>1){
-			mZoomLevel--;
-			LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
-		}
 		mBulleAdapter.setIsCluster(true);
 		return false;
 	}

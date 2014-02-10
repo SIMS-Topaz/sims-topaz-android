@@ -75,7 +75,7 @@ public class EditMessageFragment extends Fragment
 	@Override
 	public void afterPostMessage(Message message) {
 		// TODO Auto-generated method stub
-		Toast.makeText(getActivity(), "Message envoyé", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), getString(R.string.message_sent), Toast.LENGTH_SHORT).show();
 		getFragmentManager().popBackStack();
 		
 	}

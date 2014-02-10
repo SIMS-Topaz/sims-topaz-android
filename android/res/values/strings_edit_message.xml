@@ -4,4 +4,5 @@
 	<string name="edit_message_prompt">Ecrivez votre message</string>
 	<string name="edit_message_send">Envoyer</string>
 	<string name="edit_message_cancel">Annuler</string>
+	<string name="message_sent">Message envoyé</string>
 </resources>

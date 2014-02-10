@@ -31,6 +31,7 @@ import com.sims.topaz.utils.TagUtils;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -67,7 +68,19 @@ NetworkDelegate //when called to the server
     private int mZoomLevel = 12; // the zoom of the map (initially)
     
     private ClusterManager<PreviewClusterItem> mClusterManager;
-    
+    private final Handler mHandler = new Handler();
+    private CameraPosition mCurrentCameraPosition;
+    private Location mCurrentLocation;
+    private boolean isRunnableCalled = false;
+    private final Runnable mUpdateUI = new Runnable() {
+        public void run() {
+    		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
+    				mCurrentCameraPosition.target.longitude); 
+			mHandler.postDelayed(mUpdateUI, 1000); // 1 second
+			
+            }
+        };
+        
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,12 +100,13 @@ NetworkDelegate //when called to the server
 			/* map is already there, just return view as it is */
 		}
         
-        mNetworkModule = new NetworkRestModule(this);
+        
         
         // Cluster manager
         mClusterManager = new ClusterManager<PreviewClusterItem>(this.getActivity(), mMap);
         mClusterManager.setRenderer(new PreviewRenderer());
-        
+        mClusterManager.onCameraChange(mCurrentCameraPosition); 
+
         return mView;
 
     }
@@ -105,6 +119,7 @@ NetworkDelegate //when called to the server
         	mMap.setOnCameraChangeListener(this);
         	mBulleAdapter = new BulleAdapter(inflater);
         	mMap.setInfoWindowAdapter(mBulleAdapter);
+        	
         }
         
         // Create a new global location parameters object
@@ -141,9 +156,12 @@ NetworkDelegate //when called to the server
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		Location location = mLocationClient.getLastLocation();
-		// TODO si location null ?
-		LocationUtils.onChangeCameraZoom(location, mZoomLevel, mMap);
+		mCurrentLocation = mLocationClient.getLastLocation();
+		mNetworkModule = new NetworkRestModule(this);
+		LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
+		mCurrentCameraPosition = mMap.getCameraPosition();
+		mHandler.post(mUpdateUI);
+		mClusterManager.onCameraChange(mCurrentCameraPosition); 
 	}
 
 	@Override
@@ -154,8 +172,7 @@ NetworkDelegate //when called to the server
 
 	@Override
 	public void onLocationChanged(Location location) {
-		mNetworkModule.getPreviews(location.getLatitude(),location.getLongitude());
-
+		mCurrentLocation = location;
 	}
 	
     @Override
@@ -216,8 +233,7 @@ NetworkDelegate //when called to the server
 
 	@Override
 	public void onCameraChange(CameraPosition camera) {
-		mNetworkModule.getPreviews(camera.target.latitude,
-										camera.target.longitude);
+		mCurrentCameraPosition = camera;
 		mClusterManager.onCameraChange(camera);
 		
 	}
@@ -258,6 +274,7 @@ NetworkDelegate //when called to the server
 			items.add(item);
 		}	
 		mClusterManager.addItems(items);
+		mClusterManager.onCameraChange(mCurrentCameraPosition);
 	}
 	
     private class PreviewRenderer extends DefaultClusterRenderer<PreviewClusterItem> {
@@ -279,5 +296,4 @@ NetworkDelegate //when called to the server
             return cluster.getSize() > 1;
         }
     }
-    
 }

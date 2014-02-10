@@ -121,7 +121,10 @@ OnInfoWindowClickListener //when clicked on the marker
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
-		transaction.replace(R.id.edit_text, new EditMessageFragment());
+		EditMessageFragment fragment = new EditMessageFragment();
+		fragment.setPosition(point);
+		
+		transaction.replace(R.id.edit_text, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}

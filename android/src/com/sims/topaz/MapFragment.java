@@ -1,7 +1,6 @@
 package com.sims.topaz;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -10,14 +9,17 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
-import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.sims.topaz.adapter.BulleAdapter;
 import com.sims.topaz.network.NetworkDelegate;
 import com.sims.topaz.network.NetworkRestModule;
@@ -36,7 +38,6 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 
@@ -46,8 +47,7 @@ LocationListener,
 GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
 OnCameraChangeListener,
-NetworkDelegate,//when called to the server
-OnInfoWindowClickListener //when clicked on the marker
+NetworkDelegate //when called to the server
 {
 	
 	private GoogleMap mMap;
@@ -57,7 +57,6 @@ OnInfoWindowClickListener //when clicked on the marker
     // Stores the current instantiation of the location client in this object
     private LocationClient mLocationClient;
     
-    private Map<Marker, Preview> mDisplayedMarkers;
     private NetworkRestModule mNetworkModule;
     
     //bulle
@@ -66,6 +65,8 @@ OnInfoWindowClickListener //when clicked on the marker
     
     //constants
     private int mZoomLevel = 12; // the zoom of the map (initially)
+    
+    private ClusterManager<PreviewClusterItem> mClusterManager;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,8 +87,12 @@ OnInfoWindowClickListener //when clicked on the marker
 			/* map is already there, just return view as it is */
 		}
         
-        mDisplayedMarkers = new HashMap<Marker, Preview>();;
         mNetworkModule = new NetworkRestModule(this);
+        
+        // Cluster manager
+        mClusterManager = new ClusterManager<PreviewClusterItem>(this.getActivity(), mMap);
+        mClusterManager.setRenderer(new PreviewRenderer());
+        
         return mView;
 
     }
@@ -216,6 +221,7 @@ OnInfoWindowClickListener //when clicked on the marker
 	public void onCameraChange(CameraPosition camera) {
 		mNetworkModule.getPreviews(camera.target.latitude,
 										camera.target.longitude);
+		mClusterManager.onCameraChange(camera);
 		
 	}
 
@@ -243,28 +249,38 @@ OnInfoWindowClickListener //when clicked on the marker
 	}
 
 	@Override
-	public void afterGetPreviews(List<Preview> list) {		
-			for(Preview p:list){
-				String text = p.getText();
-				String tag = text.substring(text.lastIndexOf("#")+1);
-				Marker m = mMap.addMarker(new MarkerOptions()
-									        .position(new LatLng(p.getLatitude(),
-									      		  p.getLongitude()))
-									        .anchor((float) 0.5, (float) 0.5)
-									        .title(String.valueOf(p.getTimestamp()))
-									        .snippet(p.getText())
-									        .icon(BitmapDescriptorFactory.fromResource(TagUtils.getDrawableForString(tag))));
-				
-				mDisplayedMarkers.put(m, p);
-			}	
-			
+	public void afterGetPreviews(List<Preview> list) {
+		mClusterManager.clearItems();
+		
+		List<PreviewClusterItem> items = new ArrayList<PreviewClusterItem>();
+		for(Preview p:list){
+			String text = p.getText();
+			String tag = text.substring(text.lastIndexOf("#")+1);
+			PreviewClusterItem item = new PreviewClusterItem(p);
+			item.setTag(tag);
+			items.add(item);
+		}	
+		mClusterManager.addItems(items);
 	}
-	@Override
-	public void onInfoWindowClick(Marker marker) {
-		Preview p = mDisplayedMarkers.get(marker);
-		//get All Message
-		mMarkerMessage = marker;
-		mNetworkModule.getMessage(p.getId());
-	}
+	
+    private class PreviewRenderer extends DefaultClusterRenderer<PreviewClusterItem> {
+
+        public PreviewRenderer() {
+            super(mView.getContext(), mMap, mClusterManager);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(PreviewClusterItem item, MarkerOptions markerOptions) {
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(TagUtils.getDrawableForString(item.getTag()));
+            markerOptions.icon(icon).title(item.getPreview().getTimestamp().toString()).snippet(item.getPreview().getText());
+            
+        }
+
+        @Override
+        protected boolean shouldRenderAsCluster(Cluster cluster) {
+            // Always render clusters.
+            return cluster.getSize() > 1;
+        }
+    }
     
 }

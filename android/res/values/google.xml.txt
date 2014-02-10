@@ -2,7 +2,7 @@
 <resources>
     <!-- Google properties -->
     <!-- Rename me in google.xml -->
-	<string name="api_key">AIzaSyDMf9eJ6y2gKtzelyypLwepjVyxQiqJXTY</string>
+	<string name="api_key">AIzaSyBa0RIEneZIxNjK1Ul0SC2W70nNAhNOPMs</string>
 	
 	<!-- Benjamin : AIzaSyBfgX5wxPriHazLGze8QKbW4phOZWr-28s -->
 	<!-- Jean-Baptiste : AIzaSyDMf9eJ6y2gKtzelyypLwepjVyxQiqJXTY -->

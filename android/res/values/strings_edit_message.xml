@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!--  fragment edit message -->
+	<string name="edit_message_prompt">Ecrivez votre message</string>
+	<string name="edit_message_send">Envoyer</string>
+	<string name="edit_message_cancel">Annuler</string>
+</resources>

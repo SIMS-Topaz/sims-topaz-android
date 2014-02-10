@@ -11,7 +11,7 @@ public class EditMessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.edit_message_view, container, false);
+        return inflater.inflate(R.layout.fragment_edit_message, container, false);
     }
 
 }

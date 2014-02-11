@@ -64,7 +64,6 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 
 		if(getArguments()!=null && getArguments().containsKey("id_preview")){
 			long id = getArguments().getLong("id_preview");
-			Toast.makeText(getActivity(), "make call", Toast.LENGTH_SHORT).show();
 			restModule.getMessage(id);
 		}
 

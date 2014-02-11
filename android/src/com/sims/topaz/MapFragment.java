@@ -1,12 +1,15 @@
 package com.sims.topaz;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -47,7 +50,8 @@ GooglePlayServicesClient.OnConnectionFailedListener,
 NetworkDelegate, //when called to the server
 ClusterManager.OnClusterItemInfoWindowClickListener<PreviewClusterItem>,
 ClusterManager.OnClusterClickListener<PreviewClusterItem>,
-ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
+ClusterManager.OnClusterItemClickListener<PreviewClusterItem>,
+OnCameraChangeListener
 {
 	
 	private GoogleMap mMap;
@@ -140,7 +144,10 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
-		transaction.replace(R.id.edit_text, new EditMessageFragment());
+		EditMessageFragment fragment = new EditMessageFragment();
+		fragment.setPosition(point);
+		
+		transaction.replace(R.id.edit_text, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
@@ -207,15 +214,6 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
                break;
         }
     }
-    
-/*
-	@Override
-	public void onCameraChange(CameraPosition camera) {
-		mCurrentCameraPosition = camera;
-		mClusterManager.onCameraChange(camera);
-		
-	}*/
-
 
 
 	@Override
@@ -296,6 +294,13 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
 	public boolean onClusterItemClick(PreviewClusterItem item) {
 		mBulleAdapter.setIsCluster(false);
 		return false;
+	}
+	@Override
+	public void onCameraChange(CameraPosition camera) {
+		mCurrentCameraPosition = camera;
+		mClusterManager.onCameraChange(camera);	
+		//demarre un timer de 1 seconde
+		
 	}
 
 }

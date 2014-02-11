@@ -33,6 +33,8 @@ public class TagUtils {
 	
 	public static int getDrawableForString(String text){
 		String finalTag=TagUtils.TAG;
+		if(text==null || text.isEmpty()) 
+			return getDrawableForTag(TagUtils.TAG);
 		for(String tag:getAllTags()){
 			if(text.contains(tag) || tag.contains(text)){
 				finalTag = tag;

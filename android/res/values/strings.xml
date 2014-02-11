@@ -22,5 +22,8 @@
     <!-- About -->
     <string name="about_text">L\'equipe Topaz est géniale!:p\n\n\nAlina Gherman,\nBenjamin Bouchardon,\nHugo Muller,\nAlexandre Jablon,\nXiaoyu Feng,\nJean-Baptiste Ghoul</string>
 	<!-- bulle -->
-	<string name="bulle_see_all_comments">Tous les commentaires</string>
+	<string name="bulle_loyen_cluster">Note moyenne:</string>
+	<!-- comment -->
+	<string name="comment_user_icon">Icon de l\'utilisateur</string>
+	<string name="comment_hint">Write your comment here</string>
 </resources>

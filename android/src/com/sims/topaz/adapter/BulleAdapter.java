@@ -12,20 +12,23 @@ import com.sims.topaz.utils.MyTypefaceSingleton;
 
 public class BulleAdapter implements InfoWindowAdapter {
 
-	LayoutInflater mInflater=null;
-	String mAllText;
+	private LayoutInflater mInflater=null;
+	private String mAllText;
+	private boolean isCluster;
 
 	public BulleAdapter(LayoutInflater inflater) {
 		this.mInflater=inflater;
+		isCluster = false;
 	}	    
 	public BulleAdapter(LayoutInflater inflater, String mAllText) {
 		this.mInflater=inflater;
 		this.mAllText= mAllText;
+		isCluster = false;
 	}
-
-	public void setAllText(String mAllText) {
-		this.mAllText = mAllText;
+	public void setIsCluster(boolean is){
+		isCluster = is;
 	}
+	
 	@Override
 	public View getInfoWindow(Marker marker) {
 		return(null);
@@ -33,19 +36,30 @@ public class BulleAdapter implements InfoWindowAdapter {
 
 	@Override
 	public View getInfoContents(Marker marker) {
-		View popup=mInflater.inflate(R.layout.adapter_info_bulle, null);
-		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
-		
-		TextView mBulleTitle=(TextView)popup.findViewById(R.id.bulle_title);
-		mBulleTitle.setTypeface(face);
-		mBulleTitle.setText(marker.getTitle());
-		
-		TextView mBulleText=(TextView)popup.findViewById(R.id.bulle_text);
-		mBulleText.setTypeface(face);
-		if(mAllText!=null && !mAllText.equals("")){
-			mBulleText.setText(mAllText);
+		View popup;
+		if(isCluster == false){
+			popup=mInflater.inflate(R.layout.adapter_info_bulle, null);
+			Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
+			
+			TextView mBulleTitle=(TextView)popup.findViewById(R.id.bulle_title);
+			mBulleTitle.setTypeface(face);
+			mBulleTitle.setText(marker.getTitle());
+			
+			TextView mBulleText=(TextView)popup.findViewById(R.id.bulle_text);
+			mBulleText.setTypeface(face);
+			if(mAllText!=null && !mAllText.equals("")){
+				mBulleText.setText(mAllText);
+			}else{
+				mBulleText.setText(marker.getSnippet());
+			}
 		}else{
-			mBulleText.setText(marker.getSnippet());
+			popup=mInflater.inflate(R.layout.adapter_info_bulle_cluster, null);
+			Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
+			
+			TextView mBulleMoyen=(TextView)popup.findViewById(R.id.bulle_cluster_moyen_note);
+			mBulleMoyen.setTypeface(face);
+			TextView mBulleNote=(TextView)popup.findViewById(R.id.bulle_cluster_note);
+			mBulleNote.setTypeface(face);
 		}
 
 		return(popup);

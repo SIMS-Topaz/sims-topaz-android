@@ -15,8 +15,7 @@
         android:id="@+id/edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="72dp" >
+        android:layout_gravity="center_horizontal|bottom">
 
     </FrameLayout>
 

@@ -7,7 +7,7 @@ import com.sims.topaz.R;
 
 public class TagUtils {
 	
-	
+	public static final String TAG_SUN="tag_sun";
 	public static final String TAG_RESTAURANT="tag_restaurant";
 	public static final String TAG_PARTY="tag_party";
 	public static final String TAG_PIZZA="tag_pizza";
@@ -27,6 +27,7 @@ public class TagUtils {
 		tagList.add(TagUtils.TAG_SCHOOL);
 		tagList.add(TagUtils.TAG_TOILETS);
 		tagList.add(TagUtils.TAG_HOSPITAL);
+		tagList.add(TagUtils.TAG_SUN);
 		return tagList;
 	}
 	
@@ -56,6 +57,8 @@ public class TagUtils {
     		return R.drawable.tag_shopping;
     	if(tag.equals(TagUtils.TAG_TOILETS))
     		return R.drawable.tag_toilet;
+    	if(tag.equals(TagUtils.TAG_SUN))
+    		return R.drawable.tag_sun;
     	return R.drawable.tag;
     }
 }

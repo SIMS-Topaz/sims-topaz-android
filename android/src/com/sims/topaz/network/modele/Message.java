@@ -1,15 +1,23 @@
 package com.sims.topaz.network.modele;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
 	
 	private Long id;
+	
+	@JsonProperty("lat")
 	private Double latitude;
+	
+	@JsonProperty("long")
 	private Double longitude;
+	
 	private String text;
 	
 	//the number of milliseconds since Jan. 1, 1970, midnight GMT.
+	@JsonProperty("date")
 	private Long timestamp;
 	
 	public Message() {

@@ -25,9 +25,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+
 public class NetworkRestModule {
 	
-	public static final String SERVER_URL = "http://topaz1.apiary.io/api/";
+	//public static final String SERVER_URL = "http://topaz1.apiary.io/api/";
+	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1/";
 	
 	private NetworkDelegate delegate;
 	
@@ -42,6 +44,7 @@ public class NetworkRestModule {
 	 */
 	public void getMessage(Long id) {
 		String url = SERVER_URL + "get_message/" + id;
+		Log.d("Network getMessage url=", url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_MESSAGE);
 		rest.execute();
 	}
@@ -54,6 +57,7 @@ public class NetworkRestModule {
 	 */
 	public void getPreviews(Double latitude, Double longitude) {
 		String url = SERVER_URL + "get_previews/" + latitude.toString() + "/" + longitude.toString();
+		Log.d("Network getPreviews url=", url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
 		rest.execute();
 	}
@@ -61,10 +65,11 @@ public class NetworkRestModule {
 	/**
 	 * Poste un message
 	 * La fin de la requete appelera afterPostMessage() (interface NetworkDelegate)
-	 * @param message le message � poster
+	 * @param message le message à poster
 	 */
 	public void postMessage(Message message) {
 		String url = SERVER_URL + "post_message";
+		Log.d("Network postMessage url=", url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -77,6 +82,7 @@ public class NetworkRestModule {
 	
 	private void handleResponse(TypeRequest type, String response) {
 		ObjectMapper mapper = new ObjectMapper();
+
 		switch (type) {
 			case GET_MESSAGE:
 				try {

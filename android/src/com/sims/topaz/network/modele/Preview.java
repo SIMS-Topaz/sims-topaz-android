@@ -1,12 +1,25 @@
 package com.sims.topaz.network.modele;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Preview {
 	
 	private Long id;
+	
+	@JsonProperty("lat")
 	private Double latitude;
+	
+	@JsonProperty("long")
 	private Double longitude;
+	
 	private String text;
+	
+	@JsonProperty("is_full")
 	private Boolean isFull;
+	
+	@JsonProperty("date")
 	private Long timestamp;
 	
 	private final int MAX_CHAR = 10;

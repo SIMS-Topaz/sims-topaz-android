@@ -11,7 +11,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.LocationSource.OnLocationChangedListener;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -241,7 +240,7 @@ OnMapLoadedCallback
 		//If I have to change the bulle to mMarkerMessage
 		if(mMarkerMessage.getPosition().latitude == message.getLatitude() 
 				&& mMarkerMessage.getPosition().longitude == message.getLongitude()){
-			//TODO show in comment fragment
+			
 		}
 	}
 	@Override
@@ -290,6 +289,7 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {
+		mNetworkModule.getMessage(item.getPreview().getId());
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
@@ -323,8 +323,6 @@ OnMapLoadedCallback
 		mCurrentCameraPosition = mMap.getCameraPosition();
 		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
 				mCurrentCameraPosition.target.longitude); 
-		
-		
 	}
 
 }

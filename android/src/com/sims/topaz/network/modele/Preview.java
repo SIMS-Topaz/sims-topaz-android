@@ -31,8 +31,13 @@ public class Preview {
 		this.id = message.getId();
 		this.latitude = message.getLatitude();
 		this.longitude = message.getLongitude();
-		this.text = message.getText().substring(0,MAX_CHAR);
-		this.isFull = text.compareTo(message.getText())==0;
+		if(message.getText().length() > MAX_CHAR) {
+			this.text = message.getText().substring(0,MAX_CHAR);
+			this.isFull = false;
+		} else {
+			this.text = message.getText();
+			this.isFull = true;
+		}
 		this.timestamp = message.getTimestamp();
 	}
 	

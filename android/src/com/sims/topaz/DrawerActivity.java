@@ -33,6 +33,7 @@ public class DrawerActivity extends FragmentActivity
     private CharSequence mTitle;
     private String[] mViewsTitles;
     private int mApiVersion = android.os.Build.VERSION.SDK_INT;
+    private MapFragment mMapFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,15 +138,17 @@ public class DrawerActivity extends FragmentActivity
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	switch (position) {
 		case 0:
+			mMapFragment = new MapFragment();
 			fragmentManager
 			.beginTransaction()
-			.replace(R.id.content_frame, new MapFragment())
+			.replace(R.id.content_frame, mMapFragment)
 			.commit();			
 			break;
 		case 1:
+			mMapFragment = new MapFragment();
 			fragmentManager
 			.beginTransaction()
-			.replace(R.id.content_frame, new MapFragment())
+			.replace(R.id.content_frame, mMapFragment)
 			.commit();			
 			break;
 		case 2:
@@ -200,10 +203,8 @@ public class DrawerActivity extends FragmentActivity
 
 	@Override
 	public void onNewMessage(Message message) {
-		// TODO Auto-generated method stub
-		MapFragment fragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
-		if(fragment!=null) {
-			fragment.onNewMessage(message);
+		if(mMapFragment!=null) {
+			mMapFragment.onNewMessage(message);
 		}
 	}
     

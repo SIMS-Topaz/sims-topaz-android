@@ -1,6 +1,8 @@
 package com.sims.topaz;
 
 
+import org.w3c.dom.Comment;
+
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.utils.SimsContext;
@@ -24,7 +26,7 @@ import android.widget.ListView;
 
 
 public class DrawerActivity extends FragmentActivity
-					implements EditMessageFragment.OnNewMessageListener {
+					implements EditMessageFragment.OnNewMessageListener{
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -207,6 +209,7 @@ public class DrawerActivity extends FragmentActivity
 			mMapFragment.onNewMessage(message);
 		}
 	}
+
     
 
 }

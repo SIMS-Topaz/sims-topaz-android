@@ -53,7 +53,7 @@ ClusterManager.OnClusterClickListener<PreviewClusterItem>,
 ClusterManager.OnClusterItemClickListener<PreviewClusterItem>,
 OnCameraChangeListener,
 LocationListener,
-OnMapLoadedCallback 
+OnMapLoadedCallback
 {
 	
 	private GoogleMap mMap;
@@ -62,21 +62,20 @@ OnMapLoadedCallback
     private LocationRequest mLocationRequest;
     // Stores the current instantiation of the location client in this object
     private LocationClient mLocationClient;
-    
-    private NetworkRestModule mNetworkModule;
-    
+    //network call
+    private NetworkRestModule mNetworkModule; 
     //bulle
     private Marker mMarkerMessage; //stores the marker for wich the user asked for the whole text
     private BulleAdapter mBulleAdapter; 
-    
+    //clusters
+    private ClusterManager<PreviewClusterItem> mClusterManager;
+    //current values
+    private CameraPosition mCurrentCameraPosition;
+    private Location mCurrentLocation;
     //constants
     private int mZoomLevel = 12; // the zoom of the map (initially)
     
-    private ClusterManager<PreviewClusterItem> mClusterManager;
-    
-    private CameraPosition mCurrentCameraPosition;
-    private Location mCurrentLocation;
- 
+    //timers
     private CountDownTimer timerOneSecond =  new CountDownTimer(1000, 1000) {   	
         public void onFinish() {
     		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
@@ -232,17 +231,10 @@ OnMapLoadedCallback
 	}
 
 	@Override
-	public void afterPostMessage(Message message) {
-	}
+	public void afterPostMessage(Message message) {}
 
 	@Override
-	public void afterGetMessage(Message message) {
-		//If I have to change the bulle to mMarkerMessage
-		if(mMarkerMessage.getPosition().latitude == message.getLatitude() 
-				&& mMarkerMessage.getPosition().longitude == message.getLongitude()){
-			
-		}
-	}
+	public void afterGetMessage(Message message) {	}
 	@Override
 	public void afterGetPreviews(List<Preview> list) {
 		mClusterManager.clearItems();
@@ -289,6 +281,7 @@ OnMapLoadedCallback
 		CameraPosition cp = mMap.getCameraPosition();
 		mClusterManager.onCameraChange(cp);
 	}
+
     
 
 	@Override
@@ -297,14 +290,20 @@ OnMapLoadedCallback
 		return false;
 	}
 	@Override
-	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {
-		mNetworkModule.getMessage(item.getPreview().getId());
+	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {		
+		//set fragment
+		Bundle args = new Bundle();
+        args.putLong("id_preview", item.getPreview().getId());
+        CommentFragment fragment = new CommentFragment();
+        fragment.setArguments(args);
+        
+        //create transaction
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
-		transaction.replace(R.id.edit_text, new CommentFragment());
+		transaction.replace(R.id.edit_text, fragment);
 		transaction.addToBackStack(null);
-		transaction.commit();	
+		transaction.commit();
 	}
 	@Override
 	public boolean onClusterItemClick(PreviewClusterItem item) {
@@ -324,8 +323,6 @@ OnMapLoadedCallback
     				mCurrentCameraPosition.target.longitude); 
 		}
 		mCurrentLocation = location;
-		
-		
 	}
 	@Override
 	public void onMapLoaded() {	
@@ -333,5 +330,4 @@ OnMapLoadedCallback
 		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
 				mCurrentCameraPosition.target.longitude); 
 	}
-
 }

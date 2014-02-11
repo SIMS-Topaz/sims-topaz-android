@@ -1,16 +1,17 @@
 package com.sims.topaz;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.LocationSource.OnLocationChangedListener;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -32,7 +33,7 @@ import com.sims.topaz.utils.TagUtils;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -51,7 +52,9 @@ NetworkDelegate, //when called to the server
 ClusterManager.OnClusterItemInfoWindowClickListener<PreviewClusterItem>,
 ClusterManager.OnClusterClickListener<PreviewClusterItem>,
 ClusterManager.OnClusterItemClickListener<PreviewClusterItem>,
-OnCameraChangeListener
+OnCameraChangeListener,
+LocationListener,
+OnMapLoadedCallback 
 {
 	
 	private GoogleMap mMap;
@@ -72,18 +75,27 @@ OnCameraChangeListener
     
     private ClusterManager<PreviewClusterItem> mClusterManager;
     
-    private final Handler mHandler = new Handler();
     private CameraPosition mCurrentCameraPosition;
     private Location mCurrentLocation;
-    private boolean isRunnableCalled = false;
-    private final Runnable mUpdateUI = new Runnable() {
-        public void run() {
+ 
+    private CountDownTimer timerOneSecond =  new CountDownTimer(1000, 1000) {   	
+        public void onFinish() {
     		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
     				mCurrentCameraPosition.target.longitude); 
-			mHandler.postDelayed(mUpdateUI, 20000); // 20 second
-            }
-        };
-        
+        }
+
+		@Override
+		public void onTick(long millisUntilFinished) {}
+     };
+     private CountDownTimer timerOneMinute =  new CountDownTimer(60000, 1000) {
+         public void onFinish() {
+     		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
+    				mCurrentCameraPosition.target.longitude); 
+         }
+         
+		@Override
+		public void onTick(long millisUntilFinished) {}
+      };       
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +125,8 @@ OnCameraChangeListener
         mMap.setOnMarkerClickListener(mClusterManager);
         mClusterManager.setOnClusterClickListener(this);
         mClusterManager.setOnClusterItemClickListener(this);
-        mClusterManager.setOnClusterItemInfoWindowClickListener(this);   	
+        mClusterManager.setOnClusterItemInfoWindowClickListener(this);  
+        
     }
     private void setMapIfNeeded(LayoutInflater inflater){
     	mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -122,6 +135,8 @@ OnCameraChangeListener
         	mMap.setOnMapLongClickListener(this);
         	mBulleAdapter = new BulleAdapter(inflater);
         	mMap.setInfoWindowAdapter(mBulleAdapter);
+        	mMap.setOnCameraChangeListener(this);
+        	mMap.setOnMapLoadedCallback(this);
         	
         }
         
@@ -166,15 +181,12 @@ OnCameraChangeListener
 		mNetworkModule = new NetworkRestModule(this);
 		LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
 		mCurrentCameraPosition = mMap.getCameraPosition();
-		mHandler.post(mUpdateUI);
+		timerOneMinute.start();
 		mClusterManager.onCameraChange(mCurrentCameraPosition); 
 	}
 
 	@Override
-	public void onDisconnected() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onDisconnected() {}
 	
     @Override
     public void onStop() {
@@ -185,10 +197,6 @@ OnCameraChangeListener
         super.onStop();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
 
     @Override
     public void onStart() {
@@ -236,11 +244,10 @@ OnCameraChangeListener
 			//TODO show in comment fragment
 		}
 	}
-
 	@Override
 	public void afterGetPreviews(List<Preview> list) {
 		mClusterManager.clearItems();
-		
+		Toast.makeText(getActivity(), "get Previews ok", Toast.LENGTH_SHORT).show();
 		List<PreviewClusterItem> items = new ArrayList<PreviewClusterItem>();
 		for(Preview p:list){
 			String text = p.getText();
@@ -251,6 +258,7 @@ OnCameraChangeListener
 		}	
 		mClusterManager.addItems(items);
 		mClusterManager.onCameraChange(mCurrentCameraPosition);
+		mClusterManager.cluster();
 	}
 	
     private class PreviewRenderer extends DefaultClusterRenderer<PreviewClusterItem> {
@@ -299,7 +307,24 @@ OnCameraChangeListener
 	public void onCameraChange(CameraPosition camera) {
 		mCurrentCameraPosition = camera;
 		mClusterManager.onCameraChange(camera);	
-		//demarre un timer de 1 seconde
+		timerOneSecond.start();
+	}
+	@Override
+	public void onLocationChanged(Location location) {
+		if(mCurrentLocation.distanceTo(location)>100){
+    		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
+    				mCurrentCameraPosition.target.longitude); 
+		}
+		mCurrentLocation = location;
+		
+		
+	}
+	@Override
+	public void onMapLoaded() {	
+		mCurrentCameraPosition = mMap.getCameraPosition();
+		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
+				mCurrentCameraPosition.target.longitude); 
+		
 		
 	}
 

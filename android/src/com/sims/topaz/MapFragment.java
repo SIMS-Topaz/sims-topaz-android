@@ -282,5 +282,11 @@ NetworkDelegate //when called to the server
             return cluster.getSize() > 1;
         }
     }
+
+	public void onNewMessage(Message message) {
+		Preview preview = new Preview(message);
+		PreviewClusterItem pci = new PreviewClusterItem(preview);
+		mClusterManager.addItem(pci);
+	}
     
 }

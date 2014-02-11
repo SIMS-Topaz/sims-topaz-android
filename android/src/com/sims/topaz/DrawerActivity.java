@@ -1,6 +1,8 @@
 package com.sims.topaz;
 
 
+import org.w3c.dom.Comment;
+
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.utils.SimsContext;
@@ -24,7 +26,7 @@ import android.widget.ListView;
 
 
 public class DrawerActivity extends FragmentActivity
-					implements EditMessageFragment.OnNewMessageListener {
+					implements EditMessageFragment.OnNewMessageListener{
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -39,7 +41,7 @@ public class DrawerActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_list);
         SimsContext.setContext(getApplicationContext());
-
+        mMapFragment = new MapFragment();
         setDrawer(savedInstanceState);
 
     }
@@ -95,7 +97,7 @@ public class DrawerActivity extends FragmentActivity
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+        
         if (savedInstanceState == null) {
            selectItem(0);
         }
@@ -138,14 +140,13 @@ public class DrawerActivity extends FragmentActivity
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	switch (position) {
 		case 0:
-			mMapFragment = new MapFragment();
+			
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.content_frame, mMapFragment)
 			.commit();			
 			break;
 		case 1:
-			mMapFragment = new MapFragment();
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.content_frame, mMapFragment)
@@ -207,6 +208,4 @@ public class DrawerActivity extends FragmentActivity
 			mMapFragment.onNewMessage(message);
 		}
 	}
-    
-
 }

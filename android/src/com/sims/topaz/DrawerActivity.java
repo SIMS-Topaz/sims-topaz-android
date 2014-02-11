@@ -2,6 +2,7 @@ package com.sims.topaz;
 
 
 import com.sims.topaz.adapter.DrawerAdapter;
+import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.utils.SimsContext;
 
 import android.support.v4.app.FragmentManager;
@@ -22,7 +23,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 
-public class DrawerActivity extends FragmentActivity{
+public class DrawerActivity extends FragmentActivity
+					implements EditMessageFragment.OnNewMessageListener {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -31,6 +33,7 @@ public class DrawerActivity extends FragmentActivity{
     private CharSequence mTitle;
     private String[] mViewsTitles;
     private int mApiVersion = android.os.Build.VERSION.SDK_INT;
+    private MapFragment mMapFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,15 +138,17 @@ public class DrawerActivity extends FragmentActivity{
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	switch (position) {
 		case 0:
+			mMapFragment = new MapFragment();
 			fragmentManager
 			.beginTransaction()
-			.replace(R.id.content_frame, new MapFragment())
+			.replace(R.id.content_frame, mMapFragment)
 			.commit();			
 			break;
 		case 1:
+			mMapFragment = new MapFragment();
 			fragmentManager
 			.beginTransaction()
-			.replace(R.id.content_frame, new MapFragment())
+			.replace(R.id.content_frame, mMapFragment)
 			.commit();			
 			break;
 		case 2:
@@ -194,6 +199,14 @@ public class DrawerActivity extends FragmentActivity{
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+    
+
+	@Override
+	public void onNewMessage(Message message) {
+		if(mMapFragment!=null) {
+			mMapFragment.onNewMessage(message);
+		}
+	}
     
 
 }

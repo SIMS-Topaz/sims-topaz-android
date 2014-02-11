@@ -22,7 +22,23 @@ public class Preview {
 	@JsonProperty("date")
 	private Long timestamp;
 	
+	private final int MAX_CHAR = 10;
+	
 	public Preview() {
+	}
+	
+	public Preview(Message message) {
+		this.id = message.getId();
+		this.latitude = message.getLatitude();
+		this.longitude = message.getLongitude();
+		if(message.getText().length() > MAX_CHAR) {
+			this.text = message.getText().substring(0,MAX_CHAR);
+			this.isFull = false;
+		} else {
+			this.text = message.getText();
+			this.isFull = true;
+		}
+		this.timestamp = message.getTimestamp();
 	}
 	
 	public Long getId() {

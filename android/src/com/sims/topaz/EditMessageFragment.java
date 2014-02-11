@@ -9,6 +9,8 @@ import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 
+import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter.LengthFilter;
@@ -25,6 +27,26 @@ public class EditMessageFragment extends Fragment
 	
 	NetworkRestModule restModule = new NetworkRestModule(this);
 	LatLng position;
+	
+	OnNewMessageListener mCallback;
+	// Container Activity must implement this interface
+	public interface OnNewMessageListener {
+		public void onNewMessage(Message message);
+	}
+	
+	@Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (OnNewMessageListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnNewMessageListener");
+        }
+    }
 	
     public void setPosition(LatLng position) {
 		this.position = position;
@@ -75,9 +97,9 @@ public class EditMessageFragment extends Fragment
 	@Override
 	public void afterPostMessage(Message message) {
 		// TODO Auto-generated method stub
-		Toast.makeText(getActivity(), "Message envoyé", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), getString(R.string.message_sent), Toast.LENGTH_SHORT).show();
+		new AsyncNewMessage().execute(mCallback, message);
 		getFragmentManager().popBackStack();
-		
 	}
 
 	@Override
@@ -95,6 +117,18 @@ public class EditMessageFragment extends Fragment
 	@Override
 	public void networkError() {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	private class AsyncNewMessage extends AsyncTask<Object, Integer, Void> {
+
+		@Override
+		protected Void doInBackground(Object... params) {
+			OnNewMessageListener callback = (OnNewMessageListener) params[0];
+			Message message = (Message) params[1];
+			callback.onNewMessage(message);
+			return null;
+		}
 		
 	}
 

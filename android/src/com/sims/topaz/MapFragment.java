@@ -282,6 +282,15 @@ OnMapLoadedCallback
     }
 
 
+	public void onNewMessage(Message message) {
+		Preview preview = new Preview(message);
+		PreviewClusterItem pci = new PreviewClusterItem(preview);
+		mClusterManager.addItem(pci);
+		CameraPosition cp = mMap.getCameraPosition();
+		mClusterManager.onCameraChange(cp);
+	}
+    
+
 	@Override
 	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
 		mBulleAdapter.setIsCluster(true);

@@ -98,7 +98,8 @@ public class EditMessageFragment extends Fragment
 	public void afterPostMessage(Message message) {
 		// TODO Auto-generated method stub
 		Toast.makeText(getActivity(), getString(R.string.message_sent), Toast.LENGTH_SHORT).show();
-		new AsyncNewMessage().execute(mCallback, message);
+		getFragmentManager().beginTransaction().hide(this).commit();
+		mCallback.onNewMessage(message);
 		getFragmentManager().popBackStack();
 	}
 
@@ -117,18 +118,6 @@ public class EditMessageFragment extends Fragment
 	@Override
 	public void networkError() {
 		// TODO Auto-generated method stub
-		
-	}
-	
-	private class AsyncNewMessage extends AsyncTask<Object, Integer, Void> {
-
-		@Override
-		protected Void doInBackground(Object... params) {
-			OnNewMessageListener callback = (OnNewMessageListener) params[0];
-			Message message = (Message) params[1];
-			callback.onNewMessage(message);
-			return null;
-		}
 		
 	}
 

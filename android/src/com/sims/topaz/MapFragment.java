@@ -247,7 +247,6 @@ OnMapLoadedCallback
 	@Override
 	public void afterGetPreviews(List<Preview> list) {
 		mClusterManager.clearItems();
-		Toast.makeText(getActivity(), "get Previews ok", Toast.LENGTH_SHORT).show();
 		List<PreviewClusterItem> items = new ArrayList<PreviewClusterItem>();
 		for(Preview p:list){
 			String text = p.getText();

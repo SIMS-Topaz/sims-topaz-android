@@ -287,6 +287,8 @@ NetworkDelegate //when called to the server
 		Preview preview = new Preview(message);
 		PreviewClusterItem pci = new PreviewClusterItem(preview);
 		mClusterManager.addItem(pci);
+		CameraPosition cp = mMap.getCameraPosition();
+		mClusterManager.onCameraChange(cp);
 	}
     
 }

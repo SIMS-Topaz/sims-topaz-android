@@ -5,10 +5,8 @@ import java.util.List;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -44,10 +42,8 @@ import android.widget.Toast;
 
 public class MapFragment extends Fragment 
 implements OnMapLongClickListener,
-LocationListener,
 GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
-OnCameraChangeListener,
 NetworkDelegate, //when called to the server
 ClusterManager.OnClusterItemInfoWindowClickListener<PreviewClusterItem>,
 ClusterManager.OnClusterClickListener<PreviewClusterItem>,
@@ -71,6 +67,7 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
     private int mZoomLevel = 12; // the zoom of the map (initially)
     
     private ClusterManager<PreviewClusterItem> mClusterManager;
+    
     private final Handler mHandler = new Handler();
     private CameraPosition mCurrentCameraPosition;
     private Location mCurrentLocation;
@@ -79,8 +76,7 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
         public void run() {
     		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
     				mCurrentCameraPosition.target.longitude); 
-			mHandler.postDelayed(mUpdateUI, 1000); // 1 second
-			
+			mHandler.postDelayed(mUpdateUI, 20000); // 20 second
             }
         };
         
@@ -120,7 +116,6 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
         if(mMap!=null) {
         	mMap.setMyLocationEnabled(true);	
         	mMap.setOnMapLongClickListener(this);
-        	mMap.setOnCameraChangeListener(this);
         	mBulleAdapter = new BulleAdapter(inflater);
         	mMap.setInfoWindowAdapter(mBulleAdapter);
         	
@@ -173,19 +168,9 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void onLocationChanged(Location location) {
-		mCurrentLocation = location;
-	}
 	
     @Override
     public void onStop() {
-
-        // If the client is connected
-        if (mLocationClient!=null && mLocationClient.isConnected()) {
-            stopPeriodicUpdates();
-        }
         // After disconnect() is called, the client is considered "dead".
         if(mLocationClient!=null){
         	mLocationClient.disconnect();
@@ -205,10 +190,6 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
         	mLocationClient.connect();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -227,20 +208,13 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>
         }
     }
     
-    private void startPeriodicUpdates() {
-        mLocationClient.requestLocationUpdates(mLocationRequest, this);
-    }
-
-    private void stopPeriodicUpdates() {
-        mLocationClient.removeLocationUpdates(this);
-    }
-
+/*
 	@Override
 	public void onCameraChange(CameraPosition camera) {
 		mCurrentCameraPosition = camera;
 		mClusterManager.onCameraChange(camera);
 		
-	}
+	}*/
 
 
 

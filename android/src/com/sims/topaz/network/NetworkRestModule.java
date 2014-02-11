@@ -25,10 +25,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+
 public class NetworkRestModule {
 	
 	//public static final String SERVER_URL = "http://topaz1.apiary.io/api/";
-	public static final String SERVER_URL = "http://91.121.16.137:8080/api/";
+	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1/";
 	
 	private NetworkDelegate delegate;
 	
@@ -81,6 +82,7 @@ public class NetworkRestModule {
 	
 	private void handleResponse(TypeRequest type, String response) {
 		ObjectMapper mapper = new ObjectMapper();
+
 		switch (type) {
 			case GET_MESSAGE:
 				try {

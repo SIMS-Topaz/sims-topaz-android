@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="connection_error_code">Connection failure error code: %1$d</string>
+    <string name="connection_error_code">Erreur de connection: %1$d</string>
     <string name="connection_error_disabled">Google Play services is disabled</string>
     <string name="connection_error_internal">An internal error occurred</string>
     <string name="connection_error_invalid">The version of Google Play services on this device is not authentic</string>
@@ -16,4 +16,8 @@
     <string name="connection_error_unknown">An unknown error occurred</string>
     
     <string name="network_error">Une erreur a survenue lors de l\'appel au serveur.</string>
+
+
+    <string name="map_not_displayed">La carte n\'as pas pu être chargé. </string>
+    
 </resources>

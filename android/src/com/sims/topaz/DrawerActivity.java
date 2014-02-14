@@ -11,7 +11,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -20,10 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.support.v7.app.ActionBarActivity;  
 
 
-public class DrawerActivity extends FragmentActivity
+public class DrawerActivity extends ActionBarActivity
 					implements EditMessageFragment.OnNewMessageListener{
+	//see http://developer.android.com/guide/topics/ui/actionbar.html
+	//in order 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -60,11 +62,10 @@ public class DrawerActivity extends FragmentActivity
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
-        if (mApiVersion >= 11){
-            // Do something for froyo and above versions
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-            getActionBar().setHomeButtonEnabled(true);
-        }
+       // Do something for froyo and above versions
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        
 
 
         // ActionBarDrawerToggle ties together the the proper interactions
@@ -79,23 +80,14 @@ public class DrawerActivity extends FragmentActivity
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 			@SuppressLint("NewApi")
 			public void onDrawerClosed(View view) {
-            	if (mApiVersion > 11){
-            		getActionBar().setTitle(mTitle);
-            		invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            	}else{
-            		supportInvalidateOptionsMenu();
-            	}
+            		getSupportActionBar().setTitle(mTitle);
+            		supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()           	
             }
 
             @SuppressLint("NewApi")
 			public void onDrawerOpened(View drawerView) {
-            	if (mApiVersion > 11){
-            		getActionBar().setTitle(mDrawerTitle);
-                    invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            	}else{
-            		supportInvalidateOptionsMenu();
-            	}
-            	
+            		getSupportActionBar().setTitle(mDrawerTitle);
+            		supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -179,9 +171,7 @@ public class DrawerActivity extends FragmentActivity
 	@Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        if (mApiVersion >= 11){
-        	getActionBar().setTitle(mTitle);
-        }
+        getSupportActionBar().setTitle(mTitle);
     }
 
     /**

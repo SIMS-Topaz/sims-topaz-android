@@ -6,10 +6,12 @@ import com.sims.topaz.adapter.CommentAdapter;
 import com.sims.topaz.modele.CommentItem;
 import com.sims.topaz.network.NetworkDelegate;
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
+
 
 
 
@@ -51,7 +53,7 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		mListComments = (ListView)v.findViewById(R.id.comment_list);
 		//TODO remove this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		CommentItem[] comments = new CommentItem[2];
-		CommentItem a = new CommentItem(12321, "Dostoievski", "Plus j’aime l’humanité en général, moins j’aime les gens en particulier, comme individus.", 1392094361,
+		CommentItem a = new CommentItem(12321, "Dostoievski", "Plus jï¿½aime lï¿½humanitï¿½ en gï¿½nï¿½ral, moins jï¿½aime les gens en particulier, comme individus.", 1392094361,
 				null, (float) 8.9);
 		CommentItem b = new CommentItem(12321, "Paulo Coelho", "And, when you want something, all the universe conspires in helping you to achieve it", 1392094362,
 				null, (float) 7.9);
@@ -86,5 +88,11 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		Toast.makeText(getActivity(),
 				getResources().getString(R.string.network_error),
 				Toast.LENGTH_SHORT).show();	}
+
+	@Override
+	public void apiError(ApiError error) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

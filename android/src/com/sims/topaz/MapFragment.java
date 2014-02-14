@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
@@ -24,6 +25,7 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.sims.topaz.adapter.BulleAdapter;
 import com.sims.topaz.network.NetworkDelegate;
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.LocationUtils;
@@ -78,8 +80,8 @@ OnMapLoadedCallback
     //timers
     private CountDownTimer timerOneSecond =  new CountDownTimer(1000, 1000) {   	
         public void onFinish() {
-    		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
-    				mCurrentCameraPosition.target.longitude); 
+       	 	VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+       	 	mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
         }
 
 		@Override
@@ -87,8 +89,8 @@ OnMapLoadedCallback
      };
      private CountDownTimer timerOneMinute =  new CountDownTimer(60000, 1000) {
          public void onFinish() {
-     		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
-    				mCurrentCameraPosition.target.longitude); 
+        	 VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+        	 mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
          }
          
 		@Override
@@ -115,15 +117,21 @@ OnMapLoadedCallback
 
     }
     private void setClusterManager(){
-        mClusterManager = new ClusterManager<PreviewClusterItem>(this.getActivity(), mMap);
-        mClusterManager.setRenderer(new PreviewRenderer());
-        mClusterManager.onCameraChange(mCurrentCameraPosition); 
-        mMap.setOnMarkerClickListener(mClusterManager);
-        mMap.setOnInfoWindowClickListener(mClusterManager);
-        mMap.setOnMarkerClickListener(mClusterManager);
-        mClusterManager.setOnClusterClickListener(this);
-        mClusterManager.setOnClusterItemClickListener(this);
-        mClusterManager.setOnClusterItemInfoWindowClickListener(this);  
+    	if(mMap != null){
+	        mMap.setOnMarkerClickListener(mClusterManager);
+	        mMap.setOnInfoWindowClickListener(mClusterManager);
+	        mMap.setOnMarkerClickListener(mClusterManager);
+	        mClusterManager = new ClusterManager<PreviewClusterItem>(this.getActivity(), mMap);
+	        mClusterManager.setRenderer(new PreviewRenderer());
+	        mClusterManager.onCameraChange(mCurrentCameraPosition); 
+	        mClusterManager.setOnClusterClickListener(this);
+	        mClusterManager.setOnClusterItemClickListener(this);
+	        mClusterManager.setOnClusterItemInfoWindowClickListener(this);  
+    	}else{
+    		Toast.makeText(getActivity(), 
+    				getResources().getString(R.string.map_not_displayed), 
+    				Toast.LENGTH_SHORT).show();
+    	}
         
     }
     private void setMapIfNeeded(LayoutInflater inflater){
@@ -318,15 +326,19 @@ OnMapLoadedCallback
 	@Override
 	public void onLocationChanged(Location location) {
 		if(mCurrentLocation.distanceTo(location)>100){
-    		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
-    				mCurrentCameraPosition.target.longitude); 
+    		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+    		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
 		}
 		mCurrentLocation = location;
 	}
 	@Override
 	public void onMapLoaded() {	
 		mCurrentCameraPosition = mMap.getCameraPosition();
-		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
-				mCurrentCameraPosition.target.longitude); 
+		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+	}
+	@Override
+	public void apiError(ApiError error) {
+		// TODO Auto-generated method stub
 	}
 }

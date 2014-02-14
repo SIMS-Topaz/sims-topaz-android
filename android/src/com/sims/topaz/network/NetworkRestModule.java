@@ -30,7 +30,7 @@ public class NetworkRestModule {
 
 	
 	//public static final String SERVER_URL = "http://topaz1.apiary.io/api/v1/";
-	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1/";
+	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.1/";
 	
 	private NetworkDelegate delegate;
 	
@@ -164,7 +164,9 @@ public class NetworkRestModule {
 
 		@Override
 		protected void onPostExecute(String response) {
-			module.handleResponse(typeRequest, response);
+			if(module!=null && delegate!=null){
+				module.handleResponse(typeRequest, response);
+			}
 		}
 
 		@Override

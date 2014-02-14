@@ -15,7 +15,6 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -57,109 +56,119 @@ OnCameraChangeListener,
 LocationListener,
 OnMapLoadedCallback
 {
-	
+
 	private GoogleMap mMap;
-    private static View mView;
-    // A request to connect to Location Services
-    private LocationRequest mLocationRequest;
-    // Stores the current instantiation of the location client in this object
-    private LocationClient mLocationClient;
-    //network call
-    private NetworkRestModule mNetworkModule; 
-    //bulle
-    private Marker mMarkerMessage; //stores the marker for wich the user asked for the whole text
-    private BulleAdapter mBulleAdapter; 
-    //clusters
-    private ClusterManager<PreviewClusterItem> mClusterManager;
-    //current values
-    private CameraPosition mCurrentCameraPosition;
-    private Location mCurrentLocation;
-    //constants
-    private int mZoomLevel = 12; // the zoom of the map (initially)
-    
-    //timers
-    private CountDownTimer timerOneSecond =  new CountDownTimer(1000, 1000) {   	
-        public void onFinish() {
-       	 	VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-       	 	mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
-        }
+	private static View mView;
+	// A request to connect to Location Services
+	private LocationRequest mLocationRequest;
+	// Stores the current instantiation of the location client in this object
+	private LocationClient mLocationClient;
+	//network call
+	private NetworkRestModule mNetworkModule; 
+	//bulle
+	private BulleAdapter mBulleAdapter; 
+	//clusters
+	private ClusterManager<PreviewClusterItem> mClusterManager;
+	//current values
+	private CameraPosition mCurrentCameraPosition;
+	private Location mCurrentLocation;
+	//constants
+	private int mZoomLevel = 12; // the zoom of the map (initially)
+
+	//timers
+	private CountDownTimer timerOneSecond =  new CountDownTimer(1000, 1000) {   	
+		public void onFinish() {
+			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {}
-     };
-     private CountDownTimer timerOneMinute =  new CountDownTimer(60000, 1000) {
-         public void onFinish() {
-        	 VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-        	 mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
-         }
-         
+	};
+	private CountDownTimer timerOneMinute =  new CountDownTimer(60000, 1000) {
+		public void onFinish() {
+			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+		}
+
 		@Override
 		public void onTick(long millisUntilFinished) {}
-      };       
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	};   
+	/**
+	 * This method will only be called once when the retained
+	 * Fragment is first created.
+	 */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		// Retain this fragment across configuration changes.
+		setRetainInstance(true);
+
+	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		//create a new map or use the one that is exists
 		if (mView != null) {
 			ViewGroup parent = (ViewGroup) mView.getParent();
 			if (parent != null)
 				parent.removeView(mView);
 		}		
-        try {
+		try {
 			mView = inflater.inflate(R.layout.fragment_map, container, false);
-	        //set map and location 
+			//set map and location 
 			setMapIfNeeded(inflater);
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
-        setClusterManager();
-        return mView;
 
-    }
-    private void setClusterManager(){
-    	if(mMap != null){
-	        mMap.setOnMarkerClickListener(mClusterManager);
-	        mMap.setOnInfoWindowClickListener(mClusterManager);
-	        mMap.setOnMarkerClickListener(mClusterManager);
-	        mClusterManager = new ClusterManager<PreviewClusterItem>(this.getActivity(), mMap);
-	        mClusterManager.setRenderer(new PreviewRenderer());
-	        mClusterManager.onCameraChange(mCurrentCameraPosition); 
-	        mClusterManager.setOnClusterClickListener(this);
-	        mClusterManager.setOnClusterItemClickListener(this);
-	        mClusterManager.setOnClusterItemInfoWindowClickListener(this);  
-    	}else{
-    		Toast.makeText(getActivity(), 
-    				getResources().getString(R.string.map_not_displayed), 
-    				Toast.LENGTH_SHORT).show();
-    	}
-        
-    }
-    private void setMapIfNeeded(LayoutInflater inflater){
-    	mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-        if(mMap!=null) {
-        	mMap.setMyLocationEnabled(true);	
-        	mMap.setOnMapLongClickListener(this);
-        	mBulleAdapter = new BulleAdapter(inflater);
-        	mMap.setInfoWindowAdapter(mBulleAdapter);
-        	mMap.setOnCameraChangeListener(this);
-        	mMap.setOnMapLoadedCallback(this);
-        	
-        }
-        
-        // Create a new global location parameters object
-        mLocationRequest = LocationRequest.create();
-        //Set the update interval
-        mLocationRequest.setInterval(LocationUtils.UPDATE_INTERVAL_IN_MILLISECONDS);
-        // Use high accuracy
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        // Set the interval ceiling to one minute
-        mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
-        //Create a new location client, using the enclosing class to handle callbacks.
-        mLocationClient = new LocationClient(getActivity().getApplicationContext(),
-        		this,
-        		this);
-    }
-    
+		setClusterManager();
+		return mView;
+
+	}
+	private void setClusterManager(){
+		if(mMap != null){
+			mMap.setOnMarkerClickListener(mClusterManager);
+			mMap.setOnInfoWindowClickListener(mClusterManager);
+			mMap.setOnMarkerClickListener(mClusterManager);
+			mClusterManager = new ClusterManager<PreviewClusterItem>(this.getActivity(), mMap);
+			mClusterManager.setRenderer(new PreviewRenderer());
+			mClusterManager.onCameraChange(mCurrentCameraPosition); 
+			mClusterManager.setOnClusterClickListener(this);
+			mClusterManager.setOnClusterItemClickListener(this);
+			mClusterManager.setOnClusterItemInfoWindowClickListener(this);  
+		}else{
+			Toast.makeText(getActivity(), 
+					getResources().getString(R.string.map_not_displayed), 
+					Toast.LENGTH_SHORT).show();
+		}
+
+	}
+	private void setMapIfNeeded(LayoutInflater inflater){
+		mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+		if(mMap!=null) {
+			mMap.setMyLocationEnabled(true);	
+			mMap.setOnMapLongClickListener(this);
+			mBulleAdapter = new BulleAdapter(inflater);
+			mMap.setInfoWindowAdapter(mBulleAdapter);
+			mMap.setOnCameraChangeListener(this);
+			mMap.setOnMapLoadedCallback(this);
+		}
+
+		// Create a new global location parameters object
+		mLocationRequest = LocationRequest.create();
+		//Set the update interval
+		mLocationRequest.setInterval(LocationUtils.UPDATE_INTERVAL_IN_MILLISECONDS);
+		// Use high accuracy
+		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+		// Set the interval ceiling to one minute
+		mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+		//Create a new location client, using the enclosing class to handle callbacks.
+		mLocationClient = new LocationClient(getActivity().getApplicationContext(),
+				this,
+				this);
+	}
+
 	@Override
 	public void onMapLongClick(LatLng point) {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -167,7 +176,7 @@ OnMapLoadedCallback
 				R.drawable.animation_bottom_down);
 		EditMessageFragment fragment = new EditMessageFragment();
 		fragment.setPosition(point);
-		
+
 		transaction.replace(R.id.edit_text, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
@@ -178,7 +187,7 @@ OnMapLoadedCallback
 		Toast.makeText(getActivity()
 				, getResources().getString(R.string.connection_error_code)
 				,Toast.LENGTH_SHORT).show();
-		
+
 	}
 
 	@Override
@@ -193,41 +202,40 @@ OnMapLoadedCallback
 
 	@Override
 	public void onDisconnected() {}
-	
-    @Override
-    public void onStop() {
-        // After disconnect() is called, the client is considered "dead".
-        if(mLocationClient!=null){
-        	mLocationClient.disconnect();
-        }
-        super.onStop();
-    }
+
+	@Override
+	public void onStop() {
+		// After disconnect() is called, the client is considered "dead".
+		if(mLocationClient!=null){
+			mLocationClient.disconnect();
+		}
+		super.onStop();
+	}
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(mLocationClient!=null)
-        	mLocationClient.connect();
-    }
+	@Override
+	public void onStart() {
+		super.onStart();
+		if(mLocationClient!=null)
+			mLocationClient.connect();
+	}
 
-
-    @Override
+	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        // Choose what to do based on the request code
-        switch (requestCode) {
-            // If the request code matches the code sent in onConnectionFailed
-            case LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST :
-                Log.d(Integer.toString(LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST),
-                        getString(R.string.unknown_activity_request_code, requestCode));            	
-            // If any other request code was received
-            default:
-               // Report that this Activity received an unknown requestCode
-               Log.d(LocationUtils.APPTAG,
-                       getString(R.string.unknown_activity_request_code, requestCode));
-               break;
-        }
-    }
+		// Choose what to do based on the request code
+		switch (requestCode) {
+		// If the request code matches the code sent in onConnectionFailed
+		case LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST :
+			Log.d(Integer.toString(LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST),
+					getString(R.string.unknown_activity_request_code, requestCode));            	
+			// If any other request code was received
+		default:
+			// Report that this Activity received an unknown requestCode
+			Log.d(LocationUtils.APPTAG,
+					getString(R.string.unknown_activity_request_code, requestCode));
+			break;
+		}
+	}
 
 
 	@Override
@@ -235,7 +243,7 @@ OnMapLoadedCallback
 		Toast.makeText(getActivity(),
 				getResources().getString(R.string.network_error),
 				Toast.LENGTH_SHORT).show();
-		
+
 	}
 
 	@Override
@@ -258,28 +266,28 @@ OnMapLoadedCallback
 		mClusterManager.onCameraChange(mCurrentCameraPosition);
 		mClusterManager.cluster();
 	}
-	
-    private class PreviewRenderer extends DefaultClusterRenderer<PreviewClusterItem> {
 
-        public PreviewRenderer() {
-            super(mView.getContext(), mMap, mClusterManager);
-        }
+	private class PreviewRenderer extends DefaultClusterRenderer<PreviewClusterItem> {
 
-        @Override
-        protected void onBeforeClusterItemRendered(PreviewClusterItem item, MarkerOptions markerOptions) {
-            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(TagUtils.getDrawableForString(item.getTag()));
-            markerOptions.icon(icon)
-            .title(item.getPreview().getTimestamp().toString())
-            .snippet(item.getPreview().getText());
-            
-        }
+		public PreviewRenderer() {
+			super(mView.getContext(), mMap, mClusterManager);
+		}
 
-        @Override
-        protected boolean shouldRenderAsCluster(Cluster cluster) {
-            // Always render clusters.
-            return cluster.getSize() > 1;
-        }
-    }
+		@Override
+		protected void onBeforeClusterItemRendered(PreviewClusterItem item, MarkerOptions markerOptions) {
+			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(TagUtils.getDrawableForString(item.getTag()));
+			markerOptions.icon(icon)
+			.title(item.getPreview().getTimestamp().toString())
+			.snippet(item.getPreview().getText());
+
+		}
+
+		@Override
+		protected boolean shouldRenderAsCluster(Cluster cluster) {
+			// Always render clusters.
+			return cluster.getSize() > 1;
+		}
+	}
 
 
 	public void onNewMessage(Message message) {
@@ -289,7 +297,7 @@ OnMapLoadedCallback
 		mClusterManager.cluster();
 	}
 
-    
+
 
 	@Override
 	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
@@ -300,11 +308,11 @@ OnMapLoadedCallback
 	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {		
 		//set fragment
 		Bundle args = new Bundle();
-        args.putLong("id_preview", item.getPreview().getId());
-        CommentFragment fragment = new CommentFragment();
-        fragment.setArguments(args);
-        
-        //create transaction
+		args.putLong("id_preview", item.getPreview().getId());
+		CommentFragment fragment = new CommentFragment();
+		fragment.setArguments(args);
+
+		//create transaction
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
@@ -326,8 +334,8 @@ OnMapLoadedCallback
 	@Override
 	public void onLocationChanged(Location location) {
 		if(mCurrentLocation.distanceTo(location)>100){
-    		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-    		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
 		}
 		mCurrentLocation = location;
 	}

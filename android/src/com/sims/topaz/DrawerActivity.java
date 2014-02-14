@@ -33,8 +33,8 @@ public class DrawerActivity extends ActionBarActivity
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mViewsTitles;
-    private int mApiVersion = android.os.Build.VERSION.SDK_INT;
     private MapFragment mMapFragment;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

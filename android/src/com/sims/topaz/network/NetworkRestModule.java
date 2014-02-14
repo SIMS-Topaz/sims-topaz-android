@@ -32,8 +32,8 @@ public class NetworkRestModule {
 
 	
 
-	public static final String SERVER_URL = "http://topaz11.apiary.io/api/v1.1/";
-	//public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1/";
+	//public static final String SERVER_URL = "http://topaz11.apiary.io/api/v1.1/";
+	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.1/";
 	
 	private NetworkDelegate delegate;
 	

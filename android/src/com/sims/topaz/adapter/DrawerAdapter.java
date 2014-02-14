@@ -27,6 +27,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 	@SuppressWarnings("deprecation")
 	public View getView(int position, View convertView, ViewGroup parent){
 		View view = convertView;
+		
 		if(view == null){
 			LayoutInflater inflater = 
 					(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -43,9 +44,8 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 				}else{
 					view = inflater.inflate(R.layout.drawer_list_item_search_bar, null);
 				}
-			}else{
+			}else if (position == 0){ // do not remove the if from the elese (it is needed for gingerbread)
 				view = inflater.inflate(R.layout.drawer_list_item_search_bar, null);
-				//TODO take the edit text and add a text changed listener
 			}
 
 			ImageView image = (ImageView)view.findViewById(R.id.drawer_icon);

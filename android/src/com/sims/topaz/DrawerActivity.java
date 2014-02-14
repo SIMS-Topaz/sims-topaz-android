@@ -4,15 +4,14 @@ import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.utils.SimsContext;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,19 +33,19 @@ public class DrawerActivity extends ActionBarActivity
     private CharSequence mTitle;
     private String[] mViewsTitles;
     private MapFragment mMapFragment;
+    private Fragment mLastFragment;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_list);
         SimsContext.setContext(getApplicationContext());
-        mMapFragment = new MapFragment();
+        mLastFragment = mMapFragment = new MapFragment();       
         setDrawer(savedInstanceState);
 
     }
     
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	@SuppressLint("NewApi")
+
 	private void setDrawer(Bundle savedInstanceState){
 
         mTitle = mDrawerTitle = getTitle();
@@ -77,14 +76,12 @@ public class DrawerActivity extends ActionBarActivity
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
                 ) {
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-			@SuppressLint("NewApi")
+
 			public void onDrawerClosed(View view) {
             		getSupportActionBar().setTitle(mTitle);
             		supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()           	
             }
 
-            @SuppressLint("NewApi")
 			public void onDrawerOpened(View drawerView) {
             		getSupportActionBar().setTitle(mDrawerTitle);
             		supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
@@ -114,9 +111,15 @@ public class DrawerActivity extends ActionBarActivity
     public boolean onOptionsItemSelected(MenuItem item) {
          // The action bar home/up action should open or close the drawer.
          // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
+    	if(android.R.id.home == item.getItemId()) {
+            if (mDrawerLayout.isDrawerOpen(Gravity.LEFT) == false) {
+            	mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+            else {
+            	mDrawerLayout.closeDrawers();
+            }
         }
+        
          return super.onOptionsItemSelected(item);
         
     }
@@ -129,37 +132,28 @@ public class DrawerActivity extends ActionBarActivity
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void selectItem(int position) {
     	FragmentManager fragmentManager = getSupportFragmentManager();
+    	fragmentManager.beginTransaction().remove(mLastFragment);
     	switch (position) {
 		case 0:
-			
-			fragmentManager
-			.beginTransaction()
-			.replace(R.id.content_frame, mMapFragment)
-			.commit();			
+			mLastFragment = mMapFragment;		
 			break;
 		case 1:
-			fragmentManager
-			.beginTransaction()
-			.replace(R.id.content_frame, mMapFragment)
-			.commit();			
+			mLastFragment = mMapFragment;		
 			break;
 		case 2:
-			fragmentManager
-			.beginTransaction()
-			.replace(R.id.content_frame, new SettingsFragment())
-			.commit();		
+			mLastFragment = new SettingsFragment();	
 		case 3:
-			fragmentManager
-			.beginTransaction()
-			.replace(R.id.content_frame, new AboutFragment())
-			.commit();	
+			mLastFragment = new AboutFragment();	
 		default:
 			break;
 		}
-
+    	
+		fragmentManager
+		.beginTransaction()
+		.replace(R.id.content_frame, mLastFragment)
+		.commit();
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
@@ -167,7 +161,6 @@ public class DrawerActivity extends ActionBarActivity
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
     public void setTitle(CharSequence title) {
         mTitle = title;

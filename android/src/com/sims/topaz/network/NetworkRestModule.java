@@ -23,14 +23,16 @@ import android.util.Log;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.maps.model.LatLng;
+import com.sims.topaz.network.modele.ApiResponse;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 
 public class NetworkRestModule {
 
 	
-	//public static final String SERVER_URL = "http://topaz1.apiary.io/api/v1/";
-	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1/";
+	public static final String SERVER_URL = "http://topaz11.apiary.io/api/v1.1/";
+	//public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1/";
 	
 	private NetworkDelegate delegate;
 	
@@ -53,11 +55,11 @@ public class NetworkRestModule {
 	/**
 	 * Envoi une requete get_previews pour recuperer les previews autour d'une zone
 	 * La fin de la requete appelera afterGetPreviews() (interface NetworkDelegate)
-	 * @param latitude : latitude de la zone
-	 * @param longitude : longitude de la zone
+	 * @param farLeft : coordonnées du bord supérieur gauche
+	 * @param nearRight : coordonnéesdu bord inférieur droit
 	 */
-	public void getPreviews(Double latitude, Double longitude) {
-		String url = SERVER_URL + "get_previews/" + latitude.toString() + "/" + longitude.toString();
+	public void getPreviews(LatLng farLeft, LatLng nearRight) {
+		String url = SERVER_URL + "get_previews/" + farLeft.latitude + "/" + farLeft.longitude + "/" + nearRight.latitude + "/" + nearRight.longitude;
 		Log.d("Network getPreviews url=", url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
 		rest.execute();
@@ -87,8 +89,12 @@ public class NetworkRestModule {
 		switch (type) {
 			case GET_MESSAGE:
 				try {
-					Message message = mapper.readValue(response, Message.class);
-					delegate.afterGetMessage(message);
+					ApiResponse<Message> responseData = mapper.readValue(response, new TypeReference<ApiResponse<Message>>(){});
+					if(responseData.getError() != null) {
+						delegate.apiError(responseData.getError());
+					} else {
+						delegate.afterGetMessage(responseData.getData());
+					}
 				} catch (Exception e) {
 					delegate.networkError();
 					e.printStackTrace();
@@ -97,8 +103,12 @@ public class NetworkRestModule {
 				break;
 			case GET_PREVIEW:
 				try {
-					List<Preview> list = mapper.readValue(response, new TypeReference<List<Preview>>(){});
-					delegate.afterGetPreviews(list);
+					ApiResponse<List<Preview>> responseData = mapper.readValue(response, new TypeReference<ApiResponse<List<Preview>>>(){});
+					if(responseData.getError() != null) {
+						delegate.apiError(responseData.getError());
+					} else {
+						delegate.afterGetPreviews(responseData.getData());
+					}
 				} catch (Exception e) {
 					delegate.networkError();
 					e.printStackTrace();
@@ -106,12 +116,25 @@ public class NetworkRestModule {
 				break;	
 			case POST_MESSAGE:
 				try {
-					Message message = mapper.readValue(response, Message.class);
-					delegate.afterPostMessage(message);
+					ApiResponse<Message> responseData = mapper.readValue(response, new TypeReference<ApiResponse<Message>>(){});
+					if(responseData.getError() != null) {
+						delegate.apiError(responseData.getError());
+					} else {
+						delegate.afterPostMessage(responseData.getData());
+					}
 				} catch (Exception e) {
 					delegate.networkError();
 					e.printStackTrace();
 				}	
+				break;
+			case COMMENT_MESSAGE:
+				// TODO	
+				break;
+			case USER_SIGNIN:
+				// TODO	
+				break;
+			case USER_LOGIN:
+				// TODO	
 				break;
 			default:
 				break;
@@ -119,9 +142,8 @@ public class NetworkRestModule {
 	}
 
 	enum TypeRequest {
-		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE
+		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, USER_SIGNIN, USER_LOGIN
 	}
-	
 	
 	
 	class RESTTask extends AsyncTask<String, Integer, String> {

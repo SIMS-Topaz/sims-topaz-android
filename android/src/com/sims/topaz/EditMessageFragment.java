@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.android.gms.maps.model.LatLng;
 import com.sims.topaz.network.NetworkDelegate;
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 
@@ -116,6 +117,12 @@ public class EditMessageFragment extends Fragment
 
 	@Override
 	public void networkError() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void apiError(ApiError error) {
 		// TODO Auto-generated method stub
 		
 	}

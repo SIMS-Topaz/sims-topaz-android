@@ -1,8 +1,5 @@
 package com.sims.topaz;
 
-
-import org.w3c.dom.Comment;
-
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.utils.SimsContext;
@@ -82,18 +79,23 @@ public class DrawerActivity extends FragmentActivity
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 			@SuppressLint("NewApi")
 			public void onDrawerClosed(View view) {
-            	if (mApiVersion >= 11){
+            	if (mApiVersion > 11){
             		getActionBar().setTitle(mTitle);
             		invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            	}else{
+            		supportInvalidateOptionsMenu();
             	}
             }
 
             @SuppressLint("NewApi")
 			public void onDrawerOpened(View drawerView) {
-            	if (mApiVersion >= 11){
+            	if (mApiVersion > 11){
             		getActionBar().setTitle(mDrawerTitle);
                     invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            	}else{
+            		supportInvalidateOptionsMenu();
             	}
+            	
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);

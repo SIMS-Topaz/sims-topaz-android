@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
     android:orientation="vertical"
-    android:padding="4dp" >
+    android:padding="8dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,35 +20,34 @@
 
             <ImageView
                 android:id="@+id/comment_image_first_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
                 android:contentDescription="@string/comment_user_icon"
-                android:src="@drawable/ic_user"
-                android:scaleType="center" />
+                android:scaleType="center"
+                android:src="@drawable/ic_user" />
 
             <TextView
                 android:id="@+id/comment_person_name"
-                style="@style/text_black_big"
+                style="@style/text_dark_gray_big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
                 android:text="Victor HUGO" />
 
             <TextView
                 android:id="@+id/comment_time"
-                style="@style/text_black_big"
+                style="@style/text_dark_gray_big"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_margin="4dp"
+                android:layout_margin="8dp"
                 android:gravity="right"
                 android:text="11/02/2014" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/comment_first_comment_text"
-            style="@style/text_black_normal"
+            style="@style/text_dark_gray_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/comment_loading" />
@@ -59,51 +58,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:divider="@android:color/transparent"
-        android:dividerHeight="5dp"
-        android:paddingTop="4dp" />
+        android:dividerHeight="8dp"
+        android:paddingTop="8dp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:padding="4dp"
-        android:background="@color/white" >
+        android:layout_margin="8dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="8dp" >
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+        <ImageButton
+            android:id="@+id/comment_unlike"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/comment_unlike"
+            android:scaleType="center"
+            android:src="@drawable/ic_dislike"
+            android:background="@null" />
 
-            <ImageButton
-                android:id="@+id/comment_unlike"
-                android:layout_width="34dp"
-                android:layout_height="32dp"
-                android:layout_margin="4dp"
-                android:contentDescription="@string/comment_unlike"
-                android:src="@drawable/ic_dislike"
-                android:scaleType="center" />
-
-            <ImageButton
-                android:id="@+id/comment_like"
-                android:layout_width="34dp"
-                android:layout_height="32dp"
-                android:layout_margin="4dp"
-                android:contentDescription="@string/comment_like"
-                android:src="@drawable/ic_like"
-                android:scaleType="center" />
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/comment_like"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/comment_like"
+            android:scaleType="center"
+            android:src="@drawable/ic_like"
+            android:background="@null" />
 
         <ImageButton
             android:id="@+id/comment_share"
-            android:layout_width="34dp"
-            android:layout_height="32dp"
-            android:layout_alignParentRight="true"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_margin="4dp"
             android:contentDescription="@string/comment_share"
-            android:src="@drawable/ic_share"
+            android:onClick="shareMessage"
             android:scaleType="center"
-            android:onClick="shareMessage" />
-    </RelativeLayout>
+            android:src="@drawable/ic_share"
+            android:background="@null" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -115,10 +112,9 @@
             style="@style/text_gray_normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
             android:hint="@string/comment_hint"
             android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
-            android:padding="4dp" />
+            android:padding="8dp" />
 
         <Button
             android:id="@+id/clearable_button_clear"

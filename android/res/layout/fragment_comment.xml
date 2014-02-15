@@ -24,7 +24,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:contentDescription="@string/comment_user_icon"
-                android:src="@drawable/ic_user" />
+                android:src="@drawable/ic_user"
+                android:scaleType="centerInside" />
 
             <TextView
                 android:id="@+id/comment_person_name"
@@ -74,8 +75,8 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
             <ImageButton
                 android:id="@+id/comment_unlike"
@@ -83,7 +84,8 @@
                 android:layout_height="32dp"
                 android:layout_margin="4dp"
                 android:contentDescription="@string/comment_unlike"
-                android:src="@drawable/ic_dislike" />
+                android:src="@drawable/ic_dislike"
+                android:scaleType="centerInside" />
 
             <ImageButton
                 android:id="@+id/comment_like"
@@ -91,7 +93,8 @@
                 android:layout_height="32dp"
                 android:layout_margin="4dp"
                 android:contentDescription="@string/comment_like"
-                android:src="@drawable/ic_like" />
+                android:src="@drawable/ic_like"
+                android:scaleType="centerInside" />
         </LinearLayout>
 
         <ImageButton
@@ -101,17 +104,33 @@
             android:layout_alignParentRight="true"
             android:layout_margin="4dp"
             android:contentDescription="@string/comment_share"
-            android:src="@drawable/ic_share" />
+            android:src="@drawable/ic_share"
+            android:scaleType="centerInside" />
     </RelativeLayout>
 
-    <com.sims.topaz.customviews.CustomEditText
-        android:id="@+id/write_comment_text"
-        style="@style/text_gray_normal"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:hint="@string/comment_hint"
-        android:padding="4dp"
-        android:inputType="textAutoCorrect|textCapSentences|textMultiLine"   />
+        android:layout_margin="4dp" >
+
+        <com.sims.topaz.customviews.CustomEditText
+            android:id="@+id/write_comment_text"
+            style="@style/text_gray_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/comment_hint"
+            android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
+            android:padding="4dp" />
+
+        <Button
+            android:id="@+id/clearable_button_clear"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/ic_clear_text" />
+    </RelativeLayout>
 
 </LinearLayout>

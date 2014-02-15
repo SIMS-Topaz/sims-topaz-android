@@ -16,7 +16,8 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:contentDescription="@string/comment_user_icon"
-            android:src="@drawable/ic_user" />
+            android:src="@drawable/ic_user"
+            android:scaleType="centerInside" />
 
         <TextView
             style="@style/text_gray_big"

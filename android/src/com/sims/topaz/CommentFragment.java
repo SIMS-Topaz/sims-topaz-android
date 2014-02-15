@@ -12,6 +12,7 @@ import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -19,7 +20,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,7 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 	private TextView mFirstCommentTimestamp;
 	private EditText mNewComment;
 	private ListView mListComments;
+	private ImageButton mShareButton;
 	//intelligence
 	private NetworkRestModule restModule = new NetworkRestModule(this);
 
@@ -48,7 +52,7 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		mNewComment = (EditText)v.findViewById(R.id.write_comment_text);
 		mNewComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mListComments = (ListView)v.findViewById(R.id.comment_list);
-		
+		mShareButton = (ImageButton)v.findViewById(R.id.comment_share);
 		//TODO remove this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		CommentItem[] comments = new CommentItem[2];
 		CommentItem a = new CommentItem(12321, "Dostoievski", "Plus j�aime l�humanit� en g�n�ral, moins j�aime les gens en particulier, comme individus.", 1392094361,
@@ -70,12 +74,15 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		}
 		mNewComment.setImeOptions(EditorInfo.IME_ACTION_GO);
 		mNewComment.setOnKeyListener(new View.OnKeyListener() {
-			
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				onDoneButton();
 				return false;
 			}
+		});
+		mShareButton.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {shareMessage();}
 		});
 
 		return v;
@@ -106,6 +113,16 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 	public void apiError(ApiError error) {
 		// TODO Auto-generated method stub
 		
+	}
+	public void clearMessage(){
+		mNewComment.setText("");
+	}
+	public void shareMessage(){
+		Intent sendIntent = new Intent();
+		sendIntent.setAction(Intent.ACTION_SEND);
+		sendIntent.putExtra(Intent.EXTRA_TEXT, mFirstComment.getText());
+		sendIntent.setType("text/plain");
+		startActivity(Intent.createChooser(sendIntent, "Share Comment"));
 	}
 
 }

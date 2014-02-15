@@ -360,7 +360,7 @@ OnMapLoadedCallback
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_slide_out_right);
-		transaction.replace(R.id.edit_text, fragment);
+		transaction.replace(R.id.fragment_map_comment, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}

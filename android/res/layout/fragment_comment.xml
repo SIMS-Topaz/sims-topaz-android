@@ -25,7 +25,7 @@
                 android:layout_margin="4dp"
                 android:contentDescription="@string/comment_user_icon"
                 android:src="@drawable/ic_user"
-                android:scaleType="centerInside" />
+                android:scaleType="center" />
 
             <TextView
                 android:id="@+id/comment_person_name"
@@ -62,16 +62,12 @@
         android:dividerHeight="5dp"
         android:paddingTop="4dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dip"
-        android:layout_margin="4dp"
-        android:background="@color/icon_color" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp" >
+        android:layout_margin="4dp"
+        android:padding="4dp"
+        android:background="@color/white" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -85,7 +81,7 @@
                 android:layout_margin="4dp"
                 android:contentDescription="@string/comment_unlike"
                 android:src="@drawable/ic_dislike"
-                android:scaleType="centerInside" />
+                android:scaleType="center" />
 
             <ImageButton
                 android:id="@+id/comment_like"
@@ -94,7 +90,7 @@
                 android:layout_margin="4dp"
                 android:contentDescription="@string/comment_like"
                 android:src="@drawable/ic_like"
-                android:scaleType="centerInside" />
+                android:scaleType="center" />
         </LinearLayout>
 
         <ImageButton
@@ -105,7 +101,8 @@
             android:layout_margin="4dp"
             android:contentDescription="@string/comment_share"
             android:src="@drawable/ic_share"
-            android:scaleType="centerInside" />
+            android:scaleType="center"
+            android:onClick="shareMessage" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -129,8 +126,9 @@
             android:layout_height="32dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="4dp"
-            android:background="@drawable/ic_clear_text" />
+            android:layout_marginRight="8dp"
+            android:background="@drawable/ic_clear_text"
+            android:onClick="clearMessage" />
     </RelativeLayout>
 
 </LinearLayout>

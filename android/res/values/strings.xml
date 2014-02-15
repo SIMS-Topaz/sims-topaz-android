@@ -29,4 +29,5 @@
 	<string name="comment_loading">Chargement...</string>
 	<string name="comment_like">like icon</string>
 	<string name="comment_unlike">unlike icon</string>
+	<string name="comment_share">share icon</string>
 </resources>

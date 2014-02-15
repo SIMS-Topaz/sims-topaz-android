@@ -131,7 +131,6 @@ OnMapLoadedCallback
 	}
 	private void setClusterManager(){
 		if(mMap!=null){
-			Log.e("Debug", "setClusterManager- map not null");
 			mClusterManager = new ClusterManager<PreviewClusterItem>(SimsContext.getContext(), mMap);
 			mClusterManager.setRenderer(new PreviewRenderer());
 			if(mClusterManager!=null){
@@ -153,7 +152,6 @@ OnMapLoadedCallback
 	private void setMapIfNeeded(LayoutInflater inflater){
 		mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 		if(mMap!=null) {
-			Log.e("Debug", "setMapIfNeeded- map not null");
 			mMap.setMyLocationEnabled(true);	
 			mMap.setOnMapLongClickListener(this);
 			mBulleAdapter = new BulleAdapter(inflater);
@@ -308,14 +306,12 @@ OnMapLoadedCallback
 
 	@Override
 	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
-		Log.e("Debug", "onClusterClick");
 		mBulleAdapter.setIsCluster(true);
 		return false;
 	}
 	@Override
 	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {		
 		//set fragment
-		Log.e("Debug", "Click on item:"+String.valueOf(item.getPreview().getId()));
 		Bundle args = new Bundle();
 		args.putLong("id_preview", item.getPreview().getId());
 		CommentFragment fragment = new CommentFragment();
@@ -323,15 +319,14 @@ OnMapLoadedCallback
 
 		//create transaction
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
-				R.drawable.animation_bottom_down);
+		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
+				R.drawable.animation_slide_out_right);
 		transaction.replace(R.id.edit_text, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
 	@Override
 	public boolean onClusterItemClick(PreviewClusterItem item) {
-		Log.e("Debug", "onClusterItemClick");
 		mBulleAdapter.setIsCluster(false);
 		return false;
 	}

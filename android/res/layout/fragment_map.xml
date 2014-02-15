@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom">
     </FrameLayout>
+    
     <FrameLayout
         android:id="@+id/fragment_map_comment"
         android:layout_width="match_parent"

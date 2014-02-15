@@ -14,9 +14,11 @@ import com.sims.topaz.utils.SimsContext;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +48,7 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		mNewComment = (EditText)v.findViewById(R.id.write_comment_text);
 		mNewComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mListComments = (ListView)v.findViewById(R.id.comment_list);
+		
 		//TODO remove this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		CommentItem[] comments = new CommentItem[2];
 		CommentItem a = new CommentItem(12321, "Dostoievski", "Plus j�aime l�humanit� en g�n�ral, moins j�aime les gens en particulier, comme individus.", 1392094361,
@@ -54,6 +57,8 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 				null, (float) 7.9);
 		comments[0]=a;
 		comments[1]=b;
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
 		mListComments.setAdapter(new CommentAdapter(SimsContext.getContext(),
 				R.layout.fragment_comment_item,
 				comments));
@@ -63,10 +68,23 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 			long id = getArguments().getLong("id_preview");
 			restModule.getMessage(id);
 		}
+		mNewComment.setImeOptions(EditorInfo.IME_ACTION_GO);
+		mNewComment.setOnKeyListener(new View.OnKeyListener() {
+			
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				onDoneButton();
+				return false;
+			}
+		});
 
 		return v;
 	}   
+	public void onDoneButton(){
+		getFragmentManager().beginTransaction().remove(this).commit();
 
+	}
+	
 	@Override
 	public void afterPostMessage(Message message) {}
 

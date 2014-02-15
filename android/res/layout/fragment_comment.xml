@@ -72,8 +72,8 @@
 
         <ImageButton
             android:id="@+id/comment_unlike"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_margin="4dp"
             android:contentDescription="@string/comment_unlike"
             android:scaleType="center"
@@ -82,8 +82,8 @@
 
         <ImageButton
             android:id="@+id/comment_like"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_margin="4dp"
             android:contentDescription="@string/comment_like"
             android:scaleType="center"
@@ -92,8 +92,8 @@
 
         <ImageButton
             android:id="@+id/comment_share"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_margin="4dp"
             android:contentDescription="@string/comment_share"
             android:onClick="shareMessage"

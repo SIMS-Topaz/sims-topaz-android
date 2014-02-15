@@ -1,7 +1,9 @@
 package com.sims.topaz.utils;
 
 import android.graphics.Typeface;
-
+/**
+ * Singleton that helps us use the same typeface in the whole application
+ */
 public class MyTypefaceSingleton {
     private static Typeface mTypeFace = null;
     private static MyTypefaceSingleton instance;

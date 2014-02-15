@@ -1,7 +1,10 @@
 package com.sims.topaz.utils;
 
 import android.content.Context;
-
+/**
+ * Used in order to optimize the use of the context 
+ * by having it saved only once
+ */
 public class SimsContext {
 	private static Context context = null;
 

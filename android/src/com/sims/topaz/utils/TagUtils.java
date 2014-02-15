@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sims.topaz.R;
-
+/**
+ * Get the image to use for a certain tag
+ * Helps us know if a string is a tag or not
+ *
+ */
 public class TagUtils {
 	
 	public static final String TAG_SUN="tag_sun";

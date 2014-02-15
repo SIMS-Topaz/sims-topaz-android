@@ -4,8 +4,11 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <!-- api 8 is 2.2 (Froyo) which has 1.3% -->
+    <!-- api 10 is 2.3 (Gingerbread) which has 20% -->
+    <!-- http://developer.android.com/about/dashboards/index.html?utm_source=ausdroid.net -->
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="10"
         android:targetSdkVersion="19" />
     <uses-feature
         android:glEsVersion="0x00020000"

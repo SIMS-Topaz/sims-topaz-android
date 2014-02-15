@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.ClusterManager.OnClusterInfoWindowClickListener;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.sims.topaz.adapter.BulleAdapter;
 import com.sims.topaz.network.NetworkDelegate;
@@ -28,6 +29,7 @@ import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.LocationUtils;
+import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.TagUtils;
 
 import android.content.Intent;
@@ -52,6 +54,7 @@ NetworkDelegate, //when called to the server
 ClusterManager.OnClusterItemInfoWindowClickListener<PreviewClusterItem>,
 ClusterManager.OnClusterClickListener<PreviewClusterItem>,
 ClusterManager.OnClusterItemClickListener<PreviewClusterItem>,
+OnClusterInfoWindowClickListener<PreviewClusterItem>,
 OnCameraChangeListener,
 LocationListener,
 OnMapLoadedCallback
@@ -122,31 +125,35 @@ OnMapLoadedCallback
 			/* map is already there, just return view as it is */
 		}
 
-		setClusterManager();
+		
 		return mView;
 
 	}
 	private void setClusterManager(){
-		if(mMap != null){
-			mMap.setOnMarkerClickListener(mClusterManager);
-			mMap.setOnInfoWindowClickListener(mClusterManager);
-			mMap.setOnMarkerClickListener(mClusterManager);
-			mClusterManager = new ClusterManager<PreviewClusterItem>(this.getActivity(), mMap);
+		if(mMap!=null){
+			Log.e("Debug", "setClusterManager- map not null");
+			mClusterManager = new ClusterManager<PreviewClusterItem>(SimsContext.getContext(), mMap);
 			mClusterManager.setRenderer(new PreviewRenderer());
-			mClusterManager.onCameraChange(mCurrentCameraPosition); 
-			mClusterManager.setOnClusterClickListener(this);
-			mClusterManager.setOnClusterItemClickListener(this);
-			mClusterManager.setOnClusterItemInfoWindowClickListener(this);  
+			if(mClusterManager!=null){
+				mMap.setOnMarkerClickListener(mClusterManager);
+				mMap.setOnInfoWindowClickListener(mClusterManager);
+				mClusterManager.onCameraChange(mCurrentCameraPosition); 
+				mClusterManager.setOnClusterClickListener(this);
+				mClusterManager.setOnClusterItemClickListener(this);
+				mClusterManager.setOnClusterItemInfoWindowClickListener(this);
+				mClusterManager.setOnClusterInfoWindowClickListener(this);	
+			}
 		}else{
-			Toast.makeText(getActivity(), 
-					getResources().getString(R.string.map_not_displayed), 
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(),
+					getResources().getString(R.string.map_not_displayed),
+					Toast.LENGTH_SHORT)
+					.show();
 		}
-
 	}
 	private void setMapIfNeeded(LayoutInflater inflater){
 		mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 		if(mMap!=null) {
+			Log.e("Debug", "setMapIfNeeded- map not null");
 			mMap.setMyLocationEnabled(true);	
 			mMap.setOnMapLongClickListener(this);
 			mBulleAdapter = new BulleAdapter(inflater);
@@ -167,6 +174,7 @@ OnMapLoadedCallback
 		mLocationClient = new LocationClient(getActivity().getApplicationContext(),
 				this,
 				this);
+		setClusterManager();
 	}
 
 	@Override
@@ -282,6 +290,7 @@ OnMapLoadedCallback
 
 		}
 
+		@SuppressWarnings("rawtypes")
 		@Override
 		protected boolean shouldRenderAsCluster(Cluster cluster) {
 			// Always render clusters.
@@ -297,16 +306,16 @@ OnMapLoadedCallback
 		mClusterManager.cluster();
 	}
 
-
-
 	@Override
 	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
+		Log.e("Debug", "onClusterClick");
 		mBulleAdapter.setIsCluster(true);
 		return false;
 	}
 	@Override
 	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {		
 		//set fragment
+		Log.e("Debug", "Click on item:"+String.valueOf(item.getPreview().getId()));
 		Bundle args = new Bundle();
 		args.putLong("id_preview", item.getPreview().getId());
 		CommentFragment fragment = new CommentFragment();
@@ -322,6 +331,7 @@ OnMapLoadedCallback
 	}
 	@Override
 	public boolean onClusterItemClick(PreviewClusterItem item) {
+		Log.e("Debug", "onClusterItemClick");
 		mBulleAdapter.setIsCluster(false);
 		return false;
 	}
@@ -347,6 +357,11 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void apiError(ApiError error) {
-		// TODO Auto-generated method stub
+		Log.e("Debug", "apiError");
 	}
+	@Override
+	public void onClusterInfoWindowClick(Cluster<PreviewClusterItem> cluster) {
+		Log.e("Debug", "onClusterInfoWindowClick");
+	}
+	
 }

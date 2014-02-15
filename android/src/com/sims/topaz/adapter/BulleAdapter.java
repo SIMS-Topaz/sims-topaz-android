@@ -1,6 +1,7 @@
 package com.sims.topaz.adapter;
 
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ public class BulleAdapter implements InfoWindowAdapter {
 	public View getInfoContents(Marker marker) {
 		View popup;
 		if(isCluster == false){
+			Log.e("Debug", "isNotCluster");
 			popup=mInflater.inflate(R.layout.adapter_info_bulle, null);
 			Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 			
@@ -53,6 +55,7 @@ public class BulleAdapter implements InfoWindowAdapter {
 				mBulleText.setText(marker.getSnippet());
 			}
 		}else{
+			Log.e("Debug", "isCluster");
 			popup=mInflater.inflate(R.layout.adapter_info_bulle_cluster, null);
 			Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 			

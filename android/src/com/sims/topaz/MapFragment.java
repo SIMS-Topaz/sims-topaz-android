@@ -77,16 +77,16 @@ OnMapLoadedCallback
 	private Location mCurrentLocation;
 	//constants
 	private int mZoomLevel = 12; // the zoom of the map (initially)
-
 	//timers
-	private CountDownTimer timerOneSecond =  new CountDownTimer(1000, 1000) {   	
+	private CountDownTimer timerSeconds =  new CountDownTimer(3000, 1000) {   	
 		public void onFinish() {
 			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
 			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
 		}
 
 		@Override
-		public void onTick(long millisUntilFinished) {}
+		public void onTick(long millisUntilFinished) {
+		}
 	};
 	private CountDownTimer timerOneMinute =  new CountDownTimer(60000, 1000) {
 		public void onFinish() {
@@ -95,8 +95,11 @@ OnMapLoadedCallback
 		}
 
 		@Override
-		public void onTick(long millisUntilFinished) {}
-	};   
+		public void onTick(long millisUntilFinished) {
+		}
+	};
+	
+	
 	/**
 	 * This method will only be called once when the retained
 	 * Fragment is first created.
@@ -108,6 +111,13 @@ OnMapLoadedCallback
 		setRetainInstance(true);
 
 	}
+	/**
+	 * 
+	 * @param inflater
+	 * @param container
+	 * @param savedInstanceState
+	 * @return
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -124,11 +134,13 @@ OnMapLoadedCallback
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
-
-		
 		return mView;
 
 	}
+	/**
+	 * Create the Cluster Manager
+	 * Set the needed listener to ClusterManager
+	 */
 	private void setClusterManager(){
 		if(mMap!=null){
 			mClusterManager = new ClusterManager<PreviewClusterItem>(SimsContext.getContext(), mMap);
@@ -149,6 +161,10 @@ OnMapLoadedCallback
 					.show();
 		}
 	}
+	/**
+	 * Set the map and it's listeners
+	 * @param inflater
+	 */
 	private void setMapIfNeeded(LayoutInflater inflater){
 		mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 		if(mMap!=null) {
@@ -202,6 +218,7 @@ OnMapLoadedCallback
 		mNetworkModule = new NetworkRestModule(this);
 		LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
 		mCurrentCameraPosition = mMap.getCameraPosition();
+		timerOneMinute.cancel();
 		timerOneMinute.start();
 		mClusterManager.onCameraChange(mCurrentCameraPosition); 
 	}
@@ -209,6 +226,7 @@ OnMapLoadedCallback
 	@Override
 	public void onDisconnected() {}
 
+	//Fragment lifecycle----------------------------------------------------------------------------
 	@Override
 	public void onStop() {
 		// After disconnect() is called, the client is considered "dead".
@@ -224,7 +242,22 @@ OnMapLoadedCallback
 		super.onStart();
 		if(mLocationClient!=null)
 			mLocationClient.connect();
+		timerSeconds.start();
+		timerOneMinute.start();
 	}
+	
+	/**
+	 * The system calls this method as the first indication 
+	 * that the user is leaving the fragment 
+	 * (though it does not always mean the fragment is being destroyed).
+	 */
+	@Override
+	public void onPause(){
+		super.onPause();
+		timerSeconds.cancel();
+		timerOneMinute.cancel();
+	}
+	
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -251,7 +284,7 @@ OnMapLoadedCallback
 				Toast.LENGTH_SHORT).show();
 
 	}
-
+	//Our Server call listeners----------------------------------------------------------------------------
 	@Override
 	public void afterPostMessage(Message message) {}
 
@@ -272,7 +305,12 @@ OnMapLoadedCallback
 		mClusterManager.onCameraChange(mCurrentCameraPosition);
 		mClusterManager.cluster();
 	}
-
+	@Override
+	public void apiError(ApiError error) {
+		Log.e("Debug", "apiError");
+	}
+	
+	//PreviewRenderer----------------------------------------------------------------------------
 	private class PreviewRenderer extends DefaultClusterRenderer<PreviewClusterItem> {
 
 		public PreviewRenderer() {
@@ -303,7 +341,8 @@ OnMapLoadedCallback
 		mClusterManager.addItem(pci);
 		mClusterManager.cluster();
 	}
-
+	
+	//Clusters listeners----------------------------------------------------------------------------
 	@Override
 	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
 		mBulleAdapter.setIsCluster(true);
@@ -331,10 +370,16 @@ OnMapLoadedCallback
 		return false;
 	}
 	@Override
+	public void onClusterInfoWindowClick(Cluster<PreviewClusterItem> cluster) {
+		Log.e("Debug", "onClusterInfoWindowClick");
+	}
+	//Location and map listeners----------------------------------------------------------------------------
+	@Override
 	public void onCameraChange(CameraPosition camera) {
 		mCurrentCameraPosition = camera;
-		mClusterManager.onCameraChange(camera);	
-		timerOneSecond.start();
+		mClusterManager.onCameraChange(camera);
+		timerSeconds.cancel();
+		timerSeconds.start();
 	}
 	@Override
 	public void onLocationChanged(Location location) {
@@ -350,13 +395,7 @@ OnMapLoadedCallback
 		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
 		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
 	}
-	@Override
-	public void apiError(ApiError error) {
-		Log.e("Debug", "apiError");
-	}
-	@Override
-	public void onClusterInfoWindowClick(Cluster<PreviewClusterItem> cluster) {
-		Log.e("Debug", "onClusterInfoWindowClick");
-	}
+
+
 	
 }

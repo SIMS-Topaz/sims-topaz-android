@@ -10,18 +10,13 @@ import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,7 +26,6 @@ implements NetworkDelegate{
 
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private LatLng mPosition;
-	private EditText mEditText;
 
 	OnNewMessageListener mCallback;
 	// Container Activity must implement this interface
@@ -71,7 +65,6 @@ implements NetworkDelegate{
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_edit_message, container, false);
-		mEditText = (EditText) view.findViewById(R.id.editMessage);
 	
 		setUpButtons(view);
 		return view;
@@ -106,13 +99,10 @@ implements NetworkDelegate{
 		message.setTimestamp(new Date().getTime());
 
 		mRestModule.postMessage(message);
-
-
 	}
 
 	@Override
 	public void afterPostMessage(Message message) {
-		// TODO Auto-generated method stub
 		Toast.makeText(getActivity(), getString(R.string.message_sent), Toast.LENGTH_SHORT).show();
 		getFragmentManager().beginTransaction().hide(this).commit();
 		mCallback.onNewMessage(message);
@@ -120,27 +110,15 @@ implements NetworkDelegate{
 	}
 
 	@Override
-	public void afterGetMessage(Message message) {
-		// TODO Auto-generated method stub
-
-	}
+	public void afterGetMessage(Message message) {}
 
 	@Override
-	public void afterGetPreviews(List<Preview> list) {
-		// TODO Auto-generated method stub
-
-	}
+	public void afterGetPreviews(List<Preview> list) {}
 
 	@Override
-	public void networkError() {
-		// TODO Auto-generated method stub
-
-	}
+	public void networkError() {}
 
 	@Override
-	public void apiError(ApiError error) {
-		// TODO Auto-generated method stub
-
-	}
+	public void apiError(ApiError error) {}
 
 }

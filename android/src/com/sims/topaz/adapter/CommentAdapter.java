@@ -6,9 +6,7 @@ import java.lang.ref.WeakReference;
 import com.sims.topaz.R;
 import com.sims.topaz.modele.CommentItem;
 import com.sims.topaz.utils.MyTypefaceSingleton;
-
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

@@ -60,7 +60,13 @@ public class NetworkRestModule {
 	 * @param nearRight : coordonnéesdu bord inférieur droit
 	 */
 	public void getPreviews(LatLng farLeft, LatLng nearRight) {
-		String url = SERVER_URL + "get_previews/" + farLeft.latitude + "/" + farLeft.longitude + "/" + nearRight.latitude + "/" + nearRight.longitude;
+		
+		Double minLat = Math.min(farLeft.latitude, nearRight.latitude);
+		Double maxLat = Math.max(farLeft.latitude, nearRight.latitude);
+		Double minLong = Math.min(farLeft.longitude, nearRight.longitude);
+		Double maxLong = Math.max(farLeft.longitude, nearRight.longitude);		
+		
+		String url = SERVER_URL + "get_previews/" + minLat + "/" + maxLat + "/" + minLong + "/" + maxLong;
 		Log.d("Network getPreviews url=", url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
 		rest.execute();

@@ -34,8 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="8dp"
-            android:orientation="vertical"
-            android:background="@color/light_light_gray"/>
+            android:orientation="vertical"/>
 
         <Button
             android:id="@+id/go_to_map"

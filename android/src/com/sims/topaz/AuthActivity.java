@@ -46,15 +46,10 @@ public class AuthActivity extends FragmentActivity{
 
 	
 	public void onFlipCard(View v){
-		/*
-		 * .setCustomAnimations(
-                    R.drawable.animation_card_flip_right_in, R.drawable.animation_card_flip_right_out,
-                    R.drawable.animation_card_flip_left_in, R.drawable.animation_card_flip_left_out)
-			
-		 */
 		if (mShowingBack) {
 			mShowingBack = false;
 			getSupportFragmentManager().beginTransaction()
+			.setCustomAnimations(R.drawable.animation_grow_from_middle, R.drawable.animation_shrink_to_middle)
 			.replace(R.id.auth, signInFragment)
 					.addToBackStack(null)
 					.commit();	
@@ -62,6 +57,7 @@ public class AuthActivity extends FragmentActivity{
 		}else{
 			mShowingBack = true;
 			getSupportFragmentManager().beginTransaction()
+			.setCustomAnimations(R.drawable.animation_grow_from_middle, R.drawable.animation_shrink_to_middle)
 			.replace(R.id.auth, signUpFragment)
 					.addToBackStack(null)
 					.commit();	

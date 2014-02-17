@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
@@ -51,6 +52,62 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/comment_loading" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/textViewLikes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="123"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <ImageButton
+                android:id="@+id/comment_like"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="4dp"
+                android:background="@null"
+                android:contentDescription="@string/comment_like"
+                android:scaleType="center"
+                android:src="@drawable/ic_like" />
+
+            <TextView
+                android:id="@+id/TextViewUnlike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1234"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <ImageButton
+                android:id="@+id/comment_dislike"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="4dp"
+                android:background="@null"
+                android:contentDescription="@string/comment_dislike"
+                android:scaleType="center"
+                android:src="@drawable/ic_dislike" />
+
+            <ImageButton
+                android:id="@+id/comment_share"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="4dp"
+                android:background="@null"
+                android:contentDescription="@string/comment_share"
+                android:onClick="shareMessage"
+                android:scaleType="center"
+                android:src="@drawable/ic_share" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <ListView
@@ -59,48 +116,8 @@
         android:layout_height="wrap_content"
         android:divider="@android:color/transparent"
         android:dividerHeight="8dp"
-        android:paddingTop="8dp" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:padding="8dp" >
-
-        <ImageButton
-            android:id="@+id/comment_dislike"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="4dp"
-            android:contentDescription="@string/comment_dislike"
-            android:scaleType="center"
-            android:src="@drawable/ic_dislike"
-            android:background="@null" />
-
-        <ImageButton
-            android:id="@+id/comment_like"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="4dp"
-            android:contentDescription="@string/comment_like"
-            android:scaleType="center"
-            android:src="@drawable/ic_like"
-            android:background="@null" />
-
-        <ImageButton
-            android:id="@+id/comment_share"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_margin="4dp"
-            android:contentDescription="@string/comment_share"
-            android:onClick="shareMessage"
-            android:scaleType="center"
-            android:src="@drawable/ic_share"
-            android:background="@null" />
-    </LinearLayout>
+        android:paddingTop="8dp"
+        tools:listitem="@layout/fragment_comment_item" />
 
     <RelativeLayout
         android:layout_width="match_parent"

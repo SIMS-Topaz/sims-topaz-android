@@ -2,23 +2,48 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="@color/white"
     android:orientation="vertical" >
 
-    <fragment android:name="com.sims.topaz.SignInFragment"
-            android:id="@+id/signin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tag="signin" />
-    <fragment android:name="com.sims.topaz.SignUpFragment"
-            android:id="@+id/signup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tag="signup" />
-    
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        style="@style/text_gray_big"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"
+        android:gravity="center_horizontal"
+        android:text="@string/auth_activity" />
+
+    <fragment
+        android:id="@+id/signin"
+        android:name="com.sims.topaz.SignInFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:tag="signin" />
+
+    <fragment
+        android:id="@+id/signup"
+        android:name="com.sims.topaz.SignUpFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:tag="signup" />
+
     <Button
         android:id="@+id/go_to_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go to map" />
-    
+        android:text="Go to map (temporary)" />
+
 </LinearLayout>

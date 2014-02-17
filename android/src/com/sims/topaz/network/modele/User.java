@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 	
+	private Long sessionId;
 	private Long id;
 	private String name;
 	private String password;
@@ -12,7 +13,11 @@ public class User {
 	
 	public User() {
 	}
-
+	
+	public Long getSessionId() {
+		return sessionId;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -27,6 +32,10 @@ public class User {
 	
 	public String getEmail() {
 		return email;
+	}
+	
+	public void setSessionId(Long sessionId) {
+		this.sessionId = sessionId;
 	}
 	
 	public void setId(Long id) {

@@ -37,4 +37,6 @@
 	<string name="auth_username">Utilisateur</string>
 	<string name="auth_password">Mot de passe</string>
 	<string name="auth_sign_in_welcome">Bienvenue à nouveau!</string>
+	<string name="auth_no_user">Vous n\'avez pas de compte?</string>
+	<string name="auth_user">Vous avez pas de compte?</string>
 </resources>

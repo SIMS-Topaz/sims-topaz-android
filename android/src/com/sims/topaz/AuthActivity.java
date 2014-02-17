@@ -6,12 +6,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
 public class AuthActivity extends FragmentActivity{
 	private Button mTempButton;
+	private Fragment signInFragment;
+	private Fragment signUpFragment;
+	/**
+	 * Whether or not we're showing the back of the card (otherwise showing the
+	 * front).
+	 */
+	private boolean mShowingBack = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,11 +34,31 @@ public class AuthActivity extends FragmentActivity{
 				startActivity(intent);
 			}
 		});
-		
+
 		FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
-		transaction.replace(R.id.signin, (Fragment)new SignInFragment());
-		transaction.replace(R.id.signup, (Fragment)new SignUpFragment());
-		
+		signInFragment = (Fragment)new SignInFragment();
+		signUpFragment = (Fragment)new SignUpFragment();
+		transaction.replace(R.id.auth, signInFragment).commit();
+
+	}
+
+
+	
+	public void onFlipCard(View v){
+		if (mShowingBack) {
+			mShowingBack = false;
+			getSupportFragmentManager().beginTransaction()
+			.replace(R.id.auth, signInFragment)
+					.addToBackStack(null)
+					.commit();	
+			return;
+		}else{
+			mShowingBack = true;
+			getSupportFragmentManager().beginTransaction()
+			.replace(R.id.auth, signUpFragment)
+					.addToBackStack(null)
+					.commit();	
+		}
 	}
 }

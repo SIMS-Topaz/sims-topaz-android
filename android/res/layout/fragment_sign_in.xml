@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/light_gray"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <TextView
@@ -22,6 +21,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="8dp"
         android:hint="@string/auth_username"
+        android:nextFocusDown="@+id/sign_in_password"
         android:padding="4dp" />
 
     <EditText
@@ -33,14 +33,14 @@
         android:layout_margin="8dp"
         android:hint="@string/auth_password"
         android:imeOptions="actionDone"
+        android:inputType="textPassword"
         android:nextFocusUp="@id/sign_in_username"
         android:padding="4dp"
-        android:singleLine="true"
-        android:inputType="textPassword" />
+        android:singleLine="true" />
 
     <Button
-        style="@style/text_white_normal"
         android:id="@+id/Sign_in"
+        style="@style/text_white_normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -48,5 +48,34 @@
         android:gravity="center"
         android:padding="4dp"
         android:text="@string/auth_sign_in" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2" >
+
+        <TextView
+            android:id="@+id/text_sing_up"
+            style="@style/text_gray_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="@string/auth_no_user"
+            android:layout_weight="0.75"/>
+
+        <Button
+            android:id="@+id/Sign_up"
+            style="@style/text_white_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/auth_sign_up" 
+            android:layout_weight="1.25"
+            android:onClick="onFlipCard"/>
+    </LinearLayout>
 
 </LinearLayout>

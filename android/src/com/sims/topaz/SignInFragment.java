@@ -22,6 +22,8 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	private EditText mUserNameEditText;
 	private EditText mPasswordEditText;
 	private NetworkRestModule mRestModule;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,4 +73,5 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	public void networkError() {
 		Toast.makeText(getActivity(), "after sign in ok", Toast.LENGTH_SHORT).show();
 	}
+
 }

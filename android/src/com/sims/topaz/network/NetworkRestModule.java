@@ -30,13 +30,14 @@ import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.modele.ApiResponse;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.network.modele.User;
 
 public class NetworkRestModule {
 
 
 	//public static final String SERVER_URL = "http://topaz11.apiary.io/api/v1.1/";
 	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.1/";
-	
+	public static HttpClient httpclient;
 	private Object delegate;
 	
 	public NetworkRestModule(Object delegate) {
@@ -143,7 +144,17 @@ public class NetworkRestModule {
 				// TODO	
 				break;
 			case USER_LOGIN:
-				// TODO	
+				try {
+					ApiResponse<User> responseData = mapper.readValue(response, new TypeReference<ApiResponse<User>>(){});
+					if(responseData.getError() != null) {
+						((ErreurDelegate) delegate).apiError(responseData.getError());
+					} else {
+						((SignInDelegate)delegate).afterSignIn(responseData.getData());
+					}
+				} catch (Exception e) {
+					((ErreurDelegate) delegate).networkError();
+					e.printStackTrace();
+				}	
 				break;
 			default:
 				break;
@@ -233,7 +244,8 @@ public class NetworkRestModule {
 
 		private HttpResponse doResponse(String url) {
 
-			HttpClient httpclient = new DefaultHttpClient(getHttpParams());
+			if(httpclient==null)
+				httpclient = new DefaultHttpClient(getHttpParams());
 			HttpResponse response = null;
 
 			try {

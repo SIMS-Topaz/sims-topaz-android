@@ -1,5 +1,7 @@
 package com.sims.topaz.network.interfaces;
 
-public class SignInDelegate {
+import com.sims.topaz.network.modele.User;
 
+public interface SignInDelegate {
+	public void afterSignIn(User user);
 }

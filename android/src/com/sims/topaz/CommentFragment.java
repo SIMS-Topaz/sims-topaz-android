@@ -56,14 +56,12 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		mNewComment = (EditText)v.findViewById(R.id.write_comment_text);
 		mNewComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mListComments = (ListView)v.findViewById(R.id.comment_list);
-		mShareButton = (ImageButton)v.findViewById(R.id.comment_share);
-		mLikeButton = (ImageButton)v.findViewById(R.id.comment_like);
-		mDislikeButton = (ImageButton)v.findViewById(R.id.comment_dislike);
+		
+		//Set Like, Dislike and Share Buttons
+		setButtons(v);
 		
 		//get the main message from the preview id
-		//Long preview_id = savedInstanceState.getLong("id_preview");
-		//restModule.getMessage(preview_id);
-		
+		loadMessage();
 		
 		//TODO remove this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		CommentItem[] comments = new CommentItem[2];
@@ -80,10 +78,6 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 				comments));
 
 
-		if(getArguments()!=null && getArguments().containsKey("id_preview")){
-			long id = getArguments().getLong("id_preview");
-			restModule.getMessage(id);
-		}
 		mNewComment.setImeOptions(EditorInfo.IME_ACTION_GO);
 		mNewComment.setOnKeyListener(new View.OnKeyListener() {
 			@Override
@@ -92,6 +86,16 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 				return false;
 			}
 		});
+		
+
+		return v;
+	}   
+	
+	//Set Like, Dislike and Share Buttons
+	private void setButtons(View v) {
+		mShareButton = (ImageButton)v.findViewById(R.id.comment_share);
+		mLikeButton = (ImageButton)v.findViewById(R.id.comment_like);
+		mDislikeButton = (ImageButton)v.findViewById(R.id.comment_dislike);
 		mShareButton.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {shareMessage();}
@@ -104,12 +108,27 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 			@Override
 			public void onClick(View v) {dislikeMessage();}
 		});
-
-		return v;
-	}   
-	protected void likeMessage() {
+		
 	}
+	
+	private void loadMessage() {
+		//get the main message from the preview id
+		if(getArguments()!=null && getArguments().containsKey("id_preview")){
+			Long id = getArguments().getLong("id_preview");
+			restModule.getMessage(id);
+		}		
+	}
+	
+	protected void likeMessage() {
+		//TODO test if already liked or disliked
+		mMessage.like();
+		//TODO REST method 
+	}
+	
 	protected void dislikeMessage() {
+		//TODO test if already liked or disliked
+		mMessage.dislike();
+		//TODO REST method
 	}
 	public void onDoneButton(){
 		getFragmentManager().beginTransaction().remove(this).commit();

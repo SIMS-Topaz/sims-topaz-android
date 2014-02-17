@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
-	
+
 	private Long id;
 	
 	@JsonProperty("lat")
@@ -15,6 +15,10 @@ public class Message {
 	private Double longitude;
 	
 	private String text;
+	
+	private int likes=0;
+	
+	private int dislikes=0;
 	
 	//the number of milliseconds since Jan. 1, 1970, midnight GMT.
 	@JsonProperty("date")
@@ -57,6 +61,29 @@ public class Message {
 	
 	public Long getTimestamp() {
 		return timestamp;
+	}
+	
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
+	}
+
+	public void like() {
+		setLikes(getLikes() + 1);
+	}
+	public void dislike() {
+		setDislikes(getDislikes() + 1);
 	}
 	
 }

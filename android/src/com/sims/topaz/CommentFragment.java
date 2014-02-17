@@ -120,15 +120,23 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 	}
 	
 	protected void likeMessage() {
-		//TODO test if already liked or disliked
-		mMessage.like();
-		//TODO REST method 
+		if(mMessage!=null) {
+			//TODO test if already liked or disliked
+			mMessage.like();
+			//TODO REST method
+			//Update view
+			updateLikes();
+		}
 	}
 	
 	protected void dislikeMessage() {
-		//TODO test if already liked or disliked
-		mMessage.dislike();
-		//TODO REST method
+		if(mMessage!=null) {
+			//TODO test if already liked or disliked
+			mMessage.dislike();
+			//TODO REST method
+			//update view
+			updateLikes();
+		}
 	}
 	public void onDoneButton(){
 		getFragmentManager().beginTransaction().remove(this).commit();
@@ -143,6 +151,17 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		if(message!=null) {
 			mMessage=message;
 			mFirstComment.setText(message.getText());
+			updateLikes();
+		}
+	}
+	
+	protected void updateLikes() {
+		if(mMessage!=null) {
+			TextView likes = (TextView) getView().findViewById(R.id.textViewLikes);
+			likes.setText(Integer.toString(mMessage.getLikes()));
+			TextView dislikes = (TextView) getView().findViewById(R.id.textViewDislikes);
+			dislikes.setText(Integer.toString(mMessage.getDislikes()));
+			
 		}
 	}
 

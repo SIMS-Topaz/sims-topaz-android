@@ -30,10 +30,9 @@ import com.sims.topaz.network.modele.Preview;
 
 public class NetworkRestModule {
 
-	
 
-	public static final String SERVER_URL = "http://topaz11.apiary.io/api/v1.1/";
-	//public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.1/";
+	//public static final String SERVER_URL = "http://topaz11.apiary.io/api/v1.1/";
+	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.1/";
 	
 	private NetworkDelegate delegate;
 	
@@ -66,7 +65,7 @@ public class NetworkRestModule {
 		Double minLong = Math.min(farLeft.longitude, nearRight.longitude);
 		Double maxLong = Math.max(farLeft.longitude, nearRight.longitude);		
 		
-		String url = SERVER_URL + "get_previews/" + minLat + "/" + maxLat + "/" + minLong + "/" + maxLong;
+		String url = SERVER_URL + "get_previews/" + minLat + "/" + minLong + "/" + maxLat + "/" + maxLong;
 		Log.d("Network getPreviews url=", url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
 		rest.execute();

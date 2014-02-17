@@ -71,11 +71,11 @@
         android:padding="8dp" >
 
         <ImageButton
-            android:id="@+id/comment_unlike"
+            android:id="@+id/comment_dislike"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_margin="4dp"
-            android:contentDescription="@string/comment_unlike"
+            android:contentDescription="@string/comment_dislike"
             android:scaleType="center"
             android:src="@drawable/ic_dislike"
             android:background="@null" />

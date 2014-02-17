@@ -34,6 +34,10 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 	private EditText mNewComment;
 	private ListView mListComments;
 	private ImageButton mShareButton;
+	private ImageButton mLikeButton;
+	private ImageButton mDislikeButton;
+	// The main message
+	private Message mMessage=null;
 	//intelligence
 	private NetworkRestModule restModule = new NetworkRestModule(this);
 
@@ -53,6 +57,14 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		mNewComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mListComments = (ListView)v.findViewById(R.id.comment_list);
 		mShareButton = (ImageButton)v.findViewById(R.id.comment_share);
+		mLikeButton = (ImageButton)v.findViewById(R.id.comment_like);
+		mDislikeButton = (ImageButton)v.findViewById(R.id.comment_dislike);
+		
+		//get the main message from the preview id
+		//Long preview_id = savedInstanceState.getLong("id_preview");
+		//restModule.getMessage(preview_id);
+		
+		
 		//TODO remove this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		CommentItem[] comments = new CommentItem[2];
 		CommentItem a = new CommentItem(12321, "Dostoievski", "Plus j�aime l�humanit� en g�n�ral, moins j�aime les gens en particulier, comme individus.", 1392094361,
@@ -84,9 +96,21 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 			@Override
 			public void onClick(View v) {shareMessage();}
 		});
+		mLikeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {likeMessage();}
+		});
+		mDislikeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {dislikeMessage();}
+		});
 
 		return v;
 	}   
+	protected void likeMessage() {
+	}
+	protected void dislikeMessage() {
+	}
 	public void onDoneButton(){
 		getFragmentManager().beginTransaction().remove(this).commit();
 
@@ -97,7 +121,10 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 
 	@Override
 	public void afterGetMessage(Message message) {
-		mFirstComment.setText(message.getText());
+		if(message!=null) {
+			mMessage=message;
+			mFirstComment.setText(message.getText());
+		}
 	}
 
 	@Override

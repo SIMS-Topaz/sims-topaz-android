@@ -46,6 +46,12 @@ public class AuthActivity extends FragmentActivity{
 
 	
 	public void onFlipCard(View v){
+		/*
+		 * .setCustomAnimations(
+                    R.drawable.animation_card_flip_right_in, R.drawable.animation_card_flip_right_out,
+                    R.drawable.animation_card_flip_left_in, R.drawable.animation_card_flip_left_out)
+			
+		 */
 		if (mShowingBack) {
 			mShowingBack = false;
 			getSupportFragmentManager().beginTransaction()

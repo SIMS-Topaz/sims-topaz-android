@@ -121,8 +121,11 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 	
 	protected void likeMessage() {
 		if(mMessage!=null) {
-			//TODO test if already liked or disliked
-			mMessage.like();
+			switch(mMessage.likeStatus) {
+			case LIKED: mMessage.unlike(); break;
+			case NONE: mMessage.like(); break;
+			case DISLIKED: mMessage.undislike();mMessage.like();break;
+			}
 			//TODO REST method
 			//Update view
 			updateLikes();
@@ -131,8 +134,11 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 	
 	protected void dislikeMessage() {
 		if(mMessage!=null) {
-			//TODO test if already liked or disliked
-			mMessage.dislike();
+			switch(mMessage.likeStatus) {
+			case LIKED: mMessage.unlike(); mMessage.dislike(); break;
+			case NONE: mMessage.dislike(); break;
+			case DISLIKED: mMessage.undislike();break;
+			}
 			//TODO REST method
 			//update view
 			updateLikes();

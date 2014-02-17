@@ -24,6 +24,13 @@ public class Message {
 	@JsonProperty("date")
 	private Long timestamp;
 	
+	public enum eLikeStatus {
+		NONE,
+		LIKED,
+		DISLIKED;
+	}
+	public eLikeStatus likeStatus = eLikeStatus.NONE;
+	
 	public Message() {
 	}
 	
@@ -80,10 +87,28 @@ public class Message {
 	}
 
 	public void like() {
-		setLikes(getLikes() + 1);
+		if(likeStatus!=eLikeStatus.LIKED) {
+			likes++;
+			likeStatus=eLikeStatus.LIKED;
+		}
+	}
+	public void unlike() {
+		if(likeStatus==eLikeStatus.LIKED) {
+			likes--;
+			likeStatus=eLikeStatus.NONE;
+		}
 	}
 	public void dislike() {
-		setDislikes(getDislikes() + 1);
+		if(likeStatus!=eLikeStatus.DISLIKED) {
+			dislikes++;
+			likeStatus=eLikeStatus.DISLIKED;
+		}
+	}
+	public void undislike() {
+		if(likeStatus==eLikeStatus.DISLIKED) {
+			dislikes--;
+			likeStatus=eLikeStatus.NONE;
+		}
 	}
 	
 }

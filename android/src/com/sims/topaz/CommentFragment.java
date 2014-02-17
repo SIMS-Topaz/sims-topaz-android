@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.sims.topaz.adapter.CommentAdapter;
 import com.sims.topaz.modele.CommentItem;
-import com.sims.topaz.network.NetworkDelegate;
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.interfaces.MessageDelegate;
+import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
@@ -20,13 +21,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-public class CommentFragment extends Fragment implements NetworkDelegate{
+public class CommentFragment extends Fragment implements MessageDelegate,ErreurDelegate{
 
 	private TextView mFirstComment;
 	private TextView mFirstCommentNameUser;

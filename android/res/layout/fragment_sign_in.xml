@@ -5,17 +5,20 @@
     android:orientation="vertical" >
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/sign_in_username"
         style="@style/text_dark_gray_normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/sign_in_password"
         style="@style/text_dark_gray_normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp" />
-
+        android:padding="8dp"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:nextFocusUp="@id/sign_in_username" />
+    
 </LinearLayout>

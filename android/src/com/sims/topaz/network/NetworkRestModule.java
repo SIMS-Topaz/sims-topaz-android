@@ -112,6 +112,23 @@ public class NetworkRestModule {
 		rest.execute();
 	}
 	
+	/**
+	 * Login de l'utilisateur
+	 * La fin de la requete appellera afterSignIn() (interface SigninDelegate)
+	 * @param user
+	 */
+	public void signinUser(User user) {
+		String url = SERVER_URL + "login";
+		Log.d("Network signuinUser url=", url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.USER_LOGIN);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			rest.setJSONParam(mapper.writeValueAsString(user));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		rest.execute();
+	}
 	private void handleResponse(TypeRequest type, String response) {
 		ObjectMapper mapper = new ObjectMapper();
 

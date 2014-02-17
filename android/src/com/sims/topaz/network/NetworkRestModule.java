@@ -36,8 +36,8 @@ import com.sims.topaz.network.modele.User;
 public class NetworkRestModule {
 
 
-	//public static final String SERVER_URL = "http://topaz11.apiary.io/api/v1.1/";
-	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.1/";
+	public static final String SERVER_URL = "http://topaz11.apiary.io/api/v1.2/";
+	//public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.2/";
 	public static HttpClient httpclient;
 	private Object delegate;
 	

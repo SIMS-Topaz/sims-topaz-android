@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,7 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	private EditText mUserNameEditText;
 	private EditText mPasswordEditText;
 	private NetworkRestModule mRestModule;
-
+	private Button mLoginButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,21 +32,21 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		mRestModule = new NetworkRestModule(this);
 		mUserNameEditText = (EditText)v.findViewById(R.id.sign_in_username);
 		mPasswordEditText = (EditText)v.findViewById(R.id.sign_in_password);
+		mLoginButton = (Button)v.findViewById(R.id.Sign_in);
 		TextView.OnEditorActionListener listener=new TextView.OnEditorActionListener() {
 			  @Override
 			  public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
 			    if (event==null) {
-			      if (actionId==EditorInfo.IME_ACTION_DONE){
-			      // Capture soft enters in a singleLine EditText that is the last EditText.
-			    	  checkInput(mUserNameEditText.getText().toString(),
-			    			  mPasswordEditText.getText().toString());
-			    	  
-			      }
+			      if (actionId==EditorInfo.IME_ACTION_DONE){signInAction();}
 			      return false;  // Let system handle all other null KeyEvents
 			    } ;
 				return false;
 			  }
 		};
+		mLoginButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {signInAction();}
+		});
 		mUserNameEditText.setOnEditorActionListener(listener);
 		mPasswordEditText.setOnEditorActionListener(listener);
 		
@@ -60,18 +61,23 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
     }
 	@Override
 	public void afterSignIn(User user) {
-		Toast.makeText(getActivity(), "after sign in ok", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), "after sign in ok"+user.toString(), Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void apiError(ApiError error) {
-		// TODO Auto-generated method stub
+		Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
 		
 	}
 
 	@Override
 	public void networkError() {
-		Toast.makeText(getActivity(), "after sign in ok", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
+	}
+	
+	private void signInAction(){
+  	  checkInput(mUserNameEditText.getText().toString(),
+  			  mPasswordEditText.getText().toString());
 	}
 
 }

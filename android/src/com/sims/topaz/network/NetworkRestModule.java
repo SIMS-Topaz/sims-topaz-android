@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.model.LatLng;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
-import com.sims.topaz.network.interfaces.AuthDelegate;
+import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.modele.ApiResponse;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;

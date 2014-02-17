@@ -27,9 +27,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.interfaces.AuthDelegate;
+import com.sims.topaz.network.interfaces.SignupDelegate;
 import com.sims.topaz.network.modele.ApiResponse;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.network.modele.User;
 
 public class NetworkRestModule {
 
@@ -45,7 +47,7 @@ public class NetworkRestModule {
 	
 	/**
 	 * Envoi une requete get_message pour recuperer un message
-	 * La fin de la requete appelera afterGetMessage() (interface NetworkDelegate)
+	 * La fin de la requete appellera afterGetMessage() (interface NetworkDelegate)
 	 * @param id : l'id du message
 	 */
 	public void getMessage(Long id) {
@@ -57,7 +59,7 @@ public class NetworkRestModule {
 	
 	/**
 	 * Envoi une requete get_previews pour recuperer les previews autour d'une zone
-	 * La fin de la requete appelera afterGetPreviews() (interface NetworkDelegate)
+	 * La fin de la requete appellera afterGetPreviews() (interface NetworkDelegate)
 	 * @param farLeft : coordonnées du bord supérieur gauche
 	 * @param nearRight : coordonnéesdu bord inférieur droit
 	 */
@@ -76,7 +78,7 @@ public class NetworkRestModule {
 	
 	/**
 	 * Poste un message
-	 * La fin de la requete appelera afterPostMessage() (interface NetworkDelegate)
+	 * La fin de la requete appellera afterPostMessage() (interface NetworkDelegate)
 	 * @param message le message à poster
 	 */
 	public void postMessage(Message message) {
@@ -86,6 +88,24 @@ public class NetworkRestModule {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			rest.setJSONParam(mapper.writeValueAsString(message));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		rest.execute();
+	}
+	
+	/**
+	 * Inscription d'un utilisateur
+	 * La fin de la requete appellera afterSignUp() (interface SignupDelegate)
+	 * @param user
+	 */
+	public void signupUser(User user) {
+		String url = SERVER_URL + "signup";
+		Log.d("Network signupUser url=", url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.USER_SIGNUP);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			rest.setJSONParam(mapper.writeValueAsString(user));
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -139,8 +159,18 @@ public class NetworkRestModule {
 			case COMMENT_MESSAGE:
 				// TODO	
 				break;
-			case USER_SIGNIN:
-				// TODO	
+			case USER_SIGNUP:
+				try {
+					ApiResponse<User> responseData = mapper.readValue(response, new TypeReference<ApiResponse<User>>(){});
+					if(responseData.getError() != null) {
+						((ErreurDelegate) delegate).apiError(responseData.getError());
+					} else {
+						((SignupDelegate)delegate).afterSignUp(responseData.getData());
+					}
+				} catch (Exception e) {
+					((ErreurDelegate) delegate).networkError();
+					e.printStackTrace();
+				}	
 				break;
 			case USER_LOGIN:
 				// TODO	
@@ -151,7 +181,7 @@ public class NetworkRestModule {
 	}
 
 	enum TypeRequest {
-		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, USER_SIGNIN, USER_LOGIN
+		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, USER_SIGNUP, USER_LOGIN
 	}
 	
 	

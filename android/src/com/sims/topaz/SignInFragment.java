@@ -8,6 +8,7 @@ import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
+import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 import android.support.v4.app.Fragment;
@@ -38,10 +39,15 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		View v = inflater.inflate(R.layout.fragment_sign_in, container, false);
 		mRestModule = new NetworkRestModule(this);
 		mUserNameEditText = (EditText)v.findViewById(R.id.sign_in_username);
+		mUserNameEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mPasswordEditText = (EditText)v.findViewById(R.id.sign_in_password);
+		mPasswordEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mLoginButton = (Button)v.findViewById(R.id.Sign_in);
+		mLoginButton.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mUserNameErrorTextView = (TextView)v.findViewById(R.id.sign_in_username_error);
+		mUserNameErrorTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mPasswordErrorTextView = (TextView)v.findViewById(R.id.sign_in_password_error);
+		mPasswordErrorTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		//set TextWatcher listeners
 		mUserNameEditText.addTextChangedListener(this);
 		mPasswordEditText.addTextChangedListener(this);

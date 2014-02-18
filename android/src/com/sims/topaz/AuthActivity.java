@@ -1,11 +1,13 @@
 package com.sims.topaz;
 
+import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -14,7 +16,7 @@ public class AuthActivity extends FragmentActivity{
 	private Button mTempButton;
 	private Fragment signInFragment;
 	private Fragment signUpFragment;
-	
+	private TextView mTitleTextView;
 
 	/**
 	 * Whether or not we're showing the back of the card (otherwise showing the
@@ -43,6 +45,9 @@ public class AuthActivity extends FragmentActivity{
 		signInFragment = (Fragment)new SignInFragment();
 		signUpFragment = (Fragment)new SignUpFragment();
 		transaction.replace(R.id.auth, signInFragment).commit();
+		
+		mTitleTextView = (TextView) findViewById(R.id.auth_title);
+		mTitleTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 
 	}
 

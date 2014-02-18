@@ -10,6 +10,7 @@ import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.MyTypefaceSingleton;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditMessageFragment extends Fragment
@@ -30,6 +32,7 @@ implements MessageDelegate,ErreurDelegate{
 
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private LatLng mPosition;
+	private TextView mTextTextView;
 
 	OnNewMessageListener mCallback;
 	// Container Activity must implement this interface
@@ -76,7 +79,8 @@ implements MessageDelegate,ErreurDelegate{
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_edit_message, container, false);
-	
+		mTextTextView = (TextView) view.findViewById(R.id.edit_message_text);
+		mTextTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		setUpButtons(view);
 		return view;
 	}    
@@ -141,10 +145,7 @@ implements MessageDelegate,ErreurDelegate{
 		getView().findViewById(R.id.button_send_message).setEnabled(true);
 	}
 	
-	public void apiError(ApiError error) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void apiError(ApiError error) {}
 
 
 

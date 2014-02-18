@@ -15,6 +15,7 @@
         android:src="@drawable/ic_launcher" />
 
     <TextView
+        android:id="@+id/title"
         style="@style/text_gray_big"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

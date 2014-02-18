@@ -32,7 +32,9 @@ implements MessageDelegate,ErreurDelegate{
 
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private LatLng mPosition;
-	private TextView mTextTextView;
+	private Button send;
+	private Button cancel;
+	private EditText editText;
 
 	OnNewMessageListener mCallback;
 	// Container Activity must implement this interface
@@ -79,14 +81,18 @@ implements MessageDelegate,ErreurDelegate{
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_edit_message, container, false);
-		mTextTextView = (TextView) view.findViewById(R.id.edit_message_text);
+		TextView mTextTextView = (TextView) view.findViewById(R.id.edit_message_text);
 		mTextTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		send.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		cancel.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		editText = (EditText) getActivity().findViewById(R.id.editMessage);
+
 		setUpButtons(view);
 		return view;
 	}    
 
 	private void setUpButtons(View view) {
-		Button send = (Button) view.findViewById(R.id.button_send_message);
+		send = (Button) view.findViewById(R.id.button_send_message);
 		send.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -95,7 +101,7 @@ implements MessageDelegate,ErreurDelegate{
 				onSendButton(v);
 			}
 		});
-		Button cancel = (Button) view.findViewById(R.id.button_cancel_message);
+		cancel = (Button) view.findViewById(R.id.button_cancel_message);
 		cancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -108,16 +114,13 @@ implements MessageDelegate,ErreurDelegate{
 	protected void closeKeyboard() {
 		InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
 			      Context.INPUT_METHOD_SERVICE);
-		EditText editText = (EditText) getActivity().findViewById(R.id.editMessage);
-			imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 	}
  
 	public void onSendButton(View view) {
-		EditText editText = (EditText) getActivity().findViewById(R.id.editMessage);
 		String text = editText.getText().toString();
 		// Create the message
 		Message message = new Message();
-
 		message.setText(text);
 		message.setLongitude(mPosition.longitude);
 		message.setLatitude(mPosition.latitude);

@@ -6,6 +6,7 @@
     android:orientation="vertical" >
 
     <TextView
+        android:id="@+id/sign_in_welcome"
         style="@style/text_gray_big"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

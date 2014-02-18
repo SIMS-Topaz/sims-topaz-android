@@ -33,6 +33,8 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	private Button mLoginButton;
 	private TextView mUserNameErrorTextView;
 	private TextView mPasswordErrorTextView;
+
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +50,12 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		mUserNameErrorTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mPasswordErrorTextView = (TextView)v.findViewById(R.id.sign_in_password_error);
 		mPasswordErrorTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		TextView mWelcomeTextView = (TextView)v.findViewById(R.id.sign_in_welcome);
+		mWelcomeTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		TextView mNoLoginTextView = (TextView)v.findViewById(R.id.text_sing_up);
+		mNoLoginTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		Button mSignUp = (Button)v.findViewById(R.id.Sign_up);
+		mSignUp.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		//set TextWatcher listeners
 		mUserNameEditText.addTextChangedListener(this);
 		mPasswordEditText.addTextChangedListener(this);

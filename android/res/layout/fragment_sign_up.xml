@@ -17,6 +17,13 @@
         android:nextFocusDown="@+id/sign_up_mail"
         android:padding="4dp" />
 
+    <TextView
+        android:id="@+id/signup_username_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username error"
+        android:textColor="@color/red" />
+
     <EditText
         android:id="@+id/sign_up_mail"
         android:layout_width="match_parent"
@@ -29,6 +36,13 @@
         android:nextFocusDown="@+id/sign_up_password"
         android:padding="4dp"
         android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/signup_email_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email error"
+        android:textColor="@color/red" />
 
     <EditText
         android:id="@+id/sign_up_password"
@@ -56,6 +70,13 @@
         android:inputType="textPassword"
         android:padding="4dp"
         android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/signup_password_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password error"
+        android:textColor="@color/red" />
 
     <Button
         android:id="@+id/sign_up_bt"

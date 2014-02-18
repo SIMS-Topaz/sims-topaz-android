@@ -1,13 +1,21 @@
 package com.sims.topaz.network.modele;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 	
+	@JsonProperty("user_id")
 	private Long id;
+	
+	@JsonProperty("user_name")
 	private String name;
+	
+	@JsonProperty("user_password")
 	private String password;
+	
+	@JsonProperty("user_mail")
 	private String email;
 	
 	public User() {

@@ -33,7 +33,7 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	private Button mLoginButton;
 	private TextView mUserNameErrorTextView;
 	private TextView mPasswordErrorTextView;
-
+	private boolean isOnTablet;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +84,11 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 					.getString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME, "");
 			mUserNameEditText.setText(username);
 		}
+		
+		if(getArguments()!=null && getArguments().getBoolean(AuthActivity.IS_ON_TABLET)){
+			mNoLoginTextView.setVisibility(View.GONE);
+			mSignUp.setVisibility(View.GONE);
+		}
 
 		return v;
 	}
@@ -112,7 +117,6 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	}
 	@Override
 	public void afterSignIn(User user) {
-
 		Intent intent = new Intent(SimsContext.getContext(),
 				DrawerActivity.class);
 		startActivity(intent);		

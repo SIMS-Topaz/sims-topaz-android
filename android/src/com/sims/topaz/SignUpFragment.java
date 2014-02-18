@@ -58,6 +58,9 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		confirmpasswordError = (TextView)v.findViewById(R.id.signup_confirmpassword_error);
 		confirmpasswordError.setVisibility(View.GONE);
 		
+		Button signIn = (Button)v.findViewById(R.id.Sign_up);
+		TextView textSignIn = (TextView)v.findViewById(R.id.text_sing_up);
+		
 		TextView.OnEditorActionListener listener=new TextView.OnEditorActionListener() {
 			  @Override
 			  public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
@@ -77,7 +80,10 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		mEmailEditText.setOnEditorActionListener(listener);
 		mPasswordEditText.setOnEditorActionListener(listener);
 		mPasswordConfirmEditText.setOnEditorActionListener(listener);
-		
+		if(getArguments()!=null && getArguments().getBoolean(AuthActivity.IS_ON_TABLET)){
+			textSignIn.setVisibility(View.GONE);
+			signIn.setVisibility(View.GONE);
+		}
 		return v;
     }
 

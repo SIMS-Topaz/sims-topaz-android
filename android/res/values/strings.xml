@@ -37,7 +37,7 @@
 	<string name="auth_sign_up">Créer un compte</string>
 	<string name="auth_username">Utilisateur</string>
 	<string name="auth_password">Mot de passe</string>
-	<string name="auth_confirm_password">Confirmation mot de passe</string>
+	<string name="auth_confirm_password">Confirmation mot du passe</string>
 	<string name="auth_email">Email</string>
 	<string name="auth_sign_in_welcome">Bienvenue à nouveau !</string>
 	<string name="auth_no_user">Vous n\'avez pas de compte ?</string>

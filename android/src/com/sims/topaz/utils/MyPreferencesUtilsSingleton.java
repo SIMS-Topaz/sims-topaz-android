@@ -50,4 +50,8 @@ public class MyPreferencesUtilsSingleton {
 	    public boolean hasKey(String key){
 	        return mPrefs.contains(key);
 	    }
+	    public void removeKey(String key){
+	    	mEditor.remove(key);
+	    	mEditor.commit();
+	    }
 }

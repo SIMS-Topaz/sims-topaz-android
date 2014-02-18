@@ -48,4 +48,5 @@
 	<string name="auth_usermail_error">Format incorrect</string>
 	<string name="auth_userpwd_error">Mot de passe incorrect (6 caractères minimun)</string>
 	<string name="auth_userconfirmpwd_error">Retapez votre mot de passe</string>
+	<string name="auth_unconnect">Déconnexion</string>
 </resources>

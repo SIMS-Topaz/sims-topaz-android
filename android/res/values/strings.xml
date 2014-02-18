@@ -30,4 +30,5 @@
 	<string name="comment_like">like icon</string>
 	<string name="comment_dislike">unlike icon</string>
 	<string name="comment_share">share icon</string>
+	<string name="date_format">dd MMM yyyy - HH:mm</string>
 </resources>

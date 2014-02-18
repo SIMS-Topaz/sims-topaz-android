@@ -33,7 +33,7 @@
                 style="@style/text_dark_gray_big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Victor HUGO" />
+                android:text="@string/comment_loading" />
 
             <TextView
                 android:id="@+id/comment_time"
@@ -43,7 +43,7 @@
                 android:layout_gravity="right"
                 android:layout_margin="8dp"
                 android:gravity="right"
-                android:text="11/02/2014" />
+                android:text="@string/comment_loading" />
         </LinearLayout>
 
         <TextView
@@ -65,7 +65,7 @@
                 android:id="@+id/textViewLikes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="123"
+                android:text=""
                 style="@style/text_gray_normal" />
 
             <ImageButton
@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/text_gray_normal"
-                android:text="1234" />
+                android:text="" />
 
             <ImageButton
                 android:id="@+id/comment_dislike"

@@ -1,11 +1,13 @@
 package com.sims.topaz;
 
+import java.sql.Date;
 import java.util.List;
 
 import android.content.Intent;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -184,6 +186,9 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		if(message!=null) {
 			mMessage=message;
 			mFirstComment.setText(message.getText());
+			mFirstCommentTimestamp.setText(DateFormat.format
+					(getString(R.string.date_format), 
+							new Date( message.getTimestamp() ) ) );
 			updateLikes();
 		}
 	}

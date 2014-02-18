@@ -8,6 +8,7 @@ import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.SimsContext;
+import com.sims.topaz.utils.AuthUtils;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,10 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 	private NetworkRestModule mRestModule;
 	private Button mSignupButton;
 	
+	private TextView usernameError;
+	private TextView emailError;
+	private TextView passwordError;
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +45,13 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		mPasswordEditText = (EditText)v.findViewById(R.id.sign_up_password);
 		mPasswordConfirmEditText = (EditText)v.findViewById(R.id.sign_up_confirm_password);
 		mSignupButton = (Button)v.findViewById(R.id.sign_up_bt);
+		
+		usernameError = (TextView)v.findViewById(R.id.signup_username_error);
+		usernameError.setVisibility(View.GONE);
+		emailError = (TextView)v.findViewById(R.id.signup_email_error);
+		emailError.setVisibility(View.GONE);
+		passwordError = (TextView)v.findViewById(R.id.signup_password_error);
+		passwordError.setVisibility(View.GONE);
 		
 		TextView.OnEditorActionListener listener=new TextView.OnEditorActionListener() {
 			  @Override
@@ -64,13 +76,34 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		return v;
     }
 
-    
 	private void signUpAction(){
-    	User u = new User();
-    	u.setName(mUserNameEditText.getText().toString());
-    	u.setEmail(mEmailEditText.getText().toString());
-    	u.setPassword(mPasswordEditText.getText().toString());
-    	mRestModule.signupUser(u);
+		
+		usernameError.setVisibility(View.GONE);
+		emailError.setVisibility(View.GONE);
+		passwordError.setVisibility(View.GONE);		
+		
+		String username = mUserNameEditText.getText().toString();
+		String email = mEmailEditText.getText().toString();
+		String password = mPasswordEditText.getText().toString();
+		String confirmPassword = mPasswordConfirmEditText.getText().toString();
+		
+		if(!AuthUtils.isValidUsername(username)) {
+			Toast.makeText(getActivity(), "not isValidUsername", Toast.LENGTH_SHORT).show();
+			usernameError.setVisibility(TextView.VISIBLE);
+		} else if(!AuthUtils.isValidEmail(email)) {
+			Toast.makeText(getActivity(), "not isValidEmail", Toast.LENGTH_SHORT).show();
+			emailError.setVisibility(TextView.VISIBLE);
+		} else if(!AuthUtils.isValidPassword(password, confirmPassword, 6)) {
+			Toast.makeText(getActivity(), "not isValidPassword", Toast.LENGTH_SHORT).show();
+			passwordError.setVisibility(TextView.VISIBLE);
+		} else {
+	    	User u = new User();
+	    	u.setName(username);
+	    	u.setEmail(email);
+	    	u.setPassword(password);
+	    	mRestModule.signupUser(u);	
+		}
+		
 	}
 
 	@Override

@@ -3,13 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    <ImageView 
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_margin="8dp"
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="@string/auth"/>
-    
-    
+        android:layout_margin="8dp"
+        android:contentDescription="@string/auth"
+        android:src="@drawable/ic_user_profile" />
+
+    <TextView
+        android:id="@+id/username"
+        style="@style/text_gray_big"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal" />
+
+    <TextView
+        style="@style/text_gray_small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="@string/auth_view_profile" />
 
 </LinearLayout>

@@ -12,6 +12,10 @@ public class AuthUtils {
 	    return matcher.matches();
 	}
 	
+	public static boolean isValidPassword(String password, Integer minLen) {
+	    return password != null && password.length() >= minLen;
+	}
+	
 	public static boolean isValidPassword(String password, String confirm, Integer minLen) {
 	    return password != null && password.equals(confirm) && password.length() >= minLen;
 	}

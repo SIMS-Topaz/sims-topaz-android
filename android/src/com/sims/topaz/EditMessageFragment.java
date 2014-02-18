@@ -81,8 +81,8 @@ implements MessageDelegate,ErreurDelegate{
 		View view = inflater.inflate(R.layout.fragment_edit_message, container, false);
 		TextView mTextTextView = (TextView) view.findViewById(R.id.edit_message_text);
 		mTextTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-		editText = (EditText) getActivity().findViewById(R.id.editMessage);
-
+		editText = (EditText) view.findViewById(R.id.editMessage);
+		editText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		setUpButtons(view);
 		return view;
 	}    

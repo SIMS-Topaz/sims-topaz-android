@@ -43,7 +43,9 @@
 	<string name="auth_no_user">Vous n\'avez pas de compte ?</string>
 	<string name="auth_user">Vous avez déjà un compte ?</string>
 	<string name="auth_username_error">Utilisez seulement des lettres, des chiffres et _</string>
-	<string name="auth_usermail_error">Format incorrect</string>
+	<string name="auth_conflictusername_error">Nom déjà utilisé</string>
+	<string name="auth_usermail_error">Format d\'email incorrect</string>
+	<string name="auth_conflictusermail_error">Email déjà utilisé</string>
 	<string name="auth_userpwd_error">Mot de passe incorrect (6 caractères minimun)</string>
 	<string name="auth_userconfirmpwd_error">Retapez votre mot de passe</string>
 	

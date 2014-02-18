@@ -92,12 +92,16 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		String confirmPassword = mPasswordConfirmEditText.getText().toString();
 		
 		if(!AuthUtils.isValidUsername(username)) {
+			usernameError.setText(R.string.auth_username_error);
 			usernameError.setVisibility(TextView.VISIBLE);
 		} else if(!AuthUtils.isValidEmail(email)) {
+			emailError.setText(R.string.auth_usermail_error);
 			emailError.setVisibility(TextView.VISIBLE);
 		} else if(!AuthUtils.isValidPassword(password, 6)) {
+			passwordError.setText(R.string.auth_userpwd_error);
 			passwordError.setVisibility(TextView.VISIBLE);
 		} else if(!AuthUtils.isValidPassword(password, confirmPassword, 6)) {
+			confirmpasswordError.setText(R.string.auth_userconfirmpwd_error);
 			confirmpasswordError.setVisibility(TextView.VISIBLE);
 		} else {
 	    	User u = new User();
@@ -111,7 +115,16 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 
 	@Override
 	public void apiError(ApiError error) {
-		Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
+		// Conflit
+		if(error.getCode().equals(409)) {
+			if(error.getMsg().equals("NAME_IN_USE")) {
+				emailError.setText(R.string.auth_conflictusermail_error);
+				emailError.setVisibility(TextView.VISIBLE);
+			} else if(error.getMsg().equals("EMAIL_IN_USE")) {
+				usernameError.setText(R.string.auth_conflictusername_error);
+				usernameError.setVisibility(TextView.VISIBLE);
+			}
+		}
 	}
 
 	@Override

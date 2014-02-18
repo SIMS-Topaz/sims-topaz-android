@@ -9,7 +9,9 @@ import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.SimsContext;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -34,6 +36,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 	private TextView usernameError;
 	private TextView emailError;
 	private TextView passwordError;
+	private TextView confirmpasswordError;
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +55,8 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		emailError.setVisibility(View.GONE);
 		passwordError = (TextView)v.findViewById(R.id.signup_password_error);
 		passwordError.setVisibility(View.GONE);
+		confirmpasswordError = (TextView)v.findViewById(R.id.signup_confirmpassword_error);
+		confirmpasswordError.setVisibility(View.GONE);
 		
 		TextView.OnEditorActionListener listener=new TextView.OnEditorActionListener() {
 			  @Override
@@ -80,7 +85,8 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		
 		usernameError.setVisibility(View.GONE);
 		emailError.setVisibility(View.GONE);
-		passwordError.setVisibility(View.GONE);		
+		passwordError.setVisibility(View.GONE);
+		confirmpasswordError.setVisibility(View.GONE);
 		
 		String username = mUserNameEditText.getText().toString();
 		String email = mEmailEditText.getText().toString();
@@ -88,14 +94,13 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		String confirmPassword = mPasswordConfirmEditText.getText().toString();
 		
 		if(!AuthUtils.isValidUsername(username)) {
-			Toast.makeText(getActivity(), "not isValidUsername", Toast.LENGTH_SHORT).show();
 			usernameError.setVisibility(TextView.VISIBLE);
 		} else if(!AuthUtils.isValidEmail(email)) {
-			Toast.makeText(getActivity(), "not isValidEmail", Toast.LENGTH_SHORT).show();
 			emailError.setVisibility(TextView.VISIBLE);
-		} else if(!AuthUtils.isValidPassword(password, confirmPassword, 6)) {
-			Toast.makeText(getActivity(), "not isValidPassword", Toast.LENGTH_SHORT).show();
+		} else if(!AuthUtils.isValidPassword(password, 6)) {
 			passwordError.setVisibility(TextView.VISIBLE);
+		} else if(!AuthUtils.isValidPassword(password, confirmPassword, 6)) {
+			confirmpasswordError.setVisibility(TextView.VISIBLE);
 		} else {
 	    	User u = new User();
 	    	u.setName(username);
@@ -118,14 +123,8 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 
 	@Override
 	public void afterSignUp(User user) {
-		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-								   .putString(
-										   MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
-										   user.getName());
-		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-		   .putString(
-				   MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
-				   user.getName());
+		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
+		startActivity(intent);
 	}
 
 }

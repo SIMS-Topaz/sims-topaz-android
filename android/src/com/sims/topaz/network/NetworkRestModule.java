@@ -118,7 +118,7 @@ public class NetworkRestModule {
 	 * @param user
 	 */
 	public void signinUser(User user) {
-		String url = SERVER_URL + "login";
+		String url = SERVER_URL + "user_auth";
 		Log.d("Network signuinUser url=", url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.USER_LOGIN);
 		ObjectMapper mapper = new ObjectMapper();

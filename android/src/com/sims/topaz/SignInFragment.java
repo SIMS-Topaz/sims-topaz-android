@@ -61,7 +61,7 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
     }
 	@Override
 	public void afterSignIn(User user) {
-		Toast.makeText(getActivity(), "after sign in ok"+user.toString(), Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), "after sign up : "+user.toString(), Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

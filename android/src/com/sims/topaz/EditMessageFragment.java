@@ -32,8 +32,6 @@ implements MessageDelegate,ErreurDelegate{
 
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private LatLng mPosition;
-	private Button send;
-	private Button cancel;
 	private EditText editText;
 
 	OnNewMessageListener mCallback;
@@ -41,7 +39,7 @@ implements MessageDelegate,ErreurDelegate{
 	public interface OnNewMessageListener {
 		public void onNewMessage(Message message);
 	}
-	
+
 	private int savedSoftInputMode;
 
 	@Override
@@ -54,7 +52,7 @@ implements MessageDelegate,ErreurDelegate{
 			mCallback = (OnNewMessageListener) activity;
 			savedSoftInputMode = activity.getWindow().getAttributes().softInputMode;
 			activity.getWindow()
-			   .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+			.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnNewMessageListener");
@@ -70,7 +68,7 @@ implements MessageDelegate,ErreurDelegate{
 		super.onDetach();
 		mCallback = null;
 		getActivity().getWindow()
-		   .setSoftInputMode(savedSoftInputMode);
+		.setSoftInputMode(savedSoftInputMode);
 	}
 	public void setPosition(LatLng position) {
 		this.mPosition = position;
@@ -83,8 +81,6 @@ implements MessageDelegate,ErreurDelegate{
 		View view = inflater.inflate(R.layout.fragment_edit_message, container, false);
 		TextView mTextTextView = (TextView) view.findViewById(R.id.edit_message_text);
 		mTextTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-		send.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-		cancel.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		editText = (EditText) getActivity().findViewById(R.id.editMessage);
 
 		setUpButtons(view);
@@ -92,7 +88,8 @@ implements MessageDelegate,ErreurDelegate{
 	}    
 
 	private void setUpButtons(View view) {
-		send = (Button) view.findViewById(R.id.button_send_message);
+		Button send = (Button) view.findViewById(R.id.button_send_message);
+		send.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		send.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -101,7 +98,8 @@ implements MessageDelegate,ErreurDelegate{
 				onSendButton(v);
 			}
 		});
-		cancel = (Button) view.findViewById(R.id.button_cancel_message);
+		Button cancel = (Button) view.findViewById(R.id.button_cancel_message);
+		cancel.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		cancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -113,10 +111,10 @@ implements MessageDelegate,ErreurDelegate{
 
 	protected void closeKeyboard() {
 		InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-			      Context.INPUT_METHOD_SERVICE);
+				Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 	}
- 
+
 	public void onSendButton(View view) {
 		String text = editText.getText().toString();
 		// Create the message
@@ -147,7 +145,7 @@ implements MessageDelegate,ErreurDelegate{
 	public void networkError() {
 		getView().findViewById(R.id.button_send_message).setEnabled(true);
 	}
-	
+
 	public void apiError(ApiError error) {}
 
 

@@ -6,6 +6,7 @@ import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.AuthUtils;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -62,13 +63,27 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		return v;
     }
 
-    
 	private void signUpAction(){
-    	User u = new User();
-    	u.setName(mUserNameEditText.getText().toString());
-    	u.setEmail(mEmailEditText.getText().toString());
-    	u.setPassword(mPasswordEditText.getText().toString());
-    	mRestModule.signupUser(u);
+		
+		String username = mUserNameEditText.getText().toString();
+		String email = mEmailEditText.getText().toString();
+		String password = mPasswordEditText.getText().toString();
+		String confirmPassword = mPasswordConfirmEditText.getText().toString();
+		
+		if(!AuthUtils.isValidUsername(username)) {
+			Toast.makeText(getActivity(), "not isValidUsername", Toast.LENGTH_SHORT).show();
+		} else if(!AuthUtils.isValidEmail(email)) {
+			Toast.makeText(getActivity(), "not isValidEmail", Toast.LENGTH_SHORT).show();
+		} else if(!AuthUtils.isValidPassword(password, confirmPassword, 3)) {
+			Toast.makeText(getActivity(), "not isValidPassword", Toast.LENGTH_SHORT).show();
+		} else {
+	    	User u = new User();
+	    	u.setName(username);
+	    	u.setEmail(email);
+	    	u.setPassword(password);
+	    	mRestModule.signupUser(u);	
+		}
+		
 	}
 
 	@Override

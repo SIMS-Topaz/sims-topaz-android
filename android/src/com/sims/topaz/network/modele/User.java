@@ -1,14 +1,25 @@
 package com.sims.topaz.network.modele;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 	
+	@JsonProperty("user_id")
 	private Long id;
+	
+	@JsonProperty("user_name")
 	private String name;
+	
+	@JsonProperty("user_password")
 	private String password;
+	
+	@JsonProperty("user_mail")
 	private String email;
+	
+	@JsonProperty("user_verified")
+	private Boolean verified;
 	
 	public User() {
 	}
@@ -29,6 +40,10 @@ public class User {
 		return email;
 	}
 	
+	public Boolean getVerified() {
+		return verified;
+	}
+	
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -43,6 +58,10 @@ public class User {
 	
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public void setVerified(Boolean verified) {
+		this.verified = verified;
 	}
 	
 	@Override

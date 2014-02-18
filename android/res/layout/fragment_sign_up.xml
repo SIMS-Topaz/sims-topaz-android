@@ -17,6 +17,14 @@
         android:nextFocusDown="@+id/sign_up_mail"
         android:padding="4dp" />
 
+    <TextView
+        android:id="@+id/signup_username_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auth_username_error"
+        android:textColor="@color/red"
+        android:padding="4dp" />
+
     <EditText
         android:id="@+id/sign_up_mail"
         android:layout_width="match_parent"
@@ -29,6 +37,14 @@
         android:nextFocusDown="@+id/sign_up_password"
         android:padding="4dp"
         android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/signup_email_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auth_usermail_error"
+        android:textColor="@color/red"
+        android:padding="4dp" />
 
     <EditText
         android:id="@+id/sign_up_password"
@@ -44,6 +60,14 @@
         android:padding="4dp"
         android:singleLine="true" />
 
+    <TextView
+        android:id="@+id/signup_password_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:text="@string/auth_userpwd_error"
+        android:textColor="@color/red" />
+
     <EditText
         android:id="@+id/sign_up_confirm_password"
         style="@style/text_dark_gray_normal"
@@ -56,6 +80,14 @@
         android:inputType="textPassword"
         android:padding="4dp"
         android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/signup_confirmpassword_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auth_userconfirmpwd_error"
+        android:padding="4dp"
+        android:textColor="@color/red" />
 
     <Button
         android:id="@+id/sign_up_bt"

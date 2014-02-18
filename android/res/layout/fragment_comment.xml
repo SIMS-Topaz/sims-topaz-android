@@ -124,7 +124,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp" >
 
-        <com.sims.topaz.customviews.CustomEditText
+        <EditText
             android:id="@+id/write_comment_text"
             style="@style/text_gray_normal"
             android:layout_width="match_parent"

@@ -76,7 +76,7 @@
                 android:background="@null"
                 android:contentDescription="@string/comment_like"
                 android:scaleType="center"
-                android:src="@drawable/ic_like" />
+                android:src="@drawable/animation_like_button" />
 
             <TextView
                 android:id="@+id/textViewDislikes"
@@ -93,7 +93,7 @@
                 android:background="@null"
                 android:contentDescription="@string/comment_dislike"
                 android:scaleType="center"
-                android:src="@drawable/ic_dislike" />
+                android:src="@drawable/animation_dislike_button" />
 
             <ImageButton
                 android:id="@+id/comment_share"

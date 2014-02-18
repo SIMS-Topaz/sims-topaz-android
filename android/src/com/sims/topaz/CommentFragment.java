@@ -13,6 +13,7 @@ import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 import android.content.Intent;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -102,11 +103,11 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		});
 		mLikeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {likeMessage();}
+			public void onClick(View v) {likeMessage((ImageButton) v);}
 		});
 		mDislikeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {dislikeMessage();}
+			public void onClick(View v) {dislikeMessage((ImageButton) v);}
 		});
 		
 	}
@@ -119,12 +120,20 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		}		
 	}
 	
-	protected void likeMessage() {
+	protected void likeMessage(ImageButton b) {
 		if(mMessage!=null) {
 			switch(mMessage.likeStatus) {
-			case LIKED: mMessage.unlike(); break;
-			case NONE: mMessage.like(); break;
-			case DISLIKED: mMessage.undislike();mMessage.like();break;
+			case LIKED: mMessage.unlike(); 
+				((TransitionDrawable) b.getDrawable()).reverseTransition(0);
+				break;
+			case NONE: 
+				mMessage.like(); 
+				((TransitionDrawable) b.getDrawable()).startTransition(0);
+				break;
+			case DISLIKED: 
+				mMessage.undislike();mMessage.like();
+				((TransitionDrawable) b.getDrawable()).startTransition(0);
+				break;
 			}
 			//TODO REST method
 			//Update view
@@ -132,12 +141,21 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		}
 	}
 	
-	protected void dislikeMessage() {
+	protected void dislikeMessage(ImageButton b) {
 		if(mMessage!=null) {
 			switch(mMessage.likeStatus) {
-			case LIKED: mMessage.unlike(); mMessage.dislike(); break;
-			case NONE: mMessage.dislike(); break;
-			case DISLIKED: mMessage.undislike();break;
+			case LIKED: 
+				mMessage.unlike(); mMessage.dislike();
+				((TransitionDrawable) b.getDrawable()).startTransition(0);
+				break;
+			case NONE: 
+				mMessage.dislike(); 
+				((TransitionDrawable) b.getDrawable()).startTransition(0);
+				break;
+			case DISLIKED: 
+				mMessage.undislike();
+				((TransitionDrawable) b.getDrawable()).reverseTransition(0);
+				break;
 			}
 			//TODO REST method
 			//update view

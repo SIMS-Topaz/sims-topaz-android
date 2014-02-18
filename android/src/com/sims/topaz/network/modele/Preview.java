@@ -22,7 +22,11 @@ public class Preview {
 	@JsonProperty("date")
 	private Long timestamp;
 	
-	private final int MAX_CHAR = 10;
+	private final int MAX_CHAR = 20;
+	
+	private int likes = 0;
+	
+	private int dislikes = 0;
 	
 	public Preview() {
 	}
@@ -39,6 +43,8 @@ public class Preview {
 			this.isFull = true;
 		}
 		this.timestamp = message.getTimestamp();
+		this.likes = message.getLikes();
+		this.dislikes = message.getDislikes();
 	}
 	
 	public Long getId() {
@@ -67,5 +73,21 @@ public class Preview {
 	
 	public void setIsFull(Boolean isFull) {
 		this.isFull = isFull;
+	}
+
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
 	}
 }

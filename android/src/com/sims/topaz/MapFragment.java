@@ -369,6 +369,7 @@ OnMapLoadedCallback
 	@Override
 	public boolean onClusterItemClick(PreviewClusterItem item) {
 		mBulleAdapter.setIsCluster(false);
+		mBulleAdapter.setPreview(item.getPreview());
 		return false;
 	}
 	@Override

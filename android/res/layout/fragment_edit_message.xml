@@ -6,21 +6,23 @@
     android:background="@color/light_gray"
     android:orientation="vertical" >
 
+  
+
     <TextView
         android:id="@+id/signup_username_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/edit_message_prompt" />
 
-    <!-- The keyboard is not showing on gingerbread if we have request focus in the xml
-		Solution got from a guy from google
-	 -->
-    <com.sims.topaz.customviews.CustomEditText
+
+    <EditText
         android:id="@+id/editMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textAutoCorrect|textMultiLine"    />
+        android:inputType="textAutoCorrect|textMultiLine">
+        <requestFocus />
+    </EditText>
 
     <LinearLayout
         android:layout_width="wrap_content"

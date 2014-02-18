@@ -12,6 +12,7 @@ import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -85,6 +87,7 @@ implements MessageDelegate,ErreurDelegate{
 			@Override
 			public void onClick(View v) {
 				v.setEnabled(false);
+				closeKeyboard();
 				onSendButton(v);
 			}
 		});
@@ -92,11 +95,19 @@ implements MessageDelegate,ErreurDelegate{
 		cancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				closeKeyboard();
 				getFragmentManager().popBackStack();
 			}
 		});
 	}
 
+	protected void closeKeyboard() {
+		InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+			      Context.INPUT_METHOD_SERVICE);
+		EditText editText = (EditText) getActivity().findViewById(R.id.editMessage);
+			imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+	}
+ 
 	public void onSendButton(View view) {
 		EditText editText = (EditText) getActivity().findViewById(R.id.editMessage);
 		String text = editText.getText().toString();

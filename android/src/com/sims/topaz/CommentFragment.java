@@ -1,21 +1,13 @@
 package com.sims.topaz;
 
+import java.sql.Date;
 import java.util.List;
 
-import com.sims.topaz.adapter.CommentAdapter;
-import com.sims.topaz.modele.CommentItem;
-import com.sims.topaz.network.NetworkRestModule;
-import com.sims.topaz.network.interfaces.MessageDelegate;
-import com.sims.topaz.network.interfaces.ErreurDelegate;
-import com.sims.topaz.network.modele.ApiError;
-import com.sims.topaz.network.modele.Message;
-import com.sims.topaz.network.modele.Preview;
-import com.sims.topaz.utils.MyTypefaceSingleton;
-import com.sims.topaz.utils.SimsContext;
-
 import android.content.Intent;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +18,18 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sims.topaz.adapter.CommentAdapter;
+import com.sims.topaz.modele.CommentItem;
+import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.interfaces.ErreurDelegate;
+import com.sims.topaz.network.interfaces.MessageDelegate;
+import com.sims.topaz.network.modele.ApiError;
+import com.sims.topaz.network.modele.Message;
+import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.MyTypefaceSingleton;
+import com.sims.topaz.utils.SimsContext;
+
 public class CommentFragment extends Fragment implements MessageDelegate,ErreurDelegate{
 
 	private TextView mFirstComment;
@@ -34,6 +38,10 @@ public class CommentFragment extends Fragment implements MessageDelegate,ErreurD
 	private EditText mNewComment;
 	private ListView mListComments;
 	private ImageButton mShareButton;
+	private ImageButton mLikeButton;
+	private ImageButton mDislikeButton;
+	// The main message
+	private Message mMessage=null;
 	//intelligence
 	private NetworkRestModule restModule = new NetworkRestModule(this);
 
@@ -52,7 +60,13 @@ public class CommentFragment extends Fragment implements MessageDelegate,ErreurD
 		mNewComment = (EditText)v.findViewById(R.id.write_comment_text);
 		mNewComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mListComments = (ListView)v.findViewById(R.id.comment_list);
-		mShareButton = (ImageButton)v.findViewById(R.id.comment_share);
+		
+		//Set Like, Dislike and Share Buttons
+		setButtons(v);
+		
+		//get the main message from the preview id
+		loadMessage();
+		
 		//TODO remove this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		CommentItem[] comments = new CommentItem[2];
 		CommentItem a = new CommentItem(12321, "Dostoievski", "Plus j�aime l�humanit� en g�n�ral, moins j�aime les gens en particulier, comme individus.", 1392094361,
@@ -68,10 +82,6 @@ public class CommentFragment extends Fragment implements MessageDelegate,ErreurD
 				comments));
 
 
-		if(getArguments()!=null && getArguments().containsKey("id_preview")){
-			long id = getArguments().getLong("id_preview");
-			restModule.getMessage(id);
-		}
 		mNewComment.setImeOptions(EditorInfo.IME_ACTION_GO);
 		mNewComment.setOnKeyListener(new View.OnKeyListener() {
 			@Override
@@ -80,13 +90,91 @@ public class CommentFragment extends Fragment implements MessageDelegate,ErreurD
 				return false;
 			}
 		});
+		
+
+		return v;
+	}   
+	
+	//Set Like, Dislike and Share Buttons
+	private void setButtons(View v) {
+		mShareButton = (ImageButton)v.findViewById(R.id.comment_share);
+		mLikeButton = (ImageButton)v.findViewById(R.id.comment_like);
+		mDislikeButton = (ImageButton)v.findViewById(R.id.comment_dislike);
 		mShareButton.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {shareMessage();}
 		});
-
-		return v;
-	}   
+		mLikeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {likeMessage();}
+		});
+		mDislikeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {dislikeMessage();}
+		});
+		
+	}
+	
+	private void loadMessage() {
+		//get the main message from the preview id
+		if(getArguments()!=null && getArguments().containsKey("id_preview")){
+			Long id = getArguments().getLong("id_preview");
+			restModule.getMessage(id);
+		}		
+	}
+	
+	protected void likeMessage() {
+		if(mMessage!=null) {
+			switch(mMessage.likeStatus) {
+			case LIKED: mMessage.unlike(); 
+				((TransitionDrawable) mLikeButton.getDrawable())
+					.reverseTransition(0);
+				break;
+			case NONE: 
+				mMessage.like(); 
+				((TransitionDrawable) mLikeButton.getDrawable())
+					.startTransition(0);
+				break;
+			case DISLIKED: 
+				mMessage.undislike();mMessage.like();
+				((TransitionDrawable) mDislikeButton.getDrawable())
+					.reverseTransition(0);
+				((TransitionDrawable) mLikeButton.getDrawable())
+					.startTransition(0);
+				break;
+			}
+			//TODO REST method
+			//Update view
+			updateLikes();
+		}
+	}
+	
+	protected void dislikeMessage() {
+		if(mMessage!=null) {
+			switch(mMessage.likeStatus) {
+			case LIKED: 
+				mMessage.unlike(); mMessage.dislike();
+				((TransitionDrawable) mLikeButton.getDrawable())
+					.reverseTransition(0);
+				((TransitionDrawable) mDislikeButton.getDrawable())
+					.startTransition(0);
+				break;
+			case NONE: 
+				mMessage.dislike(); 
+				((TransitionDrawable) mDislikeButton.getDrawable())
+					.startTransition(0);
+				break;
+			case DISLIKED: 
+				mMessage.undislike();
+				((TransitionDrawable) mDislikeButton.getDrawable())
+					.reverseTransition(0);
+				break;
+			}
+			//TODO REST method
+			//update view
+			updateLikes();
+		}
+	}
 	public void onDoneButton(){
 		getFragmentManager().beginTransaction().remove(this).commit();
 
@@ -97,7 +185,42 @@ public class CommentFragment extends Fragment implements MessageDelegate,ErreurD
 
 	@Override
 	public void afterGetMessage(Message message) {
-		mFirstComment.setText(message.getText());
+		if(message!=null) {
+			mMessage=message;
+			mFirstComment.setText(message.getText());
+			mFirstCommentTimestamp.setText(DateFormat.format
+					(getString(R.string.date_format), 
+							new Date( message.getTimestamp() ) ) );
+			initLikeButtons();
+			updateLikes();
+		}
+	}
+	
+	private void initLikeButtons() {
+		if(mMessage==null) return;
+		switch(mMessage.likeStatus) {
+			case NONE: //nothing
+				break;
+			case LIKED:
+				((TransitionDrawable) mLikeButton.getDrawable())
+					.startTransition(0);
+				break;
+			case DISLIKED:
+				((TransitionDrawable) mDislikeButton.getDrawable())
+					.startTransition(0);
+				break;
+		}
+		
+	}
+
+	protected void updateLikes() {
+		if(mMessage!=null) {
+			TextView likes = (TextView) getView().findViewById(R.id.textViewLikes);
+			likes.setText(Integer.toString(mMessage.getLikes()));
+			TextView dislikes = (TextView) getView().findViewById(R.id.textViewDislikes);
+			dislikes.setText(Integer.toString(mMessage.getDislikes()));
+			
+		}
 	}
 
 	@Override

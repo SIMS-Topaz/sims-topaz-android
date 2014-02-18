@@ -75,14 +75,12 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 
 	@Override
 	public void apiError(ApiError error) {
-		// TODO Auto-generated method stub
-		
+		Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void networkError() {
-		// TODO Auto-generated method stub
-		
+		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

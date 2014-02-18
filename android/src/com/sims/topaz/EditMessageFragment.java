@@ -76,6 +76,7 @@ implements MessageDelegate,ErreurDelegate{
 		send.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				v.setEnabled(false);
 				onSendButton(v);
 			}
 		});
@@ -117,16 +118,15 @@ implements MessageDelegate,ErreurDelegate{
 	public void afterGetPreviews(List<Preview> list) {}
 
 	@Override
+	public void networkError() {
+		getView().findViewById(R.id.button_send_message).setEnabled(true);
+	}
+	
 	public void apiError(ApiError error) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void networkError() {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 }

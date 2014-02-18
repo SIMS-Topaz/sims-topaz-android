@@ -28,15 +28,16 @@
 	<string name="comment_hint">Write your comment here</string>
 	<string name="comment_loading">Chargement...</string>
 	<string name="comment_like">like icon</string>
-	<string name="comment_unlike">unlike icon</string>
+	<string name="comment_dislike">unlike icon</string>
 	<string name="comment_share">share icon</string>
+	<string name="date_format">dd MMM yyyy - HH:mm</string>
 	<!-- auth -->
 	<string name="auth_activity">Rester connecté..simple et efficace</string>
 	<string name="auth_sign_in">Login</string>
 	<string name="auth_sign_up">Créer un compte</string>
 	<string name="auth_username">Utilisateur</string>
 	<string name="auth_password">Mot de passe</string>
-	<string name="auth_confirm_password">Confirmation mot de passe</string>
+	<string name="auth_confirm_password">Confirmation mot du passe</string>
 	<string name="auth_email">Email</string>
 	<string name="auth_sign_in_welcome">Bienvenue à nouveau !</string>
 	<string name="auth_no_user">Vous n\'avez pas de compte ?</string>

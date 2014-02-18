@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ implements MessageDelegate,ErreurDelegate{
 	public interface OnNewMessageListener {
 		public void onNewMessage(Message message);
 	}
+	
+	private int savedSoftInputMode;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -42,6 +45,9 @@ implements MessageDelegate,ErreurDelegate{
 		// the callback interface. If not, it throws an exception
 		try {
 			mCallback = (OnNewMessageListener) activity;
+			savedSoftInputMode = activity.getWindow().getAttributes().softInputMode;
+			activity.getWindow()
+			   .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnNewMessageListener");
@@ -56,6 +62,8 @@ implements MessageDelegate,ErreurDelegate{
 	public void onDetach() {
 		super.onDetach();
 		mCallback = null;
+		getActivity().getWindow()
+		   .setSoftInputMode(savedSoftInputMode);
 	}
 	public void setPosition(LatLng position) {
 		this.mPosition = position;

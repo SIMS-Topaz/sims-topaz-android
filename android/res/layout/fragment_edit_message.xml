@@ -15,7 +15,7 @@
     <!-- The keyboard is not showing on gingerbread if we have request focus in the xml
 		Solution got from a guy from google
 	 -->
-    <com.sims.topaz.customviews.CustomEditText
+    <EditText
         android:id="@+id/editMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

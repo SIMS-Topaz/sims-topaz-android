@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/light_light_gray" >
+
+    <EditText
+        android:id="@+id/sign_up_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        style="@style/text_dark_gray_normal"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp"
+        android:hint="@string/auth_username"
+        android:nextFocusDown="@+id/sign_up_mail"
+        android:padding="4dp" />
+
+    <EditText
+        android:id="@+id/sign_up_mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        style="@style/text_dark_gray_normal"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp"
+        android:hint="@string/auth_email"
+        android:nextFocusDown="@+id/sign_up_password"
+        android:padding="4dp" />
+
+    <EditText
+        android:id="@+id/sign_up_password"
+        style="@style/text_dark_gray_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp"
+        android:hint="@string/auth_password"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:nextFocusUp="@+id/sign_up_confirm_password"
+        android:padding="4dp"
+        android:singleLine="true" />
+
+    <EditText
+        android:id="@+id/sign_up_confirm_password"
+        style="@style/text_dark_gray_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp"
+        android:hint="@string/auth_confirm_password"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:padding="4dp"
+        android:singleLine="true" />
+
+    <Button
+        android:id="@+id/sign_up_bt"
+        style="@style/text_white_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="@string/auth_sign_up" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2" >
+
+        <TextView
+            android:id="@+id/text_sing_up"
+            style="@style/text_gray_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="@string/auth_user"
+            android:layout_weight="0.75"/>
+
+        <Button
+            android:id="@+id/Sign_up"
+            style="@style/text_white_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/auth_sign_in" 
+            android:layout_weight="1.25"
+            android:onClick="onFlipCard"/>
+    </LinearLayout>
+</LinearLayout>

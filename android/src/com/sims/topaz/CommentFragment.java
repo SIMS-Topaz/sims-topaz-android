@@ -21,14 +21,16 @@ import android.widget.Toast;
 
 import com.sims.topaz.adapter.CommentAdapter;
 import com.sims.topaz.modele.CommentItem;
-import com.sims.topaz.network.NetworkDelegate;
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.interfaces.ErreurDelegate;
+import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
-public class CommentFragment extends Fragment implements NetworkDelegate{
+
+public class CommentFragment extends Fragment implements MessageDelegate,ErreurDelegate{
 
 	private TextView mFirstComment;
 	private TextView mFirstCommentNameUser;

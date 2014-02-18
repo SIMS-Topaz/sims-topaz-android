@@ -4,8 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.sims.topaz.network.NetworkDelegate;
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.interfaces.ErreurDelegate;
+import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
@@ -22,7 +23,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class EditMessageFragment extends Fragment
-implements NetworkDelegate{
+implements MessageDelegate,ErreurDelegate{
 
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private LatLng mPosition;
@@ -120,8 +121,12 @@ implements NetworkDelegate{
 	public void networkError() {
 		getView().findViewById(R.id.button_send_message).setEnabled(true);
 	}
+	
+	public void apiError(ApiError error) {
+		// TODO Auto-generated method stub
+		
+	}
 
-	@Override
-	public void apiError(ApiError error) {}
+
 
 }

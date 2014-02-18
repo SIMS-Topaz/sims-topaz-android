@@ -35,11 +35,13 @@ public class DrawerActivity extends ActionBarActivity
     private MapFragment mMapFragment;
     private Fragment mLastFragment;
     
+    
+
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_list);
-        SimsContext.setContext(getApplicationContext());
         mLastFragment = mMapFragment = new MapFragment();       
         setDrawer(savedInstanceState);
 

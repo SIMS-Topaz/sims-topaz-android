@@ -3,24 +3,24 @@ package com.sims.topaz.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class MyPreferencesUtils {
-	   private static MyPreferencesUtils INSTANCE;
+public class MyPreferencesUtilsSingleton {
+	   private static MyPreferencesUtilsSingleton INSTANCE;
 	   private SharedPreferences mPrefs;
 	   private SharedPreferences.Editor mEditor;
 	   
 	   //constants 
 	   private static final String SHARED_PREFERENCES = "topaz_shared_preferences";
-	   public static final String SHARED_PREFERENCES_CAMERA_MOVEMENT = "topaz_shared_preferences_camera_movement";
-	   
-	    private MyPreferencesUtils() {}
-	    private MyPreferencesUtils(Context c) {
+	   public static final String SHARED_PREFERENCES_AUTH_USERNAME = "topaz_shared_preferences_auth_username";
+	   public static final String SHARED_PREFERENCES_AUTH_PASSWORD = "topaz_shared_preferences_auth_password";
+	    private MyPreferencesUtilsSingleton() {}
+	    private MyPreferencesUtilsSingleton(Context c) {
 	        mPrefs = c.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
 	        mEditor = mPrefs.edit();
 	    }
 
-	    public static synchronized MyPreferencesUtils getInstance(Context c) {
+	    public static MyPreferencesUtilsSingleton getInstance(Context c) {
 	        if (INSTANCE == null) {
-	            INSTANCE = new MyPreferencesUtils (c);
+	            INSTANCE = new MyPreferencesUtilsSingleton (c);
 	        }
 	        return INSTANCE;
 	    }
@@ -40,7 +40,13 @@ public class MyPreferencesUtils {
 	    public Integer getNumber(String key, Integer defaultValue ){
 	        return mPrefs.getInt(key, defaultValue);
 	    }
-
+	    public void putString(String key, String value){
+	    	mEditor.putString(key, value);
+	    	mEditor.commit();
+	    }
+	    public String getString(String key, String defValue){
+	    	return mPrefs.getString(key, defValue);
+	    }
 	    public boolean hasKey(String key){
 	        return mPrefs.contains(key);
 	    }

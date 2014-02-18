@@ -2,7 +2,6 @@ package com.sims.topaz;
 
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.network.modele.Message;
-import com.sims.topaz.utils.SimsContext;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

@@ -6,6 +6,8 @@ import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
+import com.sims.topaz.utils.SimsContext;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -85,7 +87,14 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 
 	@Override
 	public void afterSignUp(User user) {
-		Toast.makeText(getActivity(), "after sign in ok " + user.toString(), Toast.LENGTH_SHORT).show();
+		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
+								   .putString(
+										   MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
+										   user.getName());
+		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
+		   .putString(
+				   MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
+				   user.getName());
 	}
 
 }

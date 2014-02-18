@@ -37,7 +37,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 		if(position > 1){
 			view = inflater.inflate(R.layout.drawer_list_item, null);
-			String title = titles[position];
+			String title = titles[position-1];
 			TextView titleTextView = (TextView) view.findViewById(R.id.drawer_text);
 			titleTextView.setTypeface(face);
 			titleTextView.setText(title);		

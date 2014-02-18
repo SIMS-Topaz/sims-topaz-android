@@ -10,6 +10,7 @@
     <string name="action_settings">Paramètres</string>
     <string name="drawer_image">Icon du button</string>
     <string-array name="views_array">
+        <item>Utilisateur</item>
         <item>Search</item>
         <item>La carte</item>
         <item>Paramètres</item>

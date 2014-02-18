@@ -2,16 +2,6 @@ package com.sims.topaz;
 
 import java.util.List;
 
-import com.sims.topaz.adapter.CommentAdapter;
-import com.sims.topaz.modele.CommentItem;
-import com.sims.topaz.network.NetworkDelegate;
-import com.sims.topaz.network.NetworkRestModule;
-import com.sims.topaz.network.modele.ApiError;
-import com.sims.topaz.network.modele.Message;
-import com.sims.topaz.network.modele.Preview;
-import com.sims.topaz.utils.MyTypefaceSingleton;
-import com.sims.topaz.utils.SimsContext;
-
 import android.content.Intent;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
@@ -21,12 +11,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sims.topaz.adapter.CommentAdapter;
+import com.sims.topaz.modele.CommentItem;
+import com.sims.topaz.network.NetworkDelegate;
+import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.modele.ApiError;
+import com.sims.topaz.network.modele.Message;
+import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.MyTypefaceSingleton;
+import com.sims.topaz.utils.SimsContext;
 public class CommentFragment extends Fragment implements NetworkDelegate{
 
 	private TextView mFirstComment;
@@ -103,11 +102,11 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		});
 		mLikeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {likeMessage((ImageButton) v);}
+			public void onClick(View v) {likeMessage();}
 		});
 		mDislikeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {dislikeMessage((ImageButton) v);}
+			public void onClick(View v) {dislikeMessage();}
 		});
 		
 	}
@@ -120,19 +119,24 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		}		
 	}
 	
-	protected void likeMessage(ImageButton b) {
+	protected void likeMessage() {
 		if(mMessage!=null) {
 			switch(mMessage.likeStatus) {
 			case LIKED: mMessage.unlike(); 
-				((TransitionDrawable) b.getDrawable()).reverseTransition(0);
+				((TransitionDrawable) mLikeButton.getDrawable())
+					.reverseTransition(0);
 				break;
 			case NONE: 
 				mMessage.like(); 
-				((TransitionDrawable) b.getDrawable()).startTransition(0);
+				((TransitionDrawable) mLikeButton.getDrawable())
+					.startTransition(0);
 				break;
 			case DISLIKED: 
 				mMessage.undislike();mMessage.like();
-				((TransitionDrawable) b.getDrawable()).startTransition(0);
+				((TransitionDrawable) mDislikeButton.getDrawable())
+					.reverseTransition(0);
+				((TransitionDrawable) mLikeButton.getDrawable())
+					.startTransition(0);
 				break;
 			}
 			//TODO REST method
@@ -141,20 +145,25 @@ public class CommentFragment extends Fragment implements NetworkDelegate{
 		}
 	}
 	
-	protected void dislikeMessage(ImageButton b) {
+	protected void dislikeMessage() {
 		if(mMessage!=null) {
 			switch(mMessage.likeStatus) {
 			case LIKED: 
 				mMessage.unlike(); mMessage.dislike();
-				((TransitionDrawable) b.getDrawable()).startTransition(0);
+				((TransitionDrawable) mLikeButton.getDrawable())
+					.reverseTransition(0);
+				((TransitionDrawable) mDislikeButton.getDrawable())
+					.startTransition(0);
 				break;
 			case NONE: 
 				mMessage.dislike(); 
-				((TransitionDrawable) b.getDrawable()).startTransition(0);
+				((TransitionDrawable) mDislikeButton.getDrawable())
+					.startTransition(0);
 				break;
 			case DISLIKED: 
 				mMessage.undislike();
-				((TransitionDrawable) b.getDrawable()).reverseTransition(0);
+				((TransitionDrawable) mDislikeButton.getDrawable())
+					.reverseTransition(0);
 				break;
 			}
 			//TODO REST method

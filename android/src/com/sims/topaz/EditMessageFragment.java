@@ -75,6 +75,7 @@ implements NetworkDelegate{
 		send.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				v.setEnabled(false);
 				onSendButton(v);
 			}
 		});
@@ -116,7 +117,9 @@ implements NetworkDelegate{
 	public void afterGetPreviews(List<Preview> list) {}
 
 	@Override
-	public void networkError() {}
+	public void networkError() {
+		getView().findViewById(R.id.button_send_message).setEnabled(true);
+	}
 
 	@Override
 	public void apiError(ApiError error) {}

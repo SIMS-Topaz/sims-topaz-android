@@ -18,12 +18,11 @@
         android:padding="4dp" />
 
     <TextView
+        style="@style/text_red_normal"
         android:id="@+id/signup_username_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/auth_username_error"
-        android:textColor="@color/red"
-        android:padding="4dp" />
+        android:text="@string/auth_username_error" />
 
     <EditText
         android:id="@+id/sign_up_mail"
@@ -39,12 +38,11 @@
         android:inputType="textEmailAddress" />
 
     <TextView
+        style="@style/text_red_normal"
         android:id="@+id/signup_email_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/auth_usermail_error"
-        android:textColor="@color/red"
-        android:padding="4dp" />
+        android:text="@string/auth_usermail_error" />
 
     <EditText
         android:id="@+id/sign_up_password"
@@ -61,12 +59,11 @@
         android:singleLine="true" />
 
     <TextView
+        style="@style/text_red_normal"
         android:id="@+id/signup_password_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:text="@string/auth_userpwd_error"
-        android:textColor="@color/red" />
+        android:text="@string/auth_userpwd_error" />
 
     <EditText
         android:id="@+id/sign_up_confirm_password"
@@ -82,12 +79,11 @@
         android:singleLine="true" />
 
     <TextView
+        style="@style/text_red_normal"
         android:id="@+id/signup_confirmpassword_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/auth_userconfirmpwd_error"
-        android:padding="4dp"
-        android:textColor="@color/red" />
+        android:text="@string/auth_userconfirmpwd_error" />
 
     <Button
         android:id="@+id/sign_up_bt"

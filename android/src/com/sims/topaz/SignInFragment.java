@@ -6,6 +6,7 @@ import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.SimsContext;
 
@@ -36,6 +37,8 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		mUserNameEditText = (EditText)v.findViewById(R.id.sign_in_username);
 		mPasswordEditText = (EditText)v.findViewById(R.id.sign_in_password);
 		mLoginButton = (Button)v.findViewById(R.id.Sign_in);
+
+		//set the done button to fields
 		TextView.OnEditorActionListener listener=new TextView.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
@@ -53,23 +56,38 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		mUserNameEditText.setOnEditorActionListener(listener);
 		mPasswordEditText.setOnEditorActionListener(listener);
 
+		//set the username if the user already made an account 
+		if(MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
+				.hasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
+			String username = MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
+					.getString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME, "");
+			mUserNameEditText.setText(username);
+		}
+
 		return v;
 	}
 
 	public void checkInput(String user, String password){
-		User u = new User();
-		u.setName(user);
-		u.setPassword(password);
-		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-		.putString(
-				MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
-				user);
-		
-		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-		.putString(
-				MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD,
-				password);	
-		mRestModule.signinUser(u);
+		//if all the fileds are likely to be ok
+		if(AuthUtils.isValidUsername(user) && AuthUtils.isValidPassword(password, 6)) {
+			User u = new User();
+			u.setName(user);
+			u.setPassword(password);
+			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
+			.putString(
+					MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
+					user);
+
+			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
+			.putString(
+					MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD,
+					password);	
+			mRestModule.signinUser(u);
+		}else if(!AuthUtils.isValidUsername(user)) {
+			//TODO show error field
+		}else if(!AuthUtils.isValidPassword(password, 6)) {
+			//TODO show error field
+		}
 	}
 	@Override
 	public void afterSignIn(User user) {

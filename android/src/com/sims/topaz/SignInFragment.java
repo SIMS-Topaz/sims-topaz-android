@@ -60,18 +60,20 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		User u = new User();
 		u.setName(user);
 		u.setPassword(password);
+		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
+		.putString(
+				MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
+				user);
+		
+		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
+		.putString(
+				MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD,
+				password);	
 		mRestModule.signinUser(u);
 	}
 	@Override
 	public void afterSignIn(User user) {
-		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-		.putString(
-				MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
-				user.getName());
-		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-		.putString(
-				MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
-				user.getName());	
+
 		Intent intent = new Intent(SimsContext.getContext(),
 				DrawerActivity.class);
 		startActivity(intent);		

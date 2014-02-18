@@ -191,10 +191,28 @@ public class CommentFragment extends Fragment implements MessageDelegate,ErreurD
 			mFirstCommentTimestamp.setText(DateFormat.format
 					(getString(R.string.date_format), 
 							new Date( message.getTimestamp() ) ) );
+			initLikeButtons();
 			updateLikes();
 		}
 	}
 	
+	private void initLikeButtons() {
+		if(mMessage==null) return;
+		switch(mMessage.likeStatus) {
+			case NONE: //nothing
+				break;
+			case LIKED:
+				((TransitionDrawable) mLikeButton.getDrawable())
+					.startTransition(0);
+				break;
+			case DISLIKED:
+				((TransitionDrawable) mDislikeButton.getDrawable())
+					.startTransition(0);
+				break;
+		}
+		
+	}
+
 	protected void updateLikes() {
 		if(mMessage!=null) {
 			TextView likes = (TextView) getView().findViewById(R.id.textViewLikes);

@@ -98,16 +98,7 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		if(AuthUtils.isValidUsername(user) && AuthUtils.isValidPassword(password, 6)) {
 			User u = new User();
 			u.setName(user);
-			u.setPassword(password);
-			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-			.putString(
-					MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
-					user);
-
-			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-			.putString(
-					MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD,
-					password);	
+			u.setPassword(password);	
 			mRestModule.signinUser(u);
 		}else if(!AuthUtils.isValidUsername(user)) {
 			mUserNameErrorTextView.setVisibility(View.VISIBLE);
@@ -117,9 +108,9 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	}
 	@Override
 	public void afterSignIn(User user) {
-		Intent intent = new Intent(SimsContext.getContext(),
-				DrawerActivity.class);
-		startActivity(intent);		
+		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
+		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
+		startActivity(intent);	
 	}
 
 	@Override

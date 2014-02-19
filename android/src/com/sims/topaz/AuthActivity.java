@@ -47,18 +47,21 @@ public class AuthActivity extends FragmentActivity{
 				.beginTransaction();
 		signInFragment = (Fragment)new SignInFragment();
 		signUpFragment = (Fragment)new SignUpFragment();
-		Bundle bundle = new Bundle();
+		
 		FrameLayout isOnPhoneLayout = (FrameLayout)findViewById(R.id.auth);
 		if(isOnPhoneLayout!=null){isOnTablet=false;}
 		else{isOnTablet=true;}
-		
+		Bundle bundle = new Bundle();
 		bundle.putBoolean(IS_ON_TABLET, isOnTablet);
 		signInFragment.setArguments(bundle);
 		signUpFragment.setArguments(bundle);
 		if(!isOnTablet){
 			transaction.replace(R.id.auth, signInFragment).commit();
+		}else{
+			transaction.replace(R.id.sign_in_fragment, signInFragment);
+			transaction.replace(R.id.sign_up_fragment, signUpFragment);
+			transaction.commit();
 		}
-
 	}
 
 

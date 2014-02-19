@@ -6,10 +6,8 @@ import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
-import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.AuthUtils;
-import com.sims.topaz.utils.SimsContext;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,6 +35,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 	private TextView emailError;
 	private TextView passwordError;
 	private TextView confirmpasswordError;
+	private boolean isOnTablet;
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,7 +79,9 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		mEmailEditText.setOnEditorActionListener(listener);
 		mPasswordEditText.setOnEditorActionListener(listener);
 		mPasswordConfirmEditText.setOnEditorActionListener(listener);
-		if(getArguments()!=null && getArguments().getBoolean(AuthActivity.IS_ON_TABLET)){
+		Bundle bundle = getArguments();
+		if(bundle!=null && bundle.getBoolean(AuthActivity.IS_ON_TABLET)){
+			isOnTablet = true;
 			textSignIn.setVisibility(View.GONE);
 			signIn.setVisibility(View.GONE);
 		}

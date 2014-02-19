@@ -84,8 +84,9 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 					.getString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME, "");
 			mUserNameEditText.setText(username);
 		}
-		
-		if(getArguments()!=null && getArguments().getBoolean(AuthActivity.IS_ON_TABLET)){
+		Bundle bundle = getArguments();
+		if(bundle!=null && bundle.getBoolean(AuthActivity.IS_ON_TABLET)){
+			isOnTablet = true;
 			mNoLoginTextView.setVisibility(View.GONE);
 			mSignUp.setVisibility(View.GONE);
 		}

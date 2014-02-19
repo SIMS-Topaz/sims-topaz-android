@@ -78,10 +78,8 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		mUserNameEditText.setOnEditorActionListener(listener);
 
 		//set the username if the user already made an account 
-		if(MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-				.hasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
-			String username = MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-					.getString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME, "");
+		if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
+			String username = AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME);
 			mUserNameEditText.setText(username);
 		}
 		
@@ -98,16 +96,7 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		if(AuthUtils.isValidUsername(user) && AuthUtils.isValidPassword(password, 6)) {
 			User u = new User();
 			u.setName(user);
-			u.setPassword(password);
-			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-			.putString(
-					MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
-					user);
-
-			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-			.putString(
-					MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD,
-					password);	
+			u.setPassword(password);	
 			mRestModule.signinUser(u);
 		}else if(!AuthUtils.isValidUsername(user)) {
 			mUserNameErrorTextView.setVisibility(View.VISIBLE);
@@ -117,9 +106,9 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	}
 	@Override
 	public void afterSignIn(User user) {
-		Intent intent = new Intent(SimsContext.getContext(),
-				DrawerActivity.class);
-		startActivity(intent);		
+		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
+		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
+		startActivity(intent);	
 	}
 
 	@Override

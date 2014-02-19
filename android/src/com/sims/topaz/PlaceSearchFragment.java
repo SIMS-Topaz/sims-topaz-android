@@ -18,23 +18,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class PlaceSearchFragment extends Fragment {
+public class PlaceSearchFragment extends Fragment{
 	
 	private AutoCompleteTextView autoCompView;
+	
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -59,32 +60,54 @@ public class PlaceSearchFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		autoCompView = (AutoCompleteTextView) getView().findViewById(R.id.autoCompleteTextView);
-
 		PlacesAutoCompleteAdapter adapter = new PlacesAutoCompleteAdapter(SimsContext.getContext(), 
 				R.layout.fragment_place_search, R.id.autoCompleteTextView);
 		//adapter.setNotifyOnChange(true);
 		autoCompView.setAdapter(adapter);
-	    autoCompView.setOnItemClickListener(new OnItemClickListener() {
-	    	
-	    	@Override
-	    	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-	            //String str = (String) adapterView.getItemAtPosition(position);
-	            //autoCompView.setText(str);
-	    		String str = "ss";
-	            Toast.makeText(getActivity().getApplicationContext(), str, Toast.LENGTH_SHORT).show();
-	        }
-	    	
-	    });
 	    //setRetainInstance(true);
+		autoCompView.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				Toast.makeText(SimsContext.getContext(), "sdf", Toast.LENGTH_SHORT).show();
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	private class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 	    private ArrayList<String> resultList;
-	    
+	    private TextView mTextView;
 	    public PlacesAutoCompleteAdapter(Context context, int resource, int textViewResourceId) {
 	        super(context, resource, textViewResourceId);
 	    }
-	    
+		public View getView(int position, View convertView, ViewGroup parent){
+			View view = convertView;
+			if(view == null){
+				LayoutInflater inflater = 
+						(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				view = inflater.inflate(R.layout.adapter_search_bar, null);
+				mTextView = (TextView)view.findViewById(R.id.search_bar_text);
+				if(resultList.get(position)!=null){
+					mTextView.setText(resultList.get(position));
+				}
+				view.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						Toast.makeText(SimsContext.getContext(), "qsd", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+			return view;
+		}
 	    @Override
 	    public int getCount() {
 	        return resultList.size();
@@ -127,10 +150,8 @@ public class PlaceSearchFragment extends Fragment {
 	    private static final String LOG_TAG = "Topaz-Android";
 	    
 	    private static final String PLACES_API_BASE = "https://maps.google.com/maps/api/geocode";
-	    private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
 	    private static final String OUT_JSON = "/json";
 
-	    private static final String API_KEY = "AIzaSyBDo_x_0mwiFuxXZMpLG_m5TRog8K9LsHc";
 
 	    private ArrayList<String> autocomplete(String input) {
 	        ArrayList<String> resultList = null;
@@ -181,6 +202,7 @@ public class PlaceSearchFragment extends Fragment {
 	        return resultList;
 	    }
 	}
+
 
 	
 }

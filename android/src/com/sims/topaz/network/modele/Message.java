@@ -62,6 +62,10 @@ public class Message {
 		return longitude;
 	}
 	
+	public eLikeStatus getLikeStatus() {
+		return likeStatus;
+	}
+
 	public String getText() {
 		return text;
 	}

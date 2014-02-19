@@ -26,7 +26,6 @@ public class AuthActivity extends FragmentActivity{
 	 */
 	private boolean mShowingBack = false;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,7 +46,7 @@ public class AuthActivity extends FragmentActivity{
 				.beginTransaction();
 		signInFragment = (Fragment)new SignInFragment();
 		signUpFragment = (Fragment)new SignUpFragment();
-		
+
 		FrameLayout isOnPhoneLayout = (FrameLayout)findViewById(R.id.auth);
 		if(isOnPhoneLayout!=null){isOnTablet=false;}
 		else{isOnTablet=true;}
@@ -63,7 +62,6 @@ public class AuthActivity extends FragmentActivity{
 			transaction.commit();
 		}
 	}
-
 
 
 	public void onFlipCard(View v){

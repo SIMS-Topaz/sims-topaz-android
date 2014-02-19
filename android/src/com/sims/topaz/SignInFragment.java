@@ -1,6 +1,7 @@
 package com.sims.topaz;
 
 
+import com.sims.topaz.EditMessageFragment.OnNewMessageListener;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
@@ -14,12 +15,14 @@ import com.sims.topaz.utils.SimsContext;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +36,22 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	private Button mLoginButton;
 	private TextView mUserNameErrorTextView;
 	private TextView mPasswordErrorTextView;
+	private int savedSoftInputMode;
 	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		savedSoftInputMode = activity.getWindow().getAttributes().softInputMode;
+		activity.getWindow()
+		.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		getActivity().getWindow()
+		.setSoftInputMode(savedSoftInputMode);
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

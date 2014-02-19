@@ -1,5 +1,6 @@
 package com.sims.topaz;
 
+import com.sims.topaz.interfaces.OnVisibilityProgressBar;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
@@ -14,13 +15,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
-public class AuthActivity extends FragmentActivity{
+public class AuthActivity extends FragmentActivity implements OnVisibilityProgressBar{
 	private Button mTempButton;
 	private Fragment signInFragment;
 	private Fragment signUpFragment;
 	private TextView mTitleTextView;
 	private boolean isOnTablet = true;
-	private ProgressBar mProgressBar;
 	public final static String IS_ON_TABLET = "IS_ON_TABLET";
 	/**
 	 * Whether or not we're showing the back of the card (otherwise showing the
@@ -63,7 +63,6 @@ public class AuthActivity extends FragmentActivity{
 			transaction.replace(R.id.sign_up_fragment, signUpFragment);
 			transaction.commit();
 		}
-		mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
 	}
 
 
@@ -87,12 +86,15 @@ public class AuthActivity extends FragmentActivity{
 			}
 		}
 	}
-
+	@Override
 	public void onShowProgressBar(){
+		ProgressBar mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
 		mProgressBar.setVisibility(View.VISIBLE);
 	}
+	@Override
 	public void onHideProgressBar(){
-		mProgressBar.setVisibility(View.GONE);
+		ProgressBar mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
+		mProgressBar.setVisibility(View.INVISIBLE);
 	}
 	
 }

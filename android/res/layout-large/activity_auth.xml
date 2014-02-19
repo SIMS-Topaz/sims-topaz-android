@@ -10,7 +10,14 @@
         android:layout_gravity="center_horizontal"
         android:background="@color/white"
         android:orientation="vertical" >
-
+        <ProgressBar
+            android:visibility="invisible"
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="8dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"  />
         <ImageView
             android:layout_width="96dp"
             android:layout_height="96dp"

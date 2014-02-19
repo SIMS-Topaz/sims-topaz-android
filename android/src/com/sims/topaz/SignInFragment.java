@@ -149,6 +149,7 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 			u.setName(user);
 			u.setPassword(password);	
 			mRestModule.signinUser(u);
+			mCallback.onShowProgressBar();
 		}else if(!AuthUtils.isValidUsername(user)) {
 			mUserNameErrorTextView.setVisibility(View.VISIBLE);
 		}else if(!AuthUtils.isValidPassword(password, 6)) {
@@ -158,6 +159,7 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 	@Override
 	public void afterSignIn(User user) {
 		mLoginButton.setEnabled(true);
+		mCallback.onHideProgressBar();
 		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
 		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
 		startActivity(intent);	
@@ -166,6 +168,7 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 	@Override
 	public void apiError(ApiError error) {
 		mLoginButton.setEnabled(true);
+		mCallback.onHideProgressBar();
 		Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
 
 	}

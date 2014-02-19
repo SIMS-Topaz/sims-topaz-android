@@ -12,7 +12,7 @@
         android:orientation="vertical" >
 
         <ProgressBar
-            android:visibility="gone"
+            android:visibility="invisible"
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"

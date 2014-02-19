@@ -6,6 +6,7 @@ import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.AuthUtils;
 
@@ -47,10 +48,15 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		
 		// Init all EditText
 		mUserNameEditText = (EditText)v.findViewById(R.id.sign_up_username);
+		mUserNameEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mEmailEditText = (EditText)v.findViewById(R.id.sign_up_mail);
+		mEmailEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mPasswordEditText = (EditText)v.findViewById(R.id.sign_up_password);
+		mPasswordEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mPasswordConfirmEditText = (EditText)v.findViewById(R.id.sign_up_confirm_password);
+		mPasswordConfirmEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mSignupButton = (Button)v.findViewById(R.id.sign_up_bt);
+		mSignupButton.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		
 		// Init all TextView error
 		usernameError = (TextView)v.findViewById(R.id.signup_username_error);

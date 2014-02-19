@@ -16,6 +16,8 @@ public class Preview {
 	
 	private String text;
 	
+	private String owner;
+	
 	@JsonProperty("is_full")
 	private Boolean isFull;
 	

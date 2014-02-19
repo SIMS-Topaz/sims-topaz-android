@@ -4,6 +4,7 @@ public class ApiError {
 	
 	private Integer Code;
 	private String msg;
+	private String details;
 	
 	public ApiError() {
 	}
@@ -14,6 +15,10 @@ public class ApiError {
 	
 	public String getMsg() {
 		return msg;
+	}
+	
+	public String getDetails() {
+		return details;
 	}
 	
 	public void setCode(Integer code) {

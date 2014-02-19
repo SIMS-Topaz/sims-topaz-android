@@ -1,5 +1,7 @@
 package com.sims.topaz.network.modele;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,6 +25,8 @@ public class Message {
 	//the number of milliseconds since Jan. 1, 1970, midnight GMT.
 	@JsonProperty("date")
 	private Long timestamp;
+	
+	private List<Comment> comments = null;
 	
 	public enum eLikeStatus {
 		NONE,

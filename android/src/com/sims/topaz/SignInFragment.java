@@ -102,8 +102,10 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 			u.setPassword(password);	
 			mRestModule.signinUser(u);
 		}else if(!AuthUtils.isValidUsername(user)) {
+			mUserNameErrorTextView.setText(R.string.auth_username_error);
 			mUserNameErrorTextView.setVisibility(View.VISIBLE);
 		}else if(!AuthUtils.isValidPassword(password, 6)) {
+			mPasswordErrorTextView.setText(R.string.auth_userpwd_error);
 			mPasswordErrorTextView.setVisibility(View.VISIBLE);
 		}
 	}
@@ -118,8 +120,18 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	@Override
 	public void apiError(ApiError error) {
 		mLoginButton.setEnabled(true);
-		Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
-
+		// Auth error
+		if(error.getCode().equals(401)) {
+			if(error.getMsg().equals("USER_ERR")) {
+				mUserNameErrorTextView.setText(R.string.auth_username_not_exist);
+				mUserNameErrorTextView.setVisibility(TextView.VISIBLE);
+			} else if(error.getMsg().equals("PASS_ERR")) {
+				mPasswordErrorTextView.setText(R.string.auth_userpwd_not_match);
+				mPasswordErrorTextView.setVisibility(TextView.VISIBLE);
+			}
+		} else {
+			Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
@@ -137,6 +149,7 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	public void afterTextChanged(Editable s) {
 		String user = mUserNameEditText.getText().toString();
 		if(!user.equals("") && !AuthUtils.isValidUsername(user)) {
+			mUserNameErrorTextView.setText(R.string.auth_username_error);
 			mUserNameErrorTextView.setVisibility(View.VISIBLE);
 		}else {
 			mUserNameErrorTextView.setVisibility(View.GONE);

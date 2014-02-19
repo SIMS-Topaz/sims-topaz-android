@@ -2,7 +2,6 @@ package com.sims.topaz;
 
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.network.modele.Message;
-import com.sims.topaz.utils.SimsContext;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -92,7 +91,7 @@ public class DrawerActivity extends ActionBarActivity
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         
         if (savedInstanceState == null) {
-           selectItem(0);
+           selectItem(1);
         }
     }
     
@@ -138,15 +137,18 @@ public class DrawerActivity extends ActionBarActivity
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	fragmentManager.beginTransaction().remove(mLastFragment);
     	switch (position) {
-		case 0:
-			mLastFragment = mMapFragment;		
-			break;
+    	case 0:
+    		mLastFragment = new UserFragment();
+    		break;
 		case 1:
 			mLastFragment = mMapFragment;		
 			break;
 		case 2:
-			mLastFragment = new SettingsFragment();	
+			mLastFragment = mMapFragment;		
+			break;
 		case 3:
+			mLastFragment = new SettingsFragment();	
+		case 4:
 			mLastFragment = new AboutFragment();	
 		default:
 			break;

@@ -122,7 +122,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp" >
         
         <EditText 
             android:id="@+id/write_comment_text" 
@@ -130,10 +131,10 @@
             android:layout_weight="1" 
             android:layout_width="0dp" 
             android:layout_height="match_parent" 
-            android:ems="10" 
             android:hint="@string/comment_hint" 
             android:inputType="textAutoCorrect|textCapSentences|textMultiLine" 
             android:padding="8dp" />
+        
         <RelativeLayout 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" >

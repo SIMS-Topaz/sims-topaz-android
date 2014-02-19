@@ -123,6 +123,7 @@ public class NetworkRestModule {
 		RESTTask rest = new RESTTask(this, url, TypeRequest.USER_LOGIN);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
+			
 			rest.setJSONParam(mapper.writeValueAsString(user));
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();

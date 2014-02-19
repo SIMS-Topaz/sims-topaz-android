@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,6 +20,7 @@ public class AuthActivity extends FragmentActivity{
 	private Fragment signUpFragment;
 	private TextView mTitleTextView;
 	private boolean isOnTablet = true;
+	private ProgressBar mProgressBar;
 	public final static String IS_ON_TABLET = "IS_ON_TABLET";
 	/**
 	 * Whether or not we're showing the back of the card (otherwise showing the
@@ -61,6 +63,7 @@ public class AuthActivity extends FragmentActivity{
 			transaction.replace(R.id.sign_up_fragment, signUpFragment);
 			transaction.commit();
 		}
+		mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
 	}
 
 
@@ -85,4 +88,11 @@ public class AuthActivity extends FragmentActivity{
 		}
 	}
 
+	public void onShowProgressBar(){
+		mProgressBar.setVisibility(View.VISIBLE);
+	}
+	public void onHideProgressBar(){
+		mProgressBar.setVisibility(View.GONE);
+	}
+	
 }

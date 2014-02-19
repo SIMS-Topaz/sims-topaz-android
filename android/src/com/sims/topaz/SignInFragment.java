@@ -1,7 +1,7 @@
 package com.sims.topaz;
 
 
-import com.sims.topaz.EditMessageFragment.OnNewMessageListener;
+import com.sims.topaz.interfaces.OnVisibilityProgressBar;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
@@ -22,35 +22,37 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SignInFragment extends Fragment implements SignInDelegate, ErreurDelegate, TextWatcher{
+public class SignInFragment extends Fragment 
+implements SignInDelegate, ErreurDelegate, TextWatcher{
 	private EditText mUserNameEditText;
 	private EditText mPasswordEditText;
 	private NetworkRestModule mRestModule;
 	private Button mLoginButton;
 	private TextView mUserNameErrorTextView;
 	private TextView mPasswordErrorTextView;
-	private int savedSoftInputMode;
+	private OnVisibilityProgressBar mCallback;
 	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		savedSoftInputMode = activity.getWindow().getAttributes().softInputMode;
-		activity.getWindow()
-		.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		try {
+			mCallback = (OnVisibilityProgressBar) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnNewMessageListener");
+		}
 	}
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		getActivity().getWindow()
-		.setSoftInputMode(savedSoftInputMode);
+		mCallback = null;
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -4,7 +4,17 @@
     android:layout_height="wrap_content"
     android:background="@color/light_light_gray"
     android:orientation="vertical" >
-
+    
+    <TextView
+        android:id="@+id/sign_up_welcome"
+        style="@style/text_gray_big"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp"
+        android:gravity="center_horizontal"
+        android:text="@string/auth_sign_in_welcome" />
+    
     <EditText
         android:id="@+id/sign_up_username"
         style="@style/text_dark_gray_normal"

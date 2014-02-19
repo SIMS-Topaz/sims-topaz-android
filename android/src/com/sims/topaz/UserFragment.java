@@ -30,7 +30,7 @@ public class UserFragment  extends Fragment  {
 		unconnect.setOnClickListener(new View.OnClickListener() {	
 			@Override
 			public void onClick(View v) {
-				NetworkRestModule.httpclient = null;
+				NetworkRestModule.resetHttpClient();
 				AuthUtils.unsetSession();
 				Intent intent = new Intent(SimsContext.getContext(), AuthActivity.class);
 				startActivity(intent);

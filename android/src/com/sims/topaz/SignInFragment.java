@@ -78,10 +78,8 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		mUserNameEditText.setOnEditorActionListener(listener);
 
 		//set the username if the user already made an account 
-		if(MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-				.hasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
-			String username = MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-					.getString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME, "");
+		if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
+			String username = AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME);
 			mUserNameEditText.setText(username);
 		}
 		

@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.sims.topaz.R;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.MyTypefaceSingleton;
+import com.sims.topaz.utils.SimsContext;
 
 public class BulleAdapter implements InfoWindowAdapter {
 
@@ -58,13 +59,15 @@ public class BulleAdapter implements InfoWindowAdapter {
 			
 			// Display the Like/dislike bar
 			ProgressBar pg = (ProgressBar) popup.findViewById(R.id.like_bar);
+			TextView tv = (TextView) popup.findViewById(R.id.bulle_note);
 			if(mPreview.getLikes()==0 && mPreview.getDislikes()==0) {
 				pg.setIndeterminate(true);
 			} else {
 				pg.setMax(mPreview.getLikes()+mPreview.getDislikes());
 				pg.setProgress(mPreview.getLikes());
-				
 			}
+			tv.setText(Integer.toString(mPreview.getLikes()+mPreview.getDislikes())
+					+" "+SimsContext.getContext().getString(R.string.bulle_note));
 			
 		}else{
 			Log.e("Debug", "isCluster");

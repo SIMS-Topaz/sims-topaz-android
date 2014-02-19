@@ -3,7 +3,8 @@
     android:layout_width="100dp"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:textAlignment="center" >
 
     <TextView
         android:id="@+id/bulle_title"
@@ -35,10 +36,11 @@
     <TextView
         android:id="@+id/bulle_note"
         style="@style/text_gray_small"
-        android:layout_width="100dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:padding="5dp"
-        android:text="6.5/10" />
+        android:text="@string/bulle_note"
+        android:gravity="right" />
 
 </LinearLayout>

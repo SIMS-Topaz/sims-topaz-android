@@ -6,6 +6,8 @@ import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
+import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.SimsContext;
 
@@ -56,6 +58,9 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		confirmpasswordError = (TextView)v.findViewById(R.id.signup_confirmpassword_error);
 		confirmpasswordError.setVisibility(View.GONE);
 		
+		Button signIn = (Button)v.findViewById(R.id.Sign_up);
+		TextView textSignIn = (TextView)v.findViewById(R.id.text_sing_up);
+		
 		TextView.OnEditorActionListener listener=new TextView.OnEditorActionListener() {
 			  @Override
 			  public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
@@ -75,7 +80,10 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		mEmailEditText.setOnEditorActionListener(listener);
 		mPasswordEditText.setOnEditorActionListener(listener);
 		mPasswordConfirmEditText.setOnEditorActionListener(listener);
-		
+		if(getArguments()!=null && getArguments().getBoolean(AuthActivity.IS_ON_TABLET)){
+			textSignIn.setVisibility(View.GONE);
+			signIn.setVisibility(View.GONE);
+		}
 		return v;
     }
 
@@ -134,11 +142,6 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 
 	@Override
 	public void afterSignUp(User user) {
-		Toast.makeText(getActivity(), "after sign in ok " + user.toString(), Toast.LENGTH_SHORT).show();
-		// TODO
-		// if ok, connect
-		
-		// Go to map
 		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
 		startActivity(intent);
 	}

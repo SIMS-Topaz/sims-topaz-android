@@ -10,6 +10,13 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    
+    <fragment
+        android:id="@+id/place_search_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left" 
+        android:name="com.sims.topaz.PlaceSearchFragment" />
 
     <FrameLayout
         android:id="@+id/edit_text"

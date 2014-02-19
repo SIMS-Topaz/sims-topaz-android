@@ -29,4 +29,6 @@
 	<string name="comment_loading">Chargement...</string>
 	<string name="comment_like">like icon</string>
 	<string name="comment_unlike">unlike icon</string>
+	<!--  PlaceSearch -->
+	<string name="search_hint">Enter location</string>
 </resources>

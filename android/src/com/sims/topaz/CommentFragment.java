@@ -1,6 +1,7 @@
 package com.sims.topaz;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -22,16 +24,19 @@ import android.widget.Toast;
 import com.sims.topaz.adapter.CommentAdapter;
 import com.sims.topaz.modele.CommentItem;
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.interfaces.CommentDelegate;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.LikeStatusDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
+import com.sims.topaz.network.modele.Comment;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
-public class CommentFragment extends Fragment implements MessageDelegate,LikeStatusDelegate,ErreurDelegate{
+public class CommentFragment extends Fragment 
+	implements MessageDelegate,LikeStatusDelegate,CommentDelegate,ErreurDelegate{
 
 	private TextView mFirstComment;
 	private TextView mFirstCommentNameUser;
@@ -68,34 +73,20 @@ public class CommentFragment extends Fragment implements MessageDelegate,LikeSta
 		//get the main message from the preview id
 		loadMessage();
 		
-		//TODO remove this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		CommentItem[] comments = new CommentItem[2];
-		CommentItem a = new CommentItem(12321, "Dostoievski", "Plus j�aime l�humanit� en g�n�ral, moins j�aime les gens en particulier, comme individus.", 1392094361,
-				null, (float) 8.9);
-		CommentItem b = new CommentItem(12321, "Paulo Coelho", "And, when you want something, all the universe conspires in helping you to achieve it", 1392094362,
-				null, (float) 7.9);
-		comments[0]=a;
-		comments[1]=b;
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		
-		mListComments.setAdapter(new CommentAdapter(SimsContext.getContext(),
-				R.layout.fragment_comment_item,
-				comments));
-
-
-//		mNewComment.setImeOptions(EditorInfo.IME_ACTION_GO);
-//		mNewComment.setOnKeyListener(new View.OnKeyListener() {
-//			@Override
-//			public boolean onKey(View v, int keyCode, KeyEvent event) {
-//				onDoneButton();
-//				return false;
-//			}
-//		});
-		
-
 		return v;
 	}   
 	
+	private void displayComments() {
+		List<CommentItem> lci = new ArrayList<CommentItem>();
+		for (Comment co : mMessage.getComments()) {
+			lci.add(new CommentItem(co));
+		}
+		mListComments.setAdapter(new CommentAdapter(SimsContext.getContext(),
+				R.layout.fragment_comment_item,
+				lci));
+		
+	}
+
 	//Set Like, Dislike and Share Buttons
 	private void setButtons(View v) {
 		mShareButton = (ImageButton)v.findViewById(R.id.comment_share);
@@ -196,6 +187,7 @@ public class CommentFragment extends Fragment implements MessageDelegate,LikeSta
 							new Date( message.getTimestamp() ) ) );
 			initLikeButtons();
 			updateLikes();
+			displayComments();
 		}
 	}
 	
@@ -266,6 +258,12 @@ public class CommentFragment extends Fragment implements MessageDelegate,LikeSta
 				updateLikes();
 			}
 		}
+	}
+
+	@Override
+	public void afterPostComment(Comment comment) {
+		CommentItem ci = new CommentItem(comment);
+		((CommentAdapter) mListComments.getAdapter()).add(ci);
 	}
 
 }

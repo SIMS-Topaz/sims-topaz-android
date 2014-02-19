@@ -1,5 +1,7 @@
 package com.sims.topaz.modele;
 
+import com.sims.topaz.network.modele.Comment;
+
 import android.graphics.Bitmap;
 
 public class CommentItem {
@@ -8,7 +10,6 @@ public class CommentItem {
 	private String commentText;
 	private long date;
 	private Bitmap icon;
-	private float note;
 	public long getId() {
 		return id;
 	}
@@ -39,21 +40,24 @@ public class CommentItem {
 	public void setIcon(Bitmap icon) {
 		this.icon = icon;
 	}
-	public float getNote() {
-		return note;
-	}
-	public void setNote(float note) {
-		this.note = note;
-	}
+
 	public CommentItem(long id, String user, String commentText, long date,
-			Bitmap icon, float note) {
+			Bitmap icon) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.commentText = commentText;
 		this.date = date;
 		this.icon = icon;
-		this.note = note;
+	}
+	
+	public CommentItem(Comment comment) {
+		super();
+		this.id = comment.getId();
+		this.user = comment.getOwner();
+		this.commentText = comment.getText();
+		this.date = comment.getTimestamp();
+		this.icon = null;
 	}
 	
 		

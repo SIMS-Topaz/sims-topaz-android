@@ -24,12 +24,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.model.LatLng;
+import com.sims.topaz.network.interfaces.CommentDelegate;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.LikeStatusDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
 import com.sims.topaz.network.modele.ApiResponse;
+import com.sims.topaz.network.modele.Comment;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.network.modele.User;
@@ -97,7 +99,7 @@ public class NetworkRestModule {
 	
 	/**
 	 * Poste d'un avis sur un message
-	 * @param message
+	 * @param message message dont on donne l'avis
 	 */
 	public void postLikeStatus(Message message) {
 		String url = SERVER_URL + "post_like_status";
@@ -110,7 +112,26 @@ public class NetworkRestModule {
 			e.printStackTrace();
 		}
 		rest.execute();
-		
+	}
+	
+	/**
+	 * Poste d'un avis sur un message
+	 * @param comment : comment to write
+	 * @param message : message which the comment is about
+	 */
+	public void postComment(Comment comment, Message message) {
+		String url = SERVER_URL + "post_comment";
+		//add message id in URL
+		url+="/"+Long.toString(message.getId());
+		Log.d("Network postLikeStatus url=",url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.COMMENT_MESSAGE);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			rest.setJSONParam(mapper.writeValueAsString(comment));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		rest.execute();
 	}
 	
 	/**
@@ -207,7 +228,17 @@ public class NetworkRestModule {
 				}
 				break;
 			case COMMENT_MESSAGE:
-				// TODO	
+				try {
+					ApiResponse<Comment> responseData = mapper.readValue(response, new TypeReference<ApiResponse<Comment>>(){});
+					if(responseData.getError() != null) {
+						((ErreurDelegate) delegate).apiError(responseData.getError());
+					} else {
+						((CommentDelegate)delegate).afterPostComment(responseData.getData());
+					}
+				} catch (Exception e) {
+					((ErreurDelegate) delegate).networkError();
+					e.printStackTrace();
+				}		
 				break;
 			case USER_SIGNUP:
 				try {

@@ -11,4 +11,20 @@ public class Comment {
 		
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public Long getTimestamp() {
+		return timestamp;
+	}
+
 }

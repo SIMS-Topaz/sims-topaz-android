@@ -33,7 +33,6 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	private Button mLoginButton;
 	private TextView mUserNameErrorTextView;
 	private TextView mPasswordErrorTextView;
-	private boolean isOnTablet;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,6 +74,35 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 			@Override
 			public void onClick(View v) {signInAction();}
 		});
+		//make checks after the user has changed the focus
+		mUserNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {		
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus){
+					String user = mUserNameEditText.getText().toString();
+					if(!user.isEmpty()  && !AuthUtils.isValidUsername(user)) {
+						mUserNameErrorTextView.setVisibility(View.VISIBLE);
+					}else{
+						mUserNameErrorTextView.setVisibility(View.GONE);
+					}
+				}
+			}
+		});
+		mPasswordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {		
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus){
+					String pass = mPasswordEditText.getText().toString();
+					if(!pass.isEmpty()  && !AuthUtils.isValidPassword(pass, 6)) {
+						mPasswordErrorTextView.setVisibility(View.VISIBLE);
+					}else{
+						mPasswordErrorTextView.setVisibility(View.GONE);
+					}
+				}
+			}
+		});
+		
+		
 		mUserNameEditText.setOnEditorActionListener(listener);
 
 		//set the username if the user already made an account 
@@ -86,7 +114,6 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		}
 		Bundle bundle = getArguments();
 		if(bundle!=null && bundle.getBoolean(AuthActivity.IS_ON_TABLET)){
-			isOnTablet = true;
 			mNoLoginTextView.setVisibility(View.GONE);
 			mSignUp.setVisibility(View.GONE);
 		}
@@ -99,16 +126,7 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		if(AuthUtils.isValidUsername(user) && AuthUtils.isValidPassword(password, 6)) {
 			User u = new User();
 			u.setName(user);
-			u.setPassword(password);
-			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-			.putString(
-					MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,
-					user);
-
-			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-			.putString(
-					MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD,
-					password);	
+			u.setPassword(password);	
 			mRestModule.signinUser(u);
 		}else if(!AuthUtils.isValidUsername(user)) {
 			mUserNameErrorTextView.setVisibility(View.VISIBLE);
@@ -118,9 +136,9 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	}
 	@Override
 	public void afterSignIn(User user) {
-		Intent intent = new Intent(SimsContext.getContext(),
-				DrawerActivity.class);
-		startActivity(intent);		
+		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
+		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
+		startActivity(intent);	
 	}
 
 	@Override

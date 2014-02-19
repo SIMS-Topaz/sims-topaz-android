@@ -113,6 +113,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		});
 		
 		// Signup button
+		mSignupButton.setEnabled(true);
 		mSignupButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {signUpAction();}
@@ -165,6 +166,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 			confirmpasswordError.setText(R.string.auth_userconfirmpwd_error);
 			confirmpasswordError.setVisibility(TextView.VISIBLE);
 		} else {
+			mSignupButton.setEnabled(false);
 	    	User u = new User();
 	    	u.setName(username);
 	    	u.setEmail(email);
@@ -176,6 +178,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 
 	@Override
 	public void apiError(ApiError error) {
+		mSignupButton.setEnabled(true);
 		// Conflit
 		if(error.getCode().equals(409)) {
 			if(error.getMsg().equals("NAME_IN_USE")) {
@@ -190,11 +193,14 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 
 	@Override
 	public void networkError() {
+		mSignupButton.setEnabled(true);
 		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void afterSignUp(User user) {
+		mSignupButton.setEnabled(true);
+		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
 		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
 		startActivity(intent);
 	}

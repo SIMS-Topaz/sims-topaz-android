@@ -88,6 +88,8 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 				return false;
 			}
 		};
+		
+		mLoginButton.setEnabled(true);
 		mLoginButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {signInAction();}
@@ -124,10 +126,8 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 		mUserNameEditText.setOnEditorActionListener(listener);
 
 		//set the username if the user already made an account 
-		if(MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-				.hasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
-			String username = MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-					.getString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME, "");
+		if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
+			String username = AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME);
 			mUserNameEditText.setText(username);
 		}
 		Bundle bundle = getArguments();
@@ -142,6 +142,7 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	public void checkInput(String user, String password){
 		//if all the fileds are likely to be ok
 		if(AuthUtils.isValidUsername(user) && AuthUtils.isValidPassword(password, 6)) {
+			mLoginButton.setEnabled(false);
 			User u = new User();
 			u.setName(user);
 			u.setPassword(password);	
@@ -154,6 +155,7 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	}
 	@Override
 	public void afterSignIn(User user) {
+		mLoginButton.setEnabled(true);
 		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
 		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
 		startActivity(intent);	
@@ -161,12 +163,14 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 
 	@Override
 	public void apiError(ApiError error) {
+		mLoginButton.setEnabled(true);
 		Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
 
 	}
 
 	@Override
 	public void networkError() {
+		mLoginButton.setEnabled(true);
 		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
 	}
 

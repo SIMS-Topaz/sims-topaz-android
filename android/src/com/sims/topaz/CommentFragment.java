@@ -23,6 +23,7 @@ import com.sims.topaz.adapter.CommentAdapter;
 import com.sims.topaz.modele.CommentItem;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
+import com.sims.topaz.network.interfaces.LikeStatusDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
@@ -30,7 +31,7 @@ import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
-public class CommentFragment extends Fragment implements MessageDelegate,ErreurDelegate{
+public class CommentFragment extends Fragment implements MessageDelegate,LikeStatusDelegate,ErreurDelegate{
 
 	private TextView mFirstComment;
 	private TextView mFirstCommentNameUser;
@@ -82,14 +83,14 @@ public class CommentFragment extends Fragment implements MessageDelegate,ErreurD
 				comments));
 
 
-		mNewComment.setImeOptions(EditorInfo.IME_ACTION_GO);
-		mNewComment.setOnKeyListener(new View.OnKeyListener() {
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				onDoneButton();
-				return false;
-			}
-		});
+//		mNewComment.setImeOptions(EditorInfo.IME_ACTION_GO);
+//		mNewComment.setOnKeyListener(new View.OnKeyListener() {
+//			@Override
+//			public boolean onKey(View v, int keyCode, KeyEvent event) {
+//				onDoneButton();
+//				return false;
+//			}
+//		});
 		
 
 		return v;
@@ -143,7 +144,8 @@ public class CommentFragment extends Fragment implements MessageDelegate,ErreurD
 					.startTransition(0);
 				break;
 			}
-			//TODO REST method
+			//REST method call
+			restModule.postLikeStatus(mMessage);
 			//Update view
 			updateLikes();
 		}
@@ -170,15 +172,16 @@ public class CommentFragment extends Fragment implements MessageDelegate,ErreurD
 					.reverseTransition(0);
 				break;
 			}
-			//TODO REST method
+			// REST method call
+			restModule.postLikeStatus(mMessage);
 			//update view
 			updateLikes();
 		}
 	}
-	public void onDoneButton(){
-		getFragmentManager().beginTransaction().remove(this).commit();
-
-	}
+//	public void onDoneButton(){
+//		getFragmentManager().beginTransaction().remove(this).commit();
+//
+//	}
 	
 	@Override
 	public void afterPostMessage(Message message) {}
@@ -246,6 +249,23 @@ public class CommentFragment extends Fragment implements MessageDelegate,ErreurD
 		sendIntent.putExtra(Intent.EXTRA_TEXT, mFirstComment.getText());
 		sendIntent.setType("text/plain");
 		startActivity(Intent.createChooser(sendIntent, "Share Comment"));
+	}
+
+	@Override
+	public void afterPostLikeStatus(Message message) {
+		if(message != null && mMessage != null) {
+			if(message.getLikeStatus()==mMessage.getLikeStatus()) {
+				//Rafraichir les informations
+				//Le nombre de like a pu changer
+				//Le message aussi ? dépend d'une fonction modifier message
+				mMessage = message;
+				mFirstComment.setText(message.getText());
+				mFirstCommentTimestamp.setText(DateFormat.format
+						(getString(R.string.date_format), 
+								new Date( message.getTimestamp() ) ) );
+				updateLikes();
+			}
+		}
 	}
 
 }

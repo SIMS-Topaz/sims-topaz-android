@@ -16,6 +16,8 @@ public class Message {
 	
 	private String text;
 	
+	private String owner;
+	
 	private int likes=0;
 	
 	private int dislikes=0;
@@ -54,6 +56,10 @@ public class Message {
 		return id;
 	}
 	
+	public String getOwner() {
+		return owner;
+	}
+	
 	public Double getLatitude() {
 		return latitude;
 	}
@@ -62,6 +68,10 @@ public class Message {
 		return longitude;
 	}
 	
+	public eLikeStatus getLikeStatus() {
+		return likeStatus;
+	}
+
 	public String getText() {
 		return text;
 	}

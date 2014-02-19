@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
@@ -29,6 +30,7 @@ public class UserFragment  extends Fragment  {
 		unconnect.setOnClickListener(new View.OnClickListener() {	
 			@Override
 			public void onClick(View v) {
+				NetworkRestModule.resetHttpClient();
 				AuthUtils.unsetSession();
 				Intent intent = new Intent(SimsContext.getContext(), AuthActivity.class);
 				startActivity(intent);

@@ -5,6 +5,7 @@ import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
@@ -44,16 +45,12 @@ public class SplashScreenActivity extends Activity implements SignInDelegate, Er
 		SimsContext.setContext(getApplicationContext());  
 		mTitleTextView = (TextView)findViewById(R.id.title);
 		mTitleTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-		if(MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-				.hasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME) && 
-				MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-				.hasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
+		if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME) && 
+				AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
 			mRestModule = new NetworkRestModule(this);
 			
-			String username = MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-					.getString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME, "");
-			String password = MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-					.getString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD, "");
+			String username = AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME);
+			String password = AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD);
 			User user = new User();
 			user.setPassword(password);
 			user.setName(username);

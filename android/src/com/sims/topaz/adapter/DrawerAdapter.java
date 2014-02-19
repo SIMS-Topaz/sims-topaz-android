@@ -3,9 +3,9 @@ package com.sims.topaz.adapter;
 import java.lang.ref.WeakReference;
 
 import com.sims.topaz.R;
+import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
-import com.sims.topaz.utils.SimsContext;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -47,10 +47,8 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 			user.setTypeface(face);
 			TextView profile = (TextView)view.findViewById(R.id.auth_see_profile);
 			profile.setTypeface(face);
-			if(MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-	        		.hasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
-				user.setText(MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext())
-	        		.getString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME,""));
+			if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
+				user.setText(AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 			}
 		}else if(position == 1){
 			view = inflater.inflate(R.layout.drawer_list_item_search_bar, null);

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.model.LatLng;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
+import com.sims.topaz.network.interfaces.LikeStatusDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
@@ -36,13 +37,18 @@ import com.sims.topaz.network.modele.User;
 public class NetworkRestModule {
 
 
-	public static final String SERVER_URL = "http://topaz12.apiary.io/api/v1.2/";
-	//public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.2/";
-	public static HttpClient httpclient;
+	//public static final String SERVER_URL = "http://topaz12.apiary.io/api/v1.2/";
+	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.2/";
+	
 	private Object delegate;
+	private static HttpClient httpclient;
 	
 	public NetworkRestModule(Object delegate) {
 		this.delegate = (Object) delegate;
+	}
+	
+	public static void resetHttpClient() {
+		httpclient = null;
 	}
 	
 	/**
@@ -92,6 +98,24 @@ public class NetworkRestModule {
 			e.printStackTrace();
 		}
 		rest.execute();
+	}
+	
+	/**
+	 * Poste d'un avis sur un message
+	 * @param message
+	 */
+	public void postLikeStatus(Message message) {
+		String url = SERVER_URL + "post_like_status";
+		Log.d("Network postLikeStatus url=",url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_LIKE_STATUS);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			rest.setJSONParam(mapper.writeValueAsString(message));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		rest.execute();
+		
 	}
 	
 	/**
@@ -174,6 +198,19 @@ public class NetworkRestModule {
 					e.printStackTrace();
 				}	
 				break;
+			case POST_LIKE_STATUS:
+				try {
+					ApiResponse<Message> responseData = mapper.readValue(response, new TypeReference<ApiResponse<Message>>(){});
+					if(responseData.getError() != null) {
+						((ErreurDelegate) delegate).apiError(responseData.getError());
+					} else {
+						((LikeStatusDelegate)delegate).afterPostLikeStatus(responseData.getData());
+					}
+				} catch (Exception e) {
+					((ErreurDelegate) delegate).networkError();
+					e.printStackTrace();
+				}
+				break;
 			case COMMENT_MESSAGE:
 				// TODO	
 				break;
@@ -209,7 +246,7 @@ public class NetworkRestModule {
 	}
 
 	enum TypeRequest {
-		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, USER_SIGNUP, USER_LOGIN
+		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN
 	}
 	
 	

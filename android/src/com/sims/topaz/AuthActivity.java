@@ -7,6 +7,7 @@ import com.sims.topaz.utils.SimsContext;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -22,6 +23,7 @@ public class AuthActivity extends FragmentActivity implements OnVisibilityProgre
 	private TextView mTitleTextView;
 	private boolean isOnTablet = true;
 	public final static String IS_ON_TABLET = "IS_ON_TABLET";
+	private int savedSoftInputMode;
 	/**
 	 * Whether or not we're showing the back of the card (otherwise showing the
 	 * front).
@@ -32,6 +34,9 @@ public class AuthActivity extends FragmentActivity implements OnVisibilityProgre
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_auth);
+		savedSoftInputMode = getWindow().getAttributes().softInputMode;
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		
 		mTempButton = (Button)findViewById(R.id.go_to_map);
 		mTempButton.setOnClickListener(new View.OnClickListener() {			
 			@Override

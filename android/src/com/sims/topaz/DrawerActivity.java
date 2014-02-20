@@ -79,11 +79,13 @@ public class DrawerActivity extends ActionBarActivity
                 ) {
 
 			public void onDrawerClosed(View view) {
+					super.onDrawerClosed(view);
             		getSupportActionBar().setTitle(mTitle);
             		supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()           	
             }
 
 			public void onDrawerOpened(View drawerView) {
+					super.onDrawerOpened(drawerView);
             		getSupportActionBar().setTitle(mDrawerTitle);
             		supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }

@@ -92,4 +92,8 @@ public class Preview {
 	public void setDislikes(int dislikes) {
 		this.dislikes = dislikes;
 	}
+
+	public String getOwner() {
+		return owner;
+	}
 }

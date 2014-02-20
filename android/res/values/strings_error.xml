@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="connection_error_code">Erreur de connection: %1$d</string>
     <string name="connection_error_disabled">Google Play services is disabled</string>
     <string name="connection_error_internal">An internal error occurred</string>
@@ -14,10 +15,8 @@
     <string name="connection_error_outdated">Google Play services is out of date</string>
     <string name="connection_error_sign_in_required">The user is not signed in</string>
     <string name="connection_error_unknown">An unknown error occurred</string>
-    
     <string name="network_error">Une erreur a survenue lors de l\'appel au serveur.</string>
-
-
     <string name="map_not_displayed">La carte n\'as pas pu être chargé. </string>
-    
+    <string name="warning_internet">Vous avez besoin d\'une connexion internet afin d\'utiliser Topaz.</string>
+
 </resources>

@@ -45,7 +45,8 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
         super.onCreate(savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 		mRestModule = new NetworkRestModule(this);
-		
+		TextView mTitleTextView = (TextView)v.findViewById(R.id.sign_up_welcome);
+		mTitleTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		// Init all EditText
 		mUserNameEditText = (EditText)v.findViewById(R.id.sign_up_username);
 		mUserNameEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());

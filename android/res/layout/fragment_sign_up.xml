@@ -13,7 +13,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="8dp"
         android:gravity="center_horizontal"
-        android:text="@string/auth_sign_in_welcome" />
+        android:text="@string/auth_sign_up_welcome" />
     
     <EditText
         android:id="@+id/sign_up_username"

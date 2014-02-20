@@ -197,4 +197,8 @@ public class DrawerActivity extends ActionBarActivity
 			mMapFragment.onNewMessage(message);
 		}
 	}
+	@Override
+	public void onBackPressed() {
+	    // do nothing.
+	}
 }

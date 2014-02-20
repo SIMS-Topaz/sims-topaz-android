@@ -96,5 +96,9 @@ public class AuthActivity extends FragmentActivity implements OnVisibilityProgre
 		ProgressBar mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
 		mProgressBar.setVisibility(View.INVISIBLE);
 	}
+	@Override
+	public void onBackPressed() {
+	    // do nothing.
+	}
 	
 }

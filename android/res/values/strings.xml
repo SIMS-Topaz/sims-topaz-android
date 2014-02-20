@@ -56,4 +56,9 @@
 	<string name="auth_userpwd_error">Mot de passe trop court</string>
 	<string name="auth_userconfirmpwd_error">Retapez votre mot de passe</string>
 	<string name="auth_unconnect">Déconnexion</string>
+	<!-- Settings -->
+	<string name="settings_a_propos_header">A PROPOS</string>
+	<string name="settings_a_propos_text">Version 1.0</string>
+	<string name="settings_msg_header">MESSAGES</string>
+	<string name="settings_msg_text">Visibilité</string>	
 </resources>

@@ -150,8 +150,10 @@ public class DrawerActivity extends ActionBarActivity
 			break;
 		case 3:
 			mLastFragment = new SettingsFragment();	
+			break;
 		case 4:
-			mLastFragment = new AboutFragment();	
+			mLastFragment = new AboutFragment();
+			break;
 		default:
 			break;
 		}

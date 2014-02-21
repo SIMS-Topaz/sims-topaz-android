@@ -18,7 +18,6 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -33,6 +32,7 @@ import com.sims.topaz.network.modele.ApiResponse;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.DebugUtils;
 
 public class NetworkRestModule {
 
@@ -58,7 +58,7 @@ public class NetworkRestModule {
 	 */
 	public void getMessage(Long id) {
 		String url = SERVER_URL + "get_message/" + id;
-		Log.d("Network getMessage url=", url);
+		DebugUtils.log("Network getMessage url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_MESSAGE);
 		rest.execute();
 	}
@@ -77,7 +77,7 @@ public class NetworkRestModule {
 		Double maxLong = Math.max(farLeft.longitude, nearRight.longitude);		
 		
 		String url = SERVER_URL + "get_previews/" + minLat + "/" + minLong + "/" + maxLat + "/" + maxLong;
-		Log.d("Network getPreviews url=", url);
+		DebugUtils.log("Network getPreviews url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
 		rest.execute();
 	}
@@ -89,7 +89,7 @@ public class NetworkRestModule {
 	 */
 	public void postMessage(Message message) {
 		String url = SERVER_URL + "post_message";
-		Log.d("Network postMessage url=", url);
+		DebugUtils.log("Network postMessage url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -106,7 +106,7 @@ public class NetworkRestModule {
 	 */
 	public void postLikeStatus(Message message) {
 		String url = SERVER_URL + "post_like_status";
-		Log.d("Network postLikeStatus url=",url);
+		DebugUtils.log("Network postLikeStatus url="+url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_LIKE_STATUS);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -125,7 +125,7 @@ public class NetworkRestModule {
 	 */
 	public void signupUser(User user) {
 		String url = SERVER_URL + "signup";
-		Log.d("Network signupUser url=", url);
+		DebugUtils.log("Network signupUser url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.USER_SIGNUP);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -143,7 +143,7 @@ public class NetworkRestModule {
 	 */
 	public void signinUser(User user) {
 		String url = SERVER_URL + "user_auth";
-		Log.d("Network signuinUser url=", url);
+		DebugUtils.log("Network signuinUser url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.USER_LOGIN);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -252,8 +252,6 @@ public class NetworkRestModule {
 	
 	class RESTTask extends AsyncTask<String, Integer, String> {
 
-		private static final String LOG_TAG = "RESTTask";
-
 		// connection timeout, in milliseconds (waiting to connect)
 		private static final int CONN_TIMEOUT = 3000;
 
@@ -306,12 +304,12 @@ public class NetworkRestModule {
 			} else {
 				try {
 					result = inputStreamToString(response.getEntity().getContent());
-					Log.e(LOG_TAG, "doInBackground = " + result);
+					DebugUtils.log( "doInBackground = " + result);
 				} catch (IllegalStateException e) {
-					Log.e(LOG_TAG, e.getLocalizedMessage(), e);
+					DebugUtils.logException(e);
 
 				} catch (IOException e) {
-					Log.e(LOG_TAG, e.getLocalizedMessage(), e);
+					DebugUtils.logException(e);
 				}
 			}
 
@@ -343,7 +341,7 @@ public class NetworkRestModule {
 					response = httpclient.execute(httpget);
 				}
 			} catch (Exception e) {
-				Log.e(LOG_TAG, e.getLocalizedMessage(), e);
+				DebugUtils.logException(e);
 			}
 
 			return response;
@@ -363,7 +361,7 @@ public class NetworkRestModule {
 					total.append(line);
 				}
 			} catch (IOException e) {
-				Log.e(LOG_TAG, e.getLocalizedMessage(), e);
+				DebugUtils.logException(e);
 			}
 
 			return total.toString();

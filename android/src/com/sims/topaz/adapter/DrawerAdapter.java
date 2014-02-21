@@ -9,7 +9,6 @@ import com.sims.topaz.utils.MyTypefaceSingleton;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 		this.titles = new String[3];
 		this.titles = mDrawerTitles;
 		this.delegate = new WeakReference<Context>(mDelegate);
-		Log.e("Debug", titles[0].toString()+","+titles[1].toString()+","+titles[2].toString());
 	}	
 
 	@SuppressWarnings("deprecation")

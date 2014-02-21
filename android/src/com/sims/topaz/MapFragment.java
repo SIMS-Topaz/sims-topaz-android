@@ -30,21 +30,18 @@ import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.LocationUtils;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.TagUtils;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -178,15 +175,21 @@ OnMapLoadedCallback
 	 */
 	private void setMapIfNeeded(LayoutInflater inflater){
 		if(mMap == null){
-			mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-			// Check if we were successful in obtaining the map.
-			if(mMap!=null) {
-				mMap.setMyLocationEnabled(true);	
-				mMap.setOnMapLongClickListener(this);
-				mBulleAdapter = new BulleAdapter(inflater);
-				mMap.setInfoWindowAdapter(mBulleAdapter);
-				mMap.setOnCameraChangeListener(this);
-				mMap.setOnMapLoadedCallback(this);
+			if(servicesConnected()){
+				mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+				// Check if we were successful in obtaining the map.
+				if(mMap!=null) {
+					mMap.setMyLocationEnabled(true);	
+					mMap.setOnMapLongClickListener(this);
+					mBulleAdapter = new BulleAdapter(inflater);
+					mMap.setInfoWindowAdapter(mBulleAdapter);
+					mMap.setOnCameraChangeListener(this);
+					mMap.setOnMapLoadedCallback(this);
+				}
+			}else{
+				Toast.makeText(SimsContext.getContext(),
+						getResources().getString(R.string.connection_error), 
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 		// Create a new global location parameters object
@@ -203,6 +206,9 @@ OnMapLoadedCallback
 		mLocationClient = new LocationClient(SimsContext.getContext(),
 				this,
 				this);
+		if(mLocationClient.isConnected() == false){
+			mLocationClient.connect();
+		}
 		setClusterManager();
 	}
 
@@ -286,13 +292,11 @@ OnMapLoadedCallback
 		switch (requestCode) {
 		// If the request code matches the code sent in onConnectionFailed
 		case LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST :
-			Log.d(Integer.toString(LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST),
-					getString(R.string.unknown_activity_request_code, requestCode));            	
+			DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));            	
 			// If any other request code was received
 		default:
 			// Report that this Activity received an unknown requestCode
-			Log.d(LocationUtils.APPTAG,
-					getString(R.string.unknown_activity_request_code, requestCode));
+			DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));
 			break;
 		}
 	}
@@ -328,7 +332,7 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void apiError(ApiError error) {
-		Log.e("Debug", "apiError");
+		DebugUtils.log("apiError");
 	}
 
 	//PreviewRenderer----------------------------------------------------------------------------
@@ -393,7 +397,7 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void onClusterInfoWindowClick(Cluster<PreviewClusterItem> cluster) {
-		Log.e("Debug", "onClusterInfoWindowClick");
+		DebugUtils.log("onClusterInfoWindowClick");
 	}
 	//Location and map listeners----------------------------------------------------------------------------
 	@Override
@@ -418,35 +422,35 @@ OnMapLoadedCallback
 		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
 		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
 	}
-    /**
-     * Verify that Google Play services is available before making a request.
-     *
-     * @return true if Google Play services is available, otherwise false
-     */
-    private boolean servicesConnected() {
+	/**
+	 * Verify that Google Play services is available before making a request.
+	 *
+	 * @return true if Google Play services is available, otherwise false
+	 */
+	private boolean servicesConnected() {
 
-        // Check that Google Play services is available
-        int resultCode =
-                GooglePlayServicesUtil.isGooglePlayServicesAvailable(SimsContext.getContext());
+		// Check that Google Play services is available
+		int resultCode =
+				GooglePlayServicesUtil.isGooglePlayServicesAvailable(SimsContext.getContext());
 
-        // If Google Play services is available
-        if (ConnectionResult.SUCCESS == resultCode) {
-            // In debug mode, log the status
-            Log.d(LocationUtils.APPTAG, getString(R.string.play_services_available));
-            // Continue
-            return true;
-        // Google Play services was not available for some reason
-        } else {
-            // Display an error dialog
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), 0);
-            if (dialog != null) {
-                ErrorDialogFragment errorFragment = new ErrorDialogFragment();
-                errorFragment.setDialog(dialog);
-                errorFragment.show(getActivity().getSupportFragmentManager(), LocationUtils.APPTAG);
-            }
-            return false;
-        }
-    }
+		// If Google Play services is available
+		if (ConnectionResult.SUCCESS == resultCode) {
+			// In debug mode, log the status
+			DebugUtils.log(getString(R.string.play_services_available));
+			// Continue
+			return true;
+			// Google Play services was not available for some reason
+		} else {
+			// Display an error dialog
+			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), 0);
+			if (dialog != null) {
+				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+				errorFragment.setDialog(dialog);
+				errorFragment.show(getActivity().getSupportFragmentManager(), LocationUtils.APPTAG);
+			}
+			return false;
+		}
+	}
 
 
 

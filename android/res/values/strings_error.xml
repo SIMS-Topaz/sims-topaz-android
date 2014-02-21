@@ -2,19 +2,19 @@
 <resources>
 
     <string name="connection_error_code">Erreur de connection: %1$d</string>
-    <string name="connection_error_disabled">Google Play services is disabled</string>
-    <string name="connection_error_internal">An internal error occurred</string>
-    <string name="connection_error_invalid">The version of Google Play services on this device is not authentic</string>
-    <string name="connection_error_invalid_account">The specified account name is invalid</string>
-    <string name="connection_error_license_check_failed">The app is not licensed to the user</string>
-    <string name="connection_error_message">Connection failure error message: %1$s</string>
-    <string name="connection_error_misconfigured">The application is misconfigured</string>
-    <string name="connection_error_missing">Google Play services is missing</string>
-    <string name="connection_error_needs_resolution">Additional resolution is required</string>
-    <string name="connection_error_network">A network error occurred</string>
-    <string name="connection_error_outdated">Google Play services is out of date</string>
-    <string name="connection_error_sign_in_required">The user is not signed in</string>
-    <string name="connection_error_unknown">An unknown error occurred</string>
+    <string name="connection_error_disabled">Google Play services est desactivé</string>
+    <string name="connection_error_internal">Une erreur interne a eu lieu</string>
+    <string name="connection_error_invalid">La version de Google Play services de ce device n'est pas authentique</string>
+    <string name="connection_error_invalid_account">Le compte specifié est invalid</string>
+    <string name="connection_error_license_check_failed">L'application n'as pas de licence pour l'utilisateur</string>
+    <string name="connection_error_message">Ereur de connection: %1$s</string>
+    <string name="connection_error_misconfigured">L\'application est mal configuré</string>
+    <string name="connection_error_missing">Google Play services est manquant</string>
+    <string name="connection_error_needs_resolution">Plus de solutions sont necessaires</string>
+    <string name="connection_error_network">Une erreur réseau a eu lieu</string>
+    <string name="connection_error_outdated">Google Play services n'est pas à jour</string>
+    <string name="connection_error_sign_in_required">Log in est demandé</string>
+    <string name="connection_error_unknown">Une erreur pas connue a intervenue</string>
     <string name="network_error">Une erreur a survenue lors de l\'appel au serveur.</string>
     <string name="map_not_displayed">La carte n\'as pas pu être chargé. </string>
     <string name="warning_internet">Vous avez besoin d\'une connexion internet afin d\'utiliser Topaz.</string>

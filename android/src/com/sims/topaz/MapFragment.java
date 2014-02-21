@@ -232,11 +232,6 @@ OnMapLoadedCallback
 		mCurrentLocation = mLocationClient.getLastLocation();
 		mNetworkModule = new NetworkRestModule(this);
 		if(servicesConnected()){
-			if(mCurrentLocation == null){
-				//This is gingerbread!!
-				// Get the location manager
-				
-			}
 			LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
 		}
 		mLocationClient.requestLocationUpdates(mLocationRequest, this);

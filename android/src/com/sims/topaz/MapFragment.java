@@ -82,8 +82,10 @@ OnMapLoadedCallback
 	//timers
 	private CountDownTimer timerSeconds =  new CountDownTimer(3000, 1000) {   	
 		public void onFinish() {
-			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+			if(mMap!=null && mNetworkModule!=null){
+				VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+				mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+			}
 		}
 
 		@Override
@@ -92,16 +94,18 @@ OnMapLoadedCallback
 	};
 	private CountDownTimer timerOneMinute =  new CountDownTimer(60000, 1000) {
 		public void onFinish() {
-			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+			if(mMap!=null && mNetworkModule!=null){
+				VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+				mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+			}
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
 		}
 	};
-	
-	
+
+
 	/**
 	 * This method will only be called once when the retained
 	 * Fragment is first created.
@@ -168,16 +172,18 @@ OnMapLoadedCallback
 	 * @param inflater
 	 */
 	private void setMapIfNeeded(LayoutInflater inflater){
-		mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-		if(mMap!=null) {
-			mMap.setMyLocationEnabled(true);	
-			mMap.setOnMapLongClickListener(this);
-			mBulleAdapter = new BulleAdapter(inflater);
-			mMap.setInfoWindowAdapter(mBulleAdapter);
-			mMap.setOnCameraChangeListener(this);
-			mMap.setOnMapLoadedCallback(this);
+		if(mMap == null){
+			mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+			// Check if we were successful in obtaining the map.
+			if(mMap!=null) {
+				mMap.setMyLocationEnabled(true);	
+				mMap.setOnMapLongClickListener(this);
+				mBulleAdapter = new BulleAdapter(inflater);
+				mMap.setInfoWindowAdapter(mBulleAdapter);
+				mMap.setOnCameraChangeListener(this);
+				mMap.setOnMapLoadedCallback(this);
+			}
 		}
-
 		// Create a new global location parameters object
 		mLocationRequest = LocationRequest.create();
 		//Set the update interval
@@ -247,7 +253,7 @@ OnMapLoadedCallback
 		timerSeconds.start();
 		timerOneMinute.start();
 	}
-	
+
 	/**
 	 * The system calls this method as the first indication 
 	 * that the user is leaving the fragment 
@@ -259,7 +265,7 @@ OnMapLoadedCallback
 		timerSeconds.cancel();
 		timerOneMinute.cancel();
 	}
-	
+
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -311,7 +317,7 @@ OnMapLoadedCallback
 	public void apiError(ApiError error) {
 		Log.e("Debug", "apiError");
 	}
-	
+
 	//PreviewRenderer----------------------------------------------------------------------------
 	private class PreviewRenderer extends DefaultClusterRenderer<PreviewClusterItem> {
 
@@ -343,7 +349,7 @@ OnMapLoadedCallback
 		mClusterManager.addItem(pci);
 		mClusterManager.cluster();
 	}
-	
+
 	//Clusters listeners----------------------------------------------------------------------------
 	@Override
 	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
@@ -400,5 +406,5 @@ OnMapLoadedCallback
 	}
 
 
-	
+
 }

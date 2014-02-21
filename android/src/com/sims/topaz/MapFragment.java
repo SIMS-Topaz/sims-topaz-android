@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -33,8 +34,12 @@ import com.sims.topaz.utils.LocationUtils;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.TagUtils;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -192,8 +197,10 @@ OnMapLoadedCallback
 		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 		// Set the interval ceiling to one minute
 		mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+		//set the minimum distance between location updates, in meters
+		mLocationRequest.setSmallestDisplacement(100);
 		//Create a new location client, using the enclosing class to handle callbacks.
-		mLocationClient = new LocationClient(getActivity().getApplicationContext(),
+		mLocationClient = new LocationClient(SimsContext.getContext(),
 				this,
 				this);
 		setClusterManager();
@@ -224,7 +231,15 @@ OnMapLoadedCallback
 	public void onConnected(Bundle arg0) {
 		mCurrentLocation = mLocationClient.getLastLocation();
 		mNetworkModule = new NetworkRestModule(this);
-		LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
+		if(servicesConnected()){
+			if(mCurrentLocation == null){
+				//This is gingerbread!!
+				// Get the location manager
+				
+			}
+			LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
+		}
+		mLocationClient.requestLocationUpdates(mLocationRequest, this);
 		mCurrentCameraPosition = mMap.getCameraPosition();
 		timerOneMinute.cancel();
 		timerOneMinute.start();
@@ -237,6 +252,9 @@ OnMapLoadedCallback
 	//Fragment lifecycle----------------------------------------------------------------------------
 	@Override
 	public void onStop() {
+		if(mLocationClient.isConnected()){
+			mLocationClient.removeLocationUpdates(this);
+		}
 		// After disconnect() is called, the client is considered "dead".
 		if(mLocationClient!=null){
 			mLocationClient.disconnect();
@@ -392,9 +410,10 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void onLocationChanged(Location location) {
-		if(mCurrentLocation.distanceTo(location)>100){
-			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 	
+		if(mCurrentLocation==null){
+			LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
 		}
 		mCurrentLocation = location;
 	}
@@ -404,6 +423,35 @@ OnMapLoadedCallback
 		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
 		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
 	}
+    /**
+     * Verify that Google Play services is available before making a request.
+     *
+     * @return true if Google Play services is available, otherwise false
+     */
+    private boolean servicesConnected() {
+
+        // Check that Google Play services is available
+        int resultCode =
+                GooglePlayServicesUtil.isGooglePlayServicesAvailable(SimsContext.getContext());
+
+        // If Google Play services is available
+        if (ConnectionResult.SUCCESS == resultCode) {
+            // In debug mode, log the status
+            Log.d(LocationUtils.APPTAG, getString(R.string.play_services_available));
+            // Continue
+            return true;
+        // Google Play services was not available for some reason
+        } else {
+            // Display an error dialog
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), 0);
+            if (dialog != null) {
+                ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+                errorFragment.setDialog(dialog);
+                errorFragment.show(getActivity().getSupportFragmentManager(), LocationUtils.APPTAG);
+            }
+            return false;
+        }
+    }
 
 
 

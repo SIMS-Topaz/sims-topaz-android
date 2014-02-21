@@ -47,10 +47,9 @@ public class BulleAdapter implements InfoWindowAdapter {
 			
 			
 			// Display the id of the preview
-			//TODO : it should be the username
 			TextView mBulleTitle=(TextView)popup.findViewById(R.id.bulle_title);
 			mBulleTitle.setTypeface(face);
-			mBulleTitle.setText(Long.toString(mPreview.getId()));
+			mBulleTitle.setText(mPreview.getOwner() + SimsContext.getString(R.string.bulle_says));
 			
 			// Display the text of the preview
 			TextView mBulleText=(TextView)popup.findViewById(R.id.bulle_text);

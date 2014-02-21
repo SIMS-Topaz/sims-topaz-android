@@ -31,6 +31,7 @@ import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.DebugUtils;
+import com.sims.topaz.utils.InternetConnectionUtils;
 import com.sims.topaz.utils.LocationUtils;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.TagUtils;
@@ -138,7 +139,13 @@ OnMapLoadedCallback
 		try {
 			mView = inflater.inflate(R.layout.fragment_map, container, false);
 			//set map and location 
-			setMapIfNeeded(inflater);
+			if(InternetConnectionUtils.hasConnection()){
+				setMapIfNeeded(inflater);
+			}else{
+				Toast.makeText(SimsContext.getContext(), 
+						getResources().getString(R.string.warning_internet),
+						Toast.LENGTH_SHORT).show();
+			}
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}

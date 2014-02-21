@@ -242,11 +242,11 @@ public class CommentFragment extends Fragment implements MessageDelegate,LikeSta
 		mNewComment.setText("");
 	}
 	public void shareMessage(){
-		Intent sendIntent = new Intent();
-		sendIntent.setAction(Intent.ACTION_SEND);
-		sendIntent.putExtra(Intent.EXTRA_TEXT, mFirstComment.getText());
-		sendIntent.setType("text/plain");
-		startActivity(Intent.createChooser(sendIntent, "Share Comment"));
+		Intent shareIntent = new Intent();
+		shareIntent.setAction(Intent.ACTION_SEND);
+		shareIntent.putExtra(Intent.EXTRA_TEXT, mFirstComment.getText());
+		shareIntent.setType("text/plain");
+		startActivity(Intent.createChooser(shareIntent, "Share Comment"));
 	}
 
 	@Override

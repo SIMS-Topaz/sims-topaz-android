@@ -26,6 +26,7 @@
 	<string name="bulle_loyen_cluster">Note moyenne:</string>
 	<string name="bulle_note">avis</string>
 	<string name="bulle_says">dit:</string>
+	<string name="bulle_anonyme"> Un utilisateur anonyme </string>
 	<!-- comment -->
 	<string name="comment_user_icon">Icon de l\'utilisateur</string>
 	<string name="comment_hint">Write your comment here</string>

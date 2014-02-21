@@ -49,8 +49,12 @@ public class BulleAdapter implements InfoWindowAdapter {
 			// Display the id of the preview
 			TextView mBulleTitle=(TextView)popup.findViewById(R.id.bulle_title);
 			mBulleTitle.setTypeface(face);
-			mBulleTitle.setText(mPreview.getOwner() + SimsContext.getString(R.string.bulle_says));
-			
+			if(!mPreview.getOwner().isEmpty()){
+				mBulleTitle.setText(mPreview.getOwner() +" "+ SimsContext.getString(R.string.bulle_says));
+			}else{
+				mBulleTitle.setText(SimsContext.getString(R.string.bulle_anonyme)
+						+" "+ SimsContext.getString(R.string.bulle_says));
+			}
 			// Display the text of the preview
 			TextView mBulleText=(TextView)popup.findViewById(R.id.bulle_text);
 			mBulleText.setTypeface(face);

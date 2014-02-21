@@ -202,267 +202,268 @@ OnMapLoadedCallback
 						getResources().getString(R.string.connection_error), 
 						Toast.LENGTH_SHORT).show();				
 			}
-			
-			// Create a new global location parameters object
-			mLocationRequest = LocationRequest.create();
-			//Set the update interval
-			mLocationRequest.setInterval(LocationUtils.UPDATE_INTERVAL_IN_MILLISECONDS);
-			// Use high accuracy
-			mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-			// Set the interval ceiling to one minute
-			mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
-			//set the minimum distance between location updates, in meters
-			mLocationRequest.setSmallestDisplacement(100);
-			//Create a new location client, using the enclosing class to handle callbacks.
-			mLocationClient = new LocationClient(SimsContext.getContext(),
-					this,
-					this);
-			if(mLocationClient.isConnected() == false){
-				mLocationClient.connect();
-			}
-			setClusterManager();
 		}
 
-		@Override
-		public void onMapLongClick(LatLng point) {
-			FragmentTransaction transaction = getFragmentManager().beginTransaction();
-			transaction.setCustomAnimations(R.drawable.animation_bottom_up,
-					R.drawable.animation_bottom_down);
-			EditMessageFragment fragment = new EditMessageFragment();
-			fragment.setPosition(point);
-
-			transaction.replace(R.id.edit_text, fragment);
-			transaction.addToBackStack(null);
-			transaction.commit();
+		// Create a new global location parameters object
+		mLocationRequest = LocationRequest.create();
+		//Set the update interval
+		mLocationRequest.setInterval(LocationUtils.UPDATE_INTERVAL_IN_MILLISECONDS);
+		// Use high accuracy
+		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+		// Set the interval ceiling to one minute
+		mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+		//set the minimum distance between location updates, in meters
+		mLocationRequest.setSmallestDisplacement(100);
+		//Create a new location client, using the enclosing class to handle callbacks.
+		mLocationClient = new LocationClient(SimsContext.getContext(),
+				this,
+				this);
+		if(mLocationClient.isConnected() == false){
+			mLocationClient.connect();
 		}
+		setClusterManager();
+	}
 
-		@Override
-		public void onConnectionFailed(ConnectionResult arg0) {
-			Toast.makeText(getActivity()
-					, getResources().getString(R.string.connection_error_code)
-					,Toast.LENGTH_SHORT).show();
+	@Override
+	public void onMapLongClick(LatLng point) {
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
+				R.drawable.animation_bottom_down);
+		EditMessageFragment fragment = new EditMessageFragment();
+		fragment.setPosition(point);
 
-		}
+		transaction.replace(R.id.edit_text, fragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
 
-		@Override
-		public void onConnected(Bundle arg0) {
-			mCurrentLocation = mLocationClient.getLastLocation();
-			mNetworkModule = new NetworkRestModule(this);
-			if(servicesConnected()){
-				LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
-			}
-			mLocationClient.requestLocationUpdates(mLocationRequest, this);
-			mCurrentCameraPosition = mMap.getCameraPosition();
-			timerOneMinute.cancel();
-			timerOneMinute.start();
-			mClusterManager.onCameraChange(mCurrentCameraPosition); 
-		}
-
-		@Override
-		public void onDisconnected() {}
-
-		//Fragment lifecycle----------------------------------------------------------------------------
-		@Override
-		public void onStop() {
-			if(mLocationClient.isConnected()){
-				mLocationClient.removeLocationUpdates(this);
-			}
-			// After disconnect() is called, the client is considered "dead".
-			if(mLocationClient!=null){
-				mLocationClient.disconnect();
-			}
-			super.onStop();
-		}
-
-
-		@Override
-		public void onStart() {
-			super.onStart();
-			if(mLocationClient!=null)
-				mLocationClient.connect();
-			timerSeconds.start();
-			timerOneMinute.start();
-		}
-
-		/**
-		 * The system calls this method as the first indication 
-		 * that the user is leaving the fragment 
-		 * (though it does not always mean the fragment is being destroyed).
-		 */
-		@Override
-		public void onPause(){
-			super.onPause();
-			timerSeconds.cancel();
-			timerOneMinute.cancel();
-		}
-
-
-		@Override
-		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-			// Choose what to do based on the request code
-			switch (requestCode) {
-			// If the request code matches the code sent in onConnectionFailed
-			case LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST :
-				DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));            	
-				// If any other request code was received
-			default:
-				// Report that this Activity received an unknown requestCode
-				DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));
-				break;
-			}
-		}
-
-
-		@Override
-		public void networkError() {
-			Toast.makeText(getActivity(),
-					getResources().getString(R.string.network_error),
-					Toast.LENGTH_SHORT).show();
-
-		}
-		//Our Server call listeners----------------------------------------------------------------------------
-		@Override
-		public void afterPostMessage(Message message) {}
-
-		@Override
-		public void afterGetMessage(Message message) {	}
-		@Override
-		public void afterGetPreviews(List<Preview> list) {
-			mClusterManager.clearItems();
-			List<PreviewClusterItem> items = new ArrayList<PreviewClusterItem>();
-			for(Preview p:list){
-				String text = p.getText();
-				String tag = text.substring(text.lastIndexOf("#")+1);
-				PreviewClusterItem item = new PreviewClusterItem(p);
-				item.setTag(tag);
-				items.add(item);
-			}	
-			mClusterManager.addItems(items);
-			mClusterManager.onCameraChange(mCurrentCameraPosition);
-			mClusterManager.cluster();
-		}
-		@Override
-		public void apiError(ApiError error) {
-			DebugUtils.log("apiError");
-		}
-
-		//PreviewRenderer----------------------------------------------------------------------------
-		private class PreviewRenderer extends DefaultClusterRenderer<PreviewClusterItem> {
-
-			public PreviewRenderer() {
-				super(mView.getContext(), mMap, mClusterManager);
-			}
-
-			@Override
-			protected void onBeforeClusterItemRendered(PreviewClusterItem item, MarkerOptions markerOptions) {
-				BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(TagUtils.getDrawableForString(item.getTag()));
-				markerOptions.icon(icon)
-				.title(item.getPreview().getTimestamp().toString())
-				.snippet(item.getPreview().getText());
-
-			}
-
-			@SuppressWarnings("rawtypes")
-			@Override
-			protected boolean shouldRenderAsCluster(Cluster cluster) {
-				// Always render clusters.
-				return cluster.getSize() > 1;
-			}
-		}
-
-
-		public void onNewMessage(Message message) {
-			Preview preview = new Preview(message);
-			PreviewClusterItem pci = new PreviewClusterItem(preview);
-			mClusterManager.addItem(pci);
-			mClusterManager.cluster();
-		}
-
-		//Clusters listeners----------------------------------------------------------------------------
-		@Override
-		public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
-			mBulleAdapter.setIsCluster(true);
-			return false;
-		}
-		@Override
-		public void onClusterItemInfoWindowClick(PreviewClusterItem item) {		
-			//set fragment
-			Bundle args = new Bundle();
-			args.putLong("id_preview", item.getPreview().getId());
-			CommentFragment fragment = new CommentFragment();
-			fragment.setArguments(args);
-
-			//create transaction
-			FragmentTransaction transaction = getFragmentManager().beginTransaction();
-			transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
-					R.drawable.animation_slide_out_right);
-			transaction.replace(R.id.fragment_map_comment, fragment);
-			transaction.addToBackStack(null);
-			transaction.commit();
-		}
-		@Override
-		public boolean onClusterItemClick(PreviewClusterItem item) {
-			mBulleAdapter.setIsCluster(false);
-			mBulleAdapter.setPreview(item.getPreview());
-			return false;
-		}
-		@Override
-		public void onClusterInfoWindowClick(Cluster<PreviewClusterItem> cluster) {
-			DebugUtils.log("onClusterInfoWindowClick");
-		}
-		//Location and map listeners----------------------------------------------------------------------------
-		@Override
-		public void onCameraChange(CameraPosition camera) {
-			mCurrentCameraPosition = camera;
-			mClusterManager.onCameraChange(camera);
-			timerSeconds.cancel();
-			timerSeconds.start();
-		}
-		@Override
-		public void onLocationChanged(Location location) {
-			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 	
-			if(mCurrentLocation==null){
-				LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
-			}
-			mCurrentLocation = location;
-		}
-		@Override
-		public void onMapLoaded() {	
-			mCurrentCameraPosition = mMap.getCameraPosition();
-			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
-		}
-		/**
-		 * Verify that Google Play services is available before making a request.
-		 *
-		 * @return true if Google Play services is available, otherwise false
-		 */
-		private boolean servicesConnected() {
-
-			// Check that Google Play services is available
-			int resultCode =
-					GooglePlayServicesUtil.isGooglePlayServicesAvailable(SimsContext.getContext());
-
-			// If Google Play services is available
-			if (ConnectionResult.SUCCESS == resultCode) {
-				// In debug mode, log the status
-				DebugUtils.log(getString(R.string.play_services_available));
-				// Continue
-				return true;
-				// Google Play services was not available for some reason
-			} else {
-				// Display an error dialog
-				Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), 0);
-				if (dialog != null) {
-					ErrorDialogFragment errorFragment = new ErrorDialogFragment();
-					errorFragment.setDialog(dialog);
-					errorFragment.show(getActivity().getSupportFragmentManager(), LocationUtils.APPTAG);
-				}
-				return false;
-			}
-		}
-
-
+	@Override
+	public void onConnectionFailed(ConnectionResult arg0) {
+		Toast.makeText(getActivity()
+				, getResources().getString(R.string.connection_error_code)
+				,Toast.LENGTH_SHORT).show();
 
 	}
+
+	@Override
+	public void onConnected(Bundle arg0) {
+		mCurrentLocation = mLocationClient.getLastLocation();
+		mNetworkModule = new NetworkRestModule(this);
+		if(servicesConnected()){
+			LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
+		}
+		mLocationClient.requestLocationUpdates(mLocationRequest, this);
+		mCurrentCameraPosition = mMap.getCameraPosition();
+		timerOneMinute.cancel();
+		timerOneMinute.start();
+		mClusterManager.onCameraChange(mCurrentCameraPosition); 
+	}
+
+	@Override
+	public void onDisconnected() {}
+
+	//Fragment lifecycle----------------------------------------------------------------------------
+	@Override
+	public void onStop() {
+		if(mLocationClient.isConnected()){
+			mLocationClient.removeLocationUpdates(this);
+		}
+		// After disconnect() is called, the client is considered "dead".
+		if(mLocationClient!=null){
+			mLocationClient.disconnect();
+		}
+		super.onStop();
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		if(mLocationClient!=null)
+			mLocationClient.connect();
+		timerSeconds.start();
+		timerOneMinute.start();
+	}
+
+	/**
+	 * The system calls this method as the first indication 
+	 * that the user is leaving the fragment 
+	 * (though it does not always mean the fragment is being destroyed).
+	 */
+	@Override
+	public void onPause(){
+		super.onPause();
+		timerSeconds.cancel();
+		timerOneMinute.cancel();
+	}
+
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		// Choose what to do based on the request code
+		switch (requestCode) {
+		// If the request code matches the code sent in onConnectionFailed
+		case LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST :
+			DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));            	
+			// If any other request code was received
+		default:
+			// Report that this Activity received an unknown requestCode
+			DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));
+			break;
+		}
+	}
+
+
+	@Override
+	public void networkError() {
+		Toast.makeText(getActivity(),
+				getResources().getString(R.string.network_error),
+				Toast.LENGTH_SHORT).show();
+
+	}
+	//Our Server call listeners----------------------------------------------------------------------------
+	@Override
+	public void afterPostMessage(Message message) {}
+
+	@Override
+	public void afterGetMessage(Message message) {	}
+	@Override
+	public void afterGetPreviews(List<Preview> list) {
+		mClusterManager.clearItems();
+		List<PreviewClusterItem> items = new ArrayList<PreviewClusterItem>();
+		for(Preview p:list){
+			String text = p.getText();
+			String tag = text.substring(text.lastIndexOf("#")+1);
+			PreviewClusterItem item = new PreviewClusterItem(p);
+			item.setTag(tag);
+			items.add(item);
+		}	
+		mClusterManager.addItems(items);
+		mClusterManager.onCameraChange(mCurrentCameraPosition);
+		mClusterManager.cluster();
+	}
+	@Override
+	public void apiError(ApiError error) {
+		DebugUtils.log("apiError");
+	}
+
+	//PreviewRenderer----------------------------------------------------------------------------
+	private class PreviewRenderer extends DefaultClusterRenderer<PreviewClusterItem> {
+
+		public PreviewRenderer() {
+			super(mView.getContext(), mMap, mClusterManager);
+		}
+
+		@Override
+		protected void onBeforeClusterItemRendered(PreviewClusterItem item, MarkerOptions markerOptions) {
+			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(TagUtils.getDrawableForString(item.getTag()));
+			markerOptions.icon(icon)
+			.title(item.getPreview().getTimestamp().toString())
+			.snippet(item.getPreview().getText());
+
+		}
+
+		@SuppressWarnings("rawtypes")
+		@Override
+		protected boolean shouldRenderAsCluster(Cluster cluster) {
+			// Always render clusters.
+			return cluster.getSize() > 1;
+		}
+	}
+
+
+	public void onNewMessage(Message message) {
+		Preview preview = new Preview(message);
+		PreviewClusterItem pci = new PreviewClusterItem(preview);
+		mClusterManager.addItem(pci);
+		mClusterManager.cluster();
+	}
+
+	//Clusters listeners----------------------------------------------------------------------------
+	@Override
+	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
+		mBulleAdapter.setIsCluster(true);
+		return false;
+	}
+	@Override
+	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {		
+		//set fragment
+		Bundle args = new Bundle();
+		args.putLong("id_preview", item.getPreview().getId());
+		CommentFragment fragment = new CommentFragment();
+		fragment.setArguments(args);
+
+		//create transaction
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
+				R.drawable.animation_slide_out_right);
+		transaction.replace(R.id.fragment_map_comment, fragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
+	@Override
+	public boolean onClusterItemClick(PreviewClusterItem item) {
+		mBulleAdapter.setIsCluster(false);
+		mBulleAdapter.setPreview(item.getPreview());
+		return false;
+	}
+	@Override
+	public void onClusterInfoWindowClick(Cluster<PreviewClusterItem> cluster) {
+		DebugUtils.log("onClusterInfoWindowClick");
+	}
+	//Location and map listeners----------------------------------------------------------------------------
+	@Override
+	public void onCameraChange(CameraPosition camera) {
+		mCurrentCameraPosition = camera;
+		mClusterManager.onCameraChange(camera);
+		timerSeconds.cancel();
+		timerSeconds.start();
+	}
+	@Override
+	public void onLocationChanged(Location location) {
+		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 	
+		if(mCurrentLocation==null){
+			LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
+		}
+		mCurrentLocation = location;
+	}
+	@Override
+	public void onMapLoaded() {	
+		mCurrentCameraPosition = mMap.getCameraPosition();
+		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+	}
+	/**
+	 * Verify that Google Play services is available before making a request.
+	 *
+	 * @return true if Google Play services is available, otherwise false
+	 */
+	private boolean servicesConnected() {
+
+		// Check that Google Play services is available
+		int resultCode =
+				GooglePlayServicesUtil.isGooglePlayServicesAvailable(SimsContext.getContext());
+
+		// If Google Play services is available
+		if (ConnectionResult.SUCCESS == resultCode) {
+			// In debug mode, log the status
+			DebugUtils.log(getString(R.string.play_services_available));
+			// Continue
+			return true;
+			// Google Play services was not available for some reason
+		} else {
+			// Display an error dialog
+			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), 0);
+			if (dialog != null) {
+				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+				errorFragment.setDialog(dialog);
+				errorFragment.show(getActivity().getSupportFragmentManager(), LocationUtils.APPTAG);
+			}
+			return false;
+		}
+	}
+
+
+
+}

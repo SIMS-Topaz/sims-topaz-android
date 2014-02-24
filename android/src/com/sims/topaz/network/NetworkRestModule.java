@@ -129,7 +129,7 @@ public class NetworkRestModule {
 		String url = SERVER_URL + "post_comment";
 		//add message id in URL
 		url+="/"+Long.toString(message.getId());
-		Log.d("Network postLikeStatus url=",url);
+		Log.d("Network postComment url=",url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.COMMENT_MESSAGE);
 		ObjectMapper mapper = new ObjectMapper();
 		try {

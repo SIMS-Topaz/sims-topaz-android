@@ -2,6 +2,7 @@ package com.sims.topaz.adapter;
 
 
 import java.lang.ref.WeakReference;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,7 @@ import com.sims.topaz.R;
 import com.sims.topaz.modele.CommentItem;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +62,9 @@ public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 				CommentItem ci = getItem(position);
 				holder.mUserName.setText(ci.getUser());
 				holder.mUserComment.setText(ci.getCommentText());
-				holder.mCommentDate.setText(String.valueOf(ci.getDate()));						
+				holder.mCommentDate.setText(DateFormat.format
+						(getContext().getString(R.string.date_format), 
+								new Date( ci.getDate()) ) );
 			}
 		}
 		return view;

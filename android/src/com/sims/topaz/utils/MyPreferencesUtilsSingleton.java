@@ -12,6 +12,8 @@ public class MyPreferencesUtilsSingleton {
 	   private static final String SHARED_PREFERENCES = "topaz_shared_preferences";
 	   public static final String SHARED_PREFERENCES_AUTH_USERNAME = "topaz_shared_preferences_auth_username";
 	   public static final String SHARED_PREFERENCES_AUTH_PASSWORD = "topaz_shared_preferences_auth_password";
+	   public static final String SHARED_PREFERENCES_VERIFIED = "topaz_shared_preferences_auth_verified";
+	   
 	    private MyPreferencesUtilsSingleton() {}
 	    private MyPreferencesUtilsSingleton(Context c) {
 	        mPrefs = c.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);

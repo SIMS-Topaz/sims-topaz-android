@@ -3,8 +3,6 @@ package com.sims.topaz;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;

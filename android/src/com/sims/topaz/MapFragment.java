@@ -30,9 +30,11 @@ import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.InternetConnectionUtils;
 import com.sims.topaz.utils.LocationUtils;
+import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.TagUtils;
 
@@ -47,6 +49,8 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -74,7 +78,9 @@ OnMapLoadedCallback
 	//network call
 	private NetworkRestModule mNetworkModule; 
 	//bulle
-	private BulleAdapter mBulleAdapter; 
+	private BulleAdapter mBulleAdapter;
+	// banner
+	private TextView bannerNotVerified;
 	//clusters
 	private ClusterManager<PreviewClusterItem> mClusterManager;
 	//current values
@@ -149,6 +155,13 @@ OnMapLoadedCallback
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
+		
+		// Account banner
+		bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
+		if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)) {
+			bannerNotVerified.setText(AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED));
+		}
+		
 		return mView;
 
 	}

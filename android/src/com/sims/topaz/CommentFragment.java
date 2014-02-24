@@ -221,8 +221,7 @@ public class CommentFragment extends Fragment
 
 	@Override
 	public void networkError() {
-		Toast.makeText(getActivity(),
-				getResources().getString(R.string.network_error),
+		Toast.makeText(SimsContext.getContext(),SimsContext.getString(R.string.network_error),
 				Toast.LENGTH_SHORT).show();	}
 
 	@Override

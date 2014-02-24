@@ -23,6 +23,7 @@ public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 		super(mDelegate, resource, (CommentItem [])commentsList.toArray());
 		delegate = new WeakReference<Context>(mDelegate);
 		comments = new ArrayList<CommentItem>(commentsList);
+		
 	}	
 	
 	public void addItem(CommentItem ci) {

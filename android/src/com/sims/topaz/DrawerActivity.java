@@ -33,7 +33,7 @@ public class DrawerActivity extends ActionBarActivity
     private String[] mViewsTitles;
     private MapFragment mMapFragment;
     private Fragment mLastFragment;
-    
+     
 
     
     @Override
@@ -91,7 +91,17 @@ public class DrawerActivity extends ActionBarActivity
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         
         if (savedInstanceState == null) {
-           selectItem(1);
+        	FragmentManager fragmentManager = getSupportFragmentManager();
+        	fragmentManager.beginTransaction().remove(mLastFragment);
+        	mLastFragment = mMapFragment;
+    		fragmentManager
+    		.beginTransaction()
+    		.replace(R.id.content_frame, mLastFragment)
+    		.commit();
+            // update selected item and title, then close the drawer
+            mDrawerList.setItemChecked(1, true);
+            setTitle(mViewsTitles[1]);
+            mDrawerLayout.closeDrawer(mDrawerList);
         }
     }
     

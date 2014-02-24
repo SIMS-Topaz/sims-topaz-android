@@ -158,9 +158,10 @@ OnMapLoadedCallback
 		
 		// Account banner
 		bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
-		if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)) {
-			bannerNotVerified.setText(AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED));
-		}
+		
+		//if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)) {
+			//Log.d("TEST", AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)));
+		//}
 		
 		return mView;
 

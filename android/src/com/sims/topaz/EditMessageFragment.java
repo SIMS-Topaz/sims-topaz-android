@@ -10,7 +10,10 @@ import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
+import com.sims.topaz.utils.SimsContext;
 
 import android.app.Activity;
 import android.content.Context;
@@ -124,7 +127,8 @@ implements MessageDelegate,ErreurDelegate{
 		message.setLongitude(mPosition.longitude);
 		message.setLatitude(mPosition.latitude);
 		message.setTimestamp(new Date().getTime());
-
+		message.setOwner(AuthUtils.getSessionStringValue
+				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 		mRestModule.postMessage(message);
 	}
 

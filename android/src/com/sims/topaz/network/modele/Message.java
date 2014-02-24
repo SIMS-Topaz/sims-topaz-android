@@ -18,6 +18,7 @@ public class Message {
 	
 	private String text;
 	
+	@JsonProperty("owner")
 	private String owner;
 	
 	private int likes=0;
@@ -128,6 +129,10 @@ public class Message {
 
 	public List<Comment> getComments() {
 		return comments;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 	
 }

@@ -368,6 +368,7 @@ public class NetworkRestModule {
 					httppost.setEntity((HttpEntity) new StringEntity(objectParam, "UTF8"));
 					httppost.setHeader("Content-type", "application/json");
 					response = httpclient.execute(httppost);
+					DebugUtils.log( "post = " + objectParam);
 				} else {
 					HttpGet httpget = new HttpGet(url);
 					response = httpclient.execute(httpget);

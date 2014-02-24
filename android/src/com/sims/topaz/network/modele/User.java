@@ -15,7 +15,7 @@ public class User {
 	@JsonProperty("user_password")
 	private String password;
 	
-	@JsonProperty("user_mail")
+	@JsonProperty("user_email")
 	private String email;
 	
 	@JsonProperty("user_verified")

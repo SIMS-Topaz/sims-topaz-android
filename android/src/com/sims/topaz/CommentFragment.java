@@ -117,6 +117,8 @@ public class CommentFragment extends Fragment
 	
 	protected void sendComment() {
 		String comm = mNewComment.getText().toString();
+		mNewComment.setEnabled(false);
+		mSendCommentButton.setEnabled(false);
 		Comment comment = new Comment();
 		comment.setText(comm);
 		restModule.postComment(comment, mMessage);
@@ -241,7 +243,10 @@ public class CommentFragment extends Fragment
 	public void networkError() {
 		Toast.makeText(getActivity(),
 				getResources().getString(R.string.network_error),
-				Toast.LENGTH_SHORT).show();	}
+				Toast.LENGTH_SHORT).show();	
+		mNewComment.setEnabled(true);
+		mSendCommentButton.setEnabled(true);
+	}
 
 	@Override
 	public void apiError(ApiError error) {
@@ -281,6 +286,9 @@ public class CommentFragment extends Fragment
 		CommentItem ci = new CommentItem(comment);
 		CommentAdapter ca = (CommentAdapter) mListComments.getAdapter();
 		ca.addItem(ci);
+		mNewComment.setText("");
+		mNewComment.setEnabled(true);
+		mSendCommentButton.setEnabled(true);
 	}
 
 }

@@ -40,8 +40,8 @@ import com.sims.topaz.utils.DebugUtils;
 public class NetworkRestModule {
 
 
-	public static final String SERVER_URL = "http://topaz12.apiary.io/api/v1.2/";
-	//public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.2/";
+	//public static final String SERVER_URL = "http://topaz12.apiary.io/api/v1.2/";
+	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.2/";
 	
 	private Object delegate;
 	private static HttpClient httpclient;
@@ -368,6 +368,7 @@ public class NetworkRestModule {
 					httppost.setEntity((HttpEntity) new StringEntity(objectParam, "UTF8"));
 					httppost.setHeader("Content-type", "application/json");
 					response = httpclient.execute(httppost);
+					DebugUtils.log( "post = " + objectParam);
 				} else {
 					HttpGet httpget = new HttpGet(url);
 					response = httpclient.execute(httpget);

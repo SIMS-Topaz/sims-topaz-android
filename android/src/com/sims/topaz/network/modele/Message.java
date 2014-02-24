@@ -42,6 +42,10 @@ public class Message {
 		comments = new ArrayList<Comment>();
 	}
 	
+	public Message(Long id) {
+		this.id = id;
+	}
+	
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -56,6 +60,10 @@ public class Message {
 
 	public void setTimestamp(Long timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public void setLikeStatus(eLikeStatus likeStatus) {
+		this.likeStatus = likeStatus;
 	}
 
 	public Long getId() {

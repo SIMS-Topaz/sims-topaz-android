@@ -42,6 +42,7 @@ public class CommentFragment extends Fragment
 	private ImageButton mShareButton;
 	private ImageButton mLikeButton;
 	private ImageButton mDislikeButton;
+	private ImageButton mSendCommentButton;
 	// The main message
 	private Message mMessage=null;
 	//intelligence
@@ -80,6 +81,7 @@ public class CommentFragment extends Fragment
 		mListComments.setAdapter(new CommentAdapter(SimsContext.getContext(),
 				R.layout.fragment_comment_item,
 				lci));
+		mSendCommentButton.setEnabled(true);
 		
 	}
 
@@ -88,6 +90,8 @@ public class CommentFragment extends Fragment
 		mShareButton = (ImageButton)v.findViewById(R.id.comment_share);
 		mLikeButton = (ImageButton)v.findViewById(R.id.comment_like);
 		mDislikeButton = (ImageButton)v.findViewById(R.id.comment_dislike);
+		mSendCommentButton = (ImageButton)v.findViewById(R.id.send_comment_button);
+		mSendCommentButton.setEnabled(false);
 		mShareButton.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {shareMessage();}
@@ -100,9 +104,23 @@ public class CommentFragment extends Fragment
 			@Override
 			public void onClick(View v) {dislikeMessage();}
 		});
+		mSendCommentButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {sendComment();}
+		});
 		
 	}
 	
+	protected void sendComment() {
+		String comm = mNewComment.getText().toString();
+		mNewComment.setEnabled(false);
+		mSendCommentButton.setEnabled(false);
+		Comment comment = new Comment();
+		comment.setText(comm);
+		restModule.postComment(comment, mMessage);
+		
+	}
+
 	private void loadMessage() {
 		//get the main message from the preview id
 		if(getArguments()!=null && getArguments().containsKey("id_preview")){
@@ -220,7 +238,10 @@ public class CommentFragment extends Fragment
 	@Override
 	public void networkError() {
 		Toast.makeText(SimsContext.getContext(),SimsContext.getString(R.string.network_error),
-				Toast.LENGTH_SHORT).show();	}
+				Toast.LENGTH_SHORT).show();	
+		mNewComment.setEnabled(true);
+		mSendCommentButton.setEnabled(true);
+	}
 
 	@Override
 	public void apiError(ApiError error) {
@@ -258,7 +279,11 @@ public class CommentFragment extends Fragment
 	@Override
 	public void afterPostComment(Comment comment) {
 		CommentItem ci = new CommentItem(comment);
-		((CommentAdapter) mListComments.getAdapter()).add(ci);
+		CommentAdapter ca = (CommentAdapter) mListComments.getAdapter();
+		ca.addItem(ci);
+		mNewComment.setText("");
+		mNewComment.setEnabled(true);
+		mSendCommentButton.setEnabled(true);
 	}
 
 }

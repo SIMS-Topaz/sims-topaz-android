@@ -61,6 +61,7 @@ public class NetworkRestModule {
 	 */
 	public void getMessage(Long id) {
 		String url = SERVER_URL + "get_message/" + id;
+		url+="/WITH_COMMENTS";
 		DebugUtils.log("Network getMessage url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_MESSAGE);
 		rest.execute();
@@ -112,7 +113,10 @@ public class NetworkRestModule {
 		DebugUtils.log("Network postLikeStatus url="+url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_LIKE_STATUS);
 		ObjectMapper mapper = new ObjectMapper();
+		Message msgToSend = new Message(message.getId());
+		msgToSend.setLikeStatus(message.getLikeStatus());
 		try {
+			DebugUtils.log(mapper.writeValueAsString(message));
 			rest.setJSONParam(mapper.writeValueAsString(message));
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();

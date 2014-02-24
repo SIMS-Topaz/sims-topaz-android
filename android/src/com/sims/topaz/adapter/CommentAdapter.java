@@ -3,6 +3,7 @@ package com.sims.topaz.adapter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.sims.topaz.R;
@@ -20,14 +21,15 @@ public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 	
 	private List<CommentItem> comments;
 	public CommentAdapter(Context mDelegate, int resource, List<CommentItem> commentsList) {
-		super(mDelegate, resource, (CommentItem [])commentsList.toArray());
+		super(mDelegate, resource, commentsList);
 		delegate = new WeakReference<Context>(mDelegate);
 		comments = new ArrayList<CommentItem>(commentsList);
 	}	
 	
 	public void addItem(CommentItem ci) {
-		super.add(ci);
+		add(ci);
 		comments.add(ci);
+		//notifyDataSetChanged();
 	}
 
 

@@ -279,7 +279,8 @@ public class CommentFragment extends Fragment
 	@Override
 	public void afterPostComment(Comment comment) {
 		CommentItem ci = new CommentItem(comment);
-		((CommentAdapter) mListComments.getAdapter()).add(ci);
+		CommentAdapter ca = (CommentAdapter) mListComments.getAdapter();
+		ca.addItem(ci);
 	}
 
 }

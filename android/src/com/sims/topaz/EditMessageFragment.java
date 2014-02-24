@@ -53,6 +53,7 @@ implements MessageDelegate,ErreurDelegate{
 			savedSoftInputMode = activity.getWindow().getAttributes().softInputMode;
 			activity.getWindow()
 			.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+			
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnNewMessageListener");
@@ -147,7 +148,6 @@ implements MessageDelegate,ErreurDelegate{
 	}
 
 	public void apiError(ApiError error) {}
-
 
 
 }

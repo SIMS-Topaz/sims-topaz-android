@@ -33,8 +33,7 @@ public class DrawerActivity extends ActionBarActivity
     private String[] mViewsTitles;
     private MapFragment mMapFragment;
     private Fragment mLastFragment;
-    
-    
+     
 
     
     @Override
@@ -43,12 +42,11 @@ public class DrawerActivity extends ActionBarActivity
         setContentView(R.layout.drawer_list);
         mLastFragment = mMapFragment = new MapFragment();       
         setDrawer(savedInstanceState);
-
     }
     
 
 	private void setDrawer(Bundle savedInstanceState){
-
+		
         mTitle = mDrawerTitle = getTitle();
         mViewsTitles = getResources().getStringArray(R.array.views_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -93,7 +91,17 @@ public class DrawerActivity extends ActionBarActivity
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         
         if (savedInstanceState == null) {
-           selectItem(1);
+        	FragmentManager fragmentManager = getSupportFragmentManager();
+        	fragmentManager.beginTransaction().remove(mLastFragment);
+        	mLastFragment = mMapFragment;
+    		fragmentManager
+    		.beginTransaction()
+    		.replace(R.id.content_frame, mLastFragment)
+    		.commit();
+            // update selected item and title, then close the drawer
+            mDrawerList.setItemChecked(1, true);
+            setTitle(mViewsTitles[1]);
+            mDrawerLayout.closeDrawer(mDrawerList);
         }
     }
     
@@ -161,6 +169,7 @@ public class DrawerActivity extends ActionBarActivity
 		fragmentManager
 		.beginTransaction()
 		.replace(R.id.content_frame, mLastFragment)
+		.addToBackStack(null)
 		.commit();
 
         // update selected item and title, then close the drawer
@@ -201,8 +210,5 @@ public class DrawerActivity extends ActionBarActivity
 			mMapFragment.onNewMessage(message);
 		}
 	}
-	@Override
-	public void onBackPressed() {
-	    // do nothing.
-	}
+
 }

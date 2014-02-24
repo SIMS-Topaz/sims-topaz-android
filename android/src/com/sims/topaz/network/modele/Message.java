@@ -2,12 +2,8 @@ package com.sims.topaz.network.modele;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import android.widget.ArrayAdapter;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sims.topaz.modele.CommentItem;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {

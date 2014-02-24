@@ -46,7 +46,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 			TextView profile = (TextView)view.findViewById(R.id.auth_see_profile);
 			profile.setTypeface(face);
 			if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
-				user.setText(AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
+				user.setText(AuthUtils.getSessionStringValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 			}
 		}else if(position == 1){
 			view = inflater.inflate(R.layout.drawer_list_item_search_bar, null);

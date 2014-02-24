@@ -188,10 +188,10 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		mSignupButton.setEnabled(true);
 		// Conflit
 		if(error.getCode().equals(409)) {
-			if(error.getMsg().equals("NAME_IN_USE")) {
+			if(error.getMsg().equals("EMAIL_ERR")) {
 				emailError.setText(R.string.auth_conflictusermail_error);
 				emailError.setVisibility(TextView.VISIBLE);
-			} else if(error.getMsg().equals("EMAIL_IN_USE")) {
+			} else if(error.getMsg().equals("USERNAME_ERR")) {
 				usernameError.setText(R.string.auth_conflictusername_error);
 				usernameError.setVisibility(TextView.VISIBLE);
 			}

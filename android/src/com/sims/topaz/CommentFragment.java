@@ -3,7 +3,6 @@ package com.sims.topaz;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-
 import android.content.Intent;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
@@ -12,9 +11,6 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -50,8 +46,8 @@ public class CommentFragment extends Fragment
 	private Message mMessage=null;
 	//intelligence
 	private NetworkRestModule restModule = new NetworkRestModule(this);
-
-
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -223,8 +219,7 @@ public class CommentFragment extends Fragment
 
 	@Override
 	public void networkError() {
-		Toast.makeText(getActivity(),
-				getResources().getString(R.string.network_error),
+		Toast.makeText(SimsContext.getContext(),SimsContext.getString(R.string.network_error),
 				Toast.LENGTH_SHORT).show();	}
 
 	@Override

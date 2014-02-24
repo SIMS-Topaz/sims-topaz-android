@@ -7,29 +7,37 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.sims.topaz.R.color;
 import com.sims.topaz.utils.SimsContext;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class PlaceSearchFragment extends Fragment {
@@ -44,45 +52,110 @@ public class PlaceSearchFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-		View view = inflater.inflate(R.layout.fragment_place_search, container, true);
+		View view = inflater.inflate(R.layout.fragment_place_search, container, false);
+		
+		autoCompView = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView);
+		final PlacesAutoCompleteAdapter adapter = new PlacesAutoCompleteAdapter(SimsContext.getContext(), 
+				R.layout.fragment_place_search, R.id.autoCompleteTextView);
+		//adapter.setNotifyOnChange(true);
+		autoCompView.setAdapter(adapter);
+		
+		Button clearText = (Button) view.findViewById(R.id.auto_clear_text);
+		clearText.setVisibility(View.GONE);
+		clearText.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (!autoCompView.getText().equals("")) {
+					autoCompView.setText("");
+					adapter.clearStoredLocations();
+					((Button) getView().findViewById(R.id.auto_clear_text)).setVisibility(View.GONE);
+				}
+			}
+		});
         return view;
     }
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		autoCompView = (AutoCompleteTextView) getView().findViewById(R.id.autoCompleteTextView);
-
-		PlacesAutoCompleteAdapter adapter = new PlacesAutoCompleteAdapter(SimsContext.getContext(), 
-				R.layout.fragment_place_search, R.id.autoCompleteTextView);
-		//adapter.setNotifyOnChange(true);
-		autoCompView.setAdapter(adapter);
-	    autoCompView.setOnItemClickListener(new OnItemClickListener() {
-	    	
-	    	@Override
-	    	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-	            //String str = (String) adapterView.getItemAtPosition(position);
-	            //autoCompView.setText(str);
-	    		String str = "ss";
-	            Toast.makeText(getActivity().getApplicationContext(), str, Toast.LENGTH_SHORT).show();
-	        }
-	    	
-	    });
-	    //setRetainInstance(true);
+		
+	    autoCompView.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				Button bt = (Button) getView().findViewById(R.id.auto_clear_text);
+				if (bt.getVisibility() == View.GONE) {
+					bt.setVisibility(View.VISIBLE);
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				if (s.length() == 0) {
+					((Button) getView().findViewById(R.id.auto_clear_text)).setVisibility(View.GONE);
+				}
+			}
+		});
 	}
 	
 	private class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 	    private ArrayList<String> resultList;
+	    private TextView mTextView;
+	    private HashMap<String,LatLng> placeLocation = new HashMap<String,LatLng>();
 	    
 	    public PlacesAutoCompleteAdapter(Context context, int resource, int textViewResourceId) {
 	        super(context, resource, textViewResourceId);
+	    }
+	    
+	    public void clearStoredLocations() {
+	    	this.placeLocation.clear();
+	    }
+	    
+	    @Override
+	    public View getView(int position, View convertView, ViewGroup parent) {
+	    	View view;
+	    	if (convertView == null) {
+	    		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    		view = inflater.inflate(R.layout.adapter_search_bar, null);
+	    	} else {
+	    		view = convertView;
+	    	}
+	    	mTextView = (TextView) view.findViewById(R.id.search_bar_text);
+    		if (resultList.get(position) != null) {
+    			mTextView.setText(resultList.get(position));
+    		}
+	    	
+	    	view.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					TextView textView = (TextView) ((LinearLayout) v).getChildAt(0);
+					autoCompView.setText(textView.getText());
+					((DrawerActivity) getActivity()).moveCamera(placeLocation.get(textView.getText()));
+					//textView.setBackgroundColor(color.black);
+					//autoCompView.setDropDownBackgroundResource(color.black);
+					clearStoredLocations();
+				}
+				
+			});
+	    	return view;
 	    }
 	    
 	    @Override
@@ -127,10 +200,7 @@ public class PlaceSearchFragment extends Fragment {
 	    private static final String LOG_TAG = "Topaz-Android";
 	    
 	    private static final String PLACES_API_BASE = "https://maps.google.com/maps/api/geocode";
-	    private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
 	    private static final String OUT_JSON = "/json";
-
-	    private static final String API_KEY = "AIzaSyBDo_x_0mwiFuxXZMpLG_m5TRog8K9LsHc";
 
 	    private ArrayList<String> autocomplete(String input) {
 	        ArrayList<String> resultList = null;
@@ -172,7 +242,11 @@ public class PlaceSearchFragment extends Fragment {
 	            // Extract the Place descriptions from the results
 	            resultList = new ArrayList<String>(predsJsonArray.length());
 	            for (int i = 0; i < predsJsonArray.length(); i++) {
-	                resultList.add(predsJsonArray.getJSONObject(i).getString("formatted_address"));
+	                String place = predsJsonArray.getJSONObject(i).getString("formatted_address");
+	                double lat = predsJsonArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lat");
+	                double lng = predsJsonArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lng");
+	            	resultList.add(place);
+	            	placeLocation.put(place, new LatLng(lat,lng));
 	            }
 	        } catch (JSONException e) {
 	            Log.e(LOG_TAG, "Cannot process JSON results", e);

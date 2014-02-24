@@ -3,6 +3,8 @@ package com.sims.topaz;
 
 import org.w3c.dom.Comment;
 
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.utils.SimsContext;
@@ -17,6 +19,8 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,7 +30,7 @@ import android.widget.ListView;
 
 
 public class DrawerActivity extends FragmentActivity
-					implements EditMessageFragment.OnNewMessageListener{
+					implements EditMessageFragment.OnNewMessageListener {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -206,6 +210,12 @@ public class DrawerActivity extends FragmentActivity
 	public void onNewMessage(Message message) {
 		if(mMapFragment!=null) {
 			mMapFragment.onNewMessage(message);
+		}
+	}
+	
+	public void moveCamera(LatLng latLng) {
+		if (mMapFragment != null) {
+			mMapFragment.moveCamera(latLng);
 		}
 	}
 }

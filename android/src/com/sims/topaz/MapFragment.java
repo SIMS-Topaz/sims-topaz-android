@@ -7,6 +7,7 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
@@ -109,6 +110,7 @@ OnMapLoadedCallback
 			setMapIfNeeded(inflater);
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
+			e.printStackTrace();
 		}
         setClusterManager();
         return mView;
@@ -328,5 +330,8 @@ OnMapLoadedCallback
 		mCurrentCameraPosition = mMap.getCameraPosition();
 		mNetworkModule.getPreviews(mCurrentCameraPosition.target.latitude,
 				mCurrentCameraPosition.target.longitude); 
+	}
+	public void moveCamera(LatLng latLng) {
+		mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 	}
 }

@@ -15,6 +15,10 @@ public class Comment {
 		this.text = text;
 	}
 
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
 	public Long getId() {
 		return id;
 	}

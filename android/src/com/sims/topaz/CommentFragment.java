@@ -28,6 +28,8 @@ import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Comment;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
@@ -117,6 +119,8 @@ public class CommentFragment extends Fragment
 		mSendCommentButton.setEnabled(false);
 		Comment comment = new Comment();
 		comment.setText(comm);
+		comment.setOwner(AuthUtils.getSessionStringValue
+				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 		restModule.postComment(comment, mMessage);
 		
 	}

@@ -3,8 +3,6 @@ package com.sims.topaz.adapter;
 
 import java.lang.ref.WeakReference;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.sims.topaz.R;

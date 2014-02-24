@@ -49,7 +49,6 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,9 +67,10 @@ OnCameraChangeListener,
 LocationListener,
 OnMapLoadedCallback
 {
-
+	
 	private GoogleMap mMap;
 	private static View mView;
+
 	// A request to connect to Location Services
 	private LocationRequest mLocationRequest;
 	// Stores the current instantiation of the location client in this object
@@ -156,6 +156,7 @@ OnMapLoadedCallback
 			/* map is already there, just return view as it is */
 		}
 		
+
 		// Account banner
 		bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
 		
@@ -484,6 +485,7 @@ OnMapLoadedCallback
 		}
 	}
 
+	
 
 
 }

@@ -32,14 +32,21 @@ public class AuthUtils {
 		return MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).hasKey(key);
 	}
 	
-	public final static String getSessionValue(String key) {
+	public final static String getSessionStringValue(String key) {
 		return MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).getString(key, "");
+	}
+	
+	public final static boolean getSessionBoolValue(String key, Boolean defaultValue) {
+		return MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).getBoolean(key, defaultValue);
 	}
 	
 	public final static void setSession(String username, String userpassword, Boolean verified) {
 		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).putString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME, username);
 		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).putString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD, userpassword);
-		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).putBoolean(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED, verified);
+		
+		if(verified != null) {
+			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).putBoolean(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED, verified);
+		}
 	}
 	
 	public final static void unsetSession() {

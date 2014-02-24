@@ -129,7 +129,7 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 
 		//set the username if the user already made an account 
 		if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
-			String username = AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME);
+			String username = AuthUtils.getSessionStringValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME);
 			mUserNameEditText.setText(username);
 		}
 		Bundle bundle = getArguments();

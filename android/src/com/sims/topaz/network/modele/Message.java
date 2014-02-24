@@ -22,6 +22,8 @@ public class Message {
 	
 	private String text;
 	
+	private String owner;
+	
 	private int likes=0;
 	
 	private int dislikes=0;
@@ -61,6 +63,10 @@ public class Message {
 
 	public Long getId() {
 		return id;
+	}
+	
+	public String getOwner() {
+		return owner;
 	}
 	
 	public Double getLatitude() {

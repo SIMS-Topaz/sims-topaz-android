@@ -79,11 +79,13 @@ public class DrawerActivity extends ActionBarActivity
                 ) {
 
 			public void onDrawerClosed(View view) {
+					super.onDrawerClosed(view);
             		getSupportActionBar().setTitle(mTitle);
             		supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()           	
             }
 
 			public void onDrawerOpened(View drawerView) {
+					super.onDrawerOpened(drawerView);
             		getSupportActionBar().setTitle(mDrawerTitle);
             		supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
@@ -148,8 +150,10 @@ public class DrawerActivity extends ActionBarActivity
 			break;
 		case 3:
 			mLastFragment = new SettingsFragment();	
+			break;
 		case 4:
-			mLastFragment = new AboutFragment();	
+			mLastFragment = new AboutFragment();
+			break;
 		default:
 			break;
 		}
@@ -196,5 +200,9 @@ public class DrawerActivity extends ActionBarActivity
 		if(mMapFragment!=null) {
 			mMapFragment.onNewMessage(message);
 		}
+	}
+	@Override
+	public void onBackPressed() {
+	    // do nothing.
 	}
 }

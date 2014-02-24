@@ -1,7 +1,6 @@
 package com.sims.topaz.adapter;
 
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -11,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.model.Marker;
 import com.sims.topaz.R;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
@@ -41,17 +41,20 @@ public class BulleAdapter implements InfoWindowAdapter {
 			if(mPreview==null) 
 				throw new RuntimeException("Preview should not be null");
 			
-			Log.e("Debug", "isNotCluster");
+			DebugUtils.log("isNotCluster");
 			popup=mInflater.inflate(R.layout.adapter_info_bulle, null);
 			Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 			
 			
 			// Display the id of the preview
-			//TODO : it should be the username
 			TextView mBulleTitle=(TextView)popup.findViewById(R.id.bulle_title);
 			mBulleTitle.setTypeface(face);
-			mBulleTitle.setText(Long.toString(mPreview.getId()));
-			
+			if(!mPreview.getOwner().isEmpty()){
+				mBulleTitle.setText(mPreview.getOwner() +" "+ SimsContext.getString(R.string.bulle_says));
+			}else{
+				mBulleTitle.setText(SimsContext.getString(R.string.bulle_anonyme)
+						+" "+ SimsContext.getString(R.string.bulle_says));
+			}
 			// Display the text of the preview
 			TextView mBulleText=(TextView)popup.findViewById(R.id.bulle_text);
 			mBulleText.setTypeface(face);
@@ -70,7 +73,7 @@ public class BulleAdapter implements InfoWindowAdapter {
 					+" "+SimsContext.getContext().getString(R.string.bulle_note));
 			
 		}else{
-			Log.e("Debug", "isCluster");
+			DebugUtils.log("isCluster");
 			popup=mInflater.inflate(R.layout.adapter_info_bulle_cluster, null);
 			Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 			

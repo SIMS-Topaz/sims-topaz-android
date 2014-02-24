@@ -1,6 +1,7 @@
 package com.sims.topaz;
 
 
+import com.sims.topaz.interfaces.OnVisibilityProgressBar;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
@@ -14,6 +15,7 @@ import com.sims.topaz.utils.SimsContext;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -26,15 +28,32 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SignInFragment extends Fragment implements SignInDelegate, ErreurDelegate, TextWatcher{
+public class SignInFragment extends Fragment 
+implements SignInDelegate, ErreurDelegate, TextWatcher{
 	private EditText mUserNameEditText;
 	private EditText mPasswordEditText;
 	private NetworkRestModule mRestModule;
 	private Button mLoginButton;
 	private TextView mUserNameErrorTextView;
 	private TextView mPasswordErrorTextView;
-	private boolean isOnTablet;
+	private OnVisibilityProgressBar mCallback;
 	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mCallback = (OnVisibilityProgressBar) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnNewMessageListener");
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mCallback = null;
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,10 +90,41 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 				return false;
 			}
 		};
+		
+		mLoginButton.setEnabled(true);
 		mLoginButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {signInAction();}
 		});
+		//make checks after the user has changed the focus
+		mUserNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {		
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus){
+					String user = mUserNameEditText.getText().toString();
+					if(!user.isEmpty()  && !AuthUtils.isValidUsername(user)) {
+						mUserNameErrorTextView.setVisibility(View.VISIBLE);
+					}else{
+						mUserNameErrorTextView.setVisibility(View.GONE);
+					}
+				}
+			}
+		});
+		mPasswordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {		
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus){
+					String pass = mPasswordEditText.getText().toString();
+					if(!pass.isEmpty()  && !AuthUtils.isValidPassword(pass, 6)) {
+						mPasswordErrorTextView.setVisibility(View.VISIBLE);
+					}else{
+						mPasswordErrorTextView.setVisibility(View.GONE);
+					}
+				}
+			}
+		});
+		
+		
 		mUserNameEditText.setOnEditorActionListener(listener);
 
 		//set the username if the user already made an account 
@@ -82,8 +132,8 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 			String username = AuthUtils.getSessionValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME);
 			mUserNameEditText.setText(username);
 		}
-		
-		if(getArguments()!=null && getArguments().getBoolean(AuthActivity.IS_ON_TABLET)){
+		Bundle bundle = getArguments();
+		if(bundle!=null && bundle.getBoolean(AuthActivity.IS_ON_TABLET)){
 			mNoLoginTextView.setVisibility(View.GONE);
 			mSignUp.setVisibility(View.GONE);
 		}
@@ -94,18 +144,24 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	public void checkInput(String user, String password){
 		//if all the fileds are likely to be ok
 		if(AuthUtils.isValidUsername(user) && AuthUtils.isValidPassword(password, 6)) {
+			mLoginButton.setEnabled(false);
 			User u = new User();
 			u.setName(user);
 			u.setPassword(password);	
 			mRestModule.signinUser(u);
+			mCallback.onShowProgressBar();
 		}else if(!AuthUtils.isValidUsername(user)) {
+			mUserNameErrorTextView.setText(R.string.auth_username_error);
 			mUserNameErrorTextView.setVisibility(View.VISIBLE);
 		}else if(!AuthUtils.isValidPassword(password, 6)) {
+			mPasswordErrorTextView.setText(R.string.auth_userpwd_error);
 			mPasswordErrorTextView.setVisibility(View.VISIBLE);
 		}
 	}
 	@Override
 	public void afterSignIn(User user) {
+		mLoginButton.setEnabled(true);
+		mCallback.onHideProgressBar();
 		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
 		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
 		startActivity(intent);	
@@ -113,12 +169,28 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 
 	@Override
 	public void apiError(ApiError error) {
+		mLoginButton.setEnabled(true);
+		mCallback.onHideProgressBar();
 		Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
 
+
+		// Auth error
+		if(error.getCode().equals(401)) {
+			if(error.getMsg().equals("USER_ERR")) {
+				mUserNameErrorTextView.setText(R.string.auth_username_not_exist);
+				mUserNameErrorTextView.setVisibility(TextView.VISIBLE);
+			} else if(error.getMsg().equals("PASS_ERR")) {
+				mPasswordErrorTextView.setText(R.string.auth_userpwd_not_match);
+				mPasswordErrorTextView.setVisibility(TextView.VISIBLE);
+			}
+		} else {
+			Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
 	public void networkError() {
+		mLoginButton.setEnabled(true);
 		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
 	}
 
@@ -131,6 +203,7 @@ public class SignInFragment extends Fragment implements SignInDelegate, ErreurDe
 	public void afterTextChanged(Editable s) {
 		String user = mUserNameEditText.getText().toString();
 		if(!user.equals("") && !AuthUtils.isValidUsername(user)) {
+			mUserNameErrorTextView.setText(R.string.auth_username_error);
 			mUserNameErrorTextView.setVisibility(View.VISIBLE);
 		}else {
 			mUserNameErrorTextView.setVisibility(View.GONE);

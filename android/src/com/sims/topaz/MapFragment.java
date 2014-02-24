@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -29,17 +30,19 @@ import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.DebugUtils;
+import com.sims.topaz.utils.InternetConnectionUtils;
 import com.sims.topaz.utils.LocationUtils;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.TagUtils;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,8 +85,10 @@ OnMapLoadedCallback
 	//timers
 	private CountDownTimer timerSeconds =  new CountDownTimer(3000, 1000) {   	
 		public void onFinish() {
-			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+			if(mMap!=null && mNetworkModule!=null){
+				VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+				mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+			}
 		}
 
 		@Override
@@ -92,16 +97,18 @@ OnMapLoadedCallback
 	};
 	private CountDownTimer timerOneMinute =  new CountDownTimer(60000, 1000) {
 		public void onFinish() {
-			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+			if(mMap!=null && mNetworkModule!=null){
+				VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+				mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+			}
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
 		}
 	};
-	
-	
+
+
 	/**
 	 * This method will only be called once when the retained
 	 * Fragment is first created.
@@ -132,7 +139,13 @@ OnMapLoadedCallback
 		try {
 			mView = inflater.inflate(R.layout.fragment_map, container, false);
 			//set map and location 
-			setMapIfNeeded(inflater);
+			if(InternetConnectionUtils.hasConnection()){
+				setMapIfNeeded(inflater);
+			}else{
+				Toast.makeText(SimsContext.getContext(), 
+						getResources().getString(R.string.warning_internet),
+						Toast.LENGTH_SHORT).show();
+			}
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
@@ -168,14 +181,27 @@ OnMapLoadedCallback
 	 * @param inflater
 	 */
 	private void setMapIfNeeded(LayoutInflater inflater){
-		mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-		if(mMap!=null) {
-			mMap.setMyLocationEnabled(true);	
-			mMap.setOnMapLongClickListener(this);
-			mBulleAdapter = new BulleAdapter(inflater);
-			mMap.setInfoWindowAdapter(mBulleAdapter);
-			mMap.setOnCameraChangeListener(this);
-			mMap.setOnMapLoadedCallback(this);
+		if(mMap == null){
+			if(servicesConnected()){
+				mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+				// Check if we were successful in obtaining the map.
+				if(mMap!=null) {
+					mMap.setMyLocationEnabled(true);	
+					mMap.setOnMapLongClickListener(this);
+					mBulleAdapter = new BulleAdapter(inflater);
+					mMap.setInfoWindowAdapter(mBulleAdapter);
+					mMap.setOnCameraChangeListener(this);
+					mMap.setOnMapLoadedCallback(this);
+				}else{
+					Toast.makeText(SimsContext.getContext(),
+							getResources().getString(R.string.connection_error_unknown), 
+							Toast.LENGTH_SHORT).show();
+				}
+			}else{
+				Toast.makeText(SimsContext.getContext(),
+						getResources().getString(R.string.connection_error), 
+						Toast.LENGTH_SHORT).show();				
+			}
 		}
 
 		// Create a new global location parameters object
@@ -186,10 +212,15 @@ OnMapLoadedCallback
 		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 		// Set the interval ceiling to one minute
 		mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+		//set the minimum distance between location updates, in meters
+		mLocationRequest.setSmallestDisplacement(100);
 		//Create a new location client, using the enclosing class to handle callbacks.
-		mLocationClient = new LocationClient(getActivity().getApplicationContext(),
+		mLocationClient = new LocationClient(SimsContext.getContext(),
 				this,
 				this);
+		if(mLocationClient.isConnected() == false){
+			mLocationClient.connect();
+		}
 		setClusterManager();
 	}
 
@@ -218,7 +249,10 @@ OnMapLoadedCallback
 	public void onConnected(Bundle arg0) {
 		mCurrentLocation = mLocationClient.getLastLocation();
 		mNetworkModule = new NetworkRestModule(this);
-		LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
+		if(servicesConnected()){
+			LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
+		}
+		mLocationClient.requestLocationUpdates(mLocationRequest, this);
 		mCurrentCameraPosition = mMap.getCameraPosition();
 		timerOneMinute.cancel();
 		timerOneMinute.start();
@@ -231,6 +265,9 @@ OnMapLoadedCallback
 	//Fragment lifecycle----------------------------------------------------------------------------
 	@Override
 	public void onStop() {
+		if(mLocationClient.isConnected()){
+			mLocationClient.removeLocationUpdates(this);
+		}
 		// After disconnect() is called, the client is considered "dead".
 		if(mLocationClient!=null){
 			mLocationClient.disconnect();
@@ -247,7 +284,7 @@ OnMapLoadedCallback
 		timerSeconds.start();
 		timerOneMinute.start();
 	}
-	
+
 	/**
 	 * The system calls this method as the first indication 
 	 * that the user is leaving the fragment 
@@ -259,7 +296,7 @@ OnMapLoadedCallback
 		timerSeconds.cancel();
 		timerOneMinute.cancel();
 	}
-	
+
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -267,13 +304,11 @@ OnMapLoadedCallback
 		switch (requestCode) {
 		// If the request code matches the code sent in onConnectionFailed
 		case LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST :
-			Log.d(Integer.toString(LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST),
-					getString(R.string.unknown_activity_request_code, requestCode));            	
+			DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));            	
 			// If any other request code was received
 		default:
 			// Report that this Activity received an unknown requestCode
-			Log.d(LocationUtils.APPTAG,
-					getString(R.string.unknown_activity_request_code, requestCode));
+			DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));
 			break;
 		}
 	}
@@ -309,9 +344,9 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void apiError(ApiError error) {
-		Log.e("Debug", "apiError");
+		DebugUtils.log("apiError");
 	}
-	
+
 	//PreviewRenderer----------------------------------------------------------------------------
 	private class PreviewRenderer extends DefaultClusterRenderer<PreviewClusterItem> {
 
@@ -343,7 +378,7 @@ OnMapLoadedCallback
 		mClusterManager.addItem(pci);
 		mClusterManager.cluster();
 	}
-	
+
 	//Clusters listeners----------------------------------------------------------------------------
 	@Override
 	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
@@ -374,7 +409,7 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void onClusterInfoWindowClick(Cluster<PreviewClusterItem> cluster) {
-		Log.e("Debug", "onClusterInfoWindowClick");
+		DebugUtils.log("onClusterInfoWindowClick");
 	}
 	//Location and map listeners----------------------------------------------------------------------------
 	@Override
@@ -386,9 +421,10 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void onLocationChanged(Location location) {
-		if(mCurrentLocation.distanceTo(location)>100){
-			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-			mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 	
+		if(mCurrentLocation==null){
+			LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
 		}
 		mCurrentLocation = location;
 	}
@@ -398,7 +434,36 @@ OnMapLoadedCallback
 		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
 		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
 	}
+	/**
+	 * Verify that Google Play services is available before making a request.
+	 *
+	 * @return true if Google Play services is available, otherwise false
+	 */
+	private boolean servicesConnected() {
+
+		// Check that Google Play services is available
+		int resultCode =
+				GooglePlayServicesUtil.isGooglePlayServicesAvailable(SimsContext.getContext());
+
+		// If Google Play services is available
+		if (ConnectionResult.SUCCESS == resultCode) {
+			// In debug mode, log the status
+			DebugUtils.log(getString(R.string.play_services_available));
+			// Continue
+			return true;
+			// Google Play services was not available for some reason
+		} else {
+			// Display an error dialog
+			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), 0);
+			if (dialog != null) {
+				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+				errorFragment.setDialog(dialog);
+				errorFragment.show(getActivity().getSupportFragmentManager(), LocationUtils.APPTAG);
+			}
+			return false;
+		}
+	}
 
 
-	
+
 }

@@ -6,7 +6,7 @@ import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
-import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
+import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.AuthUtils;
 
@@ -45,13 +45,19 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
         super.onCreate(savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
 		mRestModule = new NetworkRestModule(this);
-		
+		TextView mTitleTextView = (TextView)v.findViewById(R.id.sign_up_welcome);
+		mTitleTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		// Init all EditText
 		mUserNameEditText = (EditText)v.findViewById(R.id.sign_up_username);
+		mUserNameEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mEmailEditText = (EditText)v.findViewById(R.id.sign_up_mail);
+		mEmailEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mPasswordEditText = (EditText)v.findViewById(R.id.sign_up_password);
+		mPasswordEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mPasswordConfirmEditText = (EditText)v.findViewById(R.id.sign_up_confirm_password);
+		mPasswordConfirmEditText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mSignupButton = (Button)v.findViewById(R.id.sign_up_bt);
+		mSignupButton.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		
 		// Init all TextView error
 		usernameError = (TextView)v.findViewById(R.id.signup_username_error);
@@ -114,6 +120,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		});
 		
 		// Signup button
+		mSignupButton.setEnabled(true);
 		mSignupButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {signUpAction();}
@@ -131,10 +138,10 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 			  }
 		};
 		mPasswordConfirmEditText.setOnEditorActionListener(listener);
-		
-		Button signIn = (Button)v.findViewById(R.id.Sign_up);
-		TextView textSignIn = (TextView)v.findViewById(R.id.text_sing_up);
-		if(getArguments()!=null && getArguments().getBoolean(AuthActivity.IS_ON_TABLET)){
+		Bundle bundle = getArguments();
+		if(bundle!=null && bundle.getBoolean(AuthActivity.IS_ON_TABLET)){
+			Button signIn = (Button)v.findViewById(R.id.Sign_up);
+			TextView textSignIn = (TextView)v.findViewById(R.id.text_sing_up);
 			textSignIn.setVisibility(View.GONE);
 			signIn.setVisibility(View.GONE);
 		}
@@ -166,6 +173,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 			confirmpasswordError.setText(R.string.auth_userconfirmpwd_error);
 			confirmpasswordError.setVisibility(TextView.VISIBLE);
 		} else {
+			mSignupButton.setEnabled(false);
 	    	User u = new User();
 	    	u.setName(username);
 	    	u.setEmail(email);
@@ -177,6 +185,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 
 	@Override
 	public void apiError(ApiError error) {
+		mSignupButton.setEnabled(true);
 		// Conflit
 		if(error.getCode().equals(409)) {
 			if(error.getMsg().equals("NAME_IN_USE")) {
@@ -191,11 +200,13 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 
 	@Override
 	public void networkError() {
+		mSignupButton.setEnabled(true);
 		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void afterSignUp(User user) {
+		mSignupButton.setEnabled(true);
 		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString());
 		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
 		startActivity(intent);

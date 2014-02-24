@@ -24,7 +24,9 @@
         android:layout_margin="8dp"
         android:hint="@string/auth_username"
         android:nextFocusDown="@+id/sign_in_password"
-        android:padding="4dp" />
+        android:padding="4dp">
+        <requestFocus />
+    </EditText>
 
     <TextView
         android:id="@+id/sign_in_username_error"

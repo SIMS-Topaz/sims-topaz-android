@@ -1,19 +1,22 @@
 package com.sims.topaz;
 
+import com.sims.topaz.interfaces.OnVisibilityProgressBar;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
-public class AuthActivity extends FragmentActivity{
+public class AuthActivity extends FragmentActivity implements OnVisibilityProgressBar{
 	private Button mTempButton;
 	private Fragment signInFragment;
 	private Fragment signUpFragment;
@@ -26,11 +29,12 @@ public class AuthActivity extends FragmentActivity{
 	 */
 	private boolean mShowingBack = false;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_auth);
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		
 		mTempButton = (Button)findViewById(R.id.go_to_map);
 		mTempButton.setOnClickListener(new View.OnClickListener() {			
 			@Override
@@ -47,20 +51,22 @@ public class AuthActivity extends FragmentActivity{
 				.beginTransaction();
 		signInFragment = (Fragment)new SignInFragment();
 		signUpFragment = (Fragment)new SignUpFragment();
-		Bundle bundle = new Bundle();
+
 		FrameLayout isOnPhoneLayout = (FrameLayout)findViewById(R.id.auth);
 		if(isOnPhoneLayout!=null){isOnTablet=false;}
 		else{isOnTablet=true;}
-		
+		Bundle bundle = new Bundle();
 		bundle.putBoolean(IS_ON_TABLET, isOnTablet);
 		signInFragment.setArguments(bundle);
 		signUpFragment.setArguments(bundle);
 		if(!isOnTablet){
 			transaction.replace(R.id.auth, signInFragment).commit();
+		}else{
+			transaction.replace(R.id.sign_in_fragment, signInFragment);
+			transaction.replace(R.id.sign_up_fragment, signUpFragment);
+			transaction.commit();
 		}
-
 	}
-
 
 
 	public void onFlipCard(View v){
@@ -83,5 +89,19 @@ public class AuthActivity extends FragmentActivity{
 			}
 		}
 	}
-
+	@Override
+	public void onShowProgressBar(){
+		ProgressBar mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
+		mProgressBar.setVisibility(View.VISIBLE);
+	}
+	@Override
+	public void onHideProgressBar(){
+		ProgressBar mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
+		mProgressBar.setVisibility(View.INVISIBLE);
+	}
+	@Override
+	public void onBackPressed() {
+	    // do nothing.
+	}
+	
 }

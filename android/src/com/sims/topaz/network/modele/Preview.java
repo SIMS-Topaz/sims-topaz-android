@@ -16,6 +16,8 @@ public class Preview {
 	
 	private String text;
 	
+	private String owner;
+	
 	@JsonProperty("is_full")
 	private Boolean isFull;
 	
@@ -89,5 +91,9 @@ public class Preview {
 
 	public void setDislikes(int dislikes) {
 		this.dislikes = dislikes;
+	}
+
+	public String getOwner() {
+		return owner;
 	}
 }

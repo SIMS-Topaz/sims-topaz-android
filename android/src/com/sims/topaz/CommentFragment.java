@@ -9,10 +9,10 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -236,11 +236,11 @@ public class CommentFragment extends Fragment
 		mNewComment.setText("");
 	}
 	public void shareMessage(){
-		Intent sendIntent = new Intent();
-		sendIntent.setAction(Intent.ACTION_SEND);
-		sendIntent.putExtra(Intent.EXTRA_TEXT, mFirstComment.getText());
-		sendIntent.setType("text/plain");
-		startActivity(Intent.createChooser(sendIntent, "Share Comment"));
+		Intent shareIntent = new Intent();
+		shareIntent.setAction(Intent.ACTION_SEND);
+		shareIntent.putExtra(Intent.EXTRA_TEXT, mFirstComment.getText());
+		shareIntent.setType("text/plain");
+		startActivity(Intent.createChooser(shareIntent, "Share Comment"));
 	}
 
 	@Override

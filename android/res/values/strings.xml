@@ -25,11 +25,14 @@
 	<!-- bulle -->
 	<string name="bulle_loyen_cluster">Note moyenne:</string>
 	<string name="bulle_note">avis</string>
+	<string name="bulle_says">dit:</string>
+	<string name="bulle_anonyme"> Un utilisateur anonyme </string>
 	<!-- comment -->
 	<string name="comment_user_icon">Icon de l\'utilisateur</string>
 	<string name="comment_hint">Write your comment here</string>
 	<string name="comment_loading">Chargement...</string>
 	<string name="comment_like">like icon</string>
+	<string name="comment_send">like send</string>
 	<string name="comment_dislike">unlike icon</string>
 	<string name="comment_share">share icon</string>
 	<string name="date_format">dd MMM yyyy - HH:mm</string>
@@ -42,15 +45,23 @@
 	<string name="auth_confirm_password">Confirmation mot du passe</string>
 	<string name="auth_email">Email</string>
 	<string name="auth_sign_in_welcome">Bienvenue à nouveau !</string>
+	<string name="auth_sign_up_welcome">Créer un nouveau compte!</string>
 	<string name="auth_no_user">Vous n\'avez pas de compte ?</string>
 	<string name="auth_user">Vous avez déjà un compte ?</string>
 	<string name="auth">Utilisateur</string>
 	<string name="auth_view_profile">Regarde ton profil</string>
+	<string name="auth_username_not_exist">Utilisateur inexistant</string>
 	<string name="auth_username_error">Utilisez seulement des lettres, des chiffres et _</string>
 	<string name="auth_conflictusername_error">Nom déjà utilisé</string>
 	<string name="auth_usermail_error">Format d\'email incorrect</string>
 	<string name="auth_conflictusermail_error">Email déjà utilisé</string>
-	<string name="auth_userpwd_error">Mot de passe incorrect (6 caractères minimun)</string>
+	<string name="auth_userpwd_not_match">Mot de passe incorrect</string>
+	<string name="auth_userpwd_error">Mot de passe trop court</string>
 	<string name="auth_userconfirmpwd_error">Retapez votre mot de passe</string>
 	<string name="auth_unconnect">Déconnexion</string>
+	<!-- Settings -->
+	<string name="settings_a_propos_header">A PROPOS</string>
+	<string name="settings_a_propos_text">Version 1.0</string>
+	<string name="settings_msg_header">MESSAGES</string>
+	<string name="settings_msg_text">Visibilité</string>	
 </resources>

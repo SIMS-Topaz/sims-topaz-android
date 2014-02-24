@@ -1,7 +1,6 @@
 package com.sims.topaz;
 
 import com.sims.topaz.adapter.DrawerAdapter;
-import com.sims.topaz.interfaces.OnBackPressed;
 import com.sims.topaz.network.modele.Message;
 
 import android.support.v4.app.Fragment;
@@ -22,7 +21,7 @@ import android.support.v7.app.ActionBarActivity;
 
 
 public class DrawerActivity extends ActionBarActivity
-					implements EditMessageFragment.OnNewMessageListener, OnBackPressed{
+					implements EditMessageFragment.OnNewMessageListener{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
     private DrawerLayout mDrawerLayout;
@@ -34,7 +33,6 @@ public class DrawerActivity extends ActionBarActivity
     private String[] mViewsTitles;
     private MapFragment mMapFragment;
     private Fragment mLastFragment;
-	private boolean canBack;   
     
 
     
@@ -44,7 +42,6 @@ public class DrawerActivity extends ActionBarActivity
         setContentView(R.layout.drawer_list);
         mLastFragment = mMapFragment = new MapFragment();       
         setDrawer(savedInstanceState);
-        canBack = false;
     }
     
 
@@ -162,6 +159,7 @@ public class DrawerActivity extends ActionBarActivity
 		fragmentManager
 		.beginTransaction()
 		.replace(R.id.content_frame, mLastFragment)
+		.addToBackStack(null)
 		.commit();
 
         // update selected item and title, then close the drawer
@@ -202,17 +200,5 @@ public class DrawerActivity extends ActionBarActivity
 			mMapFragment.onNewMessage(message);
 		}
 	}
-	
-	@Override
-	public void onSetCanBack(boolean value){
-		canBack = value;
-	}
-	
-	
-	@Override
-	public void onBackPressed() {
-		if(canBack){
-			super.onBackPressed();
-		}
-	}
+
 }

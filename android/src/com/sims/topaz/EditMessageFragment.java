@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.sims.topaz.interfaces.OnBackPressed;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
@@ -36,7 +35,6 @@ implements MessageDelegate,ErreurDelegate{
 	private EditText editText;
 
 	OnNewMessageListener mCallback;
-	OnBackPressed mBackPressedCallback;
 	// Container Activity must implement this interface
 	public interface OnNewMessageListener {
 		public void onNewMessage(Message message);
@@ -52,8 +50,6 @@ implements MessageDelegate,ErreurDelegate{
 		// the callback interface. If not, it throws an exception
 		try {
 			mCallback = (OnNewMessageListener) activity;
-			mBackPressedCallback = (OnBackPressed) activity;
-			mBackPressedCallback.onSetCanBack(true);
 			savedSoftInputMode = activity.getWindow().getAttributes().softInputMode;
 			activity.getWindow()
 			.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -71,8 +67,6 @@ implements MessageDelegate,ErreurDelegate{
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		mBackPressedCallback.onSetCanBack(false);
-		mBackPressedCallback = null;
 		mCallback = null;
 		getActivity().getWindow()
 		.setSoftInputMode(savedSoftInputMode);

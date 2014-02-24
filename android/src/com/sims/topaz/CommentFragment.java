@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sims.topaz.adapter.CommentAdapter;
-import com.sims.topaz.interfaces.OnBackPressed;
 import com.sims.topaz.modele.CommentItem;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.CommentDelegate;
@@ -49,29 +48,8 @@ public class CommentFragment extends Fragment
 	private Message mMessage=null;
 	//intelligence
 	private NetworkRestModule restModule = new NetworkRestModule(this);
-	OnBackPressed mBackPressedCallback;
 	
 	
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		// This makes sure that the container activity has implemented
-		// the callback interface. If not, it throws an exception
-		try {
-			mBackPressedCallback = (OnBackPressed) activity;
-			mBackPressedCallback.onSetCanBack(true);
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnNewMessageListener");
-		}
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mBackPressedCallback.onSetCanBack(false);
-		mBackPressedCallback = null;
-	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

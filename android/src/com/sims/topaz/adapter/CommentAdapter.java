@@ -2,6 +2,8 @@ package com.sims.topaz.adapter;
 
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.sims.topaz.R;
 import com.sims.topaz.modele.CommentItem;
@@ -16,13 +18,17 @@ import android.widget.TextView;
 public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 	private WeakReference<Context> delegate;
 	
-	private CommentItem[] comments;
-	public CommentAdapter(Context mDelegate, int resource, CommentItem[] commentsList) {
-		super(mDelegate, resource, commentsList);
+	private List<CommentItem> comments;
+	public CommentAdapter(Context mDelegate, int resource, List<CommentItem> commentsList) {
+		super(mDelegate, resource, (CommentItem [])commentsList.toArray());
 		delegate = new WeakReference<Context>(mDelegate);
-		comments = new CommentItem[commentsList.length];
-		comments = commentsList;
+		comments = new ArrayList<CommentItem>(commentsList);
 	}	
+	
+	public void addItem(CommentItem ci) {
+		super.add(ci);
+		comments.add(ci);
+	}
 
 
 	public View getView(int position, View convertView, ViewGroup parent){
@@ -42,10 +48,10 @@ public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 				
 				holder.mCommentDate = (TextView) view.findViewById(R.id.comment_item_time);
 				holder.mCommentDate.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-				if(comments[position]!=null){
-					holder.mUserName.setText(comments[position].getUser());
-					holder.mUserComment.setText(comments[position].getCommentText());
-					holder.mCommentDate.setText(String.valueOf(comments[position].getDate()));						
+				if(comments.get(position)!=null){
+					holder.mUserName.setText(comments.get(position).getUser());
+					holder.mUserComment.setText(comments.get(position).getCommentText());
+					holder.mCommentDate.setText(String.valueOf(comments.get(position).getDate()));						
 				}
 			}
 		}

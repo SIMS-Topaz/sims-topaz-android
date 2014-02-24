@@ -1,7 +1,13 @@
 package com.sims.topaz.network.modele;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import android.widget.ArrayAdapter;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sims.topaz.modele.CommentItem;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
@@ -26,6 +32,8 @@ public class Message {
 	@JsonProperty("date")
 	private Long timestamp;
 	
+	private List<Comment> comments = null;
+	
 	public enum eLikeStatus {
 		NONE,
 		LIKED,
@@ -34,6 +42,7 @@ public class Message {
 	public eLikeStatus likeStatus = eLikeStatus.NONE;
 	
 	public Message() {
+		comments = new ArrayList<Comment>();
 	}
 	
 	public void setText(String text) {
@@ -119,6 +128,10 @@ public class Message {
 			dislikes--;
 			likeStatus=eLikeStatus.NONE;
 		}
+	}
+
+	public List<Comment> getComments() {
+		return comments;
 	}
 	
 }

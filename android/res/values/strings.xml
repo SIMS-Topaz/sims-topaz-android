@@ -37,6 +37,7 @@
 	<string name="comment_share">share icon</string>
 	<string name="date_format">dd MMM yyyy - HH:mm</string>
 	<!-- auth -->
+	<string name="auth_banner_not_verified">Compte non confirmé</string>
 	<string name="auth_activity">Rester connecté..simple et efficace</string>
 	<string name="auth_sign_in">Login</string>
 	<string name="auth_sign_up">Créer un compte</string>

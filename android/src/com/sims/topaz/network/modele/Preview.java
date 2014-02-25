@@ -45,6 +45,7 @@ public class Preview {
 			this.text = message.getText();
 			this.isFull = true;
 		}
+		this.owner = message.getOwner();
 		this.timestamp = message.getTimestamp();
 		this.likes = message.getLikes();
 		this.dislikes = message.getDislikes();

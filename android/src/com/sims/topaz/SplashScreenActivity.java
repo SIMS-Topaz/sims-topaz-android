@@ -75,7 +75,7 @@ public class SplashScreenActivity extends Activity implements SignInDelegate, Er
 	@Override
 	public void apiError(ApiError error) {
 		mShowAuth = true;
-
+		NetworkRestModule.resetHttpClient();
 	}
 	@Override
 	public void networkError() {

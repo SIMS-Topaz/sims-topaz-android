@@ -56,7 +56,7 @@ public class SplashScreenActivity extends Activity implements SignInDelegate, Er
 		if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME) && 
 				AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME)){
 			mRestModule = new NetworkRestModule(this);
-
+			NetworkRestModule.resetHttpClient();
 			String username = AuthUtils.getSessionStringValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME);
 			String password = AuthUtils.getSessionStringValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD);
 			User user = new User();

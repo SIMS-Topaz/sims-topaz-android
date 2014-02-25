@@ -84,6 +84,7 @@ public class CommentFragment extends Fragment
 				R.layout.fragment_comment_item,
 				lci));
 		mSendCommentButton.setEnabled(true);
+		mSendCommentButton.setClickable(true);
 		
 	}
 
@@ -98,24 +99,34 @@ public class CommentFragment extends Fragment
 			@Override
 			public void onClick(View v) {shareMessage();}
 		});
+		mShareButton.setClickable(false);
+		mShareButton.setEnabled(false);
 		
 		mLikeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {likeMessage();}
 		});
+		mLikeButton.setClickable(false);
+		mLikeButton.setEnabled(false);
+		
 		mDislikeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {dislikeMessage();}
 		});
+		mDislikeButton.setClickable(false);
+		mDislikeButton.setEnabled(false);
+		
 		mSendCommentButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {sendComment();}
 		});
+		mSendCommentButton.setClickable(false);
 		mSendCommentButton.setEnabled(false);
 		
 	}
 	
 	protected void sendComment() {
+		if(mMessage==null) return;
 		String comm = mNewComment.getText().toString();
 		mNewComment.setEnabled(false);
 		mSendCommentButton.setEnabled(false);
@@ -207,13 +218,24 @@ public class CommentFragment extends Fragment
 					(getString(R.string.date_format), 
 							new Date( message.getTimestamp() ) ) );
 			initLikeButtons();
+			initShareButton();
 			updateLikes();
 			displayComments();
 		}
 	}
 	
+	private void initShareButton() {
+		mShareButton.setEnabled(true);
+		mShareButton.setClickable(true);
+	}
+
 	private void initLikeButtons() {
 		if(mMessage==null) return;
+		mLikeButton.setEnabled(true);
+		mLikeButton.setClickable(true);
+		mDislikeButton.setEnabled(true);
+		mDislikeButton.setClickable(true);
+		
 		switch(mMessage.likeStatus) {
 			case NONE: //nothing
 				break;

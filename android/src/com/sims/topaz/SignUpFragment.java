@@ -163,6 +163,9 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		if(!AuthUtils.isValidUsername(username)) {
 			usernameError.setText(R.string.auth_username_error);
 			usernameError.setVisibility(TextView.VISIBLE);
+		} else if(username != null && username.length() < 4) {
+			usernameError.setText(R.string.auth_username_tooshort);
+			usernameError.setVisibility(TextView.VISIBLE);
 		} else if(!AuthUtils.isValidEmail(email)) {
 			emailError.setText(R.string.auth_usermail_error);
 			emailError.setVisibility(TextView.VISIBLE);

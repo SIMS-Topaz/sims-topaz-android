@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.sims.topaz.interfaces.OnMoveCamera;
 import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
@@ -30,6 +31,7 @@ import android.text.TextWatcher;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -44,30 +46,43 @@ import android.widget.TextView;
 public class PlaceSearchFragment extends Fragment{
 	
 	private AutoCompleteTextView autoCompView;
-	
+	private Button clearText;
+	OnMoveCamera mCallback;
 	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+		try {
+			mCallback = (OnMoveCamera) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnMoveCamera");
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mCallback = null;
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 	}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_place_search, container, false);
-		
 		autoCompView = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView);
 		autoCompView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		PlacesAutoCompleteAdapter adapter = new PlacesAutoCompleteAdapter(SimsContext.getContext(), 
 				R.layout.fragment_place_search, R.id.autoCompleteTextView);
 		autoCompView.setAdapter(adapter);
 		
-		Button clearText = (Button) view.findViewById(R.id.auto_clear_text);
+		clearText = (Button) view.findViewById(R.id.auto_clear_text);
 		clearText.setVisibility(View.GONE);
 		clearText.setOnClickListener(new OnClickListener() {
 			
@@ -77,10 +92,11 @@ public class PlaceSearchFragment extends Fragment{
 				if (autoCompView.getText().length() != 0) {
 					autoCompView.setText("");
 					//((PlacesAutoCompleteAdapter) autoCompView.getAdapter()).clearStoredLocations();
-					((Button) getView().findViewById(R.id.auto_clear_text)).setVisibility(View.GONE);
+					clearText.setVisibility(View.GONE);
 				}
 			}
 		});
+		
         return view;
     }
 	
@@ -92,9 +108,8 @@ public class PlaceSearchFragment extends Fragment{
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				Button bt = (Button) getView().findViewById(R.id.auto_clear_text);
-				if (bt.getVisibility() == View.GONE) {
-					bt.setVisibility(View.VISIBLE);
+				if (clearText.getVisibility() == View.GONE) {
+					clearText.setVisibility(View.VISIBLE);
 				}
 			}
 			
@@ -110,7 +125,7 @@ public class PlaceSearchFragment extends Fragment{
 			@Override
 			public void afterTextChanged(Editable s) {
 				if (s.length() == 0) {
-					((Button) getView().findViewById(R.id.auto_clear_text)).setVisibility(View.GONE);
+					clearText.setVisibility(View.GONE);
 				}
 				View v = getView().findViewById(autoCompView.getDropDownAnchor());
 				if (v != null ) {
@@ -159,7 +174,7 @@ public class PlaceSearchFragment extends Fragment{
 				public void onClick(View v) {
 					TextView textView = (TextView) ((LinearLayout) v).getChildAt(0);
 					autoCompView.setText(textView.getText());
-					((DrawerActivity) getActivity()).moveCamera(placeLocation.get(textView.getText()));
+					mCallback.moveCamera(placeLocation.get(textView.getText()));
 					InputMethodManager imm = (InputMethodManager)SimsContext.getContext().getSystemService(Service.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);					
 					//clearStoredLocations();

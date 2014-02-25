@@ -36,6 +36,7 @@ implements MessageDelegate,ErreurDelegate{
 	private LatLng mPosition;
 	private EditText editText;
 
+
 	OnNewMessageListener mCallback;
 	// Container Activity must implement this interface
 	public interface OnNewMessageListener {

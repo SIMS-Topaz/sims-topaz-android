@@ -19,11 +19,12 @@ import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.adapter.DrawerAdapter;
+import com.sims.topaz.interfaces.OnMoveCamera;
 import com.sims.topaz.network.modele.Message;
 
 
 public class DrawerActivity extends ActionBarActivity
-					implements EditMessageFragment.OnNewMessageListener{
+					implements EditMessageFragment.OnNewMessageListener,OnMoveCamera{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
     private DrawerLayout mDrawerLayout;
@@ -215,6 +216,7 @@ public class DrawerActivity extends ActionBarActivity
 		}
 	}
 	
+	@Override
 	public void moveCamera(LatLngBounds bounds) {
 		if (mMapFragment != null) {
 			mMapFragment.moveCamera(bounds);

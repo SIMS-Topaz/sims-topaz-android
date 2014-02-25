@@ -162,8 +162,8 @@ OnMapLoadedCallback
 
 		// Account banner
 		bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
-		
-		if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)) {
+		bannerNotVerified.setVisibility(TextView.GONE);
+		/*if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)) {
 			if(AuthUtils.getSessionBoolValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED, false)) {
 				bannerNotVerified.setVisibility(TextView.GONE);
 			} else {
@@ -171,7 +171,7 @@ OnMapLoadedCallback
 			}
 		} else {
 			bannerNotVerified.setVisibility(TextView.VISIBLE);
-		}
+		}*/
 		
 		return mView;
 

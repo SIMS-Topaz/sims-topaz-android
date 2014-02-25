@@ -178,7 +178,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 		} else {
 			mSignupButton.setEnabled(false);
 	    	User u = new User();
-	    	u.setName(username);
+	    	u.setUserName(username);
 	    	u.setEmail(email);
 	    	u.setPassword(password);
 	    	mRestModule.signupUser(u);	

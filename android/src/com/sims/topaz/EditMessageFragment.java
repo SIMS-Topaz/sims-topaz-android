@@ -127,7 +127,7 @@ implements MessageDelegate,ErreurDelegate{
 		message.setLongitude(mPosition.longitude);
 		message.setLatitude(mPosition.latitude);
 		message.setTimestamp(new Date().getTime());
-		message.setOwner(AuthUtils.getSessionStringValue
+		message.setUserName(AuthUtils.getSessionStringValue
 				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 		mRestModule.postMessage(message);
 	}

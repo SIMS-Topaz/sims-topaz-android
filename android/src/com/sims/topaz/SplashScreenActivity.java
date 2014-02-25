@@ -61,7 +61,7 @@ public class SplashScreenActivity extends Activity implements SignInDelegate, Er
 			String password = AuthUtils.getSessionStringValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD);
 			User user = new User();
 			user.setPassword(password);
-			user.setName(username);
+			user.setUserName(username);
 			mRestModule.signinUser(user);
 		}
 		TextView mWarningInternet = (TextView)findViewById(R.id.warning_internet);

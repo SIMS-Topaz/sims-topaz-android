@@ -54,7 +54,7 @@ public class CommentItem {
 	public CommentItem(Comment comment) {
 		super();
 		this.id = comment.getId();
-		this.user = comment.getOwner();
+		this.user = comment.getUserName();
 		this.commentText = comment.getText();
 		this.date = comment.getTimestamp();
 		this.icon = null;

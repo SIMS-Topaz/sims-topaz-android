@@ -121,7 +121,7 @@ public class CommentFragment extends Fragment
 		mSendCommentButton.setEnabled(false);
 		Comment comment = new Comment();
 		comment.setText(comm);
-		comment.setOwner(AuthUtils.getSessionStringValue
+		comment.setUserName(AuthUtils.getSessionStringValue
 				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 		restModule.postComment(comment, mMessage);
 		

@@ -146,7 +146,7 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 		if(AuthUtils.isValidUsername(user) && AuthUtils.isValidPassword(password, 6)) {
 			mLoginButton.setEnabled(false);
 			User u = new User();
-			u.setName(user);
+			u.setUserName(user);
 			u.setPassword(password);	
 			mRestModule.signinUser(u);
 			mCallback.onShowProgressBar();

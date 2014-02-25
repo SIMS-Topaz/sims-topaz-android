@@ -12,7 +12,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -41,10 +40,11 @@ public class NetworkRestModule {
 
 	//public static final String SERVER_URL = "http://topaz12.apiary.io/api/v1.2/";
 	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.2/";
+	//public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.2/";
 	
 	private Object delegate;
 	private static HttpClient httpclient;
-	
+
 	public NetworkRestModule(Object delegate) {
 		this.delegate = (Object) delegate;
 	}
@@ -362,7 +362,7 @@ public class NetworkRestModule {
 		private HttpResponse doResponse(String url) {
 
 			if(httpclient==null)
-				httpclient = new DefaultHttpClient(getHttpParams());
+				httpclient = new TopazHttpClient(getHttpParams());
 			HttpResponse response = null;
 
 			try {

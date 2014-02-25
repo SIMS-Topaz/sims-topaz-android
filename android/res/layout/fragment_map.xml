@@ -26,6 +26,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <ImageButton
+        android:id="@+id/my_map_location_button"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="14dp"
+        android:layout_gravity="bottom|left"
+        android:onClick="onMyLocation"
+        android:background="@drawable/selector_my_location"
+        android:contentDescription="@string/location_button"/>
+
     <FrameLayout
         android:id="@+id/edit_text"
         android:layout_width="match_parent"

@@ -220,5 +220,10 @@ public class DrawerActivity extends ActionBarActivity
 			mMapFragment.moveCamera(bounds);
 		}
 	}
+	public void onMyLocation(View v){
+		if (mMapFragment != null) {
+			mMapFragment.onMyLocation();
+		}
+	}
 
 }

@@ -69,7 +69,9 @@
 	<string name="comment_unlike">unlike icon</string>
 	<!--  PlaceSearch -->
 	<string name="search_hint">Enter location</string>
-	<!-- OK -->
+	<!-- Pop Up -->
 	<string name="ok">OK</string>
 	<string name="warning_network">Erreur connexion reseaux.</string>
+	<!-- Map -->
+	<string name="location_button">Ma position</string>
 </resources>

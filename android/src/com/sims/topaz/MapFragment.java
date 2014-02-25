@@ -13,6 +13,8 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -221,6 +223,7 @@ OnMapLoadedCallback
 					mMap.setOnMapLoadedCallback(this);
 					UiSettings settings = mMap.getUiSettings();
 					settings.setMyLocationButtonEnabled(false);
+					
 				}else{
 					Toast.makeText(SimsContext.getContext(),
 							getResources().getString(R.string.connection_error_unknown), 
@@ -496,5 +499,9 @@ OnMapLoadedCallback
 
 	public void moveCamera(LatLngBounds bounds) {
 		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,0));
+	}
+	
+	public void onMyLocation(){
+		LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
 	}
 }

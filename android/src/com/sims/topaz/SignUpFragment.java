@@ -209,6 +209,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 
 	@Override
 	public void apiError(ApiError error) {
+		NetworkRestModule.resetHttpClient();
 		mSignupButton.setEnabled(true);
 		mCallback.onHideProgressBar();
 		// Conflit

@@ -152,7 +152,7 @@ public class PlaceSearchFragment extends Fragment{
 					autoCompView.setText(textView.getText());
 					((DrawerActivity) getActivity()).moveCamera(placeLocation.get(textView.getText()));
 					clearStoredLocations();
-					 InputMethodManager imm = (InputMethodManager)SimsContext.getContext().getSystemService(Service.INPUT_METHOD_SERVICE);
+					InputMethodManager imm = (InputMethodManager)SimsContext.getContext().getSystemService(Service.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);
 					
 				}

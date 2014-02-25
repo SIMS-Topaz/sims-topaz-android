@@ -20,6 +20,7 @@ import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -150,6 +152,9 @@ public class PlaceSearchFragment extends Fragment{
 					autoCompView.setText(textView.getText());
 					((DrawerActivity) getActivity()).moveCamera(placeLocation.get(textView.getText()));
 					clearStoredLocations();
+					 InputMethodManager imm = (InputMethodManager)SimsContext.getContext().getSystemService(Service.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);
+					
 				}
 				
 			});

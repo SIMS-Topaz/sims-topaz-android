@@ -46,15 +46,9 @@
             android:id="@+id/banner_not_verified"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
-            android:layout_margin="8dp"
-            android:text="@string/auth_banner_not_verified" />
-=======
             android:text="@string/auth_banner_not_verified"
             android:layout_margin="8dp"
             android:visibility="gone" />
-
->>>>>>> 39fc0badd6564f403aadbeeedda04f449de62a3f
     </FrameLayout>
 
 </FrameLayout>

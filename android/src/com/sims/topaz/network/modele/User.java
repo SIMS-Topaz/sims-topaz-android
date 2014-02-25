@@ -10,7 +10,7 @@ public class User {
 	private Long id;
 	
 	@JsonProperty("user_name")
-	private String name;
+	private String user_name;
 	
 	@JsonProperty("user_password")
 	private String password;
@@ -28,8 +28,8 @@ public class User {
 		return id;
 	}
 	
-	public String getName() {
-		return name;
+	public String getUserName() {
+		return user_name;
 	}
 	
 	public String getPassword() {
@@ -48,8 +48,8 @@ public class User {
 		this.id = id;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setUserName(String name) {
+		this.user_name = name;
 	}
 	
 	public void setPassword(String password) {
@@ -67,7 +67,7 @@ public class User {
 	@Override
 	public String toString(){
 		return String.valueOf(id)+", "
-	+this.name + ", " + this.password + ", "+ this.email;
+	+this.user_name + ", " + this.password + ", "+ this.email;
 	}
 	
 }

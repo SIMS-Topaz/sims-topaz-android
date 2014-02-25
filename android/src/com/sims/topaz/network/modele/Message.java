@@ -18,8 +18,8 @@ public class Message {
 	
 	private String text;
 	
-	@JsonProperty("owner")
-	private String owner;
+	@JsonProperty("user_name")
+	private String user_name;
 	
 	private int likes=0;
 	
@@ -70,8 +70,8 @@ public class Message {
 		return id;
 	}
 	
-	public String getOwner() {
-		return owner;
+	public String getUserName() {
+		return user_name;
 	}
 	
 	public Double getLatitude() {
@@ -139,8 +139,8 @@ public class Message {
 		return comments;
 	}
 
-	public void setOwner(String owner) {
-		this.owner = owner;
+	public void setUserName(String owner) {
+		this.user_name = owner;
 	}
 	
 }

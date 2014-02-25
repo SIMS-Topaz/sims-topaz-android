@@ -1,9 +1,13 @@
 package com.sims.topaz.network.modele;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Comment {
 	
 	private Long id;
-	private String owner;
+	
+	@JsonProperty("user_name")
+	private String user_name;
 	private String text;
 	private Long timestamp;
 	
@@ -15,16 +19,16 @@ public class Comment {
 		this.text = text;
 	}
 
-	public void setOwner(String owner) {
-		this.owner = owner;
+	public void setUserName(String owner) {
+		this.user_name = owner;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public String getOwner() {
-		return owner;
+	public String getUserName() {
+		return user_name;
 	}
 
 	public String getText() {

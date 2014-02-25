@@ -17,7 +17,7 @@ public class Preview {
 	private String text;
 	
 	@JsonProperty("user_name")
-	private String owner;
+	private String user_name;
 	
 	@JsonProperty("is_full")
 	private Boolean isFull;
@@ -45,7 +45,7 @@ public class Preview {
 			this.text = message.getText();
 			this.isFull = true;
 		}
-		this.owner = message.getOwner();
+		this.user_name = message.getUserName();
 		this.timestamp = message.getTimestamp();
 		this.likes = message.getLikes();
 		this.dislikes = message.getDislikes();
@@ -95,7 +95,7 @@ public class Preview {
 		this.dislikes = dislikes;
 	}
 
-	public String getOwner() {
-		return owner;
+	public String getUserName() {
+		return user_name;
 	}
 }

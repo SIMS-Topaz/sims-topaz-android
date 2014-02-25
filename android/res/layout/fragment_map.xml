@@ -15,12 +15,10 @@
     <fragment
         android:id="@+id/place_search_text"
         android:name="com.sims.topaz.PlaceSearchFragment"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="60dp"
-        android:layout_marginTop="8dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_margin="8dp"
         tools:layout="@layout/fragment_place_search" />
 
     <!-- Do not remove this! If not the view is flickering on the tablet when the map is opened -->

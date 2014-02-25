@@ -15,7 +15,8 @@ import org.json.JSONObject;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.sims.topaz.R.color;
+import com.sims.topaz.utils.DebugUtils;
+import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 import android.app.Activity;
@@ -23,17 +24,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -41,7 +38,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class PlaceSearchFragment extends Fragment{
 	
@@ -61,13 +57,12 @@ public class PlaceSearchFragment extends Fragment{
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_place_search, container, false);
 		
 		autoCompView = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView);
+		autoCompView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		PlacesAutoCompleteAdapter adapter = new PlacesAutoCompleteAdapter(SimsContext.getContext(), 
 				R.layout.fragment_place_search, R.id.autoCompleteTextView);
-		//adapter.setNotifyOnChange(true);
 		autoCompView.setAdapter(adapter);
 		
 		Button clearText = (Button) view.findViewById(R.id.auto_clear_text);
@@ -95,7 +90,6 @@ public class PlaceSearchFragment extends Fragment{
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				
 				Button bt = (Button) getView().findViewById(R.id.auto_clear_text);
 				if (bt.getVisibility() == View.GONE) {
 					bt.setVisibility(View.VISIBLE);
@@ -104,14 +98,10 @@ public class PlaceSearchFragment extends Fragment{
 			
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// TODO Auto-generated method stub
-				
-			}
+					int after) {}
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				if (s.length() == 0) {
 					((Button) getView().findViewById(R.id.auto_clear_text)).setVisibility(View.GONE);
 				}
@@ -119,6 +109,7 @@ public class PlaceSearchFragment extends Fragment{
 
 		});
 	}
+	
 	
 	private class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 	    private ArrayList<String> resultList;
@@ -146,6 +137,7 @@ public class PlaceSearchFragment extends Fragment{
 	    		view = convertView;
 	    	}
 	    	mTextView = (TextView) view.findViewById(R.id.search_bar_text);
+	    	mTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
     		if (resultList.get(position) != null) {
     			mTextView.setText(resultList.get(position));
     		}
@@ -157,8 +149,6 @@ public class PlaceSearchFragment extends Fragment{
 					TextView textView = (TextView) ((LinearLayout) v).getChildAt(0);
 					autoCompView.setText(textView.getText());
 					((DrawerActivity) getActivity()).moveCamera(placeLocation.get(textView.getText()));
-					//textView.setBackgroundColor(color.black);
-					//autoCompView.setDropDownBackgroundResource(color.black);
 					clearStoredLocations();
 				}
 				
@@ -205,9 +195,7 @@ public class PlaceSearchFragment extends Fragment{
 	            }};
 	        return filter;
 	    }
-	    
-	    private static final String LOG_TAG = "place search";
-	    
+	    	    
 	    private static final String PLACES_API_BASE = "https://maps.google.com/maps/api/geocode";
 	    private static final String OUT_JSON = "/json";
 
@@ -233,10 +221,10 @@ public class PlaceSearchFragment extends Fragment{
 	                jsonResults.append(buff, 0, read);
 	            }
 	        } catch (MalformedURLException e) {
-	            Log.e(LOG_TAG, "Error processing Places API URL", e);
+	        	DebugUtils.log("PleaceSearchFragment: Error processing Places API URL"+ e);
 	            return resultList;
 	        } catch (IOException e) {
-	            Log.e(LOG_TAG, "Error connecting to Places API", e);
+	        	DebugUtils.log("PleaceSearchFragment: Error connecting to Places API"+ e);
 	            return resultList;
 	        } finally {
 	            if (conn != null) {
@@ -262,11 +250,11 @@ public class PlaceSearchFragment extends Fragment{
 		            	resultList.add(place);
 		            	placeLocation.put(place, new LatLngBounds(southwest,northeast));
 	                } else {
-	                	Log.e(LOG_TAG, "does not have JsonObject viewport");
+	                	DebugUtils.log("PleaceSearchFragment: does not have JsonObject viewport");
 	                }
 	            }
 	        } catch (JSONException e) {
-	            Log.e(LOG_TAG, "Cannot process JSON results", e);
+	        	DebugUtils.log("PleaceSearchFragment: Cannot process JSON results"+ e);
 	        }
 	        
 	        return resultList;

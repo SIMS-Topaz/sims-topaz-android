@@ -28,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -218,6 +219,8 @@ OnMapLoadedCallback
 					mMap.setInfoWindowAdapter(mBulleAdapter);
 					mMap.setOnCameraChangeListener(this);
 					mMap.setOnMapLoadedCallback(this);
+					UiSettings settings = mMap.getUiSettings();
+					settings.setMyLocationButtonEnabled(false);
 				}else{
 					Toast.makeText(SimsContext.getContext(),
 							getResources().getString(R.string.connection_error_unknown), 

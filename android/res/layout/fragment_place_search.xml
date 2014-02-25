@@ -2,24 +2,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/light_gray"
-    android:orientation="horizontal"
-    android:measureAllChildren="true" >
-        
-        <AutoCompleteTextView
-        	android:id="@+id/autoCompleteTextView"
-        	android:layout_weight="1"
-        	android:layout_width="0dp"
-        	android:layout_height="wrap_content"
-        	android:hint="@string/search_hint"
-        	android:popupBackground="@color/light_gray" />
-            
-            <Button
-            android:id="@+id/auto_clear_text"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:scaleType="fitXY"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/ic_clear_text" />
+    android:background="@drawable/background_rounded_corner"
+    android:measureAllChildren="true"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="@string/search_hint"
+        android:scaleType="centerInside"
+        android:layout_marginRight="4dp"
+        android:src="@drawable/ic_search" />
+
+    <AutoCompleteTextView
+        style="@style/text_dark_gray_big"
+        android:id="@+id/autoCompleteTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:hint="@string/search_hint"
+        android:popupBackground="@color/white" />
+
+    <Button
+        android:id="@+id/auto_clear_text"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/ic_clear_text"
+        android:scaleType="fitXY" />
 
 </LinearLayout>

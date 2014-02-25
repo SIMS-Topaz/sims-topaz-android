@@ -11,7 +11,7 @@
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:hint="@string/search_hint"
-        	android:popupBackground="@color/gray" />
+        	android:popupBackground="@color/light_gray" />
 
         <LinearLayout 
             android:layout_alignBottom="@+id/autoCompleteTextView"
@@ -28,5 +28,6 @@
             android:layout_gravity="center_vertical"
             android:background="@drawable/ic_clear_text" />
         </LinearLayout>
+
 
 </RelativeLayout>

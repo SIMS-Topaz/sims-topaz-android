@@ -22,16 +22,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -41,9 +43,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PlaceSearchFragment extends Fragment {
+public class PlaceSearchFragment extends Fragment{
 	
 	private AutoCompleteTextView autoCompView;
+	
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -113,12 +116,14 @@ public class PlaceSearchFragment extends Fragment {
 					((Button) getView().findViewById(R.id.auto_clear_text)).setVisibility(View.GONE);
 				}
 			}
+
 		});
 	}
 	
 	private class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 	    private ArrayList<String> resultList;
 	    private TextView mTextView;
+
 	    private HashMap<String,LatLngBounds> placeLocation = new HashMap<String,LatLngBounds>();
 	    
 	    public PlacesAutoCompleteAdapter(Context context, int resource, int textViewResourceId) {
@@ -161,6 +166,7 @@ public class PlaceSearchFragment extends Fragment {
 	    	return view;
 	    }
 	    
+
 	    @Override
 	    public int getCount() {
 	        return resultList.size();
@@ -204,6 +210,7 @@ public class PlaceSearchFragment extends Fragment {
 	    
 	    private static final String PLACES_API_BASE = "https://maps.google.com/maps/api/geocode";
 	    private static final String OUT_JSON = "/json";
+
 
 	    private ArrayList<String> autocomplete(String input) {
 	        ArrayList<String> resultList = null;
@@ -265,6 +272,7 @@ public class PlaceSearchFragment extends Fragment {
 	        return resultList;
 	    }
 	}
+
 
 	
 }

@@ -1,7 +1,9 @@
 package com.sims.topaz.network.modele;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Comment {
 	
 	private Long id;
@@ -9,6 +11,7 @@ public class Comment {
 	@JsonProperty("user_name")
 	private String user_name;
 	private String text;
+	@JsonProperty("date")
 	private Long timestamp;
 	
 	public Comment(){

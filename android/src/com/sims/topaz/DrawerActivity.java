@@ -1,15 +1,14 @@
 package com.sims.topaz;
 
-import com.sims.topaz.adapter.DrawerAdapter;
-import com.sims.topaz.network.modele.Message;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,7 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.support.v7.app.ActionBarActivity;  
+
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.sims.topaz.adapter.DrawerAdapter;
+import com.sims.topaz.network.modele.Message;
 
 
 public class DrawerActivity extends ActionBarActivity
@@ -210,6 +212,12 @@ public class DrawerActivity extends ActionBarActivity
 	public void onNewMessage(Message message) {
 		if(mMapFragment!=null) {
 			mMapFragment.onNewMessage(message);
+		}
+	}
+	
+	public void moveCamera(LatLngBounds bounds) {
+		if (mMapFragment != null) {
+			mMapFragment.moveCamera(bounds);
 		}
 	}
 

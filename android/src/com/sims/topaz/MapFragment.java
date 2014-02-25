@@ -2,23 +2,39 @@ package com.sims.topaz;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.InflateException;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.ClusterManager.OnClusterInfoWindowClickListener;
@@ -37,20 +53,6 @@ import com.sims.topaz.utils.LocationUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.TagUtils;
-
-import android.app.Dialog;
-import android.content.Intent;
-import android.location.Location;
-import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.view.InflateException;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class MapFragment extends Fragment 
@@ -154,6 +156,7 @@ OnMapLoadedCallback
 			}
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
+			e.printStackTrace();
 		}
 		
 
@@ -485,7 +488,7 @@ OnMapLoadedCallback
 		}
 	}
 
-	
-
-
+	public void moveCamera(LatLngBounds bounds) {
+		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,0));
+	}
 }

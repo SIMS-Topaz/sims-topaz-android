@@ -66,4 +66,7 @@
 	<string name="settings_a_propos_text">Version 1.0</string>
 	<string name="settings_msg_header">MESSAGES</string>
 	<string name="settings_msg_text">Visibilité</string>	
+	<string name="comment_unlike">unlike icon</string>
+	<!--  PlaceSearch -->
+	<string name="search_hint">Enter location</string>
 </resources>

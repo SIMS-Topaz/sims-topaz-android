@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="8dp"
+        android:ems="10"
         android:hint="@string/auth_username"
         android:nextFocusDown="@+id/sign_in_password"
         android:padding="4dp">

@@ -104,6 +104,7 @@ implements MessageDelegate,ErreurDelegate{
 		});
 		Button cancel = (Button) view.findViewById(R.id.button_cancel_message);
 		cancel.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		
 		cancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

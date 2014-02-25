@@ -93,11 +93,12 @@ public class CommentFragment extends Fragment
 		mLikeButton = (ImageButton)v.findViewById(R.id.comment_like);
 		mDislikeButton = (ImageButton)v.findViewById(R.id.comment_dislike);
 		mSendCommentButton = (ImageButton)v.findViewById(R.id.send_comment_button);
-		mSendCommentButton.setEnabled(false);
+		
 		mShareButton.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {shareMessage();}
 		});
+		
 		mLikeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {likeMessage();}
@@ -110,6 +111,7 @@ public class CommentFragment extends Fragment
 			@Override
 			public void onClick(View v) {sendComment();}
 		});
+		mSendCommentButton.setEnabled(false);
 		
 	}
 	
@@ -249,8 +251,8 @@ public class CommentFragment extends Fragment
 
 	@Override
 	public void apiError(ApiError error) {
-		// TODO Auto-generated method stub
-		
+		Toast.makeText(SimsContext.getContext(),SimsContext.getString(R.string.network_error),
+				Toast.LENGTH_SHORT).show();			
 	}
 	public void clearMessage(){
 		mNewComment.setText("");

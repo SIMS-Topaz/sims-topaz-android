@@ -16,6 +16,7 @@ public class Preview {
 	
 	private String text;
 	
+	@JsonProperty("user_name")
 	private String owner;
 	
 	@JsonProperty("is_full")

@@ -201,6 +201,7 @@ public class CommentFragment extends Fragment
 	public void afterGetMessage(Message message) {
 		if(message!=null) {
 			mMessage=message;
+			mFirstCommentNameUser.setText(message.getUserName());
 			mFirstComment.setText(message.getText());
 			mFirstCommentTimestamp.setText(DateFormat.format
 					(getString(R.string.date_format), 

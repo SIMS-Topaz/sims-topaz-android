@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -8,17 +8,11 @@
         
         <AutoCompleteTextView
         	android:id="@+id/autoCompleteTextView"
-        	android:layout_width="wrap_content"
+        	android:layout_weight="1"
+        	android:layout_width="0dp"
         	android:layout_height="wrap_content"
         	android:hint="@string/search_hint"
         	android:popupBackground="@color/light_gray" />
-
-        <LinearLayout 
-            android:layout_alignBottom="@+id/autoCompleteTextView"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/autoCompleteTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
             
             <Button
             android:id="@+id/auto_clear_text"
@@ -27,7 +21,5 @@
             android:scaleType="fitXY"
             android:layout_gravity="center_vertical"
             android:background="@drawable/ic_clear_text" />
-        </LinearLayout>
 
-
-</RelativeLayout>
+</LinearLayout>

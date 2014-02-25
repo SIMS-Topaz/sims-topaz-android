@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class CommentFragment extends Fragment
 	private ImageButton mLikeButton;
 	private ImageButton mDislikeButton;
 	private ImageButton mSendCommentButton;
+	private ProgressBar mProgressBar;
 	// The main message
 	private Message mMessage=null;
 	//intelligence
@@ -65,7 +67,8 @@ public class CommentFragment extends Fragment
 		mNewComment = (EditText)v.findViewById(R.id.write_comment_text);
 		mNewComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mListComments = (ListView)v.findViewById(R.id.comment_list);
-		
+		mProgressBar = (ProgressBar)v.findViewById(R.id.progressBar);
+		mProgressBar.setVisibility(View.VISIBLE);
 		//Set Like, Dislike and Share Buttons
 		setButtons(v);
 		
@@ -221,6 +224,7 @@ public class CommentFragment extends Fragment
 			initShareButton();
 			updateLikes();
 			displayComments();
+			mProgressBar.setVisibility(View.GONE);
 		}
 	}
 	

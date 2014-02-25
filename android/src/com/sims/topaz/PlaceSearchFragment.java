@@ -76,7 +76,7 @@ public class PlaceSearchFragment extends Fragment{
 				
 				if (autoCompView.getText().length() != 0) {
 					autoCompView.setText("");
-					((PlacesAutoCompleteAdapter) autoCompView.getAdapter()).clearStoredLocations();
+					//((PlacesAutoCompleteAdapter) autoCompView.getAdapter()).clearStoredLocations();
 					((Button) getView().findViewById(R.id.auto_clear_text)).setVisibility(View.GONE);
 				}
 			}
@@ -100,12 +100,21 @@ public class PlaceSearchFragment extends Fragment{
 			
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {}
+					int after) {
+				View v = getView().findViewById(autoCompView.getDropDownAnchor());
+				if (v != null ) {
+					v.setVisibility(View.GONE);
+				}
+			}
 			
 			@Override
 			public void afterTextChanged(Editable s) {
 				if (s.length() == 0) {
 					((Button) getView().findViewById(R.id.auto_clear_text)).setVisibility(View.GONE);
+				}
+				View v = getView().findViewById(autoCompView.getDropDownAnchor());
+				if (v != null ) {
+					v.setVisibility(View.VISIBLE);
 				}
 			}
 
@@ -151,10 +160,13 @@ public class PlaceSearchFragment extends Fragment{
 					TextView textView = (TextView) ((LinearLayout) v).getChildAt(0);
 					autoCompView.setText(textView.getText());
 					((DrawerActivity) getActivity()).moveCamera(placeLocation.get(textView.getText()));
-					clearStoredLocations();
 					InputMethodManager imm = (InputMethodManager)SimsContext.getContext().getSystemService(Service.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);
-					
+					imm.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);					
+					//clearStoredLocations();
+					View dropdown = getActivity().findViewById(autoCompView.getDropDownAnchor());
+					if (dropdown != null) {
+						dropdown.setVisibility(View.GONE);
+					}
 				}
 				
 			});

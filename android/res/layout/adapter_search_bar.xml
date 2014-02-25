@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     android:layout_width="wrap_content"
+     android:layout_width="match_parent"
      android:layout_height="wrap_content"
      android:orientation="vertical" >
      
      <TextView 
          android:textColor="#00f"
+         android:textSize="25sp"
+         android:typeface="serif"
          android:background="@color/gray"
-         android:layout_width="wrap_content"
+         android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:id="@+id/search_bar_text" />
-     
-     <!-- style="@style/text_black_normal" -->
+    
      
  </LinearLayout>

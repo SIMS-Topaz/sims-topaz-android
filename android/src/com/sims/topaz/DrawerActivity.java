@@ -5,6 +5,7 @@ import org.w3c.dom.Comment;
 
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.utils.SimsContext;
@@ -213,9 +214,9 @@ public class DrawerActivity extends FragmentActivity
 		}
 	}
 	
-	public void moveCamera(LatLng latLng) {
+	public void moveCamera(LatLngBounds bounds) {
 		if (mMapFragment != null) {
-			mMapFragment.moveCamera(latLng);
+			mMapFragment.moveCamera(bounds);
 		}
 	}
 }

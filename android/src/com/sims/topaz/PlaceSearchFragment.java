@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.R.color;
 import com.sims.topaz.utils.SimsContext;
 
@@ -61,7 +62,7 @@ public class PlaceSearchFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_place_search, container, false);
 		
 		autoCompView = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView);
-		final PlacesAutoCompleteAdapter adapter = new PlacesAutoCompleteAdapter(SimsContext.getContext(), 
+		PlacesAutoCompleteAdapter adapter = new PlacesAutoCompleteAdapter(SimsContext.getContext(), 
 				R.layout.fragment_place_search, R.id.autoCompleteTextView);
 		//adapter.setNotifyOnChange(true);
 		autoCompView.setAdapter(adapter);
@@ -72,10 +73,10 @@ public class PlaceSearchFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (!autoCompView.getText().equals("")) {
+				
+				if (autoCompView.getText().length() != 0) {
 					autoCompView.setText("");
-					adapter.clearStoredLocations();
+					((PlacesAutoCompleteAdapter) autoCompView.getAdapter()).clearStoredLocations();
 					((Button) getView().findViewById(R.id.auto_clear_text)).setVisibility(View.GONE);
 				}
 			}
@@ -91,7 +92,7 @@ public class PlaceSearchFragment extends Fragment {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
+				
 				Button bt = (Button) getView().findViewById(R.id.auto_clear_text);
 				if (bt.getVisibility() == View.GONE) {
 					bt.setVisibility(View.VISIBLE);
@@ -118,14 +119,16 @@ public class PlaceSearchFragment extends Fragment {
 	private class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 	    private ArrayList<String> resultList;
 	    private TextView mTextView;
-	    private HashMap<String,LatLng> placeLocation = new HashMap<String,LatLng>();
+	    private HashMap<String,LatLngBounds> placeLocation = new HashMap<String,LatLngBounds>();
 	    
 	    public PlacesAutoCompleteAdapter(Context context, int resource, int textViewResourceId) {
 	        super(context, resource, textViewResourceId);
 	    }
 	    
 	    public void clearStoredLocations() {
-	    	this.placeLocation.clear();
+	    	if (!this.placeLocation.isEmpty()) {
+	    		this.placeLocation.clear();
+	    	}
 	    }
 	    
 	    @Override
@@ -197,7 +200,7 @@ public class PlaceSearchFragment extends Fragment {
 	        return filter;
 	    }
 	    
-	    private static final String LOG_TAG = "Topaz-Android";
+	    private static final String LOG_TAG = "place search";
 	    
 	    private static final String PLACES_API_BASE = "https://maps.google.com/maps/api/geocode";
 	    private static final String OUT_JSON = "/json";
@@ -243,10 +246,17 @@ public class PlaceSearchFragment extends Fragment {
 	            resultList = new ArrayList<String>(predsJsonArray.length());
 	            for (int i = 0; i < predsJsonArray.length(); i++) {
 	                String place = predsJsonArray.getJSONObject(i).getString("formatted_address");
-	                double lat = predsJsonArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lat");
-	                double lng = predsJsonArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lng");
-	            	resultList.add(place);
-	            	placeLocation.put(place, new LatLng(lat,lng));
+	                JSONObject ancester = predsJsonArray.getJSONObject(i).getJSONObject("geometry").getJSONObject("viewport");
+	                if (ancester != null) {
+	                	LatLng southwest = new LatLng(ancester.getJSONObject("southwest").getDouble("lat"), 
+		                		ancester.getJSONObject("southwest").getDouble("lng"));
+		                LatLng northeast = new LatLng(ancester.getJSONObject("northeast").getDouble("lat"), 
+		                		ancester.getJSONObject("northeast").getDouble("lng"));
+		            	resultList.add(place);
+		            	placeLocation.put(place, new LatLngBounds(southwest,northeast));
+	                } else {
+	                	Log.e(LOG_TAG, "does not have JsonObject viewport");
+	                }
 	            }
 	        } catch (JSONException e) {
 	            Log.e(LOG_TAG, "Cannot process JSON results", e);

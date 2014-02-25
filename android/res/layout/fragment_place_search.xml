@@ -5,14 +5,14 @@
     android:background="@drawable/background_rounded_corner"
     android:measureAllChildren="true"
     android:orientation="horizontal" >
-
+ 
     <ImageView
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:contentDescription="@string/search_hint"
         android:scaleType="centerInside"
         android:layout_marginRight="4dp"
-        android:src="@drawable/ic_search" />
+        android:src="@drawable/ic_search" /> 
 
     <AutoCompleteTextView
         style="@style/text_dark_gray_big"
@@ -22,7 +22,9 @@
         android:layout_weight="1"
         android:background="@color/white"
         android:hint="@string/search_hint"
-        android:popupBackground="@color/white" />
+        android:dropDownVerticalOffset="12dp"
+        android:dropDownHorizontalOffset="-52dp"
+        android:dropDownWidth="match_parent" />
 
     <Button
         android:id="@+id/auto_clear_text"

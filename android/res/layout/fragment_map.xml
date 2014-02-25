@@ -20,7 +20,6 @@
         android:layout_gravity="top|center_horizontal"
         android:layout_margin="8dp"
         tools:layout="@layout/fragment_place_search" />
-
     <!-- Do not remove this! If not the view is flickering on the tablet when the map is opened -->
 
     <View
@@ -44,8 +43,8 @@
             android:id="@+id/banner_not_verified"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/auth_banner_not_verified"
             android:layout_margin="8dp"
+            android:text="@string/auth_banner_not_verified"
             android:visibility="gone" />
     </FrameLayout>
 

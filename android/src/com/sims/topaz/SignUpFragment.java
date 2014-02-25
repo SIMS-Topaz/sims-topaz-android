@@ -1,6 +1,7 @@
 package com.sims.topaz;
 
 
+import com.sims.topaz.interfaces.OnVisibilityProgressBar;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
@@ -10,6 +11,7 @@ import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.AuthUtils;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,6 +41,24 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 	private TextView emailError;
 	private TextView passwordError;
 	private TextView confirmpasswordError;
+	private OnVisibilityProgressBar mCallback;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mCallback = (OnVisibilityProgressBar) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnNewMessageListener");
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mCallback = null;
+	}
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -181,14 +201,17 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 	    	u.setUserName(username);
 	    	u.setEmail(email);
 	    	u.setPassword(password);
-	    	mRestModule.signupUser(u);	
+	    	mRestModule.signupUser(u);
+	    	mCallback.onShowProgressBar();
 		}
 		
 	}
 
 	@Override
 	public void apiError(ApiError error) {
+		NetworkRestModule.resetHttpClient();
 		mSignupButton.setEnabled(true);
+		mCallback.onHideProgressBar();
 		// Conflit
 		if(error.getCode().equals(409)) {
 			if(error.getMsg().equals("EMAIL_ERR")) {
@@ -204,12 +227,14 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 	@Override
 	public void networkError() {
 		mSignupButton.setEnabled(true);
+		mCallback.onHideProgressBar();
 		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void afterSignUp(User user) {
 		mSignupButton.setEnabled(true);
+		mCallback.onHideProgressBar();
 		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString(), user.getVerified());
 		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
 		startActivity(intent);

@@ -75,7 +75,8 @@
                 android:id="@+id/go_to_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Go to map (temporary)" />
+                android:text="Go to map (temporary)"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 

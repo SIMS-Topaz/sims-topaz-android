@@ -169,10 +169,10 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 
 	@Override
 	public void apiError(ApiError error) {
+		NetworkRestModule.resetHttpClient();
 		mLoginButton.setEnabled(true);
 		mCallback.onHideProgressBar();
 		Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
-
 
 		// Auth error
 		if(error.getCode().equals(401)) {
@@ -191,6 +191,7 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 	@Override
 	public void networkError() {
 		mLoginButton.setEnabled(true);
+		mCallback.onHideProgressBar();
 		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
 	}
 

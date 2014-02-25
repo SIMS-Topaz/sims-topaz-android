@@ -40,6 +40,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.ClusterManager.OnClusterInfoWindowClickListener;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.sims.topaz.adapter.BulleAdapter;
+import com.sims.topaz.modele.PreviewClusterItem;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
@@ -162,7 +163,8 @@ OnMapLoadedCallback
 
 		// Account banner
 		bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
-		
+		/*
+		 * Removed for  Run 2
 		if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)) {
 			if(AuthUtils.getSessionBoolValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED, false)) {
 				bannerNotVerified.setVisibility(TextView.GONE);
@@ -171,7 +173,7 @@ OnMapLoadedCallback
 			}
 		} else {
 			bannerNotVerified.setVisibility(TextView.VISIBLE);
-		}
+		}*/
 		
 		return mView;
 
@@ -340,9 +342,10 @@ OnMapLoadedCallback
 
 	@Override
 	public void networkError() {
-		Toast.makeText(getActivity(),
-				getResources().getString(R.string.network_error),
-				Toast.LENGTH_SHORT).show();
+		Toast.makeText(SimsContext.getContext(),SimsContext.getString(R.string.network_error),
+				Toast.LENGTH_SHORT).show();	
+		/*WarningDialogFragment dialog = new WarningDialogFragment();
+		dialog.show(getFragmentManager(), "No internet connexion");*/
 
 	}
 	//Our Server call listeners----------------------------------------------------------------------------

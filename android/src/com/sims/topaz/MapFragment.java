@@ -341,9 +341,8 @@ OnMapLoadedCallback
 
 	@Override
 	public void networkError() {
-		Toast.makeText(getActivity(),
-				getResources().getString(R.string.network_error),
-				Toast.LENGTH_SHORT).show();
+		WarningDialogFragment dialog = new WarningDialogFragment();
+		dialog.show(getFragmentManager(), "No internet connexion");
 
 	}
 	//Our Server call listeners----------------------------------------------------------------------------

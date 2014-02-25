@@ -13,7 +13,6 @@ import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
-import com.sims.topaz.utils.SimsContext;
 
 import android.app.Activity;
 import android.content.Context;

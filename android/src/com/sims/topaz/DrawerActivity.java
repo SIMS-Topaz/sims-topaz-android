@@ -166,11 +166,13 @@ public class DrawerActivity extends ActionBarActivity
 			break;
 		}
     	
-		fragmentManager
-		.beginTransaction()
-		.replace(R.id.content_frame, mLastFragment)
-		.addToBackStack(null)
-		.commit();
+    	if(!mLastFragment.equals(mMapFragment)){
+			fragmentManager
+			.beginTransaction()
+			.replace(R.id.content_frame, mLastFragment)
+			.addToBackStack(null)
+			.commit();
+    	}
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);

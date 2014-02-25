@@ -24,6 +24,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.ClusterManager.OnClusterInfoWindowClickListener;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.sims.topaz.adapter.BulleAdapter;
+import com.sims.topaz.modele.PreviewClusterItem;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;

@@ -7,7 +7,7 @@ import com.sims.topaz.network.modele.Preview;
 public class PreviewClusterItem implements ClusterItem {
     private final LatLng mPosition;
     private Preview preview;
-    private String tag;
+    private String tag="";
 
     public PreviewClusterItem(Preview preview) {
     	this.preview = preview;

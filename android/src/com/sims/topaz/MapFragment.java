@@ -341,8 +341,10 @@ OnMapLoadedCallback
 
 	@Override
 	public void networkError() {
-		WarningDialogFragment dialog = new WarningDialogFragment();
-		dialog.show(getFragmentManager(), "No internet connexion");
+		Toast.makeText(SimsContext.getContext(),SimsContext.getString(R.string.network_error),
+				Toast.LENGTH_SHORT).show();	
+		/*WarningDialogFragment dialog = new WarningDialogFragment();
+		dialog.show(getFragmentManager(), "No internet connexion");*/
 
 	}
 	//Our Server call listeners----------------------------------------------------------------------------

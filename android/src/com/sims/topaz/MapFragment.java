@@ -498,10 +498,14 @@ OnMapLoadedCallback
 	}
 
 	public void moveCamera(LatLngBounds bounds) {
-		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,0));
+		if(mMap!=null){
+			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,0));
+		}
 	}
 	
 	public void onMyLocation(){
-		LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
+		if(mMap!=null){
+			LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
+		}
 	}
 }

@@ -1,18 +1,29 @@
 package com.sims.topaz;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.opengl.Visibility;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,6 +41,7 @@ import com.sims.topaz.network.modele.Comment;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
@@ -40,6 +52,7 @@ public class CommentFragment extends Fragment
 	private TextView mFirstComment;
 	private TextView mFirstCommentNameUser;
 	private TextView mFirstCommentTimestamp;
+	private ImageView mFirstCommentPicture;
 	private EditText mNewComment;
 	private ListView mListComments;
 	private ImageButton mShareButton;
@@ -64,6 +77,8 @@ public class CommentFragment extends Fragment
 		mFirstCommentNameUser.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mFirstCommentTimestamp = (TextView) v.findViewById(R.id.comment_time);
 		mFirstCommentTimestamp.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		mFirstCommentPicture = (ImageView) v.findViewById(R.id.comment_first_picture_view);
+		mFirstCommentPicture.setVisibility(View.GONE);
 		mNewComment = (EditText)v.findViewById(R.id.write_comment_text);
 		mNewComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mListComments = (ListView)v.findViewById(R.id.comment_list);
@@ -220,6 +235,11 @@ public class CommentFragment extends Fragment
 			mFirstCommentTimestamp.setText(DateFormat.format
 					(getString(R.string.date_format), 
 							new Date( message.getTimestamp() ) ) );
+			
+			if(message.getPictureUrl() != null && !message.getPictureUrl().isEmpty()) {
+				new LoadPictureTask(message.getPictureUrl()).execute();
+			}
+			
 			initLikeButtons();
 			initShareButton();
 			updateLikes();
@@ -318,5 +338,33 @@ public class CommentFragment extends Fragment
 		mNewComment.setEnabled(true);
 		mSendCommentButton.setEnabled(true);
 	}
+	
+	private class LoadPictureTask extends AsyncTask<URL, Integer, Boolean> {
+		
+		String url;
+		
+		public LoadPictureTask(String url) {
+			this.url = url;
+		}
+		
+		protected Boolean doInBackground(URL... urls) {
+	        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+	        try {
+				InputStream is = (InputStream) new URL(url).getContent();
+				final Drawable d = Drawable.createFromStream(is, "picture");
+				getActivity().runOnUiThread(new Runnable() {
+				     @Override
+				     public void run() {
+				    	 mFirstCommentPicture.setImageDrawable(d);
+				    	 mFirstCommentPicture.setVisibility(View.VISIBLE);
+				    }
+				});
+			} catch (Exception e) {
+				DebugUtils.logException(e);
+				Log.e("TAG", Log.getStackTraceString(e));
+			}
+			return true;
+	     }
+	 }
 
 }

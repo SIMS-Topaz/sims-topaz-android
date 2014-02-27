@@ -18,6 +18,8 @@ public class Message {
 	
 	private String text;
 	
+	private String pictureUrl;
+	
 	@JsonProperty("user_name")
 	private String user_name;
 	
@@ -141,6 +143,14 @@ public class Message {
 
 	public void setUserName(String owner) {
 		this.user_name = owner;
+	}
+	
+	public String getPictureUrl() {
+		return pictureUrl;
+	}
+	
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
 	}
 	
 }

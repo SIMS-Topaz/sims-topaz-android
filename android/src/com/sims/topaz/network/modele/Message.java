@@ -18,6 +18,7 @@ public class Message {
 	
 	private String text;
 	
+	@JsonProperty("picture_url")
 	private String pictureUrl;
 	
 	@JsonProperty("user_name")

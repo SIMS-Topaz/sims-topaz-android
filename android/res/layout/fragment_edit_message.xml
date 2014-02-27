@@ -13,18 +13,39 @@
         android:layout_height="wrap_content"
         android:text="@string/edit_message_prompt" />
 
-    <EditText
-        android:id="@+id/editMessage"
-        style="@style/text_gray_normal"
+
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textAutoCorrect|textMultiLine" >
+        android:layout_height="wrap_content" >
+        
+        <EditText
+            android:id="@+id/editMessage"
+            style="@style/text_gray_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/edit_message_image_view"
+            android:ems="10"
+            android:inputType="textAutoCorrect|textMultiLine" >
 
-        <requestFocus />
-    </EditText>
+	        <requestFocus />
+	    </EditText>
 
-    <LinearLayout
+	    <ImageView
+	        android:id="@+id/edit_message_image_view"
+	        android:layout_width="50dp"
+	        android:layout_height="40dp"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentTop="true"
+	        android:src="@drawable/camera" />
+    
+    </RelativeLayout>
+
+
+
+   <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -35,11 +56,13 @@
             android:layout_height="wrap_content"
             android:text="@string/edit_message_cancel" />
 
+
         <Button
             android:id="@+id/button_send_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/edit_message_send" />
     </LinearLayout>
+
 
 </LinearLayout>

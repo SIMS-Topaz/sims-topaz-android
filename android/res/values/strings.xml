@@ -74,4 +74,8 @@
 	<string name="warning_network">Erreur connexion reseaux.</string>
 	<!-- Map -->
 	<string name="location_button">Ma position</string>
+	<!-- Selection d'images -->
+	<string name="select_img_take_photo">Prendre une photo</string>
+	<string name="select_img_from_lib">Image enregistrée</string>
+	<string name="select_img_close">Annuler</string>
 </resources>

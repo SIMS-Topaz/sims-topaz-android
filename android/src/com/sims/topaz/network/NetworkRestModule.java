@@ -1,9 +1,17 @@
 package com.sims.topaz.network;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -11,11 +19,25 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.FormBodyPart;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.InputStreamBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.bouncycastle.crypto.tls.ContentType;
 
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -39,8 +61,9 @@ public class NetworkRestModule {
 
 
 	//public static final String SERVER_URL = "http://topaz12.apiary.io/api/v1.2/";
-	//public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.2/";
 	public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.2/";
+	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
+	
 	
 	private Object delegate;
 	private static HttpClient httpclient;
@@ -90,13 +113,14 @@ public class NetworkRestModule {
 	 * La fin de la requete appellera afterPostMessage() (interface NetworkDelegate)
 	 * @param message le message à poster
 	 */
-	public void postMessage(Message message) {
+	public void postMessage(Message message, byte[] pictureData) {
 		String url = SERVER_URL + "post_message";
 		DebugUtils.log("Network postMessage url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			rest.setJSONParam(mapper.writeValueAsString(message));
+			rest.setByteData(pictureData);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -293,7 +317,12 @@ public class NetworkRestModule {
 		// socket timeout, in milliseconds (waiting for data)
 		private static final int SOCKET_TIMEOUT = 5000;
 
+		private NetworkRestModule module;
+		private String url;
+		private TypeRequest typeRequest;
+		
 		private Boolean isPost = false;
+		private byte[] byteData = null;
 		
 		/*
 		 * JSON object for POST
@@ -305,11 +334,10 @@ public class NetworkRestModule {
 			objectParam = object;
 	    }
 		
-		private NetworkRestModule module;
-		private String url;
-		private TypeRequest typeRequest;
-		
-		
+		public void setByteData(byte[] data) {
+			byteData = data;
+	    }
+
 		public RESTTask(NetworkRestModule module, String url, TypeRequest typeRequest) {
 			this.module = module;
 			this.url = url;
@@ -368,10 +396,23 @@ public class NetworkRestModule {
 			try {
 				if(isPost) {
 					HttpPost httppost = new HttpPost(url);
-					httppost.setEntity((HttpEntity) new StringEntity(objectParam, "UTF8"));
-					httppost.setHeader("Content-type", "application/json");
+					
+				    if(byteData != null) {
+					    MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();        
+					    multipartEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+					    multipartEntity.addTextBody("json", objectParam, org.apache.http.entity.ContentType.APPLICATION_JSON);
+	                    ByteArrayBody bab = new ByteArrayBody(byteData, "image");
+	                    multipartEntity.addPart("file", bab);
+	                    httppost.setEntity(multipartEntity.build());
+				    } else {
+					    /* TODO enlever le else pour la v1.3 */
+						httppost.setEntity((HttpEntity) new StringEntity(objectParam, "UTF8"));
+						httppost.setHeader("Content-type", "application/json");
+				    }
+				    
 					response = httpclient.execute(httppost);
-					DebugUtils.log( "post = " + objectParam);
+					DebugUtils.log( "post = " + objectParam);			    
+				    
 				} else {
 					HttpGet httpget = new HttpGet(url);
 					response = httpclient.execute(httpget);

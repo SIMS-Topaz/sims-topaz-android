@@ -1,5 +1,6 @@
 package com.sims.topaz;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -15,8 +16,19 @@ import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,16 +38,20 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditMessageFragment extends Fragment
 implements MessageDelegate,ErreurDelegate{
 
+	private final static int SELECT_FILE = 10;
+	private final static int REQUEST_CAMERA = 11;
+	
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private LatLng mPosition;
 	private EditText editText;
-
+	private ImageView editImageView;
 
 	OnNewMessageListener mCallback;
 	// Container Activity must implement this interface
@@ -44,6 +60,7 @@ implements MessageDelegate,ErreurDelegate{
 	}
 
 	private int savedSoftInputMode;
+	private byte[] pictureData;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -87,7 +104,9 @@ implements MessageDelegate,ErreurDelegate{
 		mTextTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		editText = (EditText) view.findViewById(R.id.editMessage);
 		editText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		editImageView = (ImageView) view.findViewById(R.id.edit_message_image_view);
 		setUpButtons(view);
+		pictureData = null;
 		return view;
 	}    
 
@@ -112,6 +131,13 @@ implements MessageDelegate,ErreurDelegate{
 				getFragmentManager().popBackStack();
 			}
 		});
+
+		editImageView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				selectImage();
+			}
+		});
 	}
 
 	protected void closeKeyboard() {
@@ -130,7 +156,7 @@ implements MessageDelegate,ErreurDelegate{
 		message.setTimestamp(new Date().getTime());
 		message.setUserName(AuthUtils.getSessionStringValue
 				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
-		mRestModule.postMessage(message);
+		mRestModule.postMessage(message, pictureData);
 	}
 
 	@Override
@@ -154,5 +180,74 @@ implements MessageDelegate,ErreurDelegate{
 
 	public void apiError(ApiError error) {}
 
+	
+	private void selectImage() {
+        final CharSequence[] items = { getString(R.string.select_img_take_photo), getString(R.string.select_img_from_lib), getString(R.string.select_img_close) };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+        builder.setTitle(R.string.edit_add_image);
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (item == 0) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else if (item == 1) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(Intent.createChooser(intent, ""), SELECT_FILE);
+                } else if (item == 2) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+        	
+            if (requestCode == SELECT_FILE) {
+                Uri selectedImageUri = data.getData();
+                String picturePath = getPath(selectedImageUri, this.getActivity());
+                Bitmap bm = BitmapFactory.decodeFile(picturePath);
+                editImageView.setImageBitmap(bm);
+                
+                // Get data
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                
+                int maxWidth = 1024;
+                double aspectRatio = (double) bm.getHeight() / (double) bm.getWidth();
+                int targetHeight = (int) (maxWidth * aspectRatio);
+                
+                bm = Bitmap.createScaledBitmap(bm, maxWidth, targetHeight, true);
+                bm.compress(CompressFormat.JPEG, 85, bos);
+                pictureData = bos.toByteArray();
+                
+            } else if (requestCode == REQUEST_CAMERA) {
+            	
+                Bundle extras = data.getExtras();
+                Bitmap bm = (Bitmap) extras.get("data");
+                editImageView.setImageBitmap(bm);
+
+                // Get data
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bm.compress(CompressFormat.JPEG, 75, bos);
+                pictureData = bos.toByteArray();
+            }
+        }
+    }
+	
+	public String getPath(Uri uri, Activity activity) {
+        String[] projection = { MediaColumns.DATA };
+        Cursor cursor = activity.getContentResolver().query(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
 
 }

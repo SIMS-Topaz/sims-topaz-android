@@ -396,7 +396,7 @@ OnMapLoadedCallback
 		@Override
 		protected boolean shouldRenderAsCluster(Cluster cluster) {
 			// Always render clusters.
-			return cluster.getSize() > 5;
+			return cluster.getSize() > 1;
 		}
 	}
 
@@ -412,6 +412,7 @@ OnMapLoadedCallback
 	@Override
 	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
 		mBulleAdapter.setIsCluster(true);
+		mBulleAdapter.setCluster(cluster);
 		return false;
 	}
 	@Override

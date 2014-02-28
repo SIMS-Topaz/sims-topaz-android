@@ -6,8 +6,8 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/bulle_cluster_note"
-        style="@style/text_gray_small"
+        android:id="@+id/bulle_cluster_votes"
+        style="@style/text_black_small"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -15,12 +15,11 @@
         android:text="@string/bulle_loyen_cluster" />
         
     <TextView
-        android:id="@+id/bulle_cluster_moyen_note"
+        android:id="@+id/bulle_cluster_text"
         style="@style/text_gray_small"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:padding="5dp"
-        android:text="7.5/10" />
+        android:padding="5dp" />
 
 </LinearLayout>

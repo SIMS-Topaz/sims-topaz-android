@@ -41,8 +41,8 @@ import com.sims.topaz.utils.DebugUtils;
 public class NetworkRestModule {
 
 
-	//public static final String SERVER_URL = "http://topaz12.apiary.io/api/v1.2/";
-	public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.2/";
+	public static final String SERVER_URL = "http://topaz12.apiary.io/api/v1.2/";
+	//public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
 	
 	

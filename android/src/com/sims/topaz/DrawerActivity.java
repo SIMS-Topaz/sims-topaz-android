@@ -148,14 +148,19 @@ public class DrawerActivity extends ActionBarActivity
 	private void selectItem(int position) {
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	fragmentManager.beginTransaction().remove(mLastFragment);
+    	boolean change = true;
+    	
     	switch (position) {
     	case 0:
     		mLastFragment = new UserFragment();
     		break;
 		case 1:
-			mLastFragment = mMapFragment;		
+			//TODO make the search by tag fragment here
 			break;
 		case 2:
+			if(mLastFragment instanceof MapFragment){
+				change = false;
+			}
 			mLastFragment = mMapFragment;		
 			break;
 		case 3:
@@ -168,7 +173,7 @@ public class DrawerActivity extends ActionBarActivity
 			break;
 		}
     	
-    	if(!mLastFragment.equals(mMapFragment)){
+    	if(change){
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.content_frame, mLastFragment)

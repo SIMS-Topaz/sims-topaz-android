@@ -22,11 +22,16 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 	private WeakReference<Context> delegate;
 	public DrawerAdapter(Context mDelegate, int resource, String[] mDrawerTitles) {
 		super(mDelegate, resource, mDrawerTitles);
-		this.titles = new String[3];
+		this.titles = new String[5];
 		this.titles = mDrawerTitles;
 		this.delegate = new WeakReference<Context>(mDelegate);
 	}	
 
+	@Override
+	public int getCount() {
+		return titles.length;
+	}
+	
 	@SuppressWarnings("deprecation")
 	public View getView(int position, View convertView, ViewGroup parent){
 		View view = convertView;

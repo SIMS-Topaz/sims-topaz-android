@@ -396,7 +396,7 @@ OnMapLoadedCallback
 		@Override
 		protected boolean shouldRenderAsCluster(Cluster cluster) {
 			// Always render clusters.
-			return cluster.getSize() > 1;
+			return cluster.getSize() > 5;
 		}
 	}
 
@@ -462,6 +462,7 @@ OnMapLoadedCallback
 		mCurrentCameraPosition = mMap.getCameraPosition();
 		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
 		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+		LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
 	}
 	/**
 	 * Verify that Google Play services is available before making a request.

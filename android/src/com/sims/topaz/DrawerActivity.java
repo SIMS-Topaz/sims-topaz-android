@@ -38,12 +38,7 @@ public class DrawerActivity extends ActionBarActivity
     private String[] mViewsTitles;
     private MapFragment mMapFragment;
     private Fragment mLastFragment;
-     
-    public boolean isTablet() {
-        boolean xlarge = ((SimsContext.getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
-        boolean large = ((SimsContext.getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
-        return (xlarge || large);
-    }
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +46,6 @@ public class DrawerActivity extends ActionBarActivity
         setContentView(R.layout.drawer_list);
         mLastFragment = mMapFragment = new MapFragment();       
         setDrawer(savedInstanceState);   
-		if(isTablet()){
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		}else{
-			setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		}
     }
     
 

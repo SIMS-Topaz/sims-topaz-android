@@ -17,7 +17,6 @@ import com.sims.topaz.utils.MyTypefaceSingleton;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;

@@ -13,8 +13,6 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,11 +48,9 @@ import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
-import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.InternetConnectionUtils;
 import com.sims.topaz.utils.LocationUtils;
-import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.TagUtils;
 

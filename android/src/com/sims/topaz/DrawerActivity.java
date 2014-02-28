@@ -1,7 +1,6 @@
 package com.sims.topaz;
 
 
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -22,7 +21,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.interfaces.OnMoveCamera;
 import com.sims.topaz.network.modele.Message;
-import com.sims.topaz.utils.SimsContext;
 
 
 public class DrawerActivity extends ActionBarActivity

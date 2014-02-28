@@ -1,7 +1,5 @@
 package com.sims.topaz.adapter;
 
-
-import java.lang.ref.WeakReference;
 import java.sql.Date;
 import java.util.List;
 
@@ -17,12 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class CommentAdapter extends ArrayAdapter<CommentItem>  {
-	private WeakReference<Context> delegate;
 	
 	private int count = 0;
 	public CommentAdapter(Context mDelegate, int resource, List<CommentItem> commentsList) {
 		super(mDelegate, resource, commentsList);
-		delegate = new WeakReference<Context>(mDelegate);
 		count = commentsList.size();
 	}	
 	

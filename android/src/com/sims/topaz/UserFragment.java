@@ -113,12 +113,6 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		DebugUtils.log("UserFragment_networkError");
 	}
 
-	@Override
-	public void afterGetUserInfo(User user) {
-		mUserSnippetTextView.setText(user.getStatus());
-		mUserTextView.setText(user.getUserName());
-		mProgressBar.setVisibility(View.GONE);
-	}
 	
 	
 	//Image selector	
@@ -193,5 +187,17 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+
+	@Override
+	public void afterGetUserInfo(User user) {
+		mUserSnippetTextView.setText(user.getStatus());
+		mUserTextView.setText(user.getUserName());
+		mProgressBar.setVisibility(View.GONE);
+	}
+	@Override
+	public void afterPostUserInfo(User user) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

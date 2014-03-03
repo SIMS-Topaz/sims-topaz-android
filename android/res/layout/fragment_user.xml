@@ -48,7 +48,7 @@
 
         <android.support.v4.view.PagerTitleStrip
             android:id="@+id/pager_title_strip"
-            style="@style/text_gray_normal"
+            style="@style/text_gray_big"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"

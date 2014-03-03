@@ -5,12 +5,19 @@
     android:background="@color/white"
     android:orientation="vertical" >
 
+    <TextView
+        style="@style/text_gray_big"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/user_tab_info" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:background="@color/light_light_gray"
-        android:orientation="vertical"
-        android:layout_margin="8dp" >
+        android:orientation="vertical" >
 
         <EditText
             android:id="@+id/user_info_username"
@@ -68,16 +75,16 @@
             style="@style/text_red_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="@string/auth_usermail_error" />
+            android:text="@string/auth_usermail_error"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:background="@color/light_light_gray"
-        android:orientation="vertical"
-        android:layout_margin="8dp" >
+        android:orientation="vertical" >
 
         <EditText
             android:id="@+id/user_info_old_password"
@@ -149,9 +156,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:background="@color/light_light_gray"
-        android:orientation="vertical"
-        android:layout_margin="8dp" >
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -182,7 +189,6 @@
                 android:drawableRight="@drawable/ic_cancel"
                 android:text="@string/user_tab_save" />
         </LinearLayout>
-
 
         <Button
             android:id="@+id/user_unconnect"

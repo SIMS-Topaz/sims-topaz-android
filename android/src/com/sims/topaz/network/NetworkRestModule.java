@@ -197,6 +197,24 @@ public class NetworkRestModule {
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_USER_INFO);
 		rest.execute();
 	}
+	
+	/**
+	 * Envoi une requete set_user pour setter les informations d'un user
+	 * La fin de la requete appellera afterSetUserInfo() (interface UserDelegate)
+	 * @param id : l'id du username
+	 */
+	public void postUserInfo(User user) {
+		String url = SERVER_URL + "set_user_info/" + user.getId();
+		DebugUtils.log("Network postUserInfo url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_USER_INFO);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			rest.setJSONParam(mapper.writeValueAsString(user));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		rest.execute();
+	}
 	private void handleResponse(TypeRequest type, String response) {
 		ObjectMapper mapper = new ObjectMapper();
 
@@ -306,13 +324,26 @@ public class NetworkRestModule {
 					e.printStackTrace();
 				}	
 				break; 
+			case POST_USER_INFO:
+				try {
+					ApiResponse<User> responseData = mapper.readValue(response, new TypeReference<ApiResponse<User>>(){});
+					if(responseData.getError() != null) {
+						((ErreurDelegate) delegate).apiError(responseData.getError());
+					} else {
+						((UserDelegate)delegate).afterPostUserInfo(responseData.getData());
+					}
+				} catch (Exception e) {
+					((ErreurDelegate) delegate).networkError();
+					e.printStackTrace();
+				}
+				break;
 			default:
 				break;
 		}
 	}
 
 	enum TypeRequest {
-		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO
+		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, POST_USER_INFO
 	}
 	
 	

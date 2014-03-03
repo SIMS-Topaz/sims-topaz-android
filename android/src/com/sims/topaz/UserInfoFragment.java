@@ -23,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDelegate{
 	private Button mUnConnectButton;
 	private Button mSaveButton;
@@ -150,6 +151,7 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 				return false;
 			  }
 		};
+		mConfirmEditText.setOnEditorActionListener(listener);
 		return v;
     }
 
@@ -194,8 +196,7 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
     
 	@Override
 	public void afterTextChanged(Editable s) {
-		// TODO Auto-generated method stub
-		
+		saveAction();		
 	}
 
 	@Override
@@ -206,14 +207,10 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 	public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
 	@Override
-	public void afterGetUserInfo(User user) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void afterGetUserInfo(User user) {}
 
 	@Override
 	public void afterPostUserInfo(User user) {
-		// TODO Auto-generated method stub
-		
+		Toast.makeText(SimsContext.getContext(), "afterPostUserInfo", Toast.LENGTH_SHORT).show();
 	}
 }

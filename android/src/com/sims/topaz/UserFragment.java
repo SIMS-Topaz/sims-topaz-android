@@ -166,6 +166,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
                 bm.compress(CompressFormat.JPEG, 85, bos);
                 pictureData = bos.toByteArray();
                 
+                
             } else if (requestCode == REQUEST_CAMERA) {
             	
                 Bundle extras = data.getExtras();

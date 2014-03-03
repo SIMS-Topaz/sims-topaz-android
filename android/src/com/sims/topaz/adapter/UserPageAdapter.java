@@ -1,8 +1,6 @@
 package com.sims.topaz.adapter;
 
 import com.sims.topaz.R;
-import com.sims.topaz.UserCommentFragment;
-import com.sims.topaz.UserInfoFragment;
 import com.sims.topaz.utils.SimsContext;
 
 import android.support.v4.app.Fragment;
@@ -10,17 +8,26 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class UserPageAdapter extends FragmentStatePagerAdapter {
+	private Fragment userCommentFragment;
+	private Fragment userInfoFragment;
+
 	public UserPageAdapter(FragmentManager fm) {
 		super(fm);
 	}
+	public UserPageAdapter(FragmentManager fm,Fragment userCommentFragment,Fragment userInfoFragment ) {
+		super(fm);
+		this.userCommentFragment = userCommentFragment;
+		this.userInfoFragment = userInfoFragment;
+	}	
+
 
 	@Override
 	public Fragment getItem(int i) {
 		Fragment fragment;
 		if(i==1){
-			fragment = new UserCommentFragment();
+			fragment = userCommentFragment;
 		}else{
-			fragment = new UserInfoFragment();
+			fragment = userInfoFragment;
 		}
 		return fragment;
 	}

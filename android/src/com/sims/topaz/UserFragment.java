@@ -65,17 +65,8 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		//tabs
 		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 		if (!tabletSize) {
-			UserPageAdapter mTabsAdapter = new UserPageAdapter(getActivity().getSupportFragmentManager());
 			mViewPager = (ViewPager) v.findViewById(R.id.pager);
-			mViewPager.setAdapter(mTabsAdapter);
-			
-		} else {
-			FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-					.beginTransaction();
-			transaction.replace(R.id.user_info_fragment, new UserInfoFragment());
-			transaction.replace(R.id.user_info_comments_fragment, new UserCommentFragment());
-			transaction.commit();		
-		}
+		} 
 
 		//Progress bar
 		mProgressBar = (ProgressBar)v.findViewById(R.id.progressBar);
@@ -98,7 +89,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		
 		
 		//TODO network call 
-		mRestModule.getUserInfo((long)0);
+		mRestModule.getUserInfo((long)1);
 
 		return v;
 	}
@@ -194,6 +185,34 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		mUserSnippetTextView.setText(user.getStatus());
 		mUserTextView.setText(user.getUserName());
 		mProgressBar.setVisibility(View.GONE);
+		
+		//prepare fragments
+		Fragment userInfoFragment = new UserInfoFragment();
+		Fragment userCommentFragment = new UserCommentFragment();
+		Bundle b = new Bundle();
+		b.putSerializable("user", user);
+		userInfoFragment.setArguments(b);
+		userCommentFragment.setArguments(b);
+		
+		//tabs
+		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+
+		
+		if (!tabletSize) {
+			UserPageAdapter mTabsAdapter = 
+					new UserPageAdapter(getActivity().getSupportFragmentManager(),
+					userCommentFragment,
+					userInfoFragment);
+			mViewPager.setAdapter(mTabsAdapter);
+			
+		} else {
+			FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+					.beginTransaction();
+			
+			transaction.replace(R.id.user_info_fragment, userInfoFragment);
+			transaction.replace(R.id.user_info_comments_fragment, userCommentFragment);
+			transaction.commit();		
+		}
 	}
 	@Override
 	public void afterPostUserInfo(User user) {

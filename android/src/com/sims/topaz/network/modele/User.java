@@ -1,13 +1,16 @@
 package com.sims.topaz.network.modele;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
-
+public class User implements Serializable{
+	
+	private static final long serialVersionUID = 7526472295622776147L;
+	
 	@JsonProperty("user_id")
 	private Long id;
 
@@ -36,6 +39,10 @@ public class User {
 	private String status;		
 
 	public User() {
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Long getId() {

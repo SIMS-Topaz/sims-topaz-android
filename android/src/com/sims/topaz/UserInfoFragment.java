@@ -169,6 +169,7 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 		String password = mNewPassEditText.getText().toString();
 		String confirmPassword = mConfirmEditText.getText().toString();
 		
+		
 		if(!AuthUtils.isValidUsername(username)) {
 			mErrorUserTextView.setText(R.string.auth_username_error);
 			mErrorUserTextView.setVisibility(TextView.VISIBLE);
@@ -190,7 +191,8 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 	    	u.setUserName(username);
 	    	u.setEmail(email);
 	    	u.setPassword(password);
-	    	
+	    	u.setStatus(mStatusEditText.getText().toString());
+	    	mRestModule.postUserInfo(u);
 		}
     }
     

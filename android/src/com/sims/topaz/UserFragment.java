@@ -7,11 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
@@ -21,13 +22,16 @@ public class UserFragment  extends Fragment  {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_user, container, false);
-		Button unconnect = (Button) v.findViewById(R.id.user_unconnect);
+		ImageButton mUnConnectButton = (ImageButton) v.findViewById(R.id.user_unconnect);
 		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
-		unconnect.setTypeface(face);
-		TextView user = (TextView)v.findViewById(R.id.username);
-		user.setTypeface(face);
 		
-		unconnect.setOnClickListener(new View.OnClickListener() {	
+		TextView mUserTextView = (TextView)v.findViewById(R.id.username);
+		mUserTextView.setTypeface(face);
+		mUserTextView.setText(AuthUtils.getSessionStringValue
+				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
+		
+		
+		mUnConnectButton.setOnClickListener(new View.OnClickListener() {	
 			@Override
 			public void onClick(View v) {
 				NetworkRestModule.resetHttpClient();

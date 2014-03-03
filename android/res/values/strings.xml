@@ -67,6 +67,10 @@
     <!-- User page -->
     <string name="user_tab_info">Profil</string>
     <string name="user_tab_comments">Commentaires</string>
+    <string name="user_tab_info_status">Status</string>
+    <string name="user_tab_info_old_pass">Mot de passe actuel</string>
+     <string name="user_tab_info_new_pass">Nouveau mot de passe</string>
+       <string name="user_tab_save">Save Changes</string>
     <!-- Settings -->
     <string name="settings_a_propos_header">A PROPOS</string>
     <string name="settings_a_propos_text">Version 1.0</string>

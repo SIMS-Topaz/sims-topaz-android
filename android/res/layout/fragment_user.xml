@@ -38,23 +38,14 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal" />
 
-    <ImageButton
-        android:id="@+id/user_unconnect"
-        style="@style/text_gray_normal"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/ic_logout"
-        android:contentDescription="@string/auth_unconnect"
-        android:text="@string/auth_unconnect" />
+
 
     <android.support.v4.view.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1"
-        android:background="@color/blue" >
+        android:layout_weight="1" >
 
         <android.support.v4.view.PagerTitleStrip
             style="@style/text_gray_normal"

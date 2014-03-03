@@ -3,6 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
+    <ImageButton
+        android:id="@+id/user_unconnect"
+        style="@style/text_gray_normal"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/ic_logout"
+        android:contentDescription="@string/auth_unconnect"
+        android:text="@string/auth_unconnect" />
 
 </LinearLayout>

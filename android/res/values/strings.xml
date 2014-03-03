@@ -64,6 +64,9 @@
     <string name="auth_userconfirmpwd_error">Retapez votre mot de passe</string>
     <string name="auth_unconnect">Déconnexion</string>
     <string name="auth_camera">Camera</string>
+    <!-- User page -->
+    <string name="user_tab_info">Profil</string>
+    <string name="user_tab_comments">Commentaires</string>
     <!-- Settings -->
     <string name="settings_a_propos_header">A PROPOS</string>
     <string name="settings_a_propos_text">Version 1.0</string>

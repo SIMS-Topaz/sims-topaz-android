@@ -38,7 +38,6 @@ import com.sims.topaz.utils.SimsContext;
 public class UserFragment  extends Fragment implements UserDelegate,ErreurDelegate {
 	private TextView mUserTextView;
 	private TextView mUserSnippetTextView;
-	private ImageButton mUnConnectButton;
 	private ImageButton mUserImage;
 	private ViewPager mViewPager;
 	private ProgressBar mProgressBar;
@@ -52,8 +51,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		View v = inflater.inflate(R.layout.fragment_user, container, false);
 		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 
-		//unconnect button
-		mUnConnectButton = (ImageButton) v.findViewById(R.id.user_unconnect);
+
 		//username field
 		mUserTextView = (TextView)v.findViewById(R.id.username);
 		mUserTextView.setTypeface(face);
@@ -69,16 +67,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		//Progress bar
 		mProgressBar = (ProgressBar)v.findViewById(R.id.progressBar);
 		mProgressBar.setVisibility(View.VISIBLE);
-		//unconnect action
-		mUnConnectButton.setOnClickListener(new View.OnClickListener() {	
-			@Override
-			public void onClick(View v) {
-				NetworkRestModule.resetHttpClient();
-				AuthUtils.unsetSession();
-				Intent intent = new Intent(SimsContext.getContext(), AuthActivity.class);
-				startActivity(intent);
-			}
-		});
+
 		//change image
 		mUserImage.setOnClickListener(new View.OnClickListener() {
 			

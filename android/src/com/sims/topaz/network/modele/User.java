@@ -21,6 +21,15 @@ public class User {
 	@JsonProperty("user_verified")
 	private Boolean verified;
 	
+	@JsonProperty("user_picture")
+	private String pictureUrl;
+
+	@JsonProperty("user_comments")
+	private Comment comments;	
+
+	@JsonProperty("user_status")
+	private String status;		
+	
 	public User() {
 	}
 
@@ -63,7 +72,19 @@ public class User {
 	public void setVerified(Boolean verified) {
 		this.verified = verified;
 	}
-	
+
+	public String getPictureUrl() {
+		return pictureUrl;
+	}
+
+	public Comment getComments() {
+		return comments;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
 	@Override
 	public String toString(){
 		return String.valueOf(id)+", "

@@ -153,6 +153,9 @@ public class DrawerActivity extends ActionBarActivity
     	switch (position) {
     	case 0:
     		mLastFragment = new UserFragment();
+    		Bundle bundle = new Bundle();
+    		bundle.putBoolean(UserFragment.IS_MY_OWN_PROFILE, true);
+    		mLastFragment.setArguments(bundle);
     		break;
 		case 1:
 			//TODO make the search by tag fragment here

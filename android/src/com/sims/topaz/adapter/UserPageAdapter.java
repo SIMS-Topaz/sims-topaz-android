@@ -34,9 +34,9 @@ public class UserPageAdapter extends FragmentStatePagerAdapter {
 	public CharSequence getPageTitle(int position) {
 		String name = "";
 		if(position==1){
-			name = SimsContext.getString(R.string.user_tab_info);
-		}else{
 			name = SimsContext.getString(R.string.user_tab_comments);
+		}else{
+			name = SimsContext.getString(R.string.user_tab_info);		
 		}
 		return name;
 	}

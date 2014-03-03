@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +33,8 @@ import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.DebugUtils;
+import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
-import com.sims.topaz.utils.SimsContext;
 
 public class UserFragment  extends Fragment implements UserDelegate,ErreurDelegate {
 	private TextView mUserTextView;
@@ -41,9 +42,10 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 	private ImageButton mUserImage;
 	private ViewPager mViewPager;
 	private ProgressBar mProgressBar;
-	private final static int SELECT_FILE = 10;
-	private final static int REQUEST_CAMERA = 11;
+	static String IS_MY_OWN_PROFILE = "is_my_own_profile";
 	private byte[] pictureData;
+	
+	
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,9 +63,20 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		//user imgae
 		mUserImage = (ImageButton)v.findViewById(R.id.username_image);
 		//tabs
-		UserPageAdapter mTabsAdapter = new UserPageAdapter(getActivity().getSupportFragmentManager());
-		mViewPager = (ViewPager) v.findViewById(R.id.pager);
-		mViewPager.setAdapter(mTabsAdapter);
+		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+		if (!tabletSize) {
+			UserPageAdapter mTabsAdapter = new UserPageAdapter(getActivity().getSupportFragmentManager());
+			mViewPager = (ViewPager) v.findViewById(R.id.pager);
+			mViewPager.setAdapter(mTabsAdapter);
+			
+		} else {
+			FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+					.beginTransaction();
+			transaction.replace(R.id.user_info_fragment, new UserInfoFragment());
+			transaction.replace(R.id.user_info_comments_fragment, new UserCommentFragment());
+			transaction.commit();		
+		}
+
 		//Progress bar
 		mProgressBar = (ProgressBar)v.findViewById(R.id.progressBar);
 		mProgressBar.setVisibility(View.VISIBLE);
@@ -77,6 +90,13 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 				
 			}
 		});
+		if(getArguments() != null && getArguments().getBoolean(IS_MY_OWN_PROFILE)){
+			mUserTextView.setText(AuthUtils.getSessionStringValue
+					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
+			
+		}
+		
+		
 		//TODO network call 
 		mRestModule.getUserInfo((long)0);
 
@@ -100,7 +120,11 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		mProgressBar.setVisibility(View.GONE);
 	}
 	
-	//Image selector
+	
+	//Image selector	
+	private final static int SELECT_FILE = 10;
+	private final static int REQUEST_CAMERA = 11;	
+
 	private void selectImage() {
         final CharSequence[] items = { getString(R.string.select_img_take_photo),
         		getString(R.string.select_img_from_lib),

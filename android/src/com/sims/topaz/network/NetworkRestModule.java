@@ -31,6 +31,7 @@ import com.sims.topaz.network.interfaces.LikeStatusDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
+import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiResponse;
 import com.sims.topaz.network.modele.Comment;
 import com.sims.topaz.network.modele.Message;
@@ -184,6 +185,18 @@ public class NetworkRestModule {
 		}
 		rest.execute();
 	}
+	
+	/**
+	 * Envoi une requete get_user pour recuperer les informations d'un user
+	 * La fin de la requete appellera afterGetUserInfo() (interface UserDelegate)
+	 * @param id : l'id du username
+	 */
+	public void getUserInfo(Long id) {
+		String url = SERVER_URL + "get_user_info/" + id;
+		DebugUtils.log("Network getUserInfo url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_USER_INFO);
+		rest.execute();
+	}
 	private void handleResponse(TypeRequest type, String response) {
 		ObjectMapper mapper = new ObjectMapper();
 
@@ -279,14 +292,27 @@ public class NetworkRestModule {
 					((ErreurDelegate) delegate).networkError();
 					e.printStackTrace();
 				}	
-				break;
+				break; 
+			case GET_USER_INFO:
+				try {
+					ApiResponse<User> responseData = mapper.readValue(response, new TypeReference<ApiResponse<User>>(){});
+					if(responseData.getError() != null) {
+						((ErreurDelegate) delegate).apiError(responseData.getError());
+					} else {
+						((UserDelegate)delegate).afterGetUserInfo(responseData.getData());
+					}
+				} catch (Exception e) {
+					((ErreurDelegate) delegate).networkError();
+					e.printStackTrace();
+				}	
+				break; 
 			default:
 				break;
 		}
 	}
 
 	enum TypeRequest {
-		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN
+		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO
 	}
 	
 	

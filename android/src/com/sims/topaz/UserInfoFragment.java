@@ -39,37 +39,44 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 	private TextView mErrorPassTextView;
 	private TextView mErrorNewPassTextView;
 	private TextView mErrorConfirmPassTextView;
+	private TextView mShowPasswordTextView;
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
-	
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 		View v = inflater.inflate(R.layout.fragment_user_info, container, false);
 		mUserEditText = (EditText) v.findViewById(R.id.user_info_username);
 		mUserEditText.setTypeface(face);
 		mUserEditText.addTextChangedListener(this);
-		
+		mUserEditText.setEnabled(false);
+
 		mStatusEditText = (EditText) v.findViewById(R.id.user_info_status);
 		mStatusEditText.setTypeface(face);
 		mStatusEditText.addTextChangedListener(this);
-		
+		mStatusEditText.setEnabled(false);
+
 		mEmailEditText =(EditText)  v.findViewById(R.id.sign_up_mail);
 		mEmailEditText.setTypeface(face);
 		mEmailEditText.addTextChangedListener(this);
-		
+		mEmailEditText.setEnabled(false);
+
 		mPassEditText =(EditText)  v.findViewById(R.id.user_info_old_password);
 		mPassEditText.setTypeface(face);
 		mPassEditText.addTextChangedListener(this);
-		
+		mPassEditText.setVisibility(View.GONE);
+
 		mNewPassEditText =(EditText)  v.findViewById(R.id.user_info_new_password);
 		mNewPassEditText.setTypeface(face);
 		mNewPassEditText.addTextChangedListener(this);
-		
+		mNewPassEditText.setVisibility(View.GONE);
+
 		mConfirmEditText =(EditText)  v.findViewById(R.id.user_info_confirm_new_password);
 		mConfirmEditText.setTypeface(face);
 		mConfirmEditText.addTextChangedListener(this);
-		
+		mConfirmEditText.setVisibility(View.GONE);
+
 		mErrorUserTextView = (TextView) v.findViewById(R.id.user_info_username_error);
 		mErrorUserTextView.setTypeface(face);
 		mErrorEmailTextView = (TextView) v.findViewById(R.id.signup_email_error);
@@ -80,12 +87,30 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 		mErrorNewPassTextView.setTypeface(face);
 		mErrorConfirmPassTextView = (TextView) v.findViewById(R.id.user_info_confirm_new_password_error);
 		mErrorConfirmPassTextView.setTypeface(face);
-		
+		mShowPasswordTextView = (TextView)v.findViewById(R.id.user_info_show_pass);
+		mShowPasswordTextView.setTypeface(face);
+
 		mSaveButton = (Button)v.findViewById(R.id.user_save);
 		mSaveButton.setTypeface(face);
 		mCancelButton = (Button)v.findViewById(R.id.user_cancel);
 		mCancelButton.setTypeface(face);
-		
+
+
+		mShowPasswordTextView.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if(mPassEditText.getVisibility()== View.GONE){
+					mPassEditText.setVisibility(View.VISIBLE);
+					mConfirmEditText.setVisibility(View.VISIBLE);
+					mNewPassEditText.setVisibility(View.VISIBLE);
+				}else{
+					mPassEditText.setVisibility(View.GONE);
+					mConfirmEditText.setVisibility(View.GONE);
+					mNewPassEditText.setVisibility(View.GONE);				
+				}
+			}
+		});
 		mConfirmEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus) {
@@ -100,7 +125,7 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 				}
 			}
 		});
-		
+
 		mNewPassEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus) {
@@ -139,37 +164,36 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 				startActivity(intent);
 			}
 		});
-		
+
 		// When user tap DONE key
 		TextView.OnEditorActionListener listener = new TextView.OnEditorActionListener() {
-			  @Override
-			  public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-			    if (event==null) {
-			      if (actionId==EditorInfo.IME_ACTION_DONE){saveAction();}
-			      return false;  // Let system handle all other null KeyEvents
-			    } ;
+			@Override
+			public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+				if (event==null) {
+					if (actionId==EditorInfo.IME_ACTION_DONE){saveAction();}
+					return false;  // Let system handle all other null KeyEvents
+				} ;
 				return false;
-			  }
+			}
 		};
 		mConfirmEditText.setOnEditorActionListener(listener);
 		return v;
-    }
+	}
 
-    public void saveAction(){
-    	//TODO
-    	mErrorUserTextView.setVisibility(View.GONE);
-    	mErrorEmailTextView.setVisibility(View.GONE);
-    	mErrorPassTextView.setVisibility(View.GONE);
-    	mErrorNewPassTextView.setVisibility(View.GONE);
-    	mErrorConfirmPassTextView.setVisibility(View.GONE);
-    	
-		
+	public void saveAction(){
+		mErrorUserTextView.setVisibility(View.GONE);
+		mErrorEmailTextView.setVisibility(View.GONE);
+		mErrorPassTextView.setVisibility(View.GONE);
+		mErrorNewPassTextView.setVisibility(View.GONE);
+		mErrorConfirmPassTextView.setVisibility(View.GONE);
+
+
 		String username = mUserEditText.getText().toString();
 		String email = mEmailEditText.getText().toString();
 		String password = mNewPassEditText.getText().toString();
 		String confirmPassword = mConfirmEditText.getText().toString();
-		
-		
+
+
 		if(!AuthUtils.isValidUsername(username)) {
 			mErrorUserTextView.setText(R.string.auth_username_error);
 			mErrorUserTextView.setVisibility(TextView.VISIBLE);
@@ -187,15 +211,15 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 			mErrorConfirmPassTextView.setVisibility(TextView.VISIBLE);
 		} else {
 			mSaveButton.setEnabled(false);
-	    	User u = new User();
-	    	u.setUserName(username);
-	    	u.setEmail(email);
-	    	u.setPassword(password);
-	    	u.setStatus(mStatusEditText.getText().toString());
-	    	mRestModule.postUserInfo(u);
+			User u = new User();
+			u.setUserName(username);
+			u.setEmail(email);
+			u.setPassword(password);
+			u.setStatus(mStatusEditText.getText().toString());
+			mRestModule.postUserInfo(u);
 		}
-    }
-    
+	}
+
 	@Override
 	public void afterTextChanged(Editable s) {
 		saveAction();		

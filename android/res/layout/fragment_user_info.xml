@@ -27,8 +27,7 @@
                 android:layout_margin="8dp"
                 android:ems="10"
                 android:hint="@string/auth_username"
-                android:nextFocusDown="@+id/user_info_status"
-                android:padding="4dp" >
+                android:nextFocusDown="@+id/user_info_status" >
 
                 <requestFocus />
             </EditText>
@@ -50,8 +49,7 @@
                 android:layout_margin="8dp"
                 android:ems="10"
                 android:hint="@string/user_tab_info_status"
-                android:nextFocusDown="@+id/sign_up_mail"
-                android:padding="4dp" >
+                android:nextFocusDown="@+id/sign_up_mail" >
 
                 <requestFocus />
             </EditText>
@@ -66,8 +64,7 @@
                 android:ems="10"
                 android:hint="@string/auth_email"
                 android:inputType="textEmailAddress"
-                android:nextFocusDown="@+id/user_info_old_password"
-                android:padding="4dp" />
+                android:nextFocusDown="@+id/user_info_old_password" />
 
             <TextView
                 android:id="@+id/signup_email_error"
@@ -85,6 +82,16 @@
             android:background="@color/light_light_gray"
             android:orientation="vertical" >
 
+            <TextView
+                android:clickable="true"
+                android:id="@+id/user_info_show_pass"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_arrow_down"
+                android:gravity="center"
+                android:text="@string/user_tab_change_pass" />
+
             <EditText
                 android:id="@+id/user_info_old_password"
                 style="@style/text_dark_gray_normal"
@@ -92,11 +99,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="8dp"
+                android:ems="10"
                 android:hint="@string/user_tab_info_old_pass"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:nextFocusUp="@id/sign_in_username"
-                android:padding="4dp"
                 android:singleLine="true" />
 
             <TextView
@@ -114,11 +121,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="8dp"
+                android:ems="10"
                 android:hint="@string/user_tab_info_new_pass"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:nextFocusUp="@id/sign_in_username"
-                android:padding="4dp"
                 android:singleLine="true" />
 
             <TextView
@@ -136,11 +143,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="8dp"
+                android:ems="10"
                 android:hint="@string/auth_confirm_password"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:nextFocusUp="@id/sign_in_username"
-                android:padding="4dp"
                 android:singleLine="true" />
 
             <TextView
@@ -173,9 +180,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:contentDescription="@string/user_tab_save"
+                    android:contentDescription="@string/user_tab_cancel"
                     android:drawableRight="@drawable/ic_save"
-                    android:text="@string/user_tab_save" />
+                    android:text="@string/user_tab_cancel" />
 
                 <Button
                     android:id="@+id/user_save"

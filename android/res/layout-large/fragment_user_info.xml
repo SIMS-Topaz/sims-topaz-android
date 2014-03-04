@@ -7,9 +7,9 @@
 
     <TextView
         style="@style/text_gray_big"
-        android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:text="@string/user_tab_info" />
 
     <LinearLayout
@@ -85,6 +85,16 @@
         android:layout_margin="8dp"
         android:background="@color/light_light_gray"
         android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/user_info_show_pass"
+            style="@style/text_dark_gray_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawableRight="@drawable/ic_arrow_down"
+            android:gravity="center"
+            android:text="@string/user_tab_change_pass" />
 
         <EditText
             android:id="@+id/user_info_old_password"
@@ -174,9 +184,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:contentDescription="@string/user_tab_save"
+                android:contentDescription="@string/user_tab_cancel"
                 android:drawableRight="@drawable/ic_save"
-                android:text="@string/user_tab_save" />
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/user_tab_cancel" />
 
             <Button
                 android:id="@+id/user_save"
@@ -187,19 +198,20 @@
                 android:layout_weight="1"
                 android:contentDescription="@string/user_tab_save"
                 android:drawableRight="@drawable/ic_cancel"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="@string/user_tab_save" />
         </LinearLayout>
 
         <Button
             android:id="@+id/user_unconnect"
             style="@style/text_white_normal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_margin="8dp"
             android:contentDescription="@string/auth_unconnect"
             android:drawableRight="@drawable/ic_logout"
-            android:gravity="center_horizontal"
+            android:gravity="center_horizontal|center_vertical"
             android:text="@string/auth_unconnect" />
     </LinearLayout>
 

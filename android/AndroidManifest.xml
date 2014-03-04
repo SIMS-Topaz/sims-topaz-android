@@ -66,7 +66,7 @@
         <activity
             android:name="com.sims.topaz.DrawerActivity"
             android:label="@string/app_name"
-            android:noHistory="true"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.AppCompat.Light"
             android:configChanges="screenSize|orientation" >
         </activity>

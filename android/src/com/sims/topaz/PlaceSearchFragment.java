@@ -206,17 +206,22 @@ public class PlaceSearchFragment extends Fragment{
 	                FilterResults filterResults = new FilterResults();
 	                if (constraint != null) {
 	                    // Retrieve the auto-completed results.
-	                    resultList = autocomplete(constraint.toString());
-	                    
+	                	ArrayList<String> results = autocomplete(constraint.toString());
+	                	filterResults.values = results;
 	                    // Assign the data to the FilterResults
-	                    filterResults.values = resultList;
-	                    filterResults.count = resultList.size();
+	                    filterResults.count = results.size();
 	                }
 	                return filterResults;
 	            }
 
 	            @Override
 	            protected void publishResults(CharSequence constraint, FilterResults results) {
+	            	try {
+	            		resultList = (ArrayList<String>) results.values;
+	            	} catch (ClassCastException e){
+	            		resultList = null;
+	            	}
+	            	
 	                if (results != null && results.count > 0) {
 	                    notifyDataSetChanged();
 	                }

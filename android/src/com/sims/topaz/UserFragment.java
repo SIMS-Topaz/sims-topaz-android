@@ -54,6 +54,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 	private ProgressBar mProgressBar;
 	static String IS_MY_OWN_PROFILE = "is_my_own_profile";
 	private byte[] pictureData;
+	private User mUser;
 	
 
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
@@ -96,8 +97,13 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 
 		}
+		
+		pictureData = null;
+		
 		//TODO network call 
-		mRestModule.getUserInfo((long)1);
+		mUser = new User();
+		mUser.setId((long)1);
+		mRestModule.getUserInfo((long)1,pictureData);
 
 		return v;
 	}
@@ -175,7 +181,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bitmap.compress(CompressFormat.JPEG, 85, bos);
                 pictureData = bos.toByteArray();
-                
+                mRestModule.postUserInfo(mUser, pictureData);
                 break;
         }
         
@@ -204,21 +210,32 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 
 	@Override
 	public void afterGetUserInfo(User user) {
-		mUserSnippetTextView.setText(user.getStatus());
-		mUserTextView.setText(user.getUserName());
+		mUser = user;
+		
+		mUserSnippetTextView.setText(mUser.getStatus());
+		mUserTextView.setText(mUser.getUserName());
 		mProgressBar.setVisibility(View.GONE);
-
-		//prepare fragments
+		prepareFragments();
+	}
+	@Override
+	public void afterPostUserInfo(User user) {
+		mUser = user;
+		
+		mProgressBar.setVisibility(View.GONE);	
+		mUserTextView.setText(mUser.getUserName());
+		prepareFragments();
+	}
+	
+	private void prepareFragments(){
 		Fragment userInfoFragment = new UserInfoFragment();
 		Fragment userCommentFragment = new UserCommentFragment();
 		Bundle b = new Bundle();
-		b.putSerializable("user", user);
+		b.putSerializable("user", mUser);
 		userInfoFragment.setArguments(b);
 		userCommentFragment.setArguments(b);
-
+		
 		//tabs
 		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
-
 
 		if (!tabletSize) {
 			UserPageAdapter mTabsAdapter = 
@@ -234,12 +251,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 			transaction.replace(R.id.user_info_fragment, userInfoFragment);
 			transaction.replace(R.id.user_info_comments_fragment, userCommentFragment);
 			transaction.commit();		
-		}
-	}
-	@Override
-	public void afterPostUserInfo(User user) {
-		// TODO Auto-generated method stub
-
+		}	
 	}
 
 }

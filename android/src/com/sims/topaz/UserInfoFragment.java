@@ -216,7 +216,7 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 			u.setEmail(email);
 			u.setPassword(password);
 			u.setStatus(mStatusEditText.getText().toString());
-			mRestModule.postUserInfo(u);
+			mRestModule.postUserInfo(u, null);
 		}
 	}
 

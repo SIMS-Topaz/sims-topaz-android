@@ -1,19 +1,29 @@
 package com.sims.topaz;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -24,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.network.NetworkRestModule;
@@ -32,9 +43,16 @@ import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.DebugUtils;
+import com.sims.topaz.utils.InternalStorageContentProvider;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
+import com.sims.topaz.utils.SimsContext;
+
+import eu.janmuller.android.simplecropimage.CropImage;
+
+
 
 public class UserFragment  extends Fragment implements UserDelegate,ErreurDelegate {
 	private TextView mUserTextView;
@@ -45,7 +63,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 	static String IS_MY_OWN_PROFILE = "is_my_own_profile";
 	private byte[] pictureData;
 	
-	
+
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,20 +92,20 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 
 		//change image
 		mUserImage.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				selectImage();
-				
+
 			}
 		});
 		if(getArguments() != null && getArguments().getBoolean(IS_MY_OWN_PROFILE)){
 			mUserTextView.setText(AuthUtils.getSessionStringValue
 					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
-			
+
 		}
-		
-		
+
+
 		//TODO network call 
 		mRestModule.getUserInfo((long)1);
 
@@ -104,88 +122,101 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		DebugUtils.log("UserFragment_networkError");
 	}
 
-	
-	
+
+
 	//Image selector	
-	private final static int SELECT_FILE = 10;
-	private final static int REQUEST_CAMERA = 11;	
+
 
 	private void selectImage() {
-        final CharSequence[] items = { getString(R.string.select_img_take_photo),
-        		getString(R.string.select_img_from_lib),
-        		getString(R.string.select_img_close) };
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-        builder.setTitle(R.string.edit_add_image);
+		final CharSequence[] items = { getString(R.string.select_img_take_photo),
+				getString(R.string.select_img_from_lib),
+				getString(R.string.select_img_close) };
+		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		builder.setTitle(R.string.edit_add_image);
 
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (item == 0) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, REQUEST_CAMERA);
-                } else if (item == 1) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setType("image/*");
-                    startActivityForResult(Intent.createChooser(intent, ""), SELECT_FILE);
-                } else if (item == 2) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int item) {
+				if (item == 0) {
+					startActivityForResult(CameraUtils.takePicture(), CameraUtils.REQUEST_CODE_TAKE_PICTURE);
+				} else if (item == 1) {
+					startActivityForResult(CameraUtils.openGallery(), CameraUtils.REQUEST_CODE_GALLERY);
+				} else if (item == 2) {
+					dialog.dismiss();
+				}
+			}
+		});
+		builder.show();
+	}
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+        Bitmap bitmap;
+
+        switch (requestCode) {
+
+            case CameraUtils.REQUEST_CODE_GALLERY:
+
+                try {
+                    InputStream inputStream = SimsContext.getContext().getContentResolver().openInputStream(data.getData());
+                    FileOutputStream fileOutputStream = new FileOutputStream(CameraUtils.getTempFile());
+                    CameraUtils.copyStream(inputStream, fileOutputStream);
+                    fileOutputStream.close();
+                    inputStream.close();
+                    startActivityForResult(CameraUtils.startCropImage(), CameraUtils.REQUEST_CODE_CROP_IMAGE);
+                } catch (Exception e) {
+                    DebugUtils.log("Error while creating temp file"+ e);
+                }
+
+                break;
+            case CameraUtils.REQUEST_CODE_TAKE_PICTURE:
+                startActivityForResult(CameraUtils.startCropImage(), CameraUtils.REQUEST_CODE_CROP_IMAGE);
+                break;
+            case CameraUtils.REQUEST_CODE_CROP_IMAGE:
+                if(data == null){
+                	Toast.makeText(SimsContext.getContext(), "data is null", Toast.LENGTH_SHORT).show();
+                	 return;
+                }
+                String path = data.getStringExtra(CropImage.IMAGE_PATH);
+                if (path == null) {return;}
+
+                bitmap = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath());
+                //Note: we cannot user setBackground since is available only from api 16
+                mUserImage.setBackgroundDrawable(new BitmapDrawable(SimsContext.getContext().getResources(),bitmap));
+                break;
+        }
+        
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK) {
-        	
-            if (requestCode == SELECT_FILE) {
-                Uri selectedImageUri = data.getData();
-                String picturePath = getPath(selectedImageUri, this.getActivity());
-                Bitmap bm = BitmapFactory.decodeFile(picturePath);
-                mUserImage.setImageBitmap(bm);
-                
-                // Get data
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                
-                int maxWidth = 1024;
-                double aspectRatio = (double) bm.getHeight() / (double) bm.getWidth();
-                int targetHeight = (int) (maxWidth * aspectRatio);
-                
-                bm = Bitmap.createScaledBitmap(bm, maxWidth, targetHeight, true);
-                bm.compress(CompressFormat.JPEG, 85, bos);
-                pictureData = bos.toByteArray();
-                
-                
-            } else if (requestCode == REQUEST_CAMERA) {
-            	
-                Bundle extras = data.getExtras();
-                Bitmap bm = (Bitmap) extras.get("data");
-                mUserImage.setImageBitmap(bm);
-
-                // Get data
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bm.compress(CompressFormat.JPEG, 75, bos);
-                pictureData = bos.toByteArray();
-            }
-        }
-    }
+	}
 	
+ 
+   
+
+
 	public String getPath(Uri uri, Activity activity) {
-        String[] projection = { MediaColumns.DATA };
-        Cursor cursor = activity.getContentResolver().query(uri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
+		String[] projection = { MediaColumns.DATA };
+		Cursor cursor = activity.getContentResolver().query(uri, projection, null, null, null);
+		int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
+	}
+	public Uri getImageUri(Bitmap inImage) {
+		  ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		  inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+		  String path = Images.Media.insertImage(SimsContext.getContext().getContentResolver(), inImage, "Title", null);
+		  return Uri.parse(path);
+		} 
+
 
 	@Override
 	public void afterGetUserInfo(User user) {
 		mUserSnippetTextView.setText(user.getStatus());
 		mUserTextView.setText(user.getUserName());
 		mProgressBar.setVisibility(View.GONE);
-		
+
 		//prepare fragments
 		Fragment userInfoFragment = new UserInfoFragment();
 		Fragment userCommentFragment = new UserCommentFragment();
@@ -193,22 +224,22 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		b.putSerializable("user", user);
 		userInfoFragment.setArguments(b);
 		userCommentFragment.setArguments(b);
-		
+
 		//tabs
 		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 
-		
+
 		if (!tabletSize) {
 			UserPageAdapter mTabsAdapter = 
 					new UserPageAdapter(getActivity().getSupportFragmentManager(),
-					userCommentFragment,
-					userInfoFragment);
+							userCommentFragment,
+							userInfoFragment);
 			mViewPager.setAdapter(mTabsAdapter);
-			
+
 		} else {
 			FragmentTransaction transaction = getActivity().getSupportFragmentManager()
 					.beginTransaction();
-			
+
 			transaction.replace(R.id.user_info_fragment, userInfoFragment);
 			transaction.replace(R.id.user_info_comments_fragment, userCommentFragment);
 			transaction.commit();		
@@ -217,7 +248,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 	@Override
 	public void afterPostUserInfo(User user) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

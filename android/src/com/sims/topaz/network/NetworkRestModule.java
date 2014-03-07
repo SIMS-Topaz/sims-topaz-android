@@ -191,7 +191,7 @@ public class NetworkRestModule {
 	 * La fin de la requete appellera afterGetUserInfo() (interface UserDelegate)
 	 * @param id : l'id du username
 	 */
-	public void getUserInfo(Long id) {
+	public void getUserInfo(Long id, byte[] pictureData) {
 		String url = SERVER_URL + "user_info/" + id;
 		DebugUtils.log("Network getUserInfo url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_USER_INFO);
@@ -203,13 +203,14 @@ public class NetworkRestModule {
 	 * La fin de la requete appellera afterSetUserInfo() (interface UserDelegate)
 	 * @param id : l'id du username
 	 */
-	public void postUserInfo(User user) {
+	public void postUserInfo(User user, byte[] pictureData) {
 		String url = SERVER_URL + "user_info/" + user.getId();
 		DebugUtils.log("Network postUserInfo url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_USER_INFO);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			rest.setJSONParam(mapper.writeValueAsString(user));
+			rest.setByteData(pictureData);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}

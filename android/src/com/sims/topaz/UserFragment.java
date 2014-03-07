@@ -1,28 +1,21 @@
 package com.sims.topaz;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.Fragment;
@@ -45,7 +38,6 @@ import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.DebugUtils;
-import com.sims.topaz.utils.InternalStorageContentProvider;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
@@ -104,8 +96,6 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 
 		}
-
-
 		//TODO network call 
 		mRestModule.getUserInfo((long)1);
 
@@ -175,16 +165,17 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
                 startActivityForResult(CameraUtils.startCropImage(), CameraUtils.REQUEST_CODE_CROP_IMAGE);
                 break;
             case CameraUtils.REQUEST_CODE_CROP_IMAGE:
-                if(data == null){
-                	Toast.makeText(SimsContext.getContext(), "data is null", Toast.LENGTH_SHORT).show();
-                	 return;
-                }
                 String path = data.getStringExtra(CropImage.IMAGE_PATH);
                 if (path == null) {return;}
 
                 bitmap = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath());
                 //Note: we cannot user setBackground since is available only from api 16
                 mUserImage.setBackgroundDrawable(new BitmapDrawable(SimsContext.getContext().getResources(),bitmap));
+                
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(CompressFormat.JPEG, 85, bos);
+                pictureData = bos.toByteArray();
+                
                 break;
         }
         

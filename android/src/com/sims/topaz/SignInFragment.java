@@ -191,7 +191,9 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 	@Override
 	public void networkError() {
 		mLoginButton.setEnabled(true);
-		mCallback.onHideProgressBar();
+		if(mCallback!=null){
+			mCallback.onHideProgressBar();
+		}
 		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
 	}
 

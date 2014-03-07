@@ -214,7 +214,8 @@ public class PlaceSearchFragment extends Fragment{
 	                return filterResults;
 	            }
 
-	            @Override
+	            @SuppressWarnings("unchecked")
+				@Override
 	            protected void publishResults(CharSequence constraint, FilterResults results) {
 	            	try {
 	            		resultList = (ArrayList<String>) results.values;

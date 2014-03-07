@@ -21,7 +21,7 @@ public class BulleAdapter implements InfoWindowAdapter {
 	private LayoutInflater mInflater=null;
 	private boolean isCluster;
 	private Preview mPreview = null;
-	private Cluster mCluster = null;
+	private Cluster<PreviewClusterItem> mCluster = null;
 
 	public BulleAdapter(LayoutInflater inflater) {
 		this.mInflater=inflater;
@@ -104,7 +104,7 @@ public class BulleAdapter implements InfoWindowAdapter {
 		this.mPreview  = preview;
 	}
 	
-	public void setCluster(Cluster cluster){
+	public void setCluster(Cluster<PreviewClusterItem> cluster){
 		this.mCluster = cluster;
 	}
 }

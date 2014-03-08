@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDelegate{
+public class UserInfoFragment  extends Fragment  implements UserDelegate{
 	private Button mUnConnectButton;
 	private Button mSaveButton;
 	private Button mCancelButton;
@@ -53,6 +53,12 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 	private User mUser;
 	private boolean isMyProfile;
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
+	private Button mSaveUser;
+	private Button mSaveEmail;
+	private Button mSaveStatus;
+	private Button mCancelUser;
+	private Button mCancelEmail;
+	private Button mCancelStatus;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -136,18 +142,71 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 			mUnconnectLayout.setVisibility(View.GONE);	
 		}
 		
+		mSaveUser = (Button)v.findViewById(R.id.view_save_username);
+		mSaveEmail = (Button)v.findViewById(R.id.view_save_email);
+		mSaveStatus = (Button)v.findViewById(R.id.view_save);
+		mCancelUser = (Button)v.findViewById(R.id.view_cancel_username);
+		mCancelEmail = (Button)v.findViewById(R.id.view_cancel_email);
+		mCancelStatus = (Button)v.findViewById(R.id.view_cancel);	
+		
+		mSaveUser.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				saveNewUserName();
+			}
+		});
+		
+		mSaveEmail.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				saveNewEmail();
+			}
+		});
+		mSaveStatus.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				saveNewStatus();
+			}
+		});
+		
+		mCancelUser.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mErrorUserTextView.setVisibility(TextView.GONE);
+				mUserEditText.setText(mUser.getUserName());
+				
+			}
+		});
+		mCancelEmail.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mErrorEmailTextView.setVisibility(TextView.GONE);
+				mEmailEditText.setText(mUser.getEmail());
+				
+			}
+		});
+		mCancelStatus.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mStatusEditText.setText(mUser.getStatus());
+				
+			}
+		});
 
 		mUserButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				mUserEditText.setVisibility(View.VISIBLE);
+				mCancelUser.setVisibility(View.VISIBLE);
+				mSaveUser.setVisibility(View.VISIBLE);
+				
 				mUserTextView.setVisibility(View.GONE);
-				if(mUserButton.getText().equals(getResources().getString(R.string.user_tab_edit))){
-					mUserButton.setText(getResources().getString(R.string.user_tab_cancel));
-				}else{
-					mUserButton.setText(getResources().getString(R.string.user_tab_edit));
-				}
+				mUserButton.setVisibility(View.GONE);
+				
 			}
 		});
 		
@@ -156,12 +215,11 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 			@Override
 			public void onClick(View v) {
 				mEmailEditText.setVisibility(View.VISIBLE);
+				mCancelEmail.setVisibility(View.VISIBLE);
+				mSaveEmail.setVisibility(View.VISIBLE);
+				
 				mEmailTextView.setVisibility(View.GONE);
-				if(mEmailButton.getText().equals(getResources().getString(R.string.user_tab_edit))){
-					mEmailButton.setText(getResources().getString(R.string.user_tab_cancel));
-				}else{
-					mEmailButton.setText(getResources().getString(R.string.user_tab_edit));
-				}
+				mEmailButton.setVisibility(View.GONE);
 			}
 		});
 		
@@ -239,87 +297,170 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 		});
 
 		// When user tap DONE key
-		TextView.OnEditorActionListener listener = new TextView.OnEditorActionListener() {
+		TextView.OnEditorActionListener listenerConfirmPassword = new TextView.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
 				if (event==null) {
-					if (actionId==EditorInfo.IME_ACTION_DONE){saveAction();}
+					if (actionId==EditorInfo.IME_ACTION_DONE){saveNewPassword();}
 					return false;  // Let system handle all other null KeyEvents
 				} ;
 				return false;
 			}
 		};
-		mConfirmEditText.setOnEditorActionListener(listener);
+		mConfirmEditText.setOnEditorActionListener(listenerConfirmPassword);
 		
 		mUserTextView.setText(getResources().getString(R.string.auth_username)+" : "+mUser.getUserName());
 		mEmailTextView.setText(getResources().getString(R.string.auth_email)+" : "+mUser.getEmail());
 		mStatusEditText.setText(mUser.getStatus());
 		
-		mUserEditText.addTextChangedListener(this);
-		mStatusEditText.addTextChangedListener(this);
-		mEmailEditText.addTextChangedListener(this);
-		mPassEditText.addTextChangedListener(this);
-		mNewPassEditText.addTextChangedListener(this);
-		mConfirmEditText.addTextChangedListener(this);
+		mUserEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {checkNewUserName();}
+		});
+		mEmailEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {checkNewEmail();}
+		});
+		mPassEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {checkOldPassword();}
+		});
+		mNewPassEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {checkNewPassword();}
+		});
+		mConfirmEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {checkConfirmPassword();}
+		});
 
 		return v;
 	}
 
-	public void saveAction(){
-		mErrorUserTextView.setVisibility(View.GONE);
-		mErrorEmailTextView.setVisibility(View.GONE);
-		mErrorPassTextView.setVisibility(View.GONE);
-		mErrorNewPassTextView.setVisibility(View.GONE);
-		mErrorConfirmPassTextView.setVisibility(View.GONE);
-
-
+	private void saveNewUserName(){
 		String username = mUserEditText.getText().toString();
-		String email = mEmailEditText.getText().toString();
-		String password = mNewPassEditText.getText().toString();
-		String confirmPassword = mConfirmEditText.getText().toString();
 		boolean checkUserName = mUserEditText.getVisibility()== View.VISIBLE;
+		if(checkUserName && checkNewUserName()){
+				mUser.setUserName(username);
+				mRestModule.postUserInfo(mUser, null);
+		}
+	}	
+	
+	private void saveNewStatus(){
+		mUser.setStatus(mStatusEditText.getText().toString());
+		mRestModule.postUserInfo(mUser, null);			
+	}
+	private void saveNewEmail(){
+		String email = mEmailEditText.getText().toString();
 		boolean checkEmail = mEmailEditText.getVisibility()== View.VISIBLE;
-		boolean checkPass = mPasswordLayout.getVisibility()== View.VISIBLE;
-		
-		if(checkUserName && !AuthUtils.isValidUsername(username)) {
-			mErrorUserTextView.setText(R.string.auth_username_error);
-			mErrorUserTextView.setVisibility(TextView.VISIBLE);
-		} else if(checkUserName && username != null && username.length() < 4) {
-			mErrorUserTextView.setText(R.string.auth_username_tooshort);
-			mErrorUserTextView.setVisibility(TextView.VISIBLE);
-		} else if(checkEmail && !AuthUtils.isValidEmail(email)) {
-			mErrorEmailTextView.setText(R.string.auth_usermail_error);
-			mErrorEmailTextView.setVisibility(TextView.VISIBLE);
-		} else if(checkPass && !AuthUtils.isValidPassword(password, 6)) {
-			mErrorNewPassTextView.setText(R.string.auth_userpwd_error);
-			mErrorNewPassTextView.setVisibility(TextView.VISIBLE);
-		} else if(checkPass && !AuthUtils.isValidPassword(password, confirmPassword, 6)) {
-			mErrorConfirmPassTextView.setText(R.string.auth_userconfirmpwd_error);
-			mErrorConfirmPassTextView.setVisibility(TextView.VISIBLE);
-		} else {
-			if(mSaveButton.getVisibility() == View.VISIBLE){
-				mSaveButton.setEnabled(false);
-				User u = new User();
-				u.setUserName(username);
-				u.setEmail(email);
-				u.setPassword(password);
-				u.setStatus(mStatusEditText.getText().toString());
-				mRestModule.postUserInfo(u, null);
-			}
+		if(checkEmail && checkNewEmail()){
+			mUser.setEmail(email);
+			mRestModule.postUserInfo(mUser, null);					
 		}
 	}
 
-	@Override
-	public void afterTextChanged(Editable s) {
-		saveAction();		
+	private void saveNewPassword(){
+		
+		String password = mNewPassEditText.getText().toString();
+		boolean checkPass = mPasswordLayout.getVisibility()== View.VISIBLE;
+		
+		if(checkPass && checkConfirmPassword()){
+				mSaveButton.setEnabled(false);
+				mUser.setPassword(password);
+				mUser.setStatus(mStatusEditText.getText().toString());
+				mRestModule.postUserInfo(mUser, null);
+		}
 	}
-
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count,
-			int after) {}
-
-	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) {}
+	private boolean checkNewEmail(){
+		mErrorEmailTextView.setVisibility(TextView.GONE);
+		String email = mEmailEditText.getText().toString();
+		boolean checkEmail = mEmailEditText.getVisibility()== View.VISIBLE;
+		if(checkEmail && !AuthUtils.isValidEmail(email)) {
+			mErrorEmailTextView.setText(R.string.auth_usermail_error);
+			mErrorEmailTextView.setVisibility(TextView.VISIBLE);
+			return false;
+		}
+		return true;
+	}	
+	private boolean checkNewUserName(){
+		mErrorUserTextView.setVisibility(TextView.GONE);
+		String username = mUserEditText.getText().toString();
+		boolean checkUserName = mUserEditText.getVisibility()== View.VISIBLE;
+		if(checkUserName && !AuthUtils.isValidUsername(username)) {
+			mErrorUserTextView.setText(R.string.auth_username_error);
+			mErrorUserTextView.setVisibility(TextView.VISIBLE);
+			return false;
+		} else if(checkUserName && username != null && username.length() < 4) {
+			mErrorUserTextView.setText(R.string.auth_username_tooshort);
+			mErrorUserTextView.setVisibility(TextView.VISIBLE);
+			return false;
+		}
+		return true;
+	}
+	private boolean checkOldPassword(){
+		boolean checkPass = mPasswordLayout.getVisibility()== View.VISIBLE;
+		mErrorPassTextView.setVisibility(View.GONE);
+		String password = mPassEditText.getText().toString();
+		if(checkPass && !AuthUtils.isValidPassword(password, 6)) {
+			mErrorPassTextView.setText(R.string.auth_userpwd_error);
+			mErrorPassTextView.setVisibility(View.VISIBLE);
+			return false;
+		}
+		return true;
+	}
+	private boolean checkNewPassword(){
+		boolean checkPass = mPasswordLayout.getVisibility()== View.VISIBLE;
+		mErrorNewPassTextView.setVisibility(View.GONE);
+		String password = mNewPassEditText.getText().toString();
+		if(checkPass && !AuthUtils.isValidPassword(password, 6)) {
+			mErrorNewPassTextView.setText(R.string.auth_userpwd_error);
+			mErrorNewPassTextView.setVisibility(TextView.VISIBLE);
+			return false;
+		}
+		return true;
+	}
+	private boolean checkConfirmPassword(){
+		boolean checkPass = mPasswordLayout.getVisibility()== View.VISIBLE;
+		mErrorConfirmPassTextView.setVisibility(View.GONE);
+		String password = mNewPassEditText.getText().toString();
+		String confirmPassword = mConfirmEditText.getText().toString();
+		
+		if(checkPass && !AuthUtils.isValidPassword(password, 6)) {
+			mErrorNewPassTextView.setText(R.string.auth_userpwd_error);
+			mErrorNewPassTextView.setVisibility(TextView.VISIBLE);
+			return false;
+		} else if(checkPass && !AuthUtils.isValidPassword(password, confirmPassword, 6)) {
+			mErrorConfirmPassTextView.setText(R.string.auth_userconfirmpwd_error);
+			mErrorConfirmPassTextView.setVisibility(TextView.VISIBLE);
+			return false;
+		}
+		return true;
+	}
 
 	@Override
 	public void afterGetUserInfo(User user) {}

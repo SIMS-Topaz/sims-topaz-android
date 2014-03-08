@@ -19,7 +19,7 @@
         android:background="@color/light_light_gray"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp" >
@@ -36,7 +36,7 @@
                 style="@style/text_dark_gray_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_toRightOf="@id/user_info_status_text"
                 android:ems="10"
                 android:hint="@string/user_tab_info_status"
                 android:nextFocusDown="@+id/user_info_username"
@@ -44,8 +44,28 @@
 
                 <requestFocus />
             </EditText>
-        </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="8dp"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/view_cancel"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/ic_cancel"/>
+
+                <Button
+                    android:id="@+id/view_save"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/ic_save" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/user_info_username_text_layout"
@@ -62,6 +82,29 @@
                 android:layout_alignParentRight="true"
                 android:ems="4"
                 android:text="@string/user_tab_edit" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="8dp"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/view_cancel_username"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/ic_cancel"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/view_save_username"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/ic_save"
+                    android:visibility="gone" />
+            </LinearLayout>
             <!-- Username not editable -->
 
             <TextView
@@ -115,6 +158,29 @@
                 android:layout_alignParentRight="true"
                 android:ems="4"
                 android:text="@string/user_tab_edit" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="8dp"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/view_cancel_email"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/ic_cancel"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/view_save_email"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/ic_save"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/user_info_email_text"

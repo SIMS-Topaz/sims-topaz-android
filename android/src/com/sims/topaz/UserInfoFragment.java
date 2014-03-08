@@ -27,8 +27,8 @@ import android.widget.Toast;
 
 public class UserInfoFragment  extends Fragment  implements UserDelegate{
 	private Button mUnConnectButton;
-	private Button mSaveButton;
-	private Button mCancelButton;
+	private Button mSaveNewPasswordButton;
+	private Button mCancelNewPasswordButton;
 	private TextView mUserTextView;
 	private TextView mEmailTextView;
 	private Button mUserButton;
@@ -126,12 +126,12 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		mShowPasswordTextView = (TextView)v.findViewById(R.id.user_info_show_pass);
 		mShowPasswordTextView.setTypeface(face);
 
-		mSaveButton = (Button)v.findViewById(R.id.user_save);
-		mSaveButton.setTypeface(face);
-		mSaveButton.setVisibility(View.GONE);
-		mCancelButton = (Button)v.findViewById(R.id.user_cancel);
-		mCancelButton.setTypeface(face);
-		mCancelButton.setVisibility(View.GONE);
+		mSaveNewPasswordButton = (Button)v.findViewById(R.id.user_save);
+		mSaveNewPasswordButton.setTypeface(face);
+		mSaveNewPasswordButton.setVisibility(View.GONE);
+		mCancelNewPasswordButton = (Button)v.findViewById(R.id.user_cancel);
+		mCancelNewPasswordButton.setTypeface(face);
+		mCancelNewPasswordButton.setVisibility(View.GONE);
 		
 		mPasswordLayout = (LinearLayout)v.findViewById(R.id.user_info_password_layout);
 
@@ -149,6 +149,13 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		mCancelEmail = (Button)v.findViewById(R.id.view_cancel_email);
 		mCancelStatus = (Button)v.findViewById(R.id.view_cancel);	
 		
+		mSaveNewPasswordButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				saveNewPassword();
+				
+			}
+		});
 		mSaveUser.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View v) {
@@ -168,7 +175,17 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 				saveNewStatus();
 			}
 		});
-		
+		mCancelNewPasswordButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mErrorConfirmPassTextView.setVisibility(TextView.GONE);
+				mErrorPassTextView.setVisibility(TextView.GONE);
+				mErrorNewPassTextView.setVisibility(TextView.GONE);			
+				mConfirmEditText.setText("");
+				mPassEditText.setText("");
+				mNewPassEditText.setText("");
+			}
+		});
 		mCancelUser.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -231,14 +248,18 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 					mPassEditText.setVisibility(View.VISIBLE);
 					mConfirmEditText.setVisibility(View.VISIBLE);
 					mNewPassEditText.setVisibility(View.VISIBLE);
-					mSaveButton.setVisibility(View.VISIBLE);
-					mCancelButton.setVisibility(View.VISIBLE);
+					mSaveNewPasswordButton.setVisibility(View.VISIBLE);
+					mCancelNewPasswordButton.setVisibility(View.VISIBLE);
+					
 				}else{
 					mPassEditText.setVisibility(View.GONE);
 					mConfirmEditText.setVisibility(View.GONE);
 					mNewPassEditText.setVisibility(View.GONE);	
-					mSaveButton.setVisibility(View.GONE);
-					mCancelButton.setVisibility(View.GONE);
+					mSaveNewPasswordButton.setVisibility(View.GONE);
+					mCancelNewPasswordButton.setVisibility(View.GONE);
+					mErrorConfirmPassTextView.setVisibility(View.GONE);
+					mErrorPassTextView.setVisibility(View.GONE);
+					mErrorNewPassTextView.setVisibility(View.GONE);
 				}
 			}
 		});
@@ -309,8 +330,8 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		};
 		mConfirmEditText.setOnEditorActionListener(listenerConfirmPassword);
 		
-		mUserTextView.setText(getResources().getString(R.string.auth_username)+" : "+mUser.getUserName());
-		mEmailTextView.setText(getResources().getString(R.string.auth_email)+" : "+mUser.getEmail());
+		mUserTextView.setText(mUser.getUserName());
+		mEmailTextView.setText(mUser.getEmail());
 		mStatusEditText.setText(mUser.getStatus());
 		
 		mUserEditText.addTextChangedListener(new TextWatcher() {
@@ -338,7 +359,9 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {}
 			@Override
-			public void afterTextChanged(Editable s) {checkOldPassword();}
+			public void afterTextChanged(Editable s) {
+						checkOldPassword();					
+				}
 		});
 		mNewPassEditText.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -347,7 +370,10 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {}
 			@Override
-			public void afterTextChanged(Editable s) {checkNewPassword();}
+			public void afterTextChanged(Editable s) {
+						checkNewPassword();
+
+				}
 		});
 		mConfirmEditText.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -356,7 +382,9 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {}
 			@Override
-			public void afterTextChanged(Editable s) {checkConfirmPassword();}
+			public void afterTextChanged(Editable s) {
+						checkConfirmPassword();
+				}
 		});
 
 		return v;
@@ -390,7 +418,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		boolean checkPass = mPasswordLayout.getVisibility()== View.VISIBLE;
 		
 		if(checkPass && checkConfirmPassword()){
-				mSaveButton.setEnabled(false);
+				mSaveNewPasswordButton.setEnabled(false);
 				mUser.setPassword(password);
 				mUser.setStatus(mStatusEditText.getText().toString());
 				mRestModule.postUserInfo(mUser, null);
@@ -467,6 +495,16 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 
 	@Override
 	public void afterPostUserInfo(User user) {
-		Toast.makeText(SimsContext.getContext(), "afterPostUserInfo", Toast.LENGTH_SHORT).show();
+		mUser = user;
+		//We are setting the fields with the fields received from the server
+		mStatusEditText.setText(mUser.getStatus());
+
+		mEmailEditText.setText(mUser.getEmail());
+		mEmailTextView.setText(mUser.getEmail());
+		
+		mUserEditText.setText(mUser.getUserName());
+		mUserTextView.setText(mUser.getUserName());
+		
+		Toast.makeText(SimsContext.getContext(), getResources().getString(R.string.user_tab_save_ok), Toast.LENGTH_SHORT).show();
 	}
 }

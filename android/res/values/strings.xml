@@ -73,7 +73,10 @@
     <string name="user_tab_save">Sauvgarder</string>
     <string name="user_tab_cancel">Annuler</string>
     <string name="user_tab_change_pass">Changer le mot de passe</string>
-     <string name="user_tab_edit">changer</string>
+    <string name="user_tab_edit">changer</string>
+    <string name="user_tab_save_ok">Le champ a été sauvgardé.</string>
+    <string name="user_tab_user">Utilisateur :</string>
+    <string name="user_tab_email">Email : </string>
     <!-- Settings -->
     <string name="settings_a_propos_header">A PROPOS</string>
     <string name="settings_a_propos_text">Version 1.0</string>

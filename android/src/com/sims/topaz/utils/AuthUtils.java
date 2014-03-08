@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class AuthUtils {
 	
 	public static boolean isValidUsername(String username) {
-	    String expression = "^[a-z0-9_]+$";
+	    String expression = "^[a-zA-Z0-9_]+$";
 	    Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
 	    Matcher matcher = pattern.matcher(username);
 	    return matcher.matches();

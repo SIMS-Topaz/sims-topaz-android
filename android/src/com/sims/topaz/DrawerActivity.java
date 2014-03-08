@@ -24,7 +24,10 @@ import com.sims.topaz.network.modele.Message;
 
 
 public class DrawerActivity extends ActionBarActivity
-					implements EditMessageFragment.OnNewMessageListener,OnMoveCamera{
+	implements EditMessageFragment.OnNewMessageListener,
+				OnMoveCamera, 
+				PreviewListFragment.OnPreviewClickListener
+				{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
     private DrawerLayout mDrawerLayout;
@@ -233,6 +236,13 @@ public class DrawerActivity extends ActionBarActivity
 		if (mMapFragment != null) {
 			mMapFragment.onMyLocation();
 		}
+	}
+
+
+	@Override
+	public void onPreviewClick(String id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

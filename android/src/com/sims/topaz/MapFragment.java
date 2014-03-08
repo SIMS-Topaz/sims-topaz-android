@@ -1,4 +1,5 @@
 package com.sims.topaz;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -440,6 +441,17 @@ OnMapLoadedCallback
 	@Override
 	public void onClusterInfoWindowClick(Cluster<PreviewClusterItem> cluster) {
 		DebugUtils.log("onClusterInfoWindowClick");
+		ArrayList<Preview> previewList = new ArrayList<Preview>();
+		for (PreviewClusterItem pci : cluster.getItems()) {
+			previewList.add(pci.getPreview());
+		}
+		Fragment f = PreviewListFragment.newInstance(previewList);
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
+				R.drawable.animation_bottom_down);
+		transaction.replace(R.id.preview_list, f);
+		transaction.addToBackStack(null);
+		transaction.commit();
 	}
 	//Location and map listeners----------------------------------------------------------------------------
 	@Override
@@ -506,4 +518,5 @@ OnMapLoadedCallback
 			LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
 		}
 	}
+
 }

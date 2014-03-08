@@ -20,19 +20,64 @@
         android:orientation="vertical" >
 
         <EditText
-            android:id="@+id/user_info_username"
+            android:id="@+id/user_info_status"
             style="@style/text_dark_gray_normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="8dp"
             android:ems="10"
-            android:hint="@string/auth_username"
-            android:nextFocusDown="@+id/user_info_status"
+            android:hint="@string/user_tab_info_status"
+            android:nextFocusDown="@+id/user_info_username"
             android:padding="4dp" >
 
             <requestFocus />
         </EditText>
+
+        <RelativeLayout
+            android:id="@+id/user_info_username_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@color/light_light_gray" >
+
+            <Button
+                android:id="@+id/user_info_username_button"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:ems="4"
+                android:text="@string/user_tab_edit" />
+            <!-- Username not editable -->
+
+            <TextView
+                android:id="@+id/user_info_username_text"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:text="@string/auth_username" />
+
+            <!-- Username editable -->
+
+            <EditText
+                android:id="@+id/user_info_username"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="15"
+                android:hint="@string/auth_username"
+                android:nextFocusDown="@+id/sign_up_mail"
+                android:padding="4dp"
+                android:visibility="gone" >
+
+                <requestFocus />
+            </EditText>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/user_info_username_error"
@@ -42,33 +87,45 @@
             android:text="@string/auth_username_error"
             android:visibility="gone" />
 
-        <EditText
-            android:id="@+id/user_info_status"
-            style="@style/text_dark_gray_normal"
+        <RelativeLayout
+            android:id="@+id/user_info_email_text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_margin="8dp"
-            android:ems="10"
-            android:hint="@string/user_tab_info_status"
-            android:nextFocusDown="@+id/sign_up_mail"
-            android:padding="4dp" >
+            android:background="@color/light_light_gray" >
 
-            <requestFocus />
-        </EditText>
+            <Button
+                android:id="@+id/user_info_email_button"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:ems="4"
+                android:text="@string/user_tab_edit" />
 
-        <EditText
-            android:id="@+id/sign_up_mail"
-            style="@style/text_dark_gray_normal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"
-            android:ems="10"
-            android:hint="@string/auth_email"
-            android:inputType="textEmailAddress"
-            android:nextFocusDown="@+id/user_info_old_password"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/user_info_email_text"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:text="@string/auth_email" />
+
+            <EditText
+                android:id="@+id/sign_up_mail"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="15"
+                android:hint="@string/auth_email"
+                android:inputType="textEmailAddress"
+                android:nextFocusDown="@+id/user_info_old_password"
+                android:padding="4dp"
+                android:visibility="gone" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/signup_email_error"
@@ -80,6 +137,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/user_info_password_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -161,14 +219,6 @@
             android:layout_height="wrap_content"
             android:text="@string/auth_userpwd_error"
             android:visibility="gone" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="@color/light_light_gray"
-        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -201,6 +251,15 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/user_tab_save" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/user_info_unconnect_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@color/light_light_gray"
+        android:orientation="vertical" >
 
         <Button
             android:id="@+id/user_unconnect"

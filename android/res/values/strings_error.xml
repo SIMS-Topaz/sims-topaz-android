@@ -19,4 +19,5 @@
     <string name="map_not_displayed">La carte n\'as pas pu être chargé. </string>
     <string name="warning_internet">Vous avez besoin d\'une connexion internet afin d\'utiliser Topaz.</string>
 	<string name="connection_error">Une erreur lié aux Google Play services a été détecté.</string>
+	<string name="erreur_gen">Une erreur s\'est produite. Veuillez essayer à nouveau. </string>
 </resources>

@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.network.NetworkRestModule;
@@ -52,8 +53,9 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 	private ViewPager mViewPager;
 	private ProgressBar mProgressBar;
 	static String IS_MY_OWN_PROFILE = "is_my_own_profile";
+	private boolean isMyProfile;
 	private byte[] pictureData;
-	private User mUser;
+	private User mUser = null;
 	
 
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
@@ -61,6 +63,9 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_user, container, false);
+		
+		
+		
 		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 
 
@@ -91,10 +96,18 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 
 			}
 		});
+		isMyProfile = false;
 		if(getArguments() != null && getArguments().getBoolean(IS_MY_OWN_PROFILE)){
 			mUserTextView.setText(AuthUtils.getSessionStringValue
 					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
-
+			if(mUser==null){
+				mUser = new User();
+			}
+			mUser.setUserName(AuthUtils.getSessionStringValue
+					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
+			mUser.setPassword(AuthUtils.getSessionStringValue
+					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD));
+			isMyProfile = true;
 		}
 		
 		pictureData = null;
@@ -170,6 +183,9 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
                 startActivityForResult(CameraUtils.startCropImage(), CameraUtils.REQUEST_CODE_CROP_IMAGE);
                 break;
             case CameraUtils.REQUEST_CODE_CROP_IMAGE:
+            	if(data == null) {
+            		Toast.makeText(SimsContext.getContext(), getResources().getString(R.string.erreur_gen), Toast.LENGTH_SHORT).show();
+            		return;}
                 String path = data.getStringExtra(CropImage.IMAGE_PATH);
                 if (path == null) {return;}
 
@@ -218,11 +234,9 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 	}
 	@Override
 	public void afterPostUserInfo(User user) {
+		//Normally only the picture changed.
 		mUser = user;
-		
 		mProgressBar.setVisibility(View.GONE);	
-		mUserTextView.setText(mUser.getUserName());
-		prepareFragments();
 	}
 	
 	private void prepareFragments(){
@@ -230,6 +244,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		Fragment userCommentFragment = new UserCommentFragment();
 		Bundle b = new Bundle();
 		b.putSerializable("user", mUser);
+		b.putBoolean("isMyProfile", isMyProfile);
 		userInfoFragment.setArguments(b);
 		userCommentFragment.setArguments(b);
 		

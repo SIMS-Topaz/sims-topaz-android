@@ -19,20 +19,33 @@
         android:background="@color/light_light_gray"
         android:orientation="vertical" >
 
-        <EditText
-            android:id="@+id/user_info_status"
-            style="@style/text_dark_gray_normal"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"
-            android:ems="10"
-            android:hint="@string/user_tab_info_status"
-            android:nextFocusDown="@+id/user_info_username"
-            android:padding="4dp" >
+            android:layout_margin="8dp" >
 
-            <requestFocus />
-        </EditText>
+            <TextView
+                android:id="@+id/user_info_status_text"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_tab_info_status" />
+
+            <EditText
+                android:id="@+id/user_info_status"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:hint="@string/user_tab_info_status"
+                android:nextFocusDown="@+id/user_info_username"
+                android:padding="4dp" >
+
+                <requestFocus />
+            </EditText>
+        </LinearLayout>
+
 
         <RelativeLayout
             android:id="@+id/user_info_username_text_layout"

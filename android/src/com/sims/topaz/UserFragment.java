@@ -96,13 +96,14 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 
 			}
 		});
+		if(mUser==null){
+			mUser = new User();
+		}
 		isMyProfile = false;
 		if(getArguments() != null && getArguments().getBoolean(IS_MY_OWN_PROFILE)){
 			mUserTextView.setText(AuthUtils.getSessionStringValue
 					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
-			if(mUser==null){
-				mUser = new User();
-			}
+
 			mUser.setUserName(AuthUtils.getSessionStringValue
 					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 			mUser.setPassword(AuthUtils.getSessionStringValue
@@ -112,8 +113,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		
 		pictureData = null;
 		
-		//TODO network call 
-		mUser = new User();
+		//TODO
 		mUser.setId((long)1);
 		mRestModule.getUserInfo((long)1,pictureData);
 

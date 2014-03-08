@@ -79,20 +79,20 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 		mEmailTextView = (TextView) v.findViewById(R.id.user_info_email_text);
 		mEmailTextView.setTypeface(face);
 		
+		TextView mStatusTextView = (TextView)v.findViewById(R.id.user_info_status_text);
+		mStatusTextView.setTypeface(face);
+		
 		
 		mUserEditText = (EditText) v.findViewById(R.id.user_info_username);
 		mUserEditText.setTypeface(face);
-		mUserEditText.setEnabled(false);
 		mUserEditText.setVisibility(View.GONE);
 
 		mStatusEditText = (EditText) v.findViewById(R.id.user_info_status);
 		mStatusEditText.setTypeface(face);
-		mStatusEditText.setEnabled(false);
 		
 
 		mEmailEditText =(EditText)  v.findViewById(R.id.sign_up_mail);
 		mEmailEditText.setTypeface(face);
-		mEmailEditText.setEnabled(false);
 		mEmailEditText.setVisibility(View.GONE);
 
 		mPassEditText =(EditText)  v.findViewById(R.id.user_info_old_password);
@@ -127,10 +127,10 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 		mCancelButton.setTypeface(face);
 		mCancelButton.setVisibility(View.GONE);
 		
+		mPasswordLayout = (LinearLayout)v.findViewById(R.id.user_info_password_layout);
 
 		
 		if(!isMyProfile){
-			mPasswordLayout = (LinearLayout)v.findViewById(R.id.user_info_password_layout);
 			mPasswordLayout.setVisibility(View.GONE);
 			LinearLayout mUnconnectLayout = (LinearLayout)v.findViewById(R.id.user_info_unconnect_layout);
 			mUnconnectLayout.setVisibility(View.GONE);	
@@ -251,9 +251,9 @@ public class UserInfoFragment  extends Fragment  implements TextWatcher,UserDele
 		};
 		mConfirmEditText.setOnEditorActionListener(listener);
 		
-		mUserTextView.setText(getResources().getString(R.string.auth_user)+" : "+mUser.getUserName());
+		mUserTextView.setText(getResources().getString(R.string.auth_username)+" : "+mUser.getUserName());
 		mEmailTextView.setText(getResources().getString(R.string.auth_email)+" : "+mUser.getEmail());
-		mStatusEditText.setText(getResources().getString(R.string.user_tab_info_status)+" : "+mUser.getStatus());
+		mStatusEditText.setText(mUser.getStatus());
 		
 		mUserEditText.addTextChangedListener(this);
 		mStatusEditText.addTextChangedListener(this);

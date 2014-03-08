@@ -177,13 +177,12 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		});
 		mCancelNewPasswordButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				mErrorConfirmPassTextView.setVisibility(TextView.GONE);
-				mErrorPassTextView.setVisibility(TextView.GONE);
-				mErrorNewPassTextView.setVisibility(TextView.GONE);			
+			public void onClick(View v) {		
 				mConfirmEditText.setText("");
 				mPassEditText.setText("");
 				mNewPassEditText.setText("");
+				onShowHidePassword();
+				
 			}
 		});
 		mCancelUser.setOnClickListener(new View.OnClickListener() {
@@ -241,26 +240,9 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		});
 		
 		mShowPasswordTextView.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				if(mPassEditText.getVisibility()== View.GONE){
-					mPassEditText.setVisibility(View.VISIBLE);
-					mConfirmEditText.setVisibility(View.VISIBLE);
-					mNewPassEditText.setVisibility(View.VISIBLE);
-					mSaveNewPasswordButton.setVisibility(View.VISIBLE);
-					mCancelNewPasswordButton.setVisibility(View.VISIBLE);
-					
-				}else{
-					mPassEditText.setVisibility(View.GONE);
-					mConfirmEditText.setVisibility(View.GONE);
-					mNewPassEditText.setVisibility(View.GONE);	
-					mSaveNewPasswordButton.setVisibility(View.GONE);
-					mCancelNewPasswordButton.setVisibility(View.GONE);
-					mErrorConfirmPassTextView.setVisibility(View.GONE);
-					mErrorPassTextView.setVisibility(View.GONE);
-					mErrorNewPassTextView.setVisibility(View.GONE);
-				}
+				onShowHidePassword();
 			}
 		});
 		mConfirmEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -390,6 +372,25 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		return v;
 	}
 
+	private void onShowHidePassword(){
+		if(mPassEditText.getVisibility()== View.GONE){
+			mPassEditText.setVisibility(View.VISIBLE);
+			mConfirmEditText.setVisibility(View.VISIBLE);
+			mNewPassEditText.setVisibility(View.VISIBLE);
+			mSaveNewPasswordButton.setVisibility(View.VISIBLE);
+			mCancelNewPasswordButton.setVisibility(View.VISIBLE);
+			
+		}else{
+			mPassEditText.setVisibility(View.GONE);
+			mConfirmEditText.setVisibility(View.GONE);
+			mNewPassEditText.setVisibility(View.GONE);	
+			mSaveNewPasswordButton.setVisibility(View.GONE);
+			mCancelNewPasswordButton.setVisibility(View.GONE);
+			mErrorConfirmPassTextView.setVisibility(View.GONE);
+			mErrorPassTextView.setVisibility(View.GONE);
+			mErrorNewPassTextView.setVisibility(View.GONE);
+		}
+	}
 	private void saveNewUserName(){
 		String username = mUserEditText.getText().toString();
 		boolean checkUserName = mUserEditText.getVisibility()== View.VISIBLE;

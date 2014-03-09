@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.sims.topaz.R;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.MyTypefaceSingleton;
+import com.sims.topaz.utils.SimsContext;
 
 public class PreviewListAdapter extends ArrayAdapter<Preview> {
 
@@ -61,6 +62,16 @@ public class PreviewListAdapter extends ArrayAdapter<Preview> {
 				holder.mDate.setText(DateFormat.format
 						(getContext().getString(R.string.date_format), 
 								new Date( p.getTimestamp()) ) );
+				
+				if(p.getLikes()==0 && p.getDislikes()==0) {
+					//holder.mLikeBar.setIndeterminate(true);
+					holder.mLikeBar.setProgress(0);
+				} else {
+					holder.mLikeBar.setMax(p.getLikes()+p.getDislikes());
+					holder.mLikeBar.setProgress(p.getLikes());
+				}
+				holder.mNote.setText(Integer.toString(p.getLikes()+p.getDislikes())
+						+" "+SimsContext.getContext().getString(R.string.bulle_note));
 			}
 		}
 		return view;

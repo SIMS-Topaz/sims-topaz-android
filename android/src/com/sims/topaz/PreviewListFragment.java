@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.sims.topaz.adapter.PreviewListAdapter;
 import com.sims.topaz.dummy.DummyContent;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.DebugUtils;
@@ -74,9 +75,9 @@ public class PreviewListFragment extends Fragment implements
 				new Exception("preview list is null"));
 
 		// TODO: Change Adapter to display your content
-		mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-				android.R.layout.simple_list_item_1, android.R.id.text1,
-				DummyContent.ITEMS);
+		mAdapter = new PreviewListAdapter(getActivity(),
+				R.layout.adapter_preview_item, 
+				previews);
 	}
 
 	@Override

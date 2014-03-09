@@ -49,6 +49,7 @@ public class PreviewListFragment extends Fragment implements
 		PreviewListFragment fragment = new PreviewListFragment();
 		Bundle args = new Bundle();
 		fragment.setArguments(args);
+		//TODO: order preview by date descendant
 		fragment.setPreviews(param1);
 		return fragment;
 	}

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -242,7 +243,19 @@ public class DrawerActivity extends ActionBarActivity
 
 	@Override
 	public void onPreviewClick(Preview p) {
-		// TODO Auto-generated method stub
+		//set fragment
+		Bundle args = new Bundle();
+		args.putLong("id_preview", p.getId());
+		CommentFragment fragment = new CommentFragment();
+		fragment.setArguments(args);
+
+		//create transaction
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
+				R.drawable.animation_slide_out_right);
+		transaction.replace(R.id.fragment_map_comment, fragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
 		
 	}
 

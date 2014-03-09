@@ -22,7 +22,7 @@
 
         <TextView
             style="@style/text_gray_big"
-            android:id="@+id/preview_item_person_name"
+            android:id="@+id/preview_item_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/preview_item_image_first_comment"
@@ -33,7 +33,7 @@
             android:id="@+id/preview_item_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/preview_item_person_name"
+            android:layout_toRightOf="@id/preview_item_username"
             android:layout_alignParentRight="true"
             android:text="time: 15:52" />
     </RelativeLayout>

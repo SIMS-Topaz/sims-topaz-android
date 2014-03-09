@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.interfaces.OnMoveCamera;
 import com.sims.topaz.network.modele.Message;
+import com.sims.topaz.network.modele.Preview;
 
 
 public class DrawerActivity extends ActionBarActivity
@@ -240,7 +241,7 @@ public class DrawerActivity extends ActionBarActivity
 
 
 	@Override
-	public void onPreviewClick(String id) {
+	public void onPreviewClick(Preview p) {
 		// TODO Auto-generated method stub
 		
 	}

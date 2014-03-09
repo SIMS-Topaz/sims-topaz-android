@@ -120,7 +120,7 @@ public class PreviewListFragment extends Fragment implements
 			// Notify the active callbacks interface (the activity, if the
 			// fragment is attached to one) that an item has been selected.
 			mListener
-					.onPreviewClick(DummyContent.ITEMS.get(position).id);
+					.onPreviewClick(previews.get(position));
 		}
 	}
 
@@ -151,8 +151,7 @@ public class PreviewListFragment extends Fragment implements
 	 * >Communicating with Other Fragments</a> for more information.
 	 */
 	public interface OnPreviewClickListener {
-		// TODO: Update argument type and name
-		public void onPreviewClick(String id);
+		public void onPreviewClick(Preview preview);
 	}
 
 }

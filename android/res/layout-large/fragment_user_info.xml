@@ -20,6 +20,7 @@
         android:orientation="vertical" >
 
         <!-- Status#################################################################" -->
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,21 +55,22 @@
                 android:orientation="horizontal" >
 
                 <Button
+                    android:id="@+id/view_save"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/selector_save" />
+
+                <Button
                     android:id="@+id/view_cancel"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/selector_cancel" />
-
-                <Button
-                    android:id="@+id/view_save"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="@drawable/selector_save" />
             </LinearLayout>
         </RelativeLayout>
-        
- 		<!-- Username#################################################################" -->
+
+        <!-- Username#################################################################" -->
+
         <RelativeLayout
             android:id="@+id/user_info_username_text_layout"
             android:layout_width="match_parent"
@@ -126,7 +128,6 @@
                 android:gravity="center_vertical"
                 android:text="@string/auth_username" />
 
-
             <EditText
                 android:id="@+id/user_info_username"
                 style="@style/text_dark_gray_normal"
@@ -151,8 +152,9 @@
             android:layout_height="wrap_content"
             android:text="@string/auth_username_error"
             android:visibility="gone" />
-        
- 		<!-- Email#################################################################" -->
+
+        <!-- Email#################################################################" -->
+
         <RelativeLayout
             android:id="@+id/user_info_email_text_layout"
             android:layout_width="match_parent"
@@ -233,8 +235,9 @@
             android:text="@string/auth_usermail_error"
             android:visibility="gone" />
     </LinearLayout>
-    
- 	<!-- Password layout#################################################################" -->
+
+    <!-- Password layout#################################################################" -->
+
     <LinearLayout
         android:id="@+id/user_info_password_layout"
         android:layout_width="match_parent"
@@ -353,6 +356,7 @@
     </LinearLayout>
 
     <!-- unconnect#################################################################" -->
+
     <LinearLayout
         android:id="@+id/user_info_unconnect_layout"
         android:layout_width="match_parent"

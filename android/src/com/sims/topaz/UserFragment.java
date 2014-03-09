@@ -53,6 +53,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 	private ViewPager mViewPager;
 	private ProgressBar mProgressBar;
 	static String IS_MY_OWN_PROFILE = "is_my_own_profile";
+	static String USER_ID = "user_id";
 	private boolean isMyProfile;
 	private byte[] pictureData;
 	private User mUser = null;
@@ -100,7 +101,10 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 			mUser = new User();
 		}
 		isMyProfile = false;
-		if(getArguments() != null && getArguments().getBoolean(IS_MY_OWN_PROFILE)){
+		if(getArguments() != null 
+				&& getArguments().containsKey(IS_MY_OWN_PROFILE) 
+				&& getArguments().getBoolean(IS_MY_OWN_PROFILE)){
+			
 			mUserTextView.setText(AuthUtils.getSessionStringValue
 					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 
@@ -108,15 +112,23 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
 			mUser.setPassword(AuthUtils.getSessionStringValue
 					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD));
+			mUser.setId(AuthUtils.getSessionLongValue
+					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID, (long)0));
 			isMyProfile = true;
+			
+		}else if(getArguments() != null 
+				&& getArguments().containsKey(USER_ID)){
+			mUser.setId(getArguments().getLong(USER_ID));
 		}
 		
 		pictureData = null;
-		
-		//TODO
-		mUser.setId((long)1);
-		mRestModule.getUserInfo((long)1,pictureData);
-
+		if(mUser.getId()!=null){
+			mRestModule.getUserInfo(mUser.getId(),pictureData);
+		}else{
+			Toast.makeText(SimsContext.getContext(), getResources().getString(R.string.erreur_gen), Toast.LENGTH_SHORT).show();
+		}
+		// Retain this fragment across configuration changes.
+		setRetainInstance(true);
 		return v;
 	}
 
@@ -173,14 +185,14 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
                     CameraUtils.copyStream(inputStream, fileOutputStream);
                     fileOutputStream.close();
                     inputStream.close();
-                    startActivityForResult(CameraUtils.startCropImage(), CameraUtils.REQUEST_CODE_CROP_IMAGE);
+                    startActivityForResult(CameraUtils.startCropImage(100,100,true), CameraUtils.REQUEST_CODE_CROP_IMAGE);
                 } catch (Exception e) {
                     DebugUtils.log("Error while creating temp file"+ e);
                 }
 
                 break;
             case CameraUtils.REQUEST_CODE_TAKE_PICTURE:
-                startActivityForResult(CameraUtils.startCropImage(), CameraUtils.REQUEST_CODE_CROP_IMAGE);
+                startActivityForResult(CameraUtils.startCropImage(100,100,true), CameraUtils.REQUEST_CODE_CROP_IMAGE);
                 break;
             case CameraUtils.REQUEST_CODE_CROP_IMAGE:
             	if(data == null) {

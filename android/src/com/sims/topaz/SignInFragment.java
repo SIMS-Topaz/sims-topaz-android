@@ -162,7 +162,7 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 	public void afterSignIn(User user) {
 		mLoginButton.setEnabled(true);
 		mCallback.onHideProgressBar();
-		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString(), user.getVerified());
+		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString(), user.getVerified(),user.getId());
 		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
 		startActivity(intent);	
 	}

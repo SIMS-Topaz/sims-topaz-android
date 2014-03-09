@@ -51,17 +51,17 @@
                     android:orientation="horizontal" >
 
                     <Button
+                        android:id="@+id/view_save"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/selector_cancel" />
+
+                    <Button
                         android:id="@+id/view_cancel"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginRight="8dp"
                         android:background="@drawable/selector_save" />
-
-                    <Button
-                        android:id="@+id/view_save"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:background="@drawable/selector_cancel" />
                 </LinearLayout>
             </RelativeLayout>
 

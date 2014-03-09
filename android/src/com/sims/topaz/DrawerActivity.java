@@ -20,11 +20,14 @@ import android.widget.ListView;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.interfaces.OnMoveCamera;
+import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.network.modele.Message;
 
 
 public class DrawerActivity extends ActionBarActivity
-					implements EditMessageFragment.OnNewMessageListener,OnMoveCamera{
+					implements EditMessageFragment.OnNewMessageListener,
+					OnMoveCamera,
+					OnShowUserProfile{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
     private DrawerLayout mDrawerLayout;
@@ -233,6 +236,25 @@ public class DrawerActivity extends ActionBarActivity
 		if (mMapFragment != null) {
 			mMapFragment.onMyLocation();
 		}
+	}
+
+
+	@Override
+	public void OnShowUserProfileFragment(long id) {
+    	FragmentManager fragmentManager = getSupportFragmentManager();
+    	fragmentManager.beginTransaction().remove(mLastFragment);
+    	
+		mLastFragment = new UserFragment();
+		Bundle bundle = new Bundle();
+		bundle.putBoolean(UserFragment.IS_MY_OWN_PROFILE, false);
+		bundle.putLong(UserFragment.USER_ID, id);
+		mLastFragment.setArguments(bundle);		
+		
+		fragmentManager
+		.beginTransaction()
+		.replace(R.id.content_frame, mLastFragment)
+		.addToBackStack(null)
+		.commit();
 	}
 
 }

@@ -136,11 +136,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		mPasswordLayout = (LinearLayout)v.findViewById(R.id.user_info_password_layout);
 
 		
-		if(!isMyProfile){
-			mPasswordLayout.setVisibility(View.GONE);
-			LinearLayout mUnconnectLayout = (LinearLayout)v.findViewById(R.id.user_info_unconnect_layout);
-			mUnconnectLayout.setVisibility(View.GONE);	
-		}
+
 		
 		mSaveUser = (Button)v.findViewById(R.id.view_save_username);
 		mSaveEmail = (Button)v.findViewById(R.id.view_save_email);
@@ -369,6 +365,20 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 				}
 		});
 
+		if(!isMyProfile){
+			mPasswordLayout.setVisibility(View.GONE);
+			LinearLayout mUnconnectLayout = (LinearLayout)v.findViewById(R.id.user_info_unconnect_layout);
+			mUnconnectLayout.setVisibility(View.GONE);
+			mSaveStatus.setVisibility(View.GONE);
+			mCancelStatus.setVisibility(View.GONE);
+			mUserButton.setVisibility(View.GONE);
+			mEmailButton.setVisibility(View.GONE);
+			//Transform this edit text into a textView
+			mStatusEditText.setKeyListener(null);
+			mStatusEditText.setEnabled(false);
+			mStatusEditText.setCursorVisible(false);
+			mStatusTextView.setFocusable(false);
+		}
 		return v;
 	}
 

@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -18,6 +19,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,7 +30,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sims.topaz.EditMessageFragment.OnNewMessageListener;
 import com.sims.topaz.adapter.CommentAdapter;
+import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.modele.CommentItem;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.CommentDelegate;
@@ -61,7 +67,24 @@ public class CommentFragment extends Fragment
 	private Message mMessage=null;
 	//intelligence
 	private NetworkRestModule restModule = new NetworkRestModule(this);
+	OnShowUserProfile mCallback;
 	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mCallback = (OnShowUserProfile) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnShowUserProfile");
+		}
+	}
+	
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mCallback = null;
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,6 +109,7 @@ public class CommentFragment extends Fragment
 		
 		//get the main message from the preview id
 		loadMessage();
+
 		
 		return v;
 	}   
@@ -98,6 +122,13 @@ public class CommentFragment extends Fragment
 		mListComments.setAdapter(new CommentAdapter(SimsContext.getContext(),
 				R.layout.fragment_comment_item,
 				lci));
+		mListComments.setOnItemClickListener(new OnItemClickListener()
+		{
+		    @Override public void onItemClick(AdapterView<?> adapterView, View view,int position, long arg3)
+		    { 
+		    	mCallback.OnShowUserProfileFragment(mMessage.getComments().get(position).getUserId());
+		    }
+		});
 		mSendCommentButton.setEnabled(true);
 		mSendCommentButton.setClickable(true);
 		

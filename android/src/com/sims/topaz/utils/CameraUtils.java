@@ -69,14 +69,13 @@ public class CameraUtils {
 		return photoPickerIntent;
 	}
 	
-	public static  Intent startCropImage() {
+	public static  Intent startCropImage(int length, int height, boolean circle) {
 
         Intent intent = new Intent(SimsContext.getContext(), CropImage.class);
         intent.putExtra(CropImage.IMAGE_PATH, mFileTemp.getPath());
-        intent.putExtra(CropImage.SCALE, true);
-
-        intent.putExtra(CropImage.ASPECT_X, 3);
-        intent.putExtra(CropImage.ASPECT_Y, 2);
+        intent.putExtra(CropImage.CIRCLE_CROP, circle);
+        intent.putExtra(CropImage.ASPECT_X, 1);
+        intent.putExtra(CropImage.ASPECT_Y, 1);
         return intent;
     }
 	

@@ -39,11 +39,13 @@ public class AuthUtils {
 	public final static boolean getSessionBoolValue(String key, Boolean defaultValue) {
 		return MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).getBoolean(key, defaultValue);
 	}
-	
-	public final static void setSession(String username, String userpassword, Boolean verified) {
+	public final static long getSessionLongValue(String key, long defaultValue) {
+		return MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).getLong(key, defaultValue);
+	}	
+	public final static void setSession(String username, String userpassword, Boolean verified , long id) {
 		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).putString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME, username);
 		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).putString(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_PASSWORD, userpassword);
-		
+		MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).putLong(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID, id);
 		if(verified != null) {
 			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).putBoolean(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED, verified);
 		}
@@ -58,6 +60,9 @@ public class AuthUtils {
 		}
 		if(MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).hasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)) {
 			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).removeKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED);
+		}
+		if(MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).hasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID)) {
+			MyPreferencesUtilsSingleton.getInstance(SimsContext.getContext()).removeKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID);
 		}
 	}
 

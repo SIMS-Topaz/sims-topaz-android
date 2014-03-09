@@ -13,6 +13,8 @@ public class Comment  implements Serializable{
 	
 	@JsonProperty("user_name")
 	private String user_name;
+	@JsonProperty("user_id")
+	private long user_id;
 	private String text;
 	@JsonProperty("date")
 	private Long timestamp;
@@ -43,6 +45,14 @@ public class Comment  implements Serializable{
 
 	public Long getTimestamp() {
 		return timestamp;
+	}
+
+	public long getUserId() {
+		return user_id;
+	}
+
+	public void setUserId(long user_id) {
+		this.user_id = user_id;
 	}
 
 }

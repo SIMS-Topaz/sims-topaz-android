@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -30,11 +29,7 @@ import com.sims.topaz.utils.DebugUtils;
 public class PreviewListFragment extends Fragment implements
 		AbsListView.OnItemClickListener {
 
-	// TODO: Rename parameter arguments, choose names that match
-	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	private static final String ARG_PARAM1 = "previews";
 
-	// TODO: Rename and change types of parameters
 	private List<Preview> previews;
 
 	private OnPreviewClickListener mListener;
@@ -50,7 +45,6 @@ public class PreviewListFragment extends Fragment implements
 	 */
 	private ListAdapter mAdapter;
 
-	// TODO: Rename and change types of parameters
 	public static PreviewListFragment newInstance(List<Preview> param1) {
 		PreviewListFragment fragment = new PreviewListFragment();
 		Bundle args = new Bundle();
@@ -73,7 +67,6 @@ public class PreviewListFragment extends Fragment implements
 		if(previews==null) DebugUtils.logException(
 				new Exception("preview list is null"));
 
-		// TODO: Change Adapter to display your content
 		mAdapter = new PreviewListAdapter(getActivity(),
 				R.layout.adapter_preview_item, 
 				previews);

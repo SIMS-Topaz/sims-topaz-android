@@ -15,7 +15,6 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.sims.topaz.adapter.PreviewListAdapter;
-import com.sims.topaz.dummy.DummyContent;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.DebugUtils;
 

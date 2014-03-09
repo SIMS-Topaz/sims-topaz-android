@@ -55,13 +55,13 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginRight="8dp"
-                        android:background="@drawable/ic_cancel" />
+                        android:background="@drawable/selector_save" />
 
                     <Button
                         android:id="@+id/view_save"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:background="@drawable/ic_save" />
+                        android:background="@drawable/selector_cancel" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -95,14 +95,14 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginRight="8dp"
-                        android:background="@drawable/ic_cancel"
+                        android:background="@drawable/selector_cancel"
                         android:visibility="gone" />
 
                     <Button
                         android:id="@+id/view_save_username"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:background="@drawable/ic_save"
+                        android:background="@drawable/selector_save"
                         android:visibility="gone" />
                 </LinearLayout>
 
@@ -178,14 +178,14 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginRight="8dp"
-                        android:background="@drawable/ic_cancel"
+                        android:background="@drawable/selector_cancel"
                         android:visibility="gone" />
 
                     <Button
                         android:id="@+id/view_save_email"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:background="@drawable/ic_save"
+                        android:background="@drawable/selector_save"
                         android:visibility="gone" />
                 </LinearLayout>
 
@@ -331,7 +331,7 @@
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/user_tab_cancel"
-                    android:drawableRight="@drawable/ic_save"
+                    android:drawableRight="@drawable/selector_save"
                     android:gravity="center_horizontal|center_vertical"
                     android:text="@string/user_tab_cancel" />
 
@@ -343,7 +343,7 @@
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/user_tab_save"
-                    android:drawableRight="@drawable/ic_cancel"
+                    android:drawableRight="@drawable/selector_cancel"
                     android:gravity="center_horizontal|center_vertical"
                     android:text="@string/user_tab_save" />
             </LinearLayout>

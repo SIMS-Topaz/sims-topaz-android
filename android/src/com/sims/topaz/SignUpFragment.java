@@ -235,7 +235,7 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 	public void afterSignUp(User user) {
 		mSignupButton.setEnabled(true);
 		mCallback.onHideProgressBar();
-		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString(), user.getVerified());
+		AuthUtils.setSession(mUserNameEditText.getText().toString(), mPasswordEditText.getText().toString(), user.getVerified(), user.getId());
 		Intent intent = new Intent(SimsContext.getContext(), DrawerActivity.class);
 		startActivity(intent);
 	}

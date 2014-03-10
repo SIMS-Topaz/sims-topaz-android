@@ -13,6 +13,7 @@ public class MyPreferencesUtilsSingleton {
 	   public static final String SHARED_PREFERENCES_AUTH_USERNAME = "topaz_shared_preferences_auth_username";
 	   public static final String SHARED_PREFERENCES_AUTH_PASSWORD = "topaz_shared_preferences_auth_password";
 	   public static final String SHARED_PREFERENCES_VERIFIED = "topaz_shared_preferences_auth_verified";
+	   public static final String SHARED_PREFERENCES_AUTH_ID = "topaz_shared_preferences_auth_id";
 	   
 	    private MyPreferencesUtilsSingleton() {}
 	    private MyPreferencesUtilsSingleton(Context c) {
@@ -35,6 +36,13 @@ public class MyPreferencesUtilsSingleton {
 	        return mPrefs.getBoolean(key, defaultValue);
 	    }
 
+	    public void putLong(String key, long nb){
+	        mEditor.putLong(key,nb);
+	        mEditor.commit();	    	
+	    }
+	    public long getLong(String key, long defaultValue ){
+	        return mPrefs.getLong(key, defaultValue);
+	    }	    
 	    public void putNumber(String key, Integer nb){
 	        mEditor.putInt(key,nb);
 	        mEditor.commit();

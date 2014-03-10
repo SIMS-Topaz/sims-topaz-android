@@ -24,9 +24,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <!-- For crop image library -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <!--
          The following two permissions are not required to use
-	     Google Maps Android API v2, but are recommended.
+	     Google Maps Android API v2, but are recommended.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -35,7 +37,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/_Topaz" >
+        android:theme="@style/Theme.AppCompat.Light" >
 
         <!-- Google API key in res/values/google.xml -->
         <meta-data
@@ -48,8 +50,8 @@
         <activity
             android:name="com.sims.topaz.SplashScreenActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light"
-            android:noHistory="true" >
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.Light" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,17 +61,18 @@
         <activity
             android:name="com.sims.topaz.AuthActivity"
             android:label="@string/app_name"
+            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light"
-            android:windowSoftInputMode="adjustPan"
-            android:noHistory="true" >
+            android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name="com.sims.topaz.DrawerActivity"
+            android:configChanges="screenSize|orientation"
             android:label="@string/app_name"
-            android:noHistory="true"
-            android:theme="@style/Theme.AppCompat.Light"
-            android:configChanges="screenSize|orientation" >
+            android:theme="@style/Theme.AppCompat.Light" >
         </activity>
+        <!-- For Crop Image library -->
+        <activity android:name="eu.janmuller.android.simplecropimage.CropImage" />
     </application>
 
 </manifest>

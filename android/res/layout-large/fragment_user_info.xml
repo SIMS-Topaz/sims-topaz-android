@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/text_gray_big"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/user_tab_info" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@color/light_light_gray"
+        android:orientation="vertical" >
+
+        <!-- Status#################################################################" -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" >
+
+            <TextView
+                android:id="@+id/user_info_status_text"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_tab_info_status" />
+
+            <EditText
+                android:id="@+id/user_info_status"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/user_info_status_text"
+                android:ems="10"
+                android:hint="@string/user_tab_info_status"
+                android:nextFocusDown="@+id/user_info_username"
+                android:padding="4dp" >
+
+                <requestFocus />
+            </EditText>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="8dp"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/view_save"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/selector_save" />
+
+                <Button
+                    android:id="@+id/view_cancel"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/selector_cancel" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- Username#################################################################" -->
+
+        <RelativeLayout
+            android:id="@+id/user_info_username_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@color/light_light_gray" >
+
+            <Button
+                android:id="@+id/user_info_username_button"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:ems="4"
+                android:text="@string/user_tab_edit" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="8dp"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/view_cancel_username"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/selector_cancel"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/view_save_username"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/selector_save"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/user_info_username_text_static"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/user_tab_user" />
+
+            <TextView
+                android:id="@+id/user_info_username_text"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/user_info_username_text_static"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:text="@string/auth_username" />
+
+            <EditText
+                android:id="@+id/user_info_username"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_toRightOf="@id/user_info_username_text_static"
+                android:ems="15"
+                android:hint="@string/auth_username"
+                android:nextFocusDown="@+id/sign_up_mail"
+                android:padding="4dp"
+                android:visibility="gone" >
+
+                <requestFocus />
+            </EditText>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/user_info_username_error"
+            style="@style/text_red_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auth_username_error"
+            android:visibility="gone" />
+
+        <!-- Email#################################################################" -->
+
+        <RelativeLayout
+            android:id="@+id/user_info_email_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@color/light_light_gray" >
+
+            <Button
+                android:id="@+id/user_info_email_button"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:ems="4"
+                android:text="@string/user_tab_edit" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="8dp"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/view_cancel_email"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/selector_cancel"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/view_save_email"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/selector_save"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/user_info_email_text_static"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/user_tab_email" />
+
+            <TextView
+                android:id="@+id/user_info_email_text"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/user_info_email_text_static"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:text="@string/auth_email" />
+
+            <EditText
+                android:id="@+id/sign_up_mail"
+                style="@style/text_dark_gray_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_toRightOf="@id/user_info_email_text_static"
+                android:ems="15"
+                android:hint="@string/auth_email"
+                android:inputType="textEmailAddress"
+                android:nextFocusDown="@+id/user_info_old_password"
+                android:padding="4dp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/signup_email_error"
+            style="@style/text_red_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auth_usermail_error"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Password layout#################################################################" -->
+
+    <LinearLayout
+        android:id="@+id/user_info_password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@color/light_light_gray"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/user_info_show_pass"
+            style="@style/text_dark_gray_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawableRight="@drawable/ic_arrow_down"
+            android:gravity="center"
+            android:text="@string/user_tab_change_pass" />
+
+        <EditText
+            android:id="@+id/user_info_old_password"
+            style="@style/text_dark_gray_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:hint="@string/user_tab_info_old_pass"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:nextFocusUp="@id/sign_in_username"
+            android:padding="4dp"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/user_info_password_error"
+            style="@style/text_red_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auth_userpwd_error"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/user_info_new_password"
+            style="@style/text_dark_gray_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:hint="@string/user_tab_info_new_pass"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:nextFocusUp="@id/sign_in_username"
+            android:padding="4dp"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/user_info_new_password_error"
+            style="@style/text_red_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auth_userpwd_error"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/user_info_confirm_new_password"
+            style="@style/text_dark_gray_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:hint="@string/auth_confirm_password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:nextFocusUp="@id/sign_in_username"
+            android:padding="4dp"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/user_info_confirm_new_password_error"
+            style="@style/text_red_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auth_userpwd_error"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/user_cancel"
+                style="@style/text_white_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/user_tab_cancel"
+                android:drawableRight="@drawable/selector_save"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/user_tab_cancel" />
+
+            <Button
+                android:id="@+id/user_save"
+                style="@style/text_white_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/user_tab_save"
+                android:drawableRight="@drawable/selector_cancel"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/user_tab_save" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- unconnect#################################################################" -->
+
+    <LinearLayout
+        android:id="@+id/user_info_unconnect_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@color/light_light_gray"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/user_unconnect"
+            style="@style/text_white_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/auth_unconnect"
+            android:drawableRight="@drawable/ic_logout"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/auth_unconnect" />
+    </LinearLayout>
+
+</LinearLayout>

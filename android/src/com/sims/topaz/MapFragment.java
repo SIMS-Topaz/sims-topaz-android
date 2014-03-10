@@ -412,6 +412,7 @@ OnMapLoadedCallback
 	@Override
 	public boolean onClusterClick(Cluster<PreviewClusterItem> cluster) {
 		mBulleAdapter.setIsCluster(true);
+		mBulleAdapter.setCluster(cluster);
 		return false;
 	}
 	@Override
@@ -462,6 +463,7 @@ OnMapLoadedCallback
 		mCurrentCameraPosition = mMap.getCameraPosition();
 		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
 		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+		LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
 	}
 	/**
 	 * Verify that Google Play services is available before making a request.

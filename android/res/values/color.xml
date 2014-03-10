@@ -13,4 +13,5 @@
     <color name="green">#9c0</color>
     <color name="transparent">#00000000</color>
     <color name="icon_color">#557980</color>
+    <color name="transparent_gray">#80444444</color>
 </resources>

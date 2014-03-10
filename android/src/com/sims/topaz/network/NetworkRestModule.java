@@ -11,6 +11,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -31,6 +32,7 @@ import com.sims.topaz.network.interfaces.LikeStatusDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
+import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiResponse;
 import com.sims.topaz.network.modele.Comment;
 import com.sims.topaz.network.modele.Message;
@@ -115,17 +117,30 @@ public class NetworkRestModule {
 	 * La fin de la requete appellera afterPostMessage() (interface NetworkDelegate)
 	 * @param message le message à poster
 	 */
-	public void postMessage(Message message, byte[] pictureData) {
+	public void postMessage(Message message) {
 		String url = SERVER_URL + "post_message";
 		DebugUtils.log("Network postMessage url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			rest.setJSONParam(mapper.writeValueAsString(message));
-			rest.setByteData(pictureData);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
+		rest.execute();
+	}
+	
+	
+	/**
+	 * Poste une image
+	 * La fin de la requete appellera afterUploadPicture() (interface PictureUploadDelegate)
+	 * @param pictureData l'image
+	 */
+	public void uploadPicture(byte[] pictureData) {
+		String url = SERVER_URL + "upload_picture";
+		DebugUtils.log("Network uploadPicture url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
+		rest.setByteData(pictureData);
 		rest.execute();
 	}
 	
@@ -200,6 +215,37 @@ public class NetworkRestModule {
 		try {
 			
 			rest.setJSONParam(mapper.writeValueAsString(user));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		rest.execute();
+	}
+	
+	/**
+	 * Envoi une requete get_user pour recuperer les informations d'un user
+	 * La fin de la requete appellera afterGetUserInfo() (interface UserDelegate)
+	 * @param id : l'id du username
+	 */
+	public void getUserInfo(Long id, byte[] pictureData) {
+		String url = SERVER_URL + "user_info/" + id;
+		DebugUtils.log("Network getUserInfo url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_USER_INFO);
+		rest.execute();
+	}
+	
+	/**
+	 * Envoi une requete set_user pour setter les informations d'un user
+	 * La fin de la requete appellera afterSetUserInfo() (interface UserDelegate)
+	 * @param id : l'id du username
+	 */
+	public void postUserInfo(User user, byte[] pictureData) {
+		String url = SERVER_URL + "user_info/" + user.getId();
+		DebugUtils.log("Network postUserInfo url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_USER_INFO);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			rest.setJSONParam(mapper.writeValueAsString(user));
+			rest.setByteData(pictureData);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -300,6 +346,32 @@ public class NetworkRestModule {
 					((ErreurDelegate) delegate).networkError();
 					e.printStackTrace();
 				}	
+				break; 
+			case GET_USER_INFO:
+				try {
+					ApiResponse<User> responseData = mapper.readValue(response, new TypeReference<ApiResponse<User>>(){});
+					if(responseData.getError() != null) {
+						((ErreurDelegate) delegate).apiError(responseData.getError());
+					} else {
+						((UserDelegate)delegate).afterGetUserInfo(responseData.getData());
+					}
+				} catch (Exception e) {
+					((ErreurDelegate) delegate).networkError();
+					e.printStackTrace();
+				}	
+				break; 
+			case POST_USER_INFO:
+				try {
+					ApiResponse<User> responseData = mapper.readValue(response, new TypeReference<ApiResponse<User>>(){});
+					if(responseData.getError() != null) {
+						((ErreurDelegate) delegate).apiError(responseData.getError());
+					} else {
+						((UserDelegate)delegate).afterPostUserInfo(responseData.getData());
+					}
+				} catch (Exception e) {
+					((ErreurDelegate) delegate).networkError();
+					e.printStackTrace();
+				}
 				break;
 			default:
 				break;
@@ -307,7 +379,7 @@ public class NetworkRestModule {
 	}
 
 	enum TypeRequest {
-		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN
+		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, POST_USER_INFO
 	}
 	
 	
@@ -337,6 +409,7 @@ public class NetworkRestModule {
 	    }
 		
 		public void setByteData(byte[] data) {
+			isPost = true;
 			byteData = data;
 	    }
 
@@ -400,14 +473,12 @@ public class NetworkRestModule {
 					HttpPost httppost = new HttpPost(url);
 					
 				    if(byteData != null) {
-					    MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();        
+					    MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
 					    multipartEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-					    multipartEntity.addTextBody("request", objectParam, org.apache.http.entity.ContentType.APPLICATION_JSON);
 	                    ByteArrayBody bab = new ByteArrayBody(byteData, "image");
-	                    multipartEntity.addPart("file", bab);
+	                    multipartEntity.addPart("picture", bab);
 	                    httppost.setEntity(multipartEntity.build());
 				    } else {
-					    /* TODO enlever le else pour la v1.3 */
 						httppost.setEntity((HttpEntity) new StringEntity(objectParam, "UTF8"));
 						httppost.setHeader("Content-type", "application/json");
 				    }

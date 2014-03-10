@@ -40,6 +40,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -142,8 +143,26 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 				selectImage();
 			}
 		});
+		
+		
+		ProgressBar editMessagePictureLoader = (ProgressBar) view.findViewById(R.id.edit_message_picture_loader);
+		editMessagePictureLoader.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO stop
+				resetButtons();
+			}
+		});
 	}
 
+	protected void resetButtons() {
+		getView().findViewById(R.id.button_send_message).setEnabled(true);
+		getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.GONE);
+		editImageView.setImageDrawable(getResources().getDrawable(R.drawable.camera));
+		editImageView.setVisibility(View.VISIBLE);
+		pictureData = null;
+	}
+	
 	protected void closeKeyboard() {
 		InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
 				Context.INPUT_METHOD_SERVICE);
@@ -179,16 +198,13 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 
 	@Override
 	public void networkError() {
-		getView().findViewById(R.id.button_send_message).setEnabled(true);
-		getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.GONE);
-		editImageView.setImageDrawable(getResources().getDrawable(R.drawable.camera));
-		editImageView.setVisibility(View.VISIBLE);
-		pictureData = null;
+		resetButtons();
 	}
 
-	public void apiError(ApiError error) {}
+	public void apiError(ApiError error) {
+		resetButtons();
+	}
 
-	
 	private void selectImage() {
         final CharSequence[] items = { getString(R.string.select_img_take_photo), getString(R.string.select_img_from_lib), getString(R.string.select_img_close) };
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());

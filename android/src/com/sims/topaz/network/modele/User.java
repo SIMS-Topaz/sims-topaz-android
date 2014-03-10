@@ -14,25 +14,28 @@ public class User implements Serializable{
 	@JsonProperty("picture_url")
 	private String pictureUrl;
 	
-	@JsonProperty("id")
+	@JsonProperty("user_id")
 	private Long id;
 
-	@JsonProperty("name")
+	@JsonProperty("user_name")
 	private String user_name;
 
 	@JsonProperty("user_password")
 	private String password;
 
-	@JsonProperty("email")
+	@JsonProperty("user_email")
 	private String email;
 
-	@JsonProperty("verified")
+	@JsonProperty("user_verified")
 	private Boolean verified;
 
-	@JsonProperty("messages")
+	@JsonProperty("user_messages")
 	private List<Message> messages;	
 	
-	@JsonProperty("status")
+	@JsonProperty("user_likes")
+	private List<Comment> likes;	
+	
+	@JsonProperty("user_status")
 	private String status;		
 
 	

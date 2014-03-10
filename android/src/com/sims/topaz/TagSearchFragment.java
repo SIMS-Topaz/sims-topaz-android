@@ -30,8 +30,11 @@ public class TagSearchFragment extends Fragment implements MessageDelegate {
 	private GoogleMap mMap;
 	private EditText text;
 	
-	public TagSearchFragment(GoogleMap map) {
-		super();
+	public TagSearchFragment() {
+
+	}
+	
+	public void setMap(GoogleMap map) {
 		mMap = map;
 	}
 	
@@ -100,7 +103,7 @@ public class TagSearchFragment extends Fragment implements MessageDelegate {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
-		transaction.replace(R.id.preview_list_tag, f);
+		transaction.replace(R.id.fragment_container, f);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}

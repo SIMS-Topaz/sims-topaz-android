@@ -93,7 +93,8 @@ public class BulleAdapter implements InfoWindowAdapter {
 						all+= preview.getDislikes() +preview.getLikes();
 					}
 				}
-				mBulleText.setText(String.valueOf(all));
+				mBulleText.setText(String.valueOf(all)+" "+
+						SimsContext.getString(R.string.bulle_note));
 			}
 		}
 

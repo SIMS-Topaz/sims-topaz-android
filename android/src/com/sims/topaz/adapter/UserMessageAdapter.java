@@ -9,18 +9,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sims.topaz.R;
 import com.sims.topaz.network.modele.Message;
+import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 
 public class UserMessageAdapter extends ArrayAdapter<Message>  {
 	
 	private int count = 0;
-	public UserMessageAdapter(Context mDelegate, int resource, List<Message> messagesList) {
+	private byte[] image;
+	public UserMessageAdapter(Context mDelegate, int resource, List<Message> messagesList,byte[] mImage) {
 		super(mDelegate, resource, messagesList);
 		count = messagesList.size();
+		this.image = mImage;
 	}	
 	
 
@@ -48,6 +52,9 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 			
 			holder.mMessageDate = (TextView) view.findViewById(R.id.message_item_time);
 			holder.mMessageDate.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+			
+			holder.mUserImage = (ImageView) view.findViewById(R.id.message_item_image);
+			holder.mUserImage.setImageDrawable(CameraUtils.getDrwableFromBytes(image));
 			if(getItem(position)!=null){
 				Message m = getItem(position);
 				holder.mUserName.setText(m.getUserName());
@@ -64,5 +71,6 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 		 TextView mUserName;
 		 TextView mUserMessage;
 		 TextView mMessageDate;
+		 ImageView mUserImage;
     }  
 }

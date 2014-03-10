@@ -9,6 +9,9 @@ import eu.janmuller.android.simplecropimage.CropImage;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -90,8 +93,13 @@ public class CameraUtils {
         }
     }
     
-    public static byte getImageFromUrl(String url){
-		return 0;
-    	
-    }
+    
+    @SuppressWarnings("deprecation")
+	public static Drawable getDrwableFromBytes(byte[] imageBytes) {
+    	  if (imageBytes != null)
+    	   return new BitmapDrawable(BitmapFactory.decodeByteArray(imageBytes,
+    	     0, imageBytes.length));
+    	  else
+    	   return null;
+    	 }
 }

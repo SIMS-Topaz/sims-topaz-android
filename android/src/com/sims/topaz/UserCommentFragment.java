@@ -1,12 +1,11 @@
 package com.sims.topaz;
 
-import java.util.List;
 
 import com.sims.topaz.adapter.UserMessageAdapter;
-import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.SimsContext;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import android.widget.ListView;
 public class UserCommentFragment  extends Fragment  {
 	private ListView mListMessagesListView;
 	private User mUser;
+	private byte[] mImage;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,12 +26,14 @@ public class UserCommentFragment  extends Fragment  {
 				mUser = new User();
 			}
 			mUser = (User) getArguments().getSerializable("user");
+			mImage = (byte[]) getArguments().getByteArray("image");
 		}
 		
 		mListMessagesListView = (ListView)v.findViewById(R.id.fragment_user_comments__list);
 		mListMessagesListView.setAdapter(new UserMessageAdapter(SimsContext.getContext(),
 				R.layout.fragment_comment_item,
-				mUser.getMessages()));
+				mUser.getMessages(),
+				mImage));
 		return v;
     }
 }

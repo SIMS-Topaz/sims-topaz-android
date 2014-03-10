@@ -12,7 +12,7 @@
         android:layout_height="wrap_content" >
 
         <ImageView
-            android:id="@+id/message_item_image_first_comment"
+            android:id="@+id/message_item_image"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:contentDescription="@string/comment_user_icon"
@@ -24,7 +24,7 @@
             android:id="@+id/message_item_person_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/message_item_image_first_comment"
+            android:layout_toRightOf="@id/message_item_image"
             android:text="Name" />
 
         <TextView

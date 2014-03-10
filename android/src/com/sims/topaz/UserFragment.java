@@ -291,7 +291,6 @@ implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTas
 	@Override
 	public void loadPictureTaskOnPostExecute(Drawable image) {
 		mUserImage.setImageDrawable(image);
-		Toast.makeText(SimsContext.getContext(), "loadPictureTaskOnPostExecute", Toast.LENGTH_SHORT).show();
 	}
 
 }

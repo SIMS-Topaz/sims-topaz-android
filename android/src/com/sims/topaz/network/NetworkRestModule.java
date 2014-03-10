@@ -44,11 +44,13 @@ import com.sims.topaz.utils.DebugUtils;
 public class NetworkRestModule {
 
 	enum TypeRequest {
-		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, POST_USER_INFO, PICTURE_UPLOAD
+		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, 
+		POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, 
+		POST_USER_INFO, PICTURE_UPLOAD
 	}
 
-	public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
-	//public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
+	//public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
+	public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
 	
 	

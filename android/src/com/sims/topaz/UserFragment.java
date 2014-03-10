@@ -57,8 +57,8 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 	private ImageButton mUserImage;
 	private ViewPager mViewPager;
 	private ProgressBar mProgressBar;
-	static String IS_MY_OWN_PROFILE = "is_my_own_profile";
-	static String USER_ID = "user_id";
+	private static String IS_MY_OWN_PROFILE = "is_my_own_profile";
+	private static String USER_ID = "user_id";
 	private boolean isMyProfile;
 	private byte[] pictureData;
 	private User mUser = null;
@@ -66,10 +66,22 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 
-	public static UserFragment newInstance(){
-		
+	public static UserFragment newInstance(boolean isMyProfile){
+		UserFragment fragment= new UserFragment();
+		Bundle bundle = new Bundle();
+		bundle.putBoolean(IS_MY_OWN_PROFILE, true);
+		fragment.setArguments(bundle);
+		return fragment;
 	}
 	
+	public static UserFragment newInstance(boolean isMyProfile, long id){
+		UserFragment fragment= new UserFragment();
+		Bundle bundle = new Bundle();
+		bundle.putBoolean(IS_MY_OWN_PROFILE, isMyProfile);
+		bundle.putLong(USER_ID, id);
+		fragment.setArguments(bundle);
+		return fragment;
+	}	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -159,10 +159,7 @@ public class DrawerActivity extends ActionBarActivity
     	
     	switch (position) {
     	case 0:
-    		mLastFragment = new UserFragment();
-    		Bundle bundle = new Bundle();
-    		bundle.putBoolean(UserFragment.IS_MY_OWN_PROFILE, true);
-    		mLastFragment.setArguments(bundle);
+    		mLastFragment = UserFragment.newInstance(true);
     		break;
 		case 1:
 			mLastFragment = TagSearchFragment.newInstance(mMapFragment.getMap());
@@ -248,11 +245,7 @@ public class DrawerActivity extends ActionBarActivity
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	fragmentManager.beginTransaction().remove(mLastFragment);
     	
-		mLastFragment = new UserFragment();
-		Bundle bundle = new Bundle();
-		bundle.putBoolean(UserFragment.IS_MY_OWN_PROFILE, false);
-		bundle.putLong(UserFragment.USER_ID, id);
-		mLastFragment.setArguments(bundle);		
+		mLastFragment = UserFragment.newInstance(false, id);
 		
 		fragmentManager
 		.beginTransaction()

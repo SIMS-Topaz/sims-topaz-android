@@ -19,21 +19,12 @@ import com.sims.topaz.utils.MyTypefaceSingleton;
 
 public class UserMessageAdapter extends ArrayAdapter<Message>  {
 	
-	private int count = 0;
 	private byte[] image;
 	public UserMessageAdapter(Context mDelegate, int resource, List<Message> messagesList,byte[] mImage) {
 		super(mDelegate, resource, messagesList);
-		count = messagesList.size();
 		this.image = mImage;
 	}	
-	
 
-	@Override
-	public int getCount() {
-		return count;
-	}
-	
-	
 	public View getView(int position, View convertView, ViewGroup parent){
 		View view = convertView;
 		ViewHolder holder = null; 

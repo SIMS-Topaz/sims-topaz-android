@@ -6,7 +6,7 @@
     <string name="todo">TODO</string>
     <!-- Drawer -->
     <string name="drawer_search">Recherche image</string>
-    <string name="drawer_search_hint">#bar C\'est genial ici!</string>
+    <string name="drawer_search_hint">Recherche par #Tag</string>
     <string name="action_settings">Paramètres</string>
     <string name="drawer_image">Icon du button</string>
 

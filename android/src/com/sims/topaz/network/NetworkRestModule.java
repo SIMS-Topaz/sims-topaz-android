@@ -96,6 +96,27 @@ public class NetworkRestModule {
 	}
 	
 	/**
+	 * Envoi une requete get_previews pour recuperer les previews autour d'une zone
+	 * La fin de la requete appellera afterGetPreviews() (interface NetworkDelegate)
+	 * @param farLeft : coordonnées du bord supérieur gauche
+	 * @param nearRight : coordonnéesdu bord inférieur droit
+	 * @param tag: la string tag pour specifier 
+	 */
+	public void getPreviewsByTag(LatLng farLeft, LatLng nearRight, String tag) {
+		
+		Double minLat = Math.min(farLeft.latitude, nearRight.latitude);
+		Double maxLat = Math.max(farLeft.latitude, nearRight.latitude);
+		Double minLong = Math.min(farLeft.longitude, nearRight.longitude);
+		Double maxLong = Math.max(farLeft.longitude, nearRight.longitude);		
+		
+		String url = SERVER_URL + "get_previews/" + minLat + "/" + minLong + "/" + maxLat + "/" + maxLong;
+		url += "/BY_TAG?tag=" + tag;
+		DebugUtils.log("Network getPreviews url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
+		rest.execute();
+	}
+	
+	/**
 	 * Poste un message
 	 * La fin de la requete appellera afterPostMessage() (interface NetworkDelegate)
 	 * @param message le message à poster

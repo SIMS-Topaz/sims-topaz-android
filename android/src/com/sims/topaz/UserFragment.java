@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
@@ -29,9 +30,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sims.topaz.AsyncTask.LoadPictureTask;
+import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
+import com.sims.topaz.network.interfaces.PictureUserUploadDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
@@ -46,7 +50,8 @@ import eu.janmuller.android.simplecropimage.CropImage;
 
 
 
-public class UserFragment  extends Fragment implements UserDelegate,ErreurDelegate {
+public class UserFragment  extends Fragment 
+implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTaskInterface {
 	private TextView mUserTextView;
 	private TextView mUserSnippetTextView;
 	private ImageButton mUserImage;
@@ -123,7 +128,7 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 		
 		pictureData = null;
 		if(mUser.getId()!=null){
-			mRestModule.getUserInfo(mUser.getId(),pictureData);
+			mRestModule.getUserInfo(mUser.getId());
 		}else{
 			Toast.makeText(SimsContext.getContext(), getResources().getString(R.string.erreur_gen), Toast.LENGTH_SHORT).show();
 		}
@@ -145,8 +150,6 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 
 
 	//Image selector	
-
-
 	private void selectImage() {
 		final CharSequence[] items = { getString(R.string.select_img_take_photo),
 				getString(R.string.select_img_from_lib),
@@ -208,16 +211,13 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bitmap.compress(CompressFormat.JPEG, 85, bos);
                 pictureData = bos.toByteArray();
-                mRestModule.postUserInfo(mUser, pictureData);
+                mRestModule.uploadUserPicture(pictureData);
                 break;
         }
         
         super.onActivityResult(requestCode, resultCode, data);
 
 	}
-	
- 
-   
 
 
 	public String getPath(Uri uri, Activity activity) {
@@ -238,7 +238,9 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 	@Override
 	public void afterGetUserInfo(User user) {
 		mUser = user;
-		
+		//TODO set picture image
+		LoadPictureTask setImageTask = new LoadPictureTask(this);
+		setImageTask.execute(mUser.getPictureUrl());
 		mUserSnippetTextView.setText(mUser.getStatus());
 		mUserTextView.setText(mUser.getUserName());
 		mProgressBar.setVisibility(View.GONE);
@@ -278,6 +280,18 @@ public class UserFragment  extends Fragment implements UserDelegate,ErreurDelega
 			transaction.replace(R.id.user_info_comments_fragment, userCommentFragment);
 			transaction.commit();		
 		}	
+	}
+
+	@Override
+	public void afterUploadUserPicture(String pictureUrl) {
+		Toast.makeText(SimsContext.getContext(), "afterUploadUserPicture", Toast.LENGTH_SHORT).show();
+		
+	}
+
+	@Override
+	public void loadPictureTaskOnPostExecute(Drawable image) {
+		mUserImage.setImageDrawable(image);
+		Toast.makeText(SimsContext.getContext(), "loadPictureTaskOnPostExecute", Toast.LENGTH_SHORT).show();
 	}
 
 }

@@ -47,16 +47,19 @@ public class NetworkRestModule {
 		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, POST_USER_INFO, PICTURE_UPLOAD
 	}
 
-	public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
-	//public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
+	public static final String SERVER_IMG_BASEURL = "http://91.121.16.137:8080/";
+	//public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
+	public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
 	
 	
 	private Object delegate;
 	private static HttpClient httpclient;
-
+	private RESTTask lastTask; // TODO à implémenter de partout
+	
 	public NetworkRestModule(Object delegate) {
 		this.delegate = (Object) delegate;
+		lastTask = null;
 	}
 	
 	public static void resetHttpClient() {
@@ -143,10 +146,32 @@ public class NetworkRestModule {
 	public void uploadPicture(byte[] pictureData) {
 		String url = SERVER_URL + "upload_picture";
 		DebugUtils.log("Network uploadPicture url="+ url);
-		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.PICTURE_UPLOAD);
 		rest.setByteData(pictureData);
 		rest.execute();
+		lastTask = rest;
 	}
+	
+	public void cancelLastTask() {
+		if(lastTask != null && !lastTask.isCancelled()) {
+			lastTask.cancel(true);
+		}
+	}
+	
+	/**
+	 * Poste une image
+	 * La fin de la requete appellera afterUploadUserPicture() (interface PictureUserUploadDelegate)
+	 * @param pictureData l'image
+	 */
+	public void uploadUserPicture(byte[] pictureData) {
+		String url = SERVER_URL + "upload_picture";
+		DebugUtils.log("Network uploadPicture url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_USER_INFO);
+		rest.setByteData(pictureData);
+		rest.execute();
+		lastTask = rest;
+	}
+	
 	
 	/**
 	 * Poste d'un avis sur un message
@@ -230,7 +255,7 @@ public class NetworkRestModule {
 	 * La fin de la requete appellera afterGetUserInfo() (interface UserDelegate)
 	 * @param id : l'id du username
 	 */
-	public void getUserInfo(Long id, byte[] pictureData) {
+	public void getUserInfo(Long id) {
 		String url = SERVER_URL + "user_info/" + id;
 		DebugUtils.log("Network getUserInfo url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_USER_INFO);
@@ -242,14 +267,13 @@ public class NetworkRestModule {
 	 * La fin de la requete appellera afterSetUserInfo() (interface UserDelegate)
 	 * @param id : l'id du username
 	 */
-	public void postUserInfo(User user, byte[] pictureData) {
+	public void postUserInfo(User user) {
 		String url = SERVER_URL + "user_info/" + user.getId();
 		DebugUtils.log("Network postUserInfo url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_USER_INFO);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			rest.setJSONParam(mapper.writeValueAsString(user));
-			rest.setByteData(pictureData);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}

@@ -406,20 +406,20 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		boolean checkUserName = mUserEditText.getVisibility()== View.VISIBLE;
 		if(checkUserName && checkNewUserName()){
 				mUser.setUserName(username);
-				mRestModule.postUserInfo(mUser, null);
+				mRestModule.postUserInfo(mUser);
 		}
 	}	
 	
 	private void saveNewStatus(){
 		mUser.setStatus(mStatusEditText.getText().toString());
-		mRestModule.postUserInfo(mUser, null);			
+		mRestModule.postUserInfo(mUser);			
 	}
 	private void saveNewEmail(){
 		String email = mEmailEditText.getText().toString();
 		boolean checkEmail = mEmailEditText.getVisibility()== View.VISIBLE;
 		if(checkEmail && checkNewEmail()){
 			mUser.setEmail(email);
-			mRestModule.postUserInfo(mUser, null);					
+			mRestModule.postUserInfo(mUser);					
 		}
 	}
 
@@ -432,7 +432,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 				mSaveNewPasswordButton.setEnabled(false);
 				mUser.setPassword(password);
 				mUser.setStatus(mStatusEditText.getText().toString());
-				mRestModule.postUserInfo(mUser, null);
+				mRestModule.postUserInfo(mUser);
 		}
 	}
 	private boolean checkNewEmail(){

@@ -263,7 +263,10 @@ OnMapLoadedCallback
 
 	@Override
 	public void onMapLongClick(LatLng point) {
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		FragmentManager fm = getFragmentManager();
+		fm.popBackStack(FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		
+		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
 		EditMessageFragment fragment = new EditMessageFragment();

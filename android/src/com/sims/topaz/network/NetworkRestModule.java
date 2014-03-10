@@ -49,6 +49,7 @@ public class NetworkRestModule {
 		POST_USER_INFO, PICTURE_UPLOAD
 	}
 
+	public static final String SERVER_IMG_BASEURL = "http://91.121.16.137:8080/";
 	//public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
 	public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
@@ -56,9 +57,11 @@ public class NetworkRestModule {
 	
 	private Object delegate;
 	private static HttpClient httpclient;
-
+	private RESTTask lastTask; // TODO à implémenter de partout
+	
 	public NetworkRestModule(Object delegate) {
 		this.delegate = (Object) delegate;
+		lastTask = null;
 	}
 	
 	public static void resetHttpClient() {
@@ -104,7 +107,7 @@ public class NetworkRestModule {
 	 * @param nearRight : coordonnéesdu bord inférieur droit
 	 * @param tag: la string tag pour specifier 
 	 */
-	public void getPreviewsByTag(LatLng farLeft, LatLng nearRight, String tag) {
+	public void getPreviewsByTag(LatLng farLeft, LatLng nearRight, CharSequence tag) {
 		
 		Double minLat = Math.min(farLeft.latitude, nearRight.latitude);
 		Double maxLat = Math.max(farLeft.latitude, nearRight.latitude);
@@ -148,8 +151,14 @@ public class NetworkRestModule {
 		RESTTask rest = new RESTTask(this, url, TypeRequest.PICTURE_UPLOAD);
 		rest.setByteData(pictureData);
 		rest.execute();
+		lastTask = rest;
 	}
 	
+	public void cancelLastTask() {
+		if(lastTask != null && !lastTask.isCancelled()) {
+			lastTask.cancel(true);
+		}
+	}
 	
 	/**
 	 * Poste d'un avis sur un message

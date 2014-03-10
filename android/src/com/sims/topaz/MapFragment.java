@@ -1,5 +1,4 @@
 package com.sims.topaz;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -517,6 +516,13 @@ OnMapLoadedCallback
 		if(mMap!=null){
 			LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
 		}
+	}
+	
+	public GoogleMap getMap() {
+		if (mMap != null) {
+			return mMap;
+		}
+		return null;
 	}
 
 }

@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.google.maps.android.MarkerManager.Collection;
 import com.sims.topaz.adapter.PreviewListAdapter;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.DebugUtils;

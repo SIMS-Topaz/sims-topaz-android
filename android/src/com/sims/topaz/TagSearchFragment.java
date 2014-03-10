@@ -3,7 +3,6 @@ package com.sims.topaz;
 import java.util.List;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.MessageDelegate;

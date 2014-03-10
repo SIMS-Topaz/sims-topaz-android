@@ -518,5 +518,12 @@ OnMapLoadedCallback
 			LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
 		}
 	}
+	
+	public GoogleMap getMap() {
+		if (mMap != null) {
+			return mMap;
+		}
+		return null;
+	}
 
 }

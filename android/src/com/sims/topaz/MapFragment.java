@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -69,6 +70,10 @@ OnCameraChangeListener,
 LocationListener,
 OnMapLoadedCallback
 {
+	
+	private static String FRAGMENT_PREVIEW = "fragment_preview";
+	private static String FRAGMENT_MESSAGE = "fragment_message";
+	private static String FRAGMENT_COMMENT = "fragment_comment";
 	
 	private GoogleMap mMap;
 	private static View mView;
@@ -158,6 +163,10 @@ OnMapLoadedCallback
 			/* map is already there, just return view as it is */
 			e.printStackTrace();
 		}
+	
+		FragmentManager fm = getFragmentManager();
+		fm.popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		fm.popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		
 
 		// Account banner
@@ -261,7 +270,7 @@ OnMapLoadedCallback
 		fragment.setPosition(point);
 
 		transaction.replace(R.id.edit_text, fragment);
-		transaction.addToBackStack(null);
+		transaction.addToBackStack(FRAGMENT_MESSAGE);
 		transaction.commit();
 	}
 
@@ -428,7 +437,7 @@ OnMapLoadedCallback
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_slide_out_right);
 		transaction.replace(R.id.fragment_map_comment, fragment);
-		transaction.addToBackStack(null);
+		transaction.addToBackStack(FRAGMENT_COMMENT);
 		transaction.commit();
 	}
 	@Override
@@ -444,12 +453,14 @@ OnMapLoadedCallback
 		for (PreviewClusterItem pci : cluster.getItems()) {
 			previewList.add(pci.getPreview());
 		}
+		
+		
 		Fragment f = PreviewListFragment.newInstance(previewList);
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
 		transaction.replace(R.id.preview_list, f);
-		transaction.addToBackStack(null);
+		transaction.addToBackStack(FRAGMENT_PREVIEW);
 		transaction.commit();
 	}
 	//Location and map listeners----------------------------------------------------------------------------

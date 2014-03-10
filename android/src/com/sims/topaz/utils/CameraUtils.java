@@ -89,4 +89,9 @@ public class CameraUtils {
             output.write(buffer, 0, bytesRead);
         }
     }
+    
+    public static byte getImageFromUrl(String url){
+		return 0;
+    	
+    }
 }

@@ -11,6 +11,9 @@ public class User implements Serializable{
 	
 	private static final long serialVersionUID = 7526472295622776147L;
 	
+	@JsonProperty("picture_url")
+	private String pictureUrl;
+	
 	@JsonProperty("user_id")
 	private Long id;
 
@@ -88,6 +91,10 @@ public class User implements Serializable{
 
 	public List<Message> getMessages() {
 		return messages;
+	}
+
+	public String getPictureUrl() {
+		return pictureUrl;
 	}
 
 	@Override

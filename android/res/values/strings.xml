@@ -25,14 +25,14 @@
     <!-- About -->
     <string name="about_text">L\'equipe Topaz est géniale!:p\n\n\nAlina Gherman,\nBenjamin Bouchardon,\nHugo Muller,\nAlexandre Jablon,\nXiaoyu Feng,\nJean-Baptiste Ghoul</string>
     <!-- bulle -->
-    <string name="bulle_loyen_cluster">Nombre de likes/dislikes dans ce cluster:</string>
+    <string name="bulle_loyen_cluster">Voir les aperçus des messages</string>
     <string name="bulle_note">avis</string>
     <string name="bulle_says">dit:</string>
     <string name="bulle_anonyme"> Un utilisateur anonyme </string>
     <!-- comment -->
     <string name="comment_user_icon">Icon de l\'utilisateur</string>
     <string name="comment_hint">Write your comment here</string>
-    <string name="comment_loading">Chargement...</string>
+    <string name="comment_loading">Chargement&#8230;</string> <!-- '...' -->
     <string name="comment_like">like icon</string>
     <string name="comment_send">like send</string>
     <string name="comment_dislike">unlike icon</string>

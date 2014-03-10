@@ -61,8 +61,8 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 	private Button mCancelUser;
 	private Button mCancelEmail;
 	private Button mCancelStatus;
-	private static String IS_MY_OWN_PROFILE = "is_my_own_profile";
-	private static String USER = "user";
+	private static String IS_MY_OWN_PROFILE = "user_info_fragment_is_my_own_profile";
+	private static String USER = "user_info_fragment_user";
 
 	public static UserInfoFragment newInstance(boolean isMyOwnProfile, User mUser){
 		UserInfoFragment fragment= new UserInfoFragment();
@@ -78,8 +78,8 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 		super.onCreate(savedInstanceState);
 		isMyProfile = false;
 		if(getArguments()!=null){
-			mUser = (User) getArguments().getSerializable("user");
-			isMyProfile = getArguments().getBoolean("isMyProfile");
+			mUser = (User) getArguments().getSerializable(USER);
+			isMyProfile = getArguments().getBoolean(IS_MY_OWN_PROFILE);
 		}
 		
 		

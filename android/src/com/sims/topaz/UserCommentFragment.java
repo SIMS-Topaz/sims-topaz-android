@@ -16,8 +16,8 @@ public class UserCommentFragment  extends Fragment  {
 	private ListView mListMessagesListView;
 	private User mUser;
 	private byte[] mImage;
-	private static String USER = "user";
-	private static String PICTURE = "picture";
+	private static String USER = "user_comment_fragment_user";
+	private static String PICTURE = "user_comment_fragment_picture";
 
 	public static UserCommentFragment newInstance(User user, byte[] image){
 		UserCommentFragment fragment= new UserCommentFragment();

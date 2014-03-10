@@ -37,8 +37,8 @@ public class UserCommentFragment  extends Fragment  {
 			if(mUser == null){
 				mUser = new User();
 			}
-			mUser = (User) getArguments().getSerializable("user");
-			mImage = (byte[]) getArguments().getByteArray("image");
+			mUser = (User) getArguments().getSerializable(USER);
+			mImage = (byte[]) getArguments().getByteArray(PICTURE);
 		}
 		
 		mListMessagesListView = (ListView)v.findViewById(R.id.fragment_user_comments__list);

@@ -45,7 +45,9 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 			holder.mMessageDate.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 			
 			holder.mUserImage = (ImageView) view.findViewById(R.id.message_item_image);
-			holder.mUserImage.setImageDrawable(CameraUtils.getDrwableFromBytes(image));
+			if(image!=null){
+				holder.mUserImage.setImageDrawable(CameraUtils.getDrwableFromBytes(image));
+			}
 			if(getItem(position)!=null){
 				Message m = getItem(position);
 				holder.mUserName.setText(m.getUserName());

@@ -39,6 +39,7 @@ import com.sims.topaz.network.modele.Comment;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
@@ -260,7 +261,8 @@ public class CommentFragment extends Fragment
 			
 			if(message.getPictureUrl() != null && !message.getPictureUrl().isEmpty()) {
 				LoadPictureTask setImageTask = new LoadPictureTask(this);
-				setImageTask.execute(message.getPictureUrl());
+				setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + message.getPictureUrl());
+				DebugUtils.log(NetworkRestModule.SERVER_IMG_BASEURL + message.getPictureUrl());
 			}
 			
 			initLikeButtons();

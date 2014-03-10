@@ -38,6 +38,12 @@ public class User implements Serializable{
 	@JsonProperty("user_status")
 	private String status;		
 
+	
+	
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
+	}
+
 	public User() {
 	}
 

@@ -150,19 +150,6 @@ public class NetworkRestModule {
 		rest.execute();
 	}
 	
-	/**
-	 * Poste une image
-	 * La fin de la requete appellera afterUploadUserPicture() (interface PictureUserUploadDelegate)
-	 * @param pictureData l'image
-	 */
-	public void uploadUserPicture(byte[] pictureData) {
-		String url = SERVER_URL + "upload_picture";
-		DebugUtils.log("Network uploadPicture url="+ url);
-		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_USER_INFO);
-		rest.setByteData(pictureData);
-		rest.execute();
-	}
-	
 	
 	/**
 	 * Poste d'un avis sur un message

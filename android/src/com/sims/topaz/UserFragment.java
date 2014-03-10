@@ -35,7 +35,7 @@ import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
-import com.sims.topaz.network.interfaces.PictureUserUploadDelegate;
+import com.sims.topaz.network.interfaces.PictureUploadDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
@@ -51,7 +51,7 @@ import eu.janmuller.android.simplecropimage.CropImage;
 
 
 public class UserFragment  extends Fragment 
-implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTaskInterface {
+implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDelegate {
 	private TextView mUserTextView;
 	private TextView mUserSnippetTextView;
 	private ImageButton mUserImage;
@@ -211,7 +211,7 @@ implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTas
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bitmap.compress(CompressFormat.JPEG, 85, bos);
                 pictureData = bos.toByteArray();
-                mRestModule.uploadUserPicture(pictureData);
+                mRestModule.uploadPicture(pictureData);
                 break;
         }
         
@@ -283,9 +283,8 @@ implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTas
 	}
 
 	@Override
-	public void afterUploadUserPicture(String pictureUrl) {
-		Toast.makeText(SimsContext.getContext(), "afterUploadUserPicture", Toast.LENGTH_SHORT).show();
-		
+	public void afterUploadPicture(String pictureUrl) {
+		mUser.setPictureUrl(pictureUrl);
 	}
 
 	@Override

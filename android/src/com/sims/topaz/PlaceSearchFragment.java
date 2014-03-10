@@ -286,11 +286,11 @@ public class PlaceSearchFragment extends Fragment{
 		            	resultList.add(place);
 		            	placeLocation.put(place, new LatLngBounds(southwest,northeast));
 	                } else {
-	                	DebugUtils.log("PleaceSearchFragment: does not have JsonObject viewport");
+	                	DebugUtils.log("PlaceSearchFragment: does not have JsonObject viewport");
 	                }
 	            }
 	        } catch (JSONException e) {
-	        	DebugUtils.log("PleaceSearchFragment: Cannot process JSON results"+ e);
+	        	DebugUtils.log("PlaceSearchFragment: Cannot process JSON results" + e);
 	        }
 	        
 	        return resultList;

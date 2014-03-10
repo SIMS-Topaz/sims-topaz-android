@@ -41,7 +41,7 @@ import com.sims.topaz.utils.DebugUtils;
 public class NetworkRestModule {
 
 
-	public static final String SERVER_URL = "http://topaz12.apiary.io/api/v1.2/";
+	public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
 	//public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
 	
@@ -84,6 +84,27 @@ public class NetworkRestModule {
 		Double maxLong = Math.max(farLeft.longitude, nearRight.longitude);		
 		
 		String url = SERVER_URL + "get_previews/" + minLat + "/" + minLong + "/" + maxLat + "/" + maxLong;
+		DebugUtils.log("Network getPreviews url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
+		rest.execute();
+	}
+	
+	/**
+	 * Envoi une requete get_previews pour recuperer les previews autour d'une zone
+	 * La fin de la requete appellera afterGetPreviews() (interface NetworkDelegate)
+	 * @param farLeft : coordonnées du bord supérieur gauche
+	 * @param nearRight : coordonnéesdu bord inférieur droit
+	 * @param tag: la string tag pour specifier 
+	 */
+	public void getPreviewsByTag(LatLng farLeft, LatLng nearRight, String tag) {
+		
+		Double minLat = Math.min(farLeft.latitude, nearRight.latitude);
+		Double maxLat = Math.max(farLeft.latitude, nearRight.latitude);
+		Double minLong = Math.min(farLeft.longitude, nearRight.longitude);
+		Double maxLong = Math.max(farLeft.longitude, nearRight.longitude);		
+		
+		String url = SERVER_URL + "get_previews/" + minLat + "/" + minLong + "/" + maxLat + "/" + maxLong;
+		url += "/BY_TAG?tag=" + tag;
 		DebugUtils.log("Network getPreviews url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
 		rest.execute();

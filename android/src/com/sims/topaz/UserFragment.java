@@ -44,7 +44,6 @@ import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
-import com.sims.topaz.utils.NestedFragApp;
 import com.sims.topaz.utils.SimsContext;
 
 import eu.janmuller.android.simplecropimage.CropImage;

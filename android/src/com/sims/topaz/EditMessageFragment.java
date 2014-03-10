@@ -66,6 +66,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 
 	private int savedSoftInputMode;
 	private byte[] pictureData;
+	private String pictureUrl;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -112,6 +113,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 		editImageView = (ImageView) view.findViewById(R.id.edit_message_image_view);
 		setUpButtons(view);
 		pictureData = null;
+		pictureUrl = null;
 		return view;
 	}    
 
@@ -150,17 +152,18 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 			@Override
 			public void onClick(View v) {
 				// TODO stop
-				resetButtons();
+				resetForm();
 			}
 		});
 	}
 
-	protected void resetButtons() {
+	protected void resetForm() {
 		getView().findViewById(R.id.button_send_message).setEnabled(true);
 		getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.GONE);
 		editImageView.setImageDrawable(getResources().getDrawable(R.drawable.camera));
 		editImageView.setVisibility(View.VISIBLE);
 		pictureData = null;
+		pictureUrl = null;
 	}
 	
 	protected void closeKeyboard() {
@@ -179,6 +182,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 		message.setTimestamp(new Date().getTime());
 		message.setUserName(AuthUtils.getSessionStringValue
 				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
+		message.setPictureUrl(pictureUrl);
 		mRestModule.postMessage(message);
 	}
 
@@ -198,11 +202,11 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 
 	@Override
 	public void networkError() {
-		resetButtons();
+		resetForm();
 	}
 
 	public void apiError(ApiError error) {
-		resetButtons();
+		resetForm();
 	}
 
 	private void selectImage() {
@@ -253,6 +257,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
                 mRestModule.uploadPicture(pictureData);
                 
                 // Start loader, disable send button
+                pictureUrl = null;
                 editImageView.setVisibility(View.INVISIBLE);
                 getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.VISIBLE);
                 getView().findViewById(R.id.button_send_message).setEnabled(false);
@@ -270,6 +275,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
                 mRestModule.uploadPicture(pictureData);
 
                 // Start loader, disable send button
+                pictureUrl = null;
                 editImageView.setVisibility(View.INVISIBLE);
                 getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.VISIBLE);
                 getView().findViewById(R.id.button_send_message).setEnabled(false);
@@ -287,8 +293,9 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
     }
 
 	@Override
-	public void afterUploadPicture(String pictureUrl) {
-		DebugUtils.log("afterUploadPicture pictureUrl="+ pictureUrl);
+	public void afterUploadPicture(String url) {
+		DebugUtils.log("afterUploadPicture pictureUrl="+ url);
+		pictureUrl = url;
 		getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.GONE);
 		getView().findViewById(R.id.button_send_message).setEnabled(true);
 		editImageView.setVisibility(View.VISIBLE);

@@ -11,7 +11,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -30,18 +29,23 @@ import com.sims.topaz.network.interfaces.CommentDelegate;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.LikeStatusDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
+import com.sims.topaz.network.interfaces.PictureUploadDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiResponse;
 import com.sims.topaz.network.modele.Comment;
 import com.sims.topaz.network.modele.Message;
+import com.sims.topaz.network.modele.PictureUpload;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.DebugUtils;
 
 public class NetworkRestModule {
 
+	enum TypeRequest {
+		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, POST_USER_INFO, PICTURE_UPLOAD
+	}
 
 	public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
 	//public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
@@ -373,15 +377,23 @@ public class NetworkRestModule {
 					e.printStackTrace();
 				}
 				break;
+			case PICTURE_UPLOAD:
+				try {
+					ApiResponse<PictureUpload> responseData = mapper.readValue(response, new TypeReference<ApiResponse<PictureUpload>>(){});
+					if(responseData.getError() != null) {
+						((ErreurDelegate) delegate).apiError(responseData.getError());
+					} else {
+						((PictureUploadDelegate)delegate).afterUploadPicture(responseData.getData().getPicture_url());
+					}
+				} catch (Exception e) {
+					((ErreurDelegate) delegate).networkError();
+					e.printStackTrace();
+				}
+				break;
 			default:
 				break;
 		}
 	}
-
-	enum TypeRequest {
-		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, POST_USER_INFO
-	}
-	
 	
 	class RESTTask extends AsyncTask<String, Integer, String> {
 

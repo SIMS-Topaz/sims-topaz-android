@@ -1,7 +1,5 @@
 package com.sims.topaz;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +8,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +23,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sims.topaz.AsyncTask.LoadPictureTask;
+import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.adapter.CommentAdapter;
 import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.modele.CommentItem;
@@ -41,13 +39,12 @@ import com.sims.topaz.network.modele.Comment;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.AuthUtils;
-import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 public class CommentFragment extends Fragment 
-	implements MessageDelegate,LikeStatusDelegate,CommentDelegate,ErreurDelegate{
+	implements MessageDelegate,LikeStatusDelegate,CommentDelegate,ErreurDelegate, LoadPictureTaskInterface{
 
 	private TextView mFirstComment;
 	private TextView mFirstCommentNameUser;
@@ -262,7 +259,8 @@ public class CommentFragment extends Fragment
 							new Date( message.getTimestamp() ) ) );
 			
 			if(message.getPictureUrl() != null && !message.getPictureUrl().isEmpty()) {
-				new LoadPictureTask(message.getPictureUrl()).execute();
+				LoadPictureTask setImageTask = new LoadPictureTask(this);
+				setImageTask.execute(message.getPictureUrl());
 			}
 			
 			initLikeButtons();
@@ -363,33 +361,11 @@ public class CommentFragment extends Fragment
 		mNewComment.setEnabled(true);
 		mSendCommentButton.setEnabled(true);
 	}
-	
-	private class LoadPictureTask extends AsyncTask<URL, Integer, Boolean> {
-		
-		String url;
-		
-		public LoadPictureTask(String url) {
-			this.url = url;
-		}
-		
-		protected Boolean doInBackground(URL... urls) {
-	        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
-	        try {
-				InputStream is = (InputStream) new URL(url).getContent();
-				final Drawable d = Drawable.createFromStream(is, "picture");
-				getActivity().runOnUiThread(new Runnable() {
-				     @Override
-				     public void run() {
-				    	 mFirstCommentPicture.setImageDrawable(d);
-				    	 mFirstCommentPicture.setVisibility(View.VISIBLE);
-				    }
-				});
-			} catch (Exception e) {
-				DebugUtils.logException(e);
-				Log.e("TAG", Log.getStackTraceString(e));
-			}
-			return true;
-	     }
-	 }
+
+	@Override
+	public void loadPictureTaskOnPostExecute(Drawable image) {
+		mFirstCommentPicture.setImageDrawable(image);
+		mFirstCommentPicture.setVisibility(View.VISIBLE);
+	}
 
 }

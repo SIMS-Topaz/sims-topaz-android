@@ -47,16 +47,18 @@ public class NetworkRestModule {
 		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, POST_USER_INFO, PICTURE_UPLOAD
 	}
 
-	public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
-	//public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
+	//public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
+	public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
 	
 	
 	private Object delegate;
 	private static HttpClient httpclient;
-
+	private RESTTask lastTask; // TODO à implémenter de partout
+	
 	public NetworkRestModule(Object delegate) {
 		this.delegate = (Object) delegate;
+		lastTask = null;
 	}
 	
 	public static void resetHttpClient() {
@@ -146,6 +148,13 @@ public class NetworkRestModule {
 		RESTTask rest = new RESTTask(this, url, TypeRequest.PICTURE_UPLOAD);
 		rest.setByteData(pictureData);
 		rest.execute();
+		lastTask = rest;
+	}
+	
+	public void cancelLastTask() {
+		if(lastTask != null && !lastTask.isCancelled()) {
+			lastTask.cancel(true);
+		}
 	}
 	
 	/**
@@ -159,6 +168,7 @@ public class NetworkRestModule {
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_USER_INFO);
 		rest.setByteData(pictureData);
 		rest.execute();
+		lastTask = rest;
 	}
 	
 	

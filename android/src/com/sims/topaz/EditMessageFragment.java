@@ -65,7 +65,6 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 	}
 
 	private int savedSoftInputMode;
-	private byte[] pictureData;
 	private String pictureUrl;
 
 	@Override
@@ -112,7 +111,6 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 		editText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		editImageView = (ImageView) view.findViewById(R.id.edit_message_image_view);
 		setUpButtons(view);
-		pictureData = null;
 		pictureUrl = null;
 		return view;
 	}    
@@ -151,8 +149,8 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 		editMessagePictureLoader.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO stop
 				resetForm();
+				mRestModule.cancelLastTask();
 			}
 		});
 	}
@@ -162,7 +160,6 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 		getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.GONE);
 		editImageView.setImageDrawable(getResources().getDrawable(R.drawable.camera));
 		editImageView.setVisibility(View.VISIBLE);
-		pictureData = null;
 		pictureUrl = null;
 	}
 	
@@ -253,8 +250,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
                 
                 bm = Bitmap.createScaledBitmap(bm, PICTURE_MAX_WIDTH, targetHeight, true);
                 bm.compress(CompressFormat.JPEG, PICTURE_QUALITY, bos);
-                pictureData = bos.toByteArray();
-                mRestModule.uploadPicture(pictureData);
+                mRestModule.uploadPicture(bos.toByteArray());
                 
                 // Start loader, disable send button
                 pictureUrl = null;
@@ -271,8 +267,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
                 // Get data
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bm.compress(CompressFormat.JPEG, PICTURE_QUALITY, bos);
-                pictureData = bos.toByteArray();
-                mRestModule.uploadPicture(pictureData);
+                mRestModule.uploadPicture(bos.toByteArray());
 
                 // Start loader, disable send button
                 pictureUrl = null;

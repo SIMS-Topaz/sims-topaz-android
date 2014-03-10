@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="@color/white"
+    android:padding="8dp" >
+
+    <RelativeLayout
+        android:id="@+id/message_item_linear_layout_first"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/message_item_image_first_comment"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/comment_user_icon"
+            android:src="@drawable/ic_user"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/text_gray_big"
+            android:id="@+id/message_item_person_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/message_item_image_first_comment"
+            android:text="Name" />
+
+        <TextView
+            style="@style/text_gray_big"
+            android:id="@+id/message_item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="time: 15:52" />
+    </RelativeLayout>
+
+    <TextView
+        style="@style/text_gray_normal"
+        android:id="@+id/message_item_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/message_item_linear_layout_first"
+        android:text="This is a fake comment" />
+
+</RelativeLayout>

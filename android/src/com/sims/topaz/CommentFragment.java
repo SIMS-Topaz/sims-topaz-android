@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -29,8 +28,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.sims.topaz.EditMessageFragment.OnNewMessageListener;
 import com.sims.topaz.adapter.CommentAdapter;
 import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.modele.CommentItem;

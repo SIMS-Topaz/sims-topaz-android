@@ -26,11 +26,8 @@ public class User implements Serializable{
 	@JsonProperty("user_verified")
 	private Boolean verified;
 
-	@JsonProperty("user_picture")
-	private String pictureUrl;
-
-	@JsonProperty("user_comments")
-	private List<Comment> comments;	
+	@JsonProperty("user_messages")
+	private List<Message> messages;	
 	
 	@JsonProperty("user_likes")
 	private List<Comment> likes;	
@@ -85,13 +82,12 @@ public class User implements Serializable{
 		this.verified = verified;
 	}
 
-	public String getPictureUrl() {
-		return pictureUrl;
-	}
-
-
 	public String getStatus() {
 		return status;
+	}
+
+	public List<Message> getMessages() {
+		return messages;
 	}
 
 	@Override

@@ -11,7 +11,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -124,6 +123,20 @@ public class NetworkRestModule {
 	}
 	
 	/**
+	 * Poste une image
+	 * La fin de la requete appellera afterUploadUserPicture() (interface PictureUserUploadDelegate)
+	 * @param pictureData l'image
+	 */
+	public void uploadUserPicture(byte[] pictureData) {
+		String url = SERVER_URL + "upload_picture";
+		DebugUtils.log("Network uploadPicture url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_USER_INFO);
+		rest.setByteData(pictureData);
+		rest.execute();
+	}
+	
+	
+	/**
 	 * Poste d'un avis sur un message
 	 * @param message message dont on donne l'avis
 	 */
@@ -205,7 +218,7 @@ public class NetworkRestModule {
 	 * La fin de la requete appellera afterGetUserInfo() (interface UserDelegate)
 	 * @param id : l'id du username
 	 */
-	public void getUserInfo(Long id, byte[] pictureData) {
+	public void getUserInfo(Long id) {
 		String url = SERVER_URL + "user_info/" + id;
 		DebugUtils.log("Network getUserInfo url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_USER_INFO);
@@ -217,14 +230,13 @@ public class NetworkRestModule {
 	 * La fin de la requete appellera afterSetUserInfo() (interface UserDelegate)
 	 * @param id : l'id du username
 	 */
-	public void postUserInfo(User user, byte[] pictureData) {
+	public void postUserInfo(User user) {
 		String url = SERVER_URL + "user_info/" + user.getId();
 		DebugUtils.log("Network postUserInfo url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_USER_INFO);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			rest.setJSONParam(mapper.writeValueAsString(user));
-			rest.setByteData(pictureData);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}

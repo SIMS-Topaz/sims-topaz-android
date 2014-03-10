@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
@@ -29,6 +30,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sims.topaz.AsyncTask.LoadPictureTask;
+import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
@@ -48,7 +51,7 @@ import eu.janmuller.android.simplecropimage.CropImage;
 
 
 public class UserFragment  extends Fragment 
-implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate {
+implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTaskInterface {
 	private TextView mUserTextView;
 	private TextView mUserSnippetTextView;
 	private ImageButton mUserImage;
@@ -236,6 +239,8 @@ implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate {
 	public void afterGetUserInfo(User user) {
 		mUser = user;
 		//TODO set picture image
+		LoadPictureTask setImageTask = new LoadPictureTask(this);
+		setImageTask.execute(mUser.getPictureUrl());
 		mUserSnippetTextView.setText(mUser.getStatus());
 		mUserTextView.setText(mUser.getUserName());
 		mProgressBar.setVisibility(View.GONE);
@@ -281,6 +286,12 @@ implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate {
 	public void afterUploadUserPicture(String pictureUrl) {
 		Toast.makeText(SimsContext.getContext(), "afterUploadUserPicture", Toast.LENGTH_SHORT).show();
 		
+	}
+
+	@Override
+	public void loadPictureTaskOnPostExecute(Drawable image) {
+		mUserImage.setImageDrawable(image);
+		Toast.makeText(SimsContext.getContext(), "loadPictureTaskOnPostExecute", Toast.LENGTH_SHORT).show();
 	}
 
 }

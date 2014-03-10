@@ -10,25 +10,23 @@ import android.util.Log;
 
 import com.sims.topaz.utils.DebugUtils;
 
-public class LoadPictureTask extends AsyncTask<URL, Void, Drawable> {
+public class LoadPictureTask extends AsyncTask<String, Void, Drawable> {
 	
-	protected String url;
 	protected WeakReference<Object> delegate;
 	
-	public LoadPictureTask(String url, Object mDelegate) {
-		this.url = url;
+	public LoadPictureTask(Object mDelegate) {
 		this.delegate = new WeakReference<Object>(mDelegate);
 	}
 	
 	public interface LoadPictureTaskInterface{
-		public void LoadPictureTaskOnPostExecute(Drawable image);	
+		public void loadPictureTaskOnPostExecute(Drawable image);	
 	}
 	
 	@Override
-	protected Drawable doInBackground(URL... urls) {
+	protected Drawable doInBackground(String... urls) {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         try {
-			InputStream is = (InputStream) new URL(url).getContent();
+			InputStream is = (InputStream) new URL(urls[0]).getContent();
 			return Drawable.createFromStream(is, "picture");
 
 		} catch (Exception e) {
@@ -41,7 +39,7 @@ public class LoadPictureTask extends AsyncTask<URL, Void, Drawable> {
 	@Override
 	protected void onPostExecute(Drawable image) {
 		try{
-			((LoadPictureTaskInterface)this.delegate.get()).LoadPictureTaskOnPostExecute(image);
+			((LoadPictureTaskInterface)this.delegate.get()).loadPictureTaskOnPostExecute(image);
 		}catch(Exception e){}
 	}
  }

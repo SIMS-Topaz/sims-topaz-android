@@ -1,7 +1,9 @@
 package com.sims.topaz;
 
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
+import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyTypefaceSingleton;
@@ -25,7 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UserInfoFragment  extends Fragment  implements UserDelegate{
+public class UserInfoFragment  extends Fragment  implements UserDelegate, ErreurDelegate{
 	private Button mUnConnectButton;
 	private Button mSaveNewPasswordButton;
 	private Button mCancelNewPasswordButton;
@@ -517,5 +519,17 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		mUserTextView.setText(mUser.getUserName());
 		
 		Toast.makeText(SimsContext.getContext(), getResources().getString(R.string.user_tab_save_ok), Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void apiError(ApiError error) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void networkError() {
+		// TODO Auto-generated method stub
+		
 	}
 }

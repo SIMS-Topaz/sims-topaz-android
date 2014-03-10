@@ -1,8 +1,10 @@
 package com.sims.topaz;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.MessageDelegate;
@@ -26,18 +28,44 @@ import android.widget.Toast;
 public class TagSearchFragment extends Fragment implements MessageDelegate {
 	
 	private NetworkRestModule mNetworkModule;
-	private GoogleMap mMap;
 	private EditText text;
+	private static String KEY_VISIBLE_REGION_LEFT_LAT = "key_visible_region_left_lat";
+	private static String KEY_VISIBLE_REGION_RIGHT_LAT = "key_visible_region_right_lat";
+	private static String KEY_VISIBLE_REGION_LEFT_LNG = "key_visible_region_left_lng";
+	private static String KEY_VISIBLE_REGION_RIGHT_LNG = "key_visible_region_right_lng";
+	private LatLng mFarLeft;
+	private LatLng mNearRight;
 	
-	public TagSearchFragment(GoogleMap map) {
-		super();
-		mMap = map;
+	public static TagSearchFragment newInstance(GoogleMap mMap){
+		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+		TagSearchFragment fragment = new TagSearchFragment();
+
+		Bundle args = new Bundle();
+		args.putDouble(KEY_VISIBLE_REGION_LEFT_LAT, visibleRegion.farLeft.latitude);
+		args.putDouble(KEY_VISIBLE_REGION_RIGHT_LAT, visibleRegion.nearRight.latitude);
+		args.putDouble(KEY_VISIBLE_REGION_LEFT_LNG, visibleRegion.farLeft.longitude);
+		args.putDouble(KEY_VISIBLE_REGION_RIGHT_LNG, visibleRegion.nearRight.longitude);
+		fragment.setArguments(args);
+
+		return fragment;
 	}
+	
+	/**
+	 * Mandatory empty constructor for the fragment manager to instantiate the
+	 * fragment (e.g. upon screen orientation changes).
+	 */
+	public TagSearchFragment() {}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mNetworkModule = new NetworkRestModule(this);
+		if(getArguments()!=null){
+			mFarLeft = new LatLng(getArguments().getDouble(KEY_VISIBLE_REGION_LEFT_LAT), 
+					getArguments().getDouble(KEY_VISIBLE_REGION_LEFT_LNG));
+			mNearRight = new LatLng(getArguments().getDouble(KEY_VISIBLE_REGION_RIGHT_LAT), 
+					getArguments().getDouble(KEY_VISIBLE_REGION_RIGHT_LNG));
+		}
 	}
 	
 	@Override
@@ -70,10 +98,9 @@ public class TagSearchFragment extends Fragment implements MessageDelegate {
 			
 			@Override
 			public void onClick(View v) {
-				if( mMap != null && mNetworkModule != null ){
+				if( mFarLeft != null &&mNearRight !=null && mNetworkModule != null ){
 					Toast.makeText(SimsContext.getContext(), text.getText(), Toast.LENGTH_SHORT).show();
-					VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-					mNetworkModule.getPreviewsByTag(visibleRegion.farLeft, visibleRegion.nearRight, (CharSequence) text.getText());
+					mNetworkModule.getPreviewsByTag(mNearRight, mNearRight, (CharSequence) text.getText());
 				}
 				
 			}

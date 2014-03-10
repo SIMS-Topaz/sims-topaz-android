@@ -165,7 +165,7 @@ public class DrawerActivity extends ActionBarActivity
     		mLastFragment.setArguments(bundle);
     		break;
 		case 1:
-			mLastFragment = new TagSearchFragment(mMapFragment.getMap());
+			mLastFragment = TagSearchFragment.newInstance(mMapFragment.getMap());
 			break;
 		case 2:
 			if(mLastFragment instanceof MapFragment){

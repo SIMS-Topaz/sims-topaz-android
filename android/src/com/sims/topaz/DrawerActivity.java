@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -25,12 +26,15 @@ import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.interfaces.OnMoveCamera;
 import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.network.modele.Message;
+import com.sims.topaz.network.modele.Preview;
 
 
 public class DrawerActivity extends ActionBarActivity
-					implements EditMessageFragment.OnNewMessageListener,
-					OnMoveCamera,
-					OnShowUserProfile{
+	implements EditMessageFragment.OnNewMessageListener,
+				OnMoveCamera, 
+				OnShowUserProfile,
+				PreviewListFragment.OnPreviewClickListener
+				{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
     private DrawerLayout mDrawerLayout;
@@ -258,6 +262,23 @@ public class DrawerActivity extends ActionBarActivity
 		.replace(R.id.content_frame, mLastFragment)
 		.addToBackStack(null)
 		.commit();
+	}
+	
+	@Override
+	public void onPreviewClick(Preview p) {
+		//set fragment
+		Bundle args = new Bundle();
+		args.putLong("id_preview", p.getId());
+		CommentFragment fragment = new CommentFragment();
+		fragment.setArguments(args);
+
+		//create transaction
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
+				R.drawable.animation_slide_out_right);
+		transaction.replace(R.id.fragment_map_comment, fragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
 	}
 
 }

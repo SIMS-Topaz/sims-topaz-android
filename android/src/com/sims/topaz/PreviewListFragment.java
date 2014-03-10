@@ -1,5 +1,7 @@
 package com.sims.topaz;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.app.Activity;
@@ -13,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.google.maps.android.MarkerManager.Collection;
 import com.sims.topaz.adapter.PreviewListAdapter;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.DebugUtils;
@@ -49,7 +52,8 @@ public class PreviewListFragment extends Fragment implements
 		PreviewListFragment fragment = new PreviewListFragment();
 		Bundle args = new Bundle();
 		fragment.setArguments(args);
-		//TODO: order preview by date descendant
+		//order preview by date descendant
+		Collections.sort(param1, new PreviewDateComparator());
 		fragment.setPreviews(param1);
 		return fragment;
 	}
@@ -146,5 +150,24 @@ public class PreviewListFragment extends Fragment implements
 	public interface OnPreviewClickListener {
 		public void onPreviewClick(Preview preview);
 	}
+	
+	/**
+	 * Comparator of Previews
+	 * order by Date descendant
+	 * newest preview should be first
+	 */
+	protected static class PreviewDateComparator implements Comparator<Preview> {
 
+		/**
+		 * returns 0 if lhs and rhs have the same date
+		 * returns > 0 if lhs is older than rhs
+		 * returns < 0 is lhs is newer than rhs
+		 */
+		@Override
+		public int compare(Preview lhs, Preview rhs) {
+			Long diff = rhs.getTimestamp() - lhs.getTimestamp();
+			return Long.signum(diff); 
+		}
+		
+	}
 }

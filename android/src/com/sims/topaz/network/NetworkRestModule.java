@@ -11,6 +11,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -95,17 +96,30 @@ public class NetworkRestModule {
 	 * La fin de la requete appellera afterPostMessage() (interface NetworkDelegate)
 	 * @param message le message à poster
 	 */
-	public void postMessage(Message message, byte[] pictureData) {
+	public void postMessage(Message message) {
 		String url = SERVER_URL + "post_message";
 		DebugUtils.log("Network postMessage url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			rest.setJSONParam(mapper.writeValueAsString(message));
-			rest.setByteData(pictureData);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
+		rest.execute();
+	}
+	
+	
+	/**
+	 * Poste une image
+	 * La fin de la requete appellera afterUploadPicture() (interface PictureUploadDelegate)
+	 * @param pictureData l'image
+	 */
+	public void uploadPicture(byte[] pictureData) {
+		String url = SERVER_URL + "upload_picture";
+		DebugUtils.log("Network uploadPicture url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
+		rest.setByteData(pictureData);
 		rest.execute();
 	}
 	
@@ -374,6 +388,7 @@ public class NetworkRestModule {
 	    }
 		
 		public void setByteData(byte[] data) {
+			isPost = true;
 			byteData = data;
 	    }
 
@@ -437,14 +452,12 @@ public class NetworkRestModule {
 					HttpPost httppost = new HttpPost(url);
 					
 				    if(byteData != null) {
-					    MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();        
+					    MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
 					    multipartEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-					    multipartEntity.addTextBody("request", objectParam, org.apache.http.entity.ContentType.APPLICATION_JSON);
 	                    ByteArrayBody bab = new ByteArrayBody(byteData, "image");
-	                    multipartEntity.addPart("file", bab);
+	                    multipartEntity.addPart("picture", bab);
 	                    httppost.setEntity(multipartEntity.build());
 				    } else {
-					    /* TODO enlever le else pour la v1.3 */
 						httppost.setEntity((HttpEntity) new StringEntity(objectParam, "UTF8"));
 						httppost.setHeader("Content-type", "application/json");
 				    }

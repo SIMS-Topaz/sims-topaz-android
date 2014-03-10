@@ -8,10 +8,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
+import com.sims.topaz.network.interfaces.PictureUploadDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 
@@ -38,14 +40,18 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class EditMessageFragment extends Fragment
-implements MessageDelegate,ErreurDelegate{
+implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 
 	private final static int SELECT_FILE = 10;
 	private final static int REQUEST_CAMERA = 11;
+	
+	private final static int PICTURE_MAX_WIDTH = 1024;
+	private final static int PICTURE_QUALITY = 85;
 	
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private LatLng mPosition;
@@ -137,8 +143,26 @@ implements MessageDelegate,ErreurDelegate{
 				selectImage();
 			}
 		});
+		
+		
+		ProgressBar editMessagePictureLoader = (ProgressBar) view.findViewById(R.id.edit_message_picture_loader);
+		editMessagePictureLoader.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO stop
+				resetButtons();
+			}
+		});
 	}
 
+	protected void resetButtons() {
+		getView().findViewById(R.id.button_send_message).setEnabled(true);
+		getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.GONE);
+		editImageView.setImageDrawable(getResources().getDrawable(R.drawable.camera));
+		editImageView.setVisibility(View.VISIBLE);
+		pictureData = null;
+	}
+	
 	protected void closeKeyboard() {
 		InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
 				Context.INPUT_METHOD_SERVICE);
@@ -155,7 +179,7 @@ implements MessageDelegate,ErreurDelegate{
 		message.setTimestamp(new Date().getTime());
 		message.setUserName(AuthUtils.getSessionStringValue
 				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
-		mRestModule.postMessage(message, pictureData);
+		mRestModule.postMessage(message);
 	}
 
 	@Override
@@ -174,12 +198,13 @@ implements MessageDelegate,ErreurDelegate{
 
 	@Override
 	public void networkError() {
-		getView().findViewById(R.id.button_send_message).setEnabled(true);
+		resetButtons();
 	}
 
-	public void apiError(ApiError error) {}
+	public void apiError(ApiError error) {
+		resetButtons();
+	}
 
-	
 	private void selectImage() {
         final CharSequence[] items = { getString(R.string.select_img_take_photo), getString(R.string.select_img_from_lib), getString(R.string.select_img_close) };
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
@@ -219,13 +244,18 @@ implements MessageDelegate,ErreurDelegate{
                 // Get data
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 
-                int maxWidth = 1024;
                 double aspectRatio = (double) bm.getHeight() / (double) bm.getWidth();
-                int targetHeight = (int) (maxWidth * aspectRatio);
+                int targetHeight = (int) (PICTURE_MAX_WIDTH * aspectRatio);
                 
-                bm = Bitmap.createScaledBitmap(bm, maxWidth, targetHeight, true);
-                bm.compress(CompressFormat.JPEG, 85, bos);
+                bm = Bitmap.createScaledBitmap(bm, PICTURE_MAX_WIDTH, targetHeight, true);
+                bm.compress(CompressFormat.JPEG, PICTURE_QUALITY, bos);
                 pictureData = bos.toByteArray();
+                mRestModule.uploadPicture(pictureData);
+                
+                // Start loader, disable send button
+                editImageView.setVisibility(View.INVISIBLE);
+                getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.VISIBLE);
+                getView().findViewById(R.id.button_send_message).setEnabled(false);
                 
             } else if (requestCode == REQUEST_CAMERA) {
             	
@@ -235,8 +265,15 @@ implements MessageDelegate,ErreurDelegate{
 
                 // Get data
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bm.compress(CompressFormat.JPEG, 75, bos);
+                bm.compress(CompressFormat.JPEG, PICTURE_QUALITY, bos);
                 pictureData = bos.toByteArray();
+                mRestModule.uploadPicture(pictureData);
+
+                // Start loader, disable send button
+                editImageView.setVisibility(View.INVISIBLE);
+                getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.VISIBLE);
+                getView().findViewById(R.id.button_send_message).setEnabled(false);
+                
             }
         }
     }
@@ -248,5 +285,13 @@ implements MessageDelegate,ErreurDelegate{
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+
+	@Override
+	public void afterUploadPicture(String pictureUrl) {
+		DebugUtils.log("afterUploadPicture pictureUrl="+ pictureUrl);
+		getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.GONE);
+		getView().findViewById(R.id.button_send_message).setEnabled(true);
+		editImageView.setVisibility(View.VISIBLE);
+	}
 
 }

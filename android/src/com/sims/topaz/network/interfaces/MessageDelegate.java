@@ -10,6 +10,5 @@ public interface MessageDelegate {
 	public void afterPostMessage(Message message);
 	public void afterGetMessage(Message message);
 	public void afterGetPreviews(List<Preview> list);
-
 	
 }

@@ -29,21 +29,26 @@ import com.sims.topaz.network.interfaces.CommentDelegate;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.LikeStatusDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
+import com.sims.topaz.network.interfaces.PictureUploadDelegate;
 import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiResponse;
 import com.sims.topaz.network.modele.Comment;
 import com.sims.topaz.network.modele.Message;
+import com.sims.topaz.network.modele.PictureUpload;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.DebugUtils;
 
 public class NetworkRestModule {
 
+	enum TypeRequest {
+		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, POST_USER_INFO, PICTURE_UPLOAD
+	}
 
-	public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
-	//public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
+	//public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
+	public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
 	
 	
@@ -91,6 +96,27 @@ public class NetworkRestModule {
 	}
 	
 	/**
+	 * Envoi une requete get_previews pour recuperer les previews autour d'une zone
+	 * La fin de la requete appellera afterGetPreviews() (interface NetworkDelegate)
+	 * @param farLeft : coordonnées du bord supérieur gauche
+	 * @param nearRight : coordonnéesdu bord inférieur droit
+	 * @param tag: la string tag pour specifier 
+	 */
+	public void getPreviewsByTag(LatLng farLeft, LatLng nearRight, String tag) {
+		
+		Double minLat = Math.min(farLeft.latitude, nearRight.latitude);
+		Double maxLat = Math.max(farLeft.latitude, nearRight.latitude);
+		Double minLong = Math.min(farLeft.longitude, nearRight.longitude);
+		Double maxLong = Math.max(farLeft.longitude, nearRight.longitude);		
+		
+		String url = SERVER_URL + "get_previews/" + minLat + "/" + minLong + "/" + maxLat + "/" + maxLong;
+		url += "/BY_TAG?tag=" + tag;
+		DebugUtils.log("Network getPreviews url="+ url);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
+		rest.execute();
+	}
+	
+	/**
 	 * Poste un message
 	 * La fin de la requete appellera afterPostMessage() (interface NetworkDelegate)
 	 * @param message le message à poster
@@ -117,7 +143,7 @@ public class NetworkRestModule {
 	public void uploadPicture(byte[] pictureData) {
 		String url = SERVER_URL + "upload_picture";
 		DebugUtils.log("Network uploadPicture url="+ url);
-		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_MESSAGE);
+		RESTTask rest = new RESTTask(this, url, TypeRequest.PICTURE_UPLOAD);
 		rest.setByteData(pictureData);
 		rest.execute();
 	}
@@ -364,15 +390,23 @@ public class NetworkRestModule {
 					e.printStackTrace();
 				}
 				break;
+			case PICTURE_UPLOAD:
+				try {
+					ApiResponse<PictureUpload> responseData = mapper.readValue(response, new TypeReference<ApiResponse<PictureUpload>>(){});
+					if(responseData.getError() != null) {
+						((ErreurDelegate) delegate).apiError(responseData.getError());
+					} else {
+						((PictureUploadDelegate)delegate).afterUploadPicture(responseData.getData().getPicture_url());
+					}
+				} catch (Exception e) {
+					((ErreurDelegate) delegate).networkError();
+					e.printStackTrace();
+				}
+				break;
 			default:
 				break;
 		}
 	}
-
-	enum TypeRequest {
-		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, POST_USER_INFO
-	}
-	
 	
 	class RESTTask extends AsyncTask<String, Integer, String> {
 

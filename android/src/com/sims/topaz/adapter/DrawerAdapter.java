@@ -55,8 +55,9 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 			}
 		}else if(position == 1){
 			view = inflater.inflate(R.layout.drawer_list_item_search_bar, null);
-			EditText search = (EditText)view.findViewById(R.id.drawer_search);
+			TextView search = (TextView) view.findViewById(R.id.drawer_search);
 			search.setTypeface(face);
+			search.setText(R.string.drawer_search_hint);
 		}
 
 		if(position != 0){

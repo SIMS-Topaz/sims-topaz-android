@@ -7,7 +7,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
+import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.SimsContext;
@@ -25,7 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class TagSearchFragment extends Fragment implements MessageDelegate {
+public class TagSearchFragment extends Fragment implements MessageDelegate,ErreurDelegate {
 	
 	private NetworkRestModule mNetworkModule;
 	private EditText text;
@@ -129,5 +131,20 @@ public class TagSearchFragment extends Fragment implements MessageDelegate {
 		transaction.replace(R.id.preview_list_tag, f);
 		transaction.addToBackStack(null);
 		transaction.commit();
+	}
+
+	@Override
+	public void apiError(ApiError error) {
+		Toast.makeText(SimsContext.getContext(),
+				getResources().getString(R.string.erreur_gen),
+				Toast.LENGTH_SHORT).show();		
+	}
+
+	@Override
+	public void networkError() {
+		Toast.makeText(SimsContext.getContext(),
+				getResources().getString(R.string.erreur_gen),
+				Toast.LENGTH_SHORT).show();
+		
 	}
 }

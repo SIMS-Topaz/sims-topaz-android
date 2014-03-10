@@ -253,9 +253,10 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 	@Override
 	public void afterGetUserInfo(User user) {
 		mUser = user;
-		//TODO set picture image
-		LoadPictureTask setImageTask = new LoadPictureTask(this);
-		setImageTask.execute(mUser.getPictureUrl());
+		if(mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
+			LoadPictureTask setImageTask = new LoadPictureTask(this);
+			setImageTask.execute(mUser.getPictureUrl());
+		}
 		mUserSnippetTextView.setText(mUser.getStatus());
 		mUserTextView.setText(mUser.getUserName());
 		mProgressBar.setVisibility(View.GONE);
@@ -269,13 +270,8 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 	}
 	
 	private void prepareFragments(){
-		Fragment userInfoFragment = new UserInfoFragment();
-		Fragment userCommentFragment = new UserCommentFragment();
-		Bundle b = new Bundle();
-		b.putSerializable("user", mUser);
-		b.putBoolean("isMyProfile", isMyProfile);
-		userInfoFragment.setArguments(b);
-		userCommentFragment.setArguments(b);
+		Fragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
+		Fragment userCommentFragment =UserCommentFragment.newInstance(mUser, pictureData);
 		
 		//tabs
 		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);

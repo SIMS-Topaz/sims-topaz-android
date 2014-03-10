@@ -16,6 +16,19 @@ public class UserCommentFragment  extends Fragment  {
 	private ListView mListMessagesListView;
 	private User mUser;
 	private byte[] mImage;
+	private static String USER = "user";
+	private static String PICTURE = "picture";
+
+	public static UserCommentFragment newInstance(User user, byte[] image){
+		UserCommentFragment fragment= new UserCommentFragment();
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(USER, user);
+		bundle.putByteArray(PICTURE, image);
+		fragment.setArguments(bundle);
+		return fragment;		
+	}
+	
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,10 +42,13 @@ public class UserCommentFragment  extends Fragment  {
 		}
 		
 		mListMessagesListView = (ListView)v.findViewById(R.id.fragment_user_comments__list);
-		mListMessagesListView.setAdapter(new UserMessageAdapter(SimsContext.getContext(),
-				R.layout.fragment_comment_item,
-				mUser.getMessages(),
-				mImage));
+		if(mUser!=null && mUser.getMessages()!=null){
+			UserMessageAdapter adapter = new UserMessageAdapter(SimsContext.getContext(),
+					R.layout.fragment_comment_item,
+					mUser.getMessages(),
+					mImage);
+			mListMessagesListView.setAdapter(adapter);
+		}
 		return v;
     }
 }

@@ -61,7 +61,18 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 	private Button mCancelUser;
 	private Button mCancelEmail;
 	private Button mCancelStatus;
+	private static String IS_MY_OWN_PROFILE = "is_my_own_profile";
+	private static String USER = "user";
 
+	public static UserInfoFragment newInstance(boolean isMyOwnProfile, User mUser){
+		UserInfoFragment fragment= new UserInfoFragment();
+		Bundle bundle = new Bundle();
+		bundle.putBoolean(IS_MY_OWN_PROFILE, isMyOwnProfile);
+		bundle.putSerializable(USER, mUser);
+		fragment.setArguments(bundle);
+		return fragment;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

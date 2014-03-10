@@ -44,6 +44,7 @@ import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
+import com.sims.topaz.utils.NestedFragApp;
 import com.sims.topaz.utils.SimsContext;
 
 import eu.janmuller.android.simplecropimage.CropImage;
@@ -57,8 +58,9 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 	private ImageButton mUserImage;
 	private ViewPager mViewPager;
 	private ProgressBar mProgressBar;
-	private static String IS_MY_OWN_PROFILE = "is_my_own_profile";
-	private static String USER_ID = "user_id";
+	private static String IS_MY_OWN_PROFILE = "user_fragment_is_my_own_profile";
+	private static String USER_ID = "user_fragment_user_id";
+	private static String SAVED_STATE_KEY ="user_fragment_save_state";
 	private boolean isMyProfile;
 	private byte[] pictureData;
 	private User mUser = null;
@@ -87,7 +89,8 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_user, container, false);
-
+		
+		
 		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 
 		//username field
@@ -302,5 +305,6 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 	public void loadPictureTaskOnPostExecute(Drawable image) {
 		mUserImage.setImageDrawable(image);
 	}
+	
 
 }

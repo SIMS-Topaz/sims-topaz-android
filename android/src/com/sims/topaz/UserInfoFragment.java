@@ -199,7 +199,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 			@Override
 			public void onClick(View v) {
 				mErrorUserTextView.setVisibility(TextView.GONE);
-				mUserEditText.setText(mUser.getUserName());
+				mUserEditText.setText("");//or mUser.getUserName()?
 				
 			}
 		});
@@ -208,7 +208,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 			@Override
 			public void onClick(View v) {
 				mErrorEmailTextView.setVisibility(TextView.GONE);
-				mEmailEditText.setText(mUser.getEmail());
+				mEmailEditText.setText("");//or mUser.getEmail()?
 				
 			}
 		});
@@ -216,7 +216,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 			
 			@Override
 			public void onClick(View v) {
-				mStatusEditText.setText(mUser.getStatus());
+				mStatusEditText.setText("");//or mUser.getStatus()?
 				
 			}
 		});

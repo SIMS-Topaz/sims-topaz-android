@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:background="@color/white"
+    android:background="@color/light_gray"
     android:padding="8dp" >
 
     <RelativeLayout
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="@color/white"
+        android:background="@color/light_gray"
         android:orientation="vertical" >
 
         <LinearLayout

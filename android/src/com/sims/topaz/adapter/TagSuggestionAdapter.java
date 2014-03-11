@@ -82,13 +82,19 @@ public class TagSuggestionAdapter extends ArrayAdapter<String> {
 			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_school));
 			break;
 		case 5:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_toilet));
+			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_music));
 			break;
 		case 6:
 			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_hospital));
 			break;
 		case 7:
 			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_sun));
+			break;
+		case 8:
+			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_car));
+			break;
+		case 9:
+			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_cycle));
 			break;
 		default:
 			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.ic_search));

@@ -37,13 +37,11 @@ public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 	public View getView(int position, View convertView, ViewGroup parent){
 		View view = convertView;
 		ViewHolder holder = null; 
-		holder=new ViewHolder(); 
 		if(view == null){
+			holder=new ViewHolder();
 			LayoutInflater inflater = 
 					(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.fragment_comment_item, null);
-		}
-		if(position >= 0){
 			holder.mUserName = (TextView) view.findViewById(R.id.comment_item_person_name);
 			holder.mUserName.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 			
@@ -52,6 +50,12 @@ public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 			
 			holder.mCommentDate = (TextView) view.findViewById(R.id.comment_item_time);
 			holder.mCommentDate.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
+		if(position >= 0){
+
 			if(getItem(position)!=null){
 				CommentItem ci = getItem(position);
 				holder.mUserName.setText(ci.getUser());

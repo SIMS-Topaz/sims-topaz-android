@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -133,7 +134,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 			@Override
 			public void onClick(View v) {
 				closeKeyboard();
-				getFragmentManager().popBackStack();
+				getFragmentManager().popBackStack(MapFragment.FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			}
 		});
 

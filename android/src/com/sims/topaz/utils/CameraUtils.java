@@ -79,6 +79,7 @@ public class CameraUtils {
         intent.putExtra(CropImage.IMAGE_PATH, mFileTemp.getPath());
         intent.putExtra(CropImage.CIRCLE_CROP, circle);
         intent.putExtra(CropImage.ASPECT_X, 1);
+        intent.setFlags(intent.getFlags()|Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.putExtra(CropImage.ASPECT_Y, 1);
         return intent;
     }

@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -283,8 +284,7 @@ public class CommentFragment extends Fragment
 		comment.setText(comm);
 		comment.setUserName(AuthUtils.getSessionStringValue
 				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
-		restModule.postComment(comment, mMessage);
-		
+		restModule.postComment(comment, mMessage);	
 	}
 
 	private void loadMessage() {
@@ -358,6 +358,14 @@ public class CommentFragment extends Fragment
 		mNewComment.setText("");
 		mNewComment.setEnabled(true);
 		mSendCommentButton.setEnabled(true);
+		
+		// Scroll to bottom
+		mListComments.post(new Runnable() {
+	        @Override
+	        public void run() {
+	        	mListComments.setSelection(mListComments.getCount());
+	        }
+	    });
 	}
 
 	@Override

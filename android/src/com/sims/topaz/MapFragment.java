@@ -165,9 +165,9 @@ OnMapLoadedCallback
 		}
 
 		// Account banner
-		bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
+		//bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
 
-		bannerNotVerified.setVisibility(TextView.GONE);
+		//bannerNotVerified.setVisibility(TextView.GONE);
 		/*if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)) {
 			if(AuthUtils.getSessionBoolValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED, false)) {
 				bannerNotVerified.setVisibility(TextView.GONE);
@@ -430,7 +430,7 @@ OnMapLoadedCallback
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_slide_out_right);
-		transaction.replace(R.id.fragment_map_comment, fragment);
+		transaction.replace(R.id.fragment_container, fragment);
 		transaction.addToBackStack(FRAGMENT_COMMENT);
 		transaction.commit();
 	}
@@ -454,8 +454,9 @@ OnMapLoadedCallback
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
-		transaction.replace(R.id.preview_list, f);
+		transaction.replace(R.id.fragment_container, f);
 		transaction.addToBackStack(FRAGMENT_PREVIEW);
+
 		transaction.commit();
 	}
 	//Location and map listeners----------------------------------------------------------------------------

@@ -1,19 +1,22 @@
 package com.sims.topaz;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.sims.topaz.adapter.TagSuggestionAdapter;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
+import com.sims.topaz.utils.TagUtils;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -25,9 +28,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class TagSearchFragment extends Fragment implements MessageDelegate,ErreurDelegate {
+
 	
 	private NetworkRestModule mNetworkModule;
 	private EditText text;
@@ -52,6 +57,7 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 		return fragment;
 	}
 	
+	
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
@@ -74,7 +80,9 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_tag_search, container, false);
+		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 		text = (EditText) view.findViewById(R.id.tag_search);
+		text.setTypeface(face);
 		text.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -103,10 +111,14 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 				if( mFarLeft != null &&mNearRight !=null && mNetworkModule != null ){
 					Toast.makeText(SimsContext.getContext(), text.getText(), Toast.LENGTH_SHORT).show();
 					mNetworkModule.getPreviewsByTag(mNearRight, mNearRight, (CharSequence) text.getText());
+
 				}
 				
 			}
 		});
+		
+		ListView tagList = (ListView) view.findViewById(R.id.tag_list);
+		tagList.setAdapter(new TagSuggestionAdapter(SimsContext.getContext(), R.layout.tag_suggestion_item, TagUtils.getAllTags()));
 		return view;
 	}
 
@@ -138,6 +150,7 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.erreur_gen),
 				Toast.LENGTH_SHORT).show();		
+
 	}
 
 	@Override
@@ -145,6 +158,5 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.erreur_gen),
 				Toast.LENGTH_SHORT).show();
-		
 	}
 }

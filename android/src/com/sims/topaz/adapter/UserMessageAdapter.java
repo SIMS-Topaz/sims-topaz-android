@@ -35,13 +35,12 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 	public View getView(int position, View convertView, ViewGroup parent){
 		View view = convertView;
 		ViewHolder holder = null; 
-		holder=new ViewHolder(); 
+		
 		if(view == null){
+			holder=new ViewHolder(); 
 			LayoutInflater inflater = 
 					(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.fragment_message_item, null);
-		}
-		if(position >= 0){
 			holder.mUserName = (TextView) view.findViewById(R.id.message_item_person_name);
 			holder.mUserName.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 
@@ -54,7 +53,12 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 			holder.mUserImage = (ImageView) view.findViewById(R.id.message_item_image);
 			if(image!=null){
 				holder.mUserImage.setImageDrawable(CameraUtils.getDrwableFromBytes(image));
-			}
+			}			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
+		if(position >= 0){
+			
 			if(getItem(position)!=null){
 				Message m = getItem(position);
 				holder.mUserName.setText(m.getUserName());

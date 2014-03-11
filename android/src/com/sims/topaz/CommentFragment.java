@@ -96,6 +96,8 @@ public class CommentFragment extends Fragment
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View v = inflater.inflate(R.layout.fragment_comment, container, false);
+		//setClickable(true) prevents from touching the view behind
+		v.setClickable(true);
 		mFirstComment = (TextView) v.findViewById(R.id.comment_first_comment_text);
 		mFirstComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mFirstCommentNameUser = (TextView) v.findViewById(R.id.comment_person_name);

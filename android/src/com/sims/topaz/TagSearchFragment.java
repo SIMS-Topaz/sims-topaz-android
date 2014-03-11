@@ -1,5 +1,7 @@
 package com.sims.topaz;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -108,20 +110,30 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 			
 			@Override
 			public void onClick(View v) {
-				if( mFarLeft != null &&mNearRight !=null && mNetworkModule != null ){
-					Toast.makeText(SimsContext.getContext(), text.getText(), Toast.LENGTH_SHORT).show();
-					mNetworkModule.getPreviewsByTag(mNearRight, mNearRight, (CharSequence) text.getText());
 
-				}
 				
+				executeSearch(text.getText());
 			}
 		});
 		
 		ListView tagList = (ListView) view.findViewById(R.id.tag_list);
-		tagList.setAdapter(new TagSuggestionAdapter(SimsContext.getContext(), R.layout.tag_suggestion_item, TagUtils.getAllTags()));
+		tagList.setAdapter(new TagSuggestionAdapter(getActivity(), R.layout.tag_suggestion_item, TagUtils.getAllTags()));
 		return view;
 	}
+	
+	public void executeSearch(CharSequence tx) {
+		if( mFarLeft != null &&mNearRight !=null && mNetworkModule != null ){	
+					Toast.makeText(SimsContext.getContext(), text.getText(), Toast.LENGTH_SHORT).show();
+					try {
+						mNetworkModule.getPreviewsByTag(mNearRight, mNearRight, 
+								URLEncoder.encode(text.getText().toString(), "utf8"));
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 
+		}
+	}
+	
 	@Override
 	public void afterPostMessage(Message message) {
 		// TODO Auto-generated method stub
@@ -158,5 +170,9 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.erreur_gen),
 				Toast.LENGTH_SHORT).show();
+	}
+	
+	public EditText getEditText() {
+		return text;
 	}
 }

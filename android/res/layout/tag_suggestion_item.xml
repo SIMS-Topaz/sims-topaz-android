@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:padding="4dp" 
-    android:orientation="vertical"
+    android:padding="4dp"
     android:background="@drawable/selector_drawer_title" >
+    
+    <ImageView
+        android:id="@+id/tag_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp" 
+        android:padding="4dp"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/tag_image" />
     
     <TextView
         android:id="@+id/tag_suggestion"
@@ -13,8 +20,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/tag_icon"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp" />
     
-</LinearLayout>
+</RelativeLayout>

@@ -52,7 +52,7 @@ public class NetworkRestModule {
 
 	public static final String SERVER_IMG_BASEURL = "http://91.121.16.137:8081/";
 	//public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
-	public static final String SERVER_URL = "https://91.121.16.137:8080/api/v1.3/";
+	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
 	
 	
@@ -108,7 +108,7 @@ public class NetworkRestModule {
 	 * @param nearRight : coordonnéesdu bord inférieur droit
 	 * @param tag: la string tag pour specifier 
 	 */
-	public void getPreviewsByTag(LatLng farLeft, LatLng nearRight, CharSequence tag) {
+	public void getPreviewsByTag(LatLng farLeft, LatLng nearRight, String tag) {
 		
 		Double minLat = Math.min(farLeft.latitude, nearRight.latitude);
 		Double maxLat = Math.max(farLeft.latitude, nearRight.latitude);

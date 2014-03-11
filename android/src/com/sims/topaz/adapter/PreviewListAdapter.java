@@ -34,13 +34,11 @@ public class PreviewListAdapter extends ArrayAdapter<Preview> {
 	public View getView(int position, View convertView, ViewGroup parent){
 		View view = convertView;
 		ViewHolder holder = null; 
-		holder=new ViewHolder(); 
 		if(view == null){
+			holder=new ViewHolder();
 			LayoutInflater inflater = 
 					(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.adapter_preview_item, null);
-		}
-		if(position >= 0){
 			holder.mUserName = (TextView) view.findViewById(R.id.preview_item_username);
 			holder.mUserName.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 			
@@ -54,6 +52,12 @@ public class PreviewListAdapter extends ArrayAdapter<Preview> {
 			
 			holder.mNote = (TextView) view.findViewById(R.id.preview_item_note);
 			holder.mNote.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
+		if(position >= 0){
+			
 			
 			if(getItem(position)!=null){
 				Preview p = getItem(position);

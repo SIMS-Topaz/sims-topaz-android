@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white" >
@@ -38,6 +39,18 @@
             android:id="@+id/preview_list_tag"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
+
+            <ListView
+                android:id="@+id/tag_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="@color/white"
+                android:cacheColorHint="@android:color/transparent"
+                android:choiceMode="singleChoice"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="5dp" />
+            
         </FrameLayout>
     </LinearLayout>
 
@@ -47,5 +60,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal|bottom" >
     </FrameLayout>
+
 
 </FrameLayout>

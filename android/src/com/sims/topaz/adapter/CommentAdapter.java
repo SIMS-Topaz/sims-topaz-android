@@ -35,22 +35,14 @@ import android.widget.Toast;
 public class CommentAdapter extends ArrayAdapter<CommentItem> implements LoadPictureTaskInterface, LikeStatusDelegate, ErreurDelegate  {
 	
 	private Message mMessage = null;
-	private TextView mFirstComment;
-	private TextView mFirstCommentNameUser;
-	private TextView mFirstCommentTimestamp;
-	private TextView mCommentLikes;
-	private TextView mCommentDislikes;
-	private ImageView mFirstCommentPicture;
-	private ImageButton mLikeButton;
-	private ImageButton mDislikeButton;
-	private ImageButton mShareButton;
+	private ViewMessageHolder messageHolder = null;
 	
 	private int count = 0;
 	private NetworkRestModule restModule = new NetworkRestModule(this);
 	
 	public CommentAdapter(Context mDelegate, int resource, Message message, List<CommentItem> commentsList) {
 		super(mDelegate, resource, commentsList);
-		count = commentsList.size();
+		count = commentsList.size() + 1; // +1 pour le message
 		mMessage = message;
 	}	
 	
@@ -68,70 +60,83 @@ public class CommentAdapter extends ArrayAdapter<CommentItem> implements LoadPic
 	
 	public View getView(int position, View convertView, ViewGroup parent){
 		View view = convertView;
-		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
+
 		if(position == 0) {
-			view = inflater.inflate(R.layout.fragment_comment_message_item, null);
 
-			mFirstCommentNameUser = (TextView) view.findViewById(R.id.comment_person_name);
-			mFirstCommentNameUser.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-			
-			mFirstComment = (TextView) view.findViewById(R.id.comment_first_comment_text);
-			mFirstComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-			
-			mFirstCommentTimestamp = (TextView) view.findViewById(R.id.comment_time);
-			mFirstCommentTimestamp.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-			
-			mCommentLikes = (TextView) view.findViewById(R.id.textViewLikes);
-			mCommentLikes.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-			
-			mCommentDislikes = (TextView) view.findViewById(R.id.textViewDislikes);
-			mCommentDislikes.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-			
-			mLikeButton =	(ImageButton) view.findViewById(R.id.comment_like);
-			mDislikeButton = (ImageButton) view.findViewById(R.id.comment_dislike); 
-			
-			mShareButton = (ImageButton) view.findViewById(R.id.comment_share);
-			
-			mFirstCommentPicture = (ImageView) view.findViewById(R.id.comment_first_picture_view);
+			if(view == null){
+				messageHolder = new ViewMessageHolder();
+				LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				view = inflater.inflate(R.layout.fragment_comment_message_item, null);
 
-			DebugUtils.log("position == 0");
-			if(mMessage != null) {
-				mFirstCommentNameUser.setText(mMessage.getUserName());
-				mFirstComment.setText(mMessage.getText());
-				mFirstCommentTimestamp.setText(DateFormat.format(getContext().getString(R.string.date_format), new Date( mMessage.getTimestamp()) ) );
-				mCommentLikes.setText(mMessage.getLikes() + "");
-				mCommentDislikes.setText(mMessage.getDislikes() + "");
+				messageHolder.mUserName = (TextView) view.findViewById(R.id.comment_person_name);
+				messageHolder.mUserName.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 				
-				if(mMessage.getPictureUrl() != null && !mMessage.getPictureUrl().isEmpty()) {
-					LoadPictureTask setImageTask = new LoadPictureTask(this);
-					setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mMessage.getPictureUrl());
-				}
+				messageHolder.mUserComment = (TextView) view.findViewById(R.id.comment_first_comment_text);
+				messageHolder.mUserComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 				
-				mShareButton.setOnClickListener(new View.OnClickListener() {		
-					@Override
-					public void onClick(View v) { shareMessage(mMessage.getText()); }
-				});
-				mShareButton.setEnabled(true);
-				mShareButton.setClickable(true);
+				messageHolder.mCommentDate = (TextView) view.findViewById(R.id.comment_time);
+				messageHolder.mCommentDate.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 				
-				initLikeButtons();
+				messageHolder.mCommentLikes = (TextView) view.findViewById(R.id.textViewLikes);
+				messageHolder.mCommentLikes.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+				
+				messageHolder.mCommentDislikes = (TextView) view.findViewById(R.id.textViewDislikes);
+				messageHolder.mCommentDislikes.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+
+				messageHolder.mLikeButton = (ImageButton) view.findViewById(R.id.comment_like);;
+				messageHolder.mDislikeButton = (ImageButton) view.findViewById(R.id.comment_dislike);
+				
+				messageHolder.mShareButton = (ImageButton) view.findViewById(R.id.comment_share);
+				
+				messageHolder.mFirstCommentPicture = (ImageView) view.findViewById(R.id.comment_first_picture_view);
+
+				view.setTag(messageHolder);
+			} else {
+				messageHolder = (ViewMessageHolder) view.getTag();
 			}
-		} else if(position > 0){
 			
-			ViewHolder holder = new ViewHolder(); 
-			view = inflater.inflate(R.layout.fragment_comment_item, null);
-
-			holder.mUserName = (TextView) view.findViewById(R.id.comment_item_person_name);
-			holder.mUserName.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+			messageHolder.mUserName.setText(mMessage.getUserName());
+			messageHolder.mUserComment.setText(mMessage.getText());
+			messageHolder.mCommentDate.setText(DateFormat.format(getContext().getString(R.string.date_format), new Date( mMessage.getTimestamp()) ) );
+			messageHolder.mCommentLikes.setText(mMessage.getLikes() + "");
+			messageHolder.mCommentDislikes.setText(mMessage.getDislikes() + "");
 			
-			holder.mUserComment = (TextView) view.findViewById(R.id.comment_item_text);
-			holder.mUserComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+			if(mMessage.getPictureUrl() != null && !mMessage.getPictureUrl().isEmpty()) {
+				LoadPictureTask setImageTask = new LoadPictureTask(this);
+				setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mMessage.getPictureUrl());
+			}
 			
-			holder.mCommentDate = (TextView) view.findViewById(R.id.comment_item_time);
-			holder.mCommentDate.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
-			if(getItem(position)!=null){
-				CommentItem ci = getItem(position);
+			messageHolder.mShareButton.setOnClickListener(new View.OnClickListener() {		
+				@Override
+				public void onClick(View v) { shareMessage(mMessage.getText()); }
+			});
+			messageHolder.mShareButton.setEnabled(true);
+			messageHolder.mShareButton.setClickable(true);
+			
+			initLikeButtons();
+			
+		} else if(position > 0) {
+			
+			ViewHolder holder = null; 
+			if(view == null){
+				holder=new ViewHolder();
+				LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				view = inflater.inflate(R.layout.fragment_comment_item, null);
+				holder.mUserName = (TextView) view.findViewById(R.id.comment_item_person_name);
+				holder.mUserName.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+	
+				holder.mUserComment = (TextView) view.findViewById(R.id.comment_item_text);
+				holder.mUserComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+	
+				holder.mCommentDate = (TextView) view.findViewById(R.id.comment_item_time);
+				holder.mCommentDate.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+				view.setTag(holder);
+			} else {
+				holder = (ViewHolder) view.getTag();
+			}
+			
+			if(getItem(position-1)!=null){
+				CommentItem ci = getItem(position-1);
 				holder.mUserName.setText(ci.getUser());
 				holder.mUserComment.setText(ci.getCommentText());
 				holder.mCommentDate.setText(DateFormat.format
@@ -144,9 +149,9 @@ public class CommentAdapter extends ArrayAdapter<CommentItem> implements LoadPic
 	
 	@Override
 	public void loadPictureTaskOnPostExecute(Drawable image) {
-		if(mFirstCommentPicture != null) {
-			mFirstCommentPicture.setImageDrawable(image);
-			mFirstCommentPicture.setVisibility(View.VISIBLE);
+		if(messageHolder.mFirstCommentPicture != null) {
+			messageHolder.mFirstCommentPicture.setImageDrawable(image);
+			messageHolder.mFirstCommentPicture.setVisibility(View.VISIBLE);
 		}
 	}
 	
@@ -154,19 +159,19 @@ public class CommentAdapter extends ArrayAdapter<CommentItem> implements LoadPic
 		if(mMessage!=null) {
 			switch(mMessage.likeStatus) {
 			case LIKED: mMessage.unlike(); 
-				((TransitionDrawable) mLikeButton.getDrawable())
+				((TransitionDrawable) messageHolder.mLikeButton.getDrawable())
 					.reverseTransition(0);
 				break;
 			case NONE: 
 				mMessage.like(); 
-				((TransitionDrawable) mLikeButton.getDrawable())
+				((TransitionDrawable) messageHolder.mLikeButton.getDrawable())
 					.startTransition(0);
 				break;
 			case DISLIKED: 
 				mMessage.undislike();mMessage.like();
-				((TransitionDrawable) mDislikeButton.getDrawable())
+				((TransitionDrawable) messageHolder.mDislikeButton.getDrawable())
 					.reverseTransition(0);
-				((TransitionDrawable) mLikeButton.getDrawable())
+				((TransitionDrawable) messageHolder.mLikeButton.getDrawable())
 					.startTransition(0);
 				break;
 			}
@@ -182,19 +187,19 @@ public class CommentAdapter extends ArrayAdapter<CommentItem> implements LoadPic
 			switch(mMessage.likeStatus) {
 			case LIKED: 
 				mMessage.unlike(); mMessage.dislike();
-				((TransitionDrawable) mLikeButton.getDrawable())
+				((TransitionDrawable) messageHolder.mLikeButton.getDrawable())
 					.reverseTransition(0);
-				((TransitionDrawable) mDislikeButton.getDrawable())
+				((TransitionDrawable) messageHolder.mDislikeButton.getDrawable())
 					.startTransition(0);
 				break;
 			case NONE: 
 				mMessage.dislike(); 
-				((TransitionDrawable) mDislikeButton.getDrawable())
+				((TransitionDrawable) messageHolder.mDislikeButton.getDrawable())
 					.startTransition(0);
 				break;
 			case DISLIKED: 
 				mMessage.undislike();
-				((TransitionDrawable) mDislikeButton.getDrawable())
+				((TransitionDrawable) messageHolder.mDislikeButton.getDrawable())
 					.reverseTransition(0);
 				break;
 			}
@@ -206,36 +211,36 @@ public class CommentAdapter extends ArrayAdapter<CommentItem> implements LoadPic
 	}
 
 	protected void updateLikes() {
-		mCommentLikes.setText(Integer.toString(mMessage.getLikes()));
-		mCommentDislikes.setText(Integer.toString(mMessage.getDislikes()));
+		messageHolder.mCommentLikes.setText(Integer.toString(mMessage.getLikes()));
+		messageHolder.mCommentDislikes.setText(Integer.toString(mMessage.getDislikes()));
 	}
 
 	private void initLikeButtons() {
 		if(mMessage==null) return;
 		
-		mLikeButton.setOnClickListener(new View.OnClickListener() {
+		messageHolder.mLikeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {likeMessage();}
 		});
-		mDislikeButton.setOnClickListener(new View.OnClickListener() {
+		messageHolder.mDislikeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {dislikeMessage();}
 		});
 
-		mLikeButton.setEnabled(true);
-		mLikeButton.setClickable(true);
-		mDislikeButton.setEnabled(true);
-		mDislikeButton.setClickable(true);
+		messageHolder.mLikeButton.setEnabled(true);
+		messageHolder.mLikeButton.setClickable(true);
+		messageHolder.mDislikeButton.setEnabled(true);
+		messageHolder.mDislikeButton.setClickable(true);
 		
 		switch(mMessage.likeStatus) {
 			case NONE: //nothing
 				break;
 			case LIKED:
-				((TransitionDrawable) mLikeButton.getDrawable())
+				((TransitionDrawable) messageHolder.mLikeButton.getDrawable())
 					.startTransition(0);
 				break;
 			case DISLIKED:
-				((TransitionDrawable) mDislikeButton.getDrawable())
+				((TransitionDrawable) messageHolder.mDislikeButton.getDrawable())
 					.startTransition(0);
 				break;
 		}
@@ -270,6 +275,8 @@ public class CommentAdapter extends ArrayAdapter<CommentItem> implements LoadPic
 		 ImageButton mLikeButton;
 		 ImageButton mDislikeButton;
 		 ImageButton mShareButton;
+		 ImageView mFirstCommentPicture;
+		 
     }
 	
 	class ViewHolder {  
@@ -286,8 +293,8 @@ public class CommentAdapter extends ArrayAdapter<CommentItem> implements LoadPic
 				//Le nombre de like a pu changer
 				//Le message aussi ? dépend d'une fonction modifier message
 				mMessage = message;
-				mFirstComment.setText(message.getText());
-				mFirstCommentTimestamp.setText(DateFormat.format(SimsContext.getString(R.string.date_format), new Date( message.getTimestamp() ) ) );
+				messageHolder.mUserComment.setText(message.getText());
+				messageHolder.mCommentDate.setText(DateFormat.format(SimsContext.getString(R.string.date_format), new Date( message.getTimestamp() ) ) );
 				updateLikes();
 			}
 		}

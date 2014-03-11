@@ -68,6 +68,8 @@ public class CommentFragment extends Fragment
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View v = inflater.inflate(R.layout.fragment_comment, container, false);
+		//setClickable(true) prevents from touching the view behind
+		v.setClickable(true);
 		mNewComment = (EditText)v.findViewById(R.id.write_comment_text);
 		mNewComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mListComments = (ListView)v.findViewById(R.id.comment_list);
@@ -85,7 +87,6 @@ public class CommentFragment extends Fragment
 	
 	private void displayComments() {
 		List<CommentItem> lci = new ArrayList<CommentItem>();
-		lci.add(new CommentItem());
 		for (Comment co : mMessage.getComments()) {
 			lci.add(new CommentItem(co));
 		}

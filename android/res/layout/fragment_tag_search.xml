@@ -1,51 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp" >
-
-            <EditText
-                android:id="@+id/tag_search"
-                style="@style/text_gray_big"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/tag_search_icon"
-                android:hint="@string/drawer_search_hint"
-                android:padding="10dp" />
-
-            <ImageView
-                android:id="@+id/tag_search_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/ic_search"
-                android:contentDescription="@string/drawer_search"
-                android:padding="4dp" />
-        </RelativeLayout>
-
-        <FrameLayout
-            android:id="@+id/preview_list_tag"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </FrameLayout>
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/fragment_map_comment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal|bottom" >
-    </FrameLayout>
-
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:orientation="vertical" >
+	
+	        <RelativeLayout
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_margin="4dp" >
+	
+	            <EditText
+	                android:id="@+id/tag_search"
+	                style="@style/text_gray_big"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_toLeftOf="@+id/tag_search_icon"
+	                android:hint="@string/drawer_search_hint"
+	                android:padding="10dp" />
+	
+	            <ImageView
+	                android:id="@+id/tag_search_icon"
+	                android:layout_width="30dp"
+	                android:layout_height="30dp"
+	                android:layout_alignParentRight="true"
+	                android:layout_centerVertical="true"
+	                android:background="@drawable/ic_search"
+	                android:contentDescription="@string/drawer_search"
+	                android:padding="4dp" />
+	        </RelativeLayout>
+	        
+	        <FrameLayout
+	            android:id="@+id/fragment_preview_list"
+	            android:layout_width="match_parent"
+                android:layout_height="match_parent">
+	            
+	        </FrameLayout>
+	
+	    </LinearLayout>
 </FrameLayout>

@@ -103,7 +103,7 @@ public class TagSearchFragment extends Fragment implements MessageDelegate {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
-		transaction.replace(R.id.fragment_container, f);
+		transaction.replace(R.id.fragment_preview_list, f);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}

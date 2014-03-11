@@ -72,7 +72,7 @@ OnMapLoadedCallback
 {
 	
 	private static String FRAGMENT_PREVIEW = "fragment_preview";
-	private static String FRAGMENT_MESSAGE = "fragment_message";
+	public static String FRAGMENT_MESSAGE = "fragment_message";
 	private static String FRAGMENT_COMMENT = "fragment_comment";
 	
 	private GoogleMap mMap;
@@ -336,8 +336,8 @@ OnMapLoadedCallback
 		timerSeconds.cancel();
 		timerOneMinute.cancel();
 	}
-
-
+	
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		// Choose what to do based on the request code
@@ -429,14 +429,10 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {		
-		//set fragment
-		Bundle args = new Bundle();
-		args.putLong("id_preview", item.getPreview().getId());
-		CommentFragment fragment = new CommentFragment();
-		fragment.setArguments(args);
-
-		//create transaction
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		CommentFragment fragment = CommentFragment.newInstance(item.getPreview().getId());
+		FragmentManager fm = getFragmentManager(); 
+		fm.popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_slide_out_right);
 		transaction.replace(R.id.fragment_map_comment, fragment);
@@ -457,9 +453,10 @@ OnMapLoadedCallback
 			previewList.add(pci.getPreview());
 		}
 		
-		
+		FragmentManager fm = getFragmentManager(); 
 		Fragment f = PreviewListFragment.newInstance(previewList);
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		fm.popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
 		transaction.replace(R.id.preview_list, f);
@@ -537,6 +534,12 @@ OnMapLoadedCallback
 			return mMap;
 		}
 		return null;
+	}
+
+	public void popCommentAndPreview(){
+		FragmentManager fm = getFragmentManager();
+		fm.popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		fm.popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
 }

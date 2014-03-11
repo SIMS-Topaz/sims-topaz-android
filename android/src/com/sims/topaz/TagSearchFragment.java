@@ -9,8 +9,10 @@ import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -45,7 +47,9 @@ public class TagSearchFragment extends Fragment implements MessageDelegate {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_tag_search, container, false);
+		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 		text = (EditText) view.findViewById(R.id.tag_search);
+		text.setTypeface(face);
 		text.addTextChangedListener(new TextWatcher() {
 			
 			@Override

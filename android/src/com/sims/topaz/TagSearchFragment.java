@@ -5,12 +5,16 @@ import java.util.List;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.sims.topaz.adapter.TagSuggestionAdapter;
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.MessageDelegate;
+import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
+import com.sims.topaz.utils.TagUtils;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -24,9 +28,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
-public class TagSearchFragment extends Fragment implements MessageDelegate {
+public class TagSearchFragment extends Fragment implements MessageDelegate, ErreurDelegate {
 	
 	private NetworkRestModule mNetworkModule;
 	private GoogleMap mMap;
@@ -76,13 +81,16 @@ public class TagSearchFragment extends Fragment implements MessageDelegate {
 			@Override
 			public void onClick(View v) {
 				if( mMap != null && mNetworkModule != null ){
-					Toast.makeText(SimsContext.getContext(), text.getText(), Toast.LENGTH_SHORT).show();
+
 					VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
 					mNetworkModule.getPreviewsByTag(visibleRegion.farLeft, visibleRegion.nearRight, (CharSequence) text.getText());
 				}
 				
 			}
 		});
+		
+		ListView tagList = (ListView) view.findViewById(R.id.tag_list);
+		tagList.setAdapter(new TagSuggestionAdapter(SimsContext.getContext(), R.layout.tag_suggestion_item, TagUtils.getAllTags()));
 		return view;
 	}
 
@@ -107,5 +115,16 @@ public class TagSearchFragment extends Fragment implements MessageDelegate {
 		transaction.replace(R.id.preview_list_tag, f);
 		transaction.addToBackStack(null);
 		transaction.commit();
+	}
+
+	@Override
+	public void apiError(ApiError error) {
+		NetworkRestModule.resetHttpClient();
+		Toast.makeText(SimsContext.getContext(), "apiError", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void networkError() {
+		Toast.makeText(SimsContext.getContext(), "networkError", Toast.LENGTH_SHORT).show();
 	}
 }

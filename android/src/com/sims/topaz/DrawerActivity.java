@@ -168,7 +168,8 @@ public class DrawerActivity extends ActionBarActivity
     		mLastFragment.setArguments(bundle);
     		break;
 		case 1:
-			mLastFragment = new TagSearchFragment(mMapFragment.getMap());
+			mLastFragment = new TagSearchFragment();
+			((TagSearchFragment) mLastFragment).setMap(mMapFragment.getMap());
 			break;
 		case 2:
 			if(mLastFragment instanceof MapFragment){
@@ -276,7 +277,7 @@ public class DrawerActivity extends ActionBarActivity
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_slide_out_right);
-		transaction.replace(R.id.fragment_map_comment, fragment);
+		transaction.replace(R.id.fragment_container, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}

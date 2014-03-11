@@ -247,10 +247,12 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
                 // Get data
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 
-                double aspectRatio = (double) bm.getHeight() / (double) bm.getWidth();
-                int targetHeight = (int) (PICTURE_MAX_WIDTH * aspectRatio);
+                if(bm.getHeight() > PICTURE_MAX_WIDTH) {
+	                double aspectRatio = (double) bm.getHeight() / (double) bm.getWidth();
+	                int targetHeight = (int) (PICTURE_MAX_WIDTH * aspectRatio);
+	                bm = Bitmap.createScaledBitmap(bm, PICTURE_MAX_WIDTH, targetHeight, true);
+                }
                 
-                bm = Bitmap.createScaledBitmap(bm, PICTURE_MAX_WIDTH, targetHeight, true);
                 bm.compress(CompressFormat.JPEG, PICTURE_QUALITY, bos);
                 mRestModule.uploadPicture(bos.toByteArray());
                 
@@ -270,10 +272,13 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 
                 // Get data
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                double aspectRatio = (double) bm.getHeight() / (double) bm.getWidth();
-                int targetHeight = (int) (PICTURE_MAX_WIDTH * aspectRatio);
                 
-                //bm = Bitmap.createScaledBitmap(bm, PICTURE_MAX_WIDTH, targetHeight, true);
+                if(bm.getHeight() > PICTURE_MAX_WIDTH) {
+	                double aspectRatio = (double) bm.getHeight() / (double) bm.getWidth();
+	                int targetHeight = (int) (PICTURE_MAX_WIDTH * aspectRatio);
+	                bm = Bitmap.createScaledBitmap(bm, PICTURE_MAX_WIDTH, targetHeight, true);
+                }
+                
                 bm.compress(CompressFormat.JPEG, PICTURE_QUALITY, bos);
                 mRestModule.uploadPicture(bos.toByteArray());
 

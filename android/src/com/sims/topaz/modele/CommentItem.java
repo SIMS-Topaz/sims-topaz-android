@@ -10,6 +10,10 @@ public class CommentItem {
 	private String commentText;
 	private long date;
 	private Bitmap icon;
+	private String pictureUrl;
+	private int likes = 0;
+	private int dislikes = 0;
+	
 	public long getId() {
 		return id;
 	}
@@ -40,7 +44,33 @@ public class CommentItem {
 	public void setIcon(Bitmap icon) {
 		this.icon = icon;
 	}
+	
+	public String getPictureUrl() {
+		return pictureUrl;
+	}
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
+	}
+	
+	public int getLikes() {
+		return likes;
+	}
 
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
+	}
+
+	public CommentItem() {
+	}
+	
 	public CommentItem(long id, String user, String commentText, long date,
 			Bitmap icon) {
 		super();

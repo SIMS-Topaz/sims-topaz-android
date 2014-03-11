@@ -59,7 +59,7 @@ public class CameraUtils {
 			}	
 			intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
 			intent.putExtra("return-data", true);
-
+			intent.setFlags(intent.getFlags()|Intent.FLAG_ACTIVITY_NO_HISTORY);
 		} catch (ActivityNotFoundException e) {
 			DebugUtils.log("cannot take picture"+e);
 		}
@@ -69,6 +69,7 @@ public class CameraUtils {
 	public static Intent openGallery() {
 		Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 		photoPickerIntent.setType("image/*");
+		photoPickerIntent.setFlags(photoPickerIntent.getFlags()|Intent.FLAG_ACTIVITY_NO_HISTORY);
 		return photoPickerIntent;
 	}
 	

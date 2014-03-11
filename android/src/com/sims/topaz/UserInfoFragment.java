@@ -392,6 +392,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 			mStatusEditText.setCursorVisible(false);
 			mStatusTextView.setFocusable(false);
 		}
+		
 		return v;
 	}
 

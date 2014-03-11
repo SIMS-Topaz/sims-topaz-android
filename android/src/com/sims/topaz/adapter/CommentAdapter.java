@@ -1,9 +1,11 @@
 package com.sims.topaz.adapter;
 
+import java.lang.ref.WeakReference;
 import java.sql.Date;
 import java.util.List;
 
 import com.sims.topaz.R;
+import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.modele.CommentItem;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import android.content.Context;
@@ -12,15 +14,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 	
 	private int count = 0;
+	private WeakReference<Context> delegate;
 	public CommentAdapter(Context mDelegate, int resource, List<CommentItem> commentsList) {
 		super(mDelegate, resource, commentsList);
 		count = commentsList.size();
+		this.delegate = new WeakReference<Context>(mDelegate);
 	}	
+	
 	
 	public void addItem(CommentItem ci) {
 		add(ci);
@@ -34,7 +40,7 @@ public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 	}
 	
 	
-	public View getView(int position, View convertView, ViewGroup parent){
+	public View getView(final int position, View convertView, ViewGroup parent){
 		View view = convertView;
 		ViewHolder holder = null; 
 		holder=new ViewHolder(); 
@@ -52,6 +58,18 @@ public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 			
 			holder.mCommentDate = (TextView) view.findViewById(R.id.comment_item_time);
 			holder.mCommentDate.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+			
+			holder.mUserImage = (ImageButton) view.findViewById(R.id.comment_item_image_first_comment);
+			holder.mUserImage.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					((OnShowUserProfile)delegate.get()).onShowUserProfileFragment(position);
+					
+				}
+			});
+			
 			if(getItem(position)!=null){
 				CommentItem ci = getItem(position);
 				holder.mUserName.setText(ci.getUser());
@@ -68,5 +86,6 @@ public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 		 TextView mUserName;
 		 TextView mUserComment;
 		 TextView mCommentDate;
+		 ImageButton mUserImage;
     }  
 }

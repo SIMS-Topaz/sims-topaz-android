@@ -1,5 +1,5 @@
 package com.sims.topaz.interfaces;
 
 public interface OnShowUserProfile {
-	public void OnShowUserProfileFragment(long id);
+	public void onShowUserProfileFragment(long id);
 }

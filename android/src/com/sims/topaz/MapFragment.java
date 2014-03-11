@@ -163,11 +163,6 @@ OnMapLoadedCallback
 			/* map is already there, just return view as it is */
 			e.printStackTrace();
 		}
-	
-		FragmentManager fm = getFragmentManager();
-		fm.popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		fm.popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		
 
 		// Account banner
 		bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
@@ -536,10 +531,5 @@ OnMapLoadedCallback
 		return null;
 	}
 
-	public void popCommentAndPreview(){
-		FragmentManager fm = getFragmentManager();
-		fm.popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		fm.popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-	}
 
 }

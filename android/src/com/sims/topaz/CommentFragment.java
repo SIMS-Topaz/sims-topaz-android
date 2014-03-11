@@ -45,7 +45,8 @@ import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 public class CommentFragment extends Fragment 
-	implements MessageDelegate,LikeStatusDelegate,CommentDelegate,ErreurDelegate, LoadPictureTaskInterface{
+	implements MessageDelegate,LikeStatusDelegate,CommentDelegate,
+	ErreurDelegate, LoadPictureTaskInterface, OnShowUserProfile{
 
 	private TextView mFirstComment;
 	private TextView mFirstCommentNameUser;
@@ -125,16 +126,10 @@ public class CommentFragment extends Fragment
 		for (Comment co : mMessage.getComments()) {
 			lci.add(new CommentItem(co));
 		}
-		mListComments.setAdapter(new CommentAdapter(SimsContext.getContext(),
+		mListComments.setAdapter(new CommentAdapter(this.getView().getContext(),
 				R.layout.fragment_comment_item,
 				lci));
-		mListComments.setOnItemClickListener(new OnItemClickListener()
-		{
-		    @Override public void onItemClick(AdapterView<?> adapterView, View view,int position, long arg3)
-		    { 
-		    	mCallback.OnShowUserProfileFragment(mMessage.getComments().get(position).getUserId());
-		    }
-		});
+
 		mSendCommentButton.setEnabled(true);
 		mSendCommentButton.setClickable(true);
 		
@@ -379,6 +374,12 @@ public class CommentFragment extends Fragment
 	public void loadPictureTaskOnPostExecute(Drawable image) {
 		mFirstCommentPicture.setImageDrawable(image);
 		mFirstCommentPicture.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void onShowUserProfileFragment(long id) {
+		mCallback.onShowUserProfileFragment(id);
+		
 	}
 
 }

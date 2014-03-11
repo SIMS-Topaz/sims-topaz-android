@@ -127,6 +127,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 				onSendButton(v);
 			}
 		});
+		
 		Button cancel = (Button) view.findViewById(R.id.button_cancel_message);
 		cancel.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		
@@ -134,7 +135,8 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 			@Override
 			public void onClick(View v) {
 				closeKeyboard();
-				getFragmentManager().popBackStack(MapFragment.FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+				getFragmentManager().popBackStack(MapFragment.FRAGMENT_MESSAGE, 
+						FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			}
 		});
 

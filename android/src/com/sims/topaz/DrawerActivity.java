@@ -175,7 +175,6 @@ public class DrawerActivity extends ActionBarActivity
 		case 2:
 			if(mLastFragment instanceof MapFragment){
 				change = false;
-				mMapFragment.popCommentAndPreview();
 			}
 			mLastFragment = mMapFragment;	
 			TAG = FRAGMENT_MAP;
@@ -253,7 +252,7 @@ public class DrawerActivity extends ActionBarActivity
 
 
 	@Override
-	public void OnShowUserProfileFragment(long id) {
+	public void onShowUserProfileFragment(long id) {
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	fragmentManager.beginTransaction().remove(mLastFragment);
     	

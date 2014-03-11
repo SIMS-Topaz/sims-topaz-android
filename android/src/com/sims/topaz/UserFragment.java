@@ -59,7 +59,6 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 	private ProgressBar mProgressBar;
 	private static String IS_MY_OWN_PROFILE = "user_fragment_is_my_own_profile";
 	private static String USER_ID = "user_fragment_user_id";
-	private static String SAVED_STATE_KEY ="user_fragment_save_state";
 	private boolean isMyProfile;
 	private byte[] pictureData;
 	private User mUser = null;
@@ -257,7 +256,10 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 		mUser = user;
 		if(mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
 			LoadPictureTask setImageTask = new LoadPictureTask(this);
-			setImageTask.execute(mUser.getPictureUrl());
+			setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());
+			Toast.makeText(SimsContext.getContext(), 
+					NetworkRestModule.SERVER_IMG_BASEURL+mUser.getPictureUrl(),
+					Toast.LENGTH_SHORT).show();
 		}
 		mUserSnippetTextView.setText(mUser.getStatus());
 		mUserTextView.setText(mUser.getUserName());
@@ -298,12 +300,11 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 	@Override
 	public void afterUploadPicture(String pictureUrl) {
 		mUser.setPictureUrl(pictureUrl);
+		Toast.makeText(SimsContext.getContext(), pictureUrl, Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void loadPictureTaskOnPostExecute(Drawable image) {
 		mUserImage.setImageDrawable(image);
 	}
-	
-
 }

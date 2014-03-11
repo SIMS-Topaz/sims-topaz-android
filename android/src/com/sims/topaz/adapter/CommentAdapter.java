@@ -64,8 +64,8 @@ public class CommentAdapter extends ArrayAdapter<CommentItem>  {
 				
 				@Override
 				public void onClick(View v) {
-					
-					((OnShowUserProfile)delegate.get()).onShowUserProfileFragment(position);
+					CommentItem ci = getItem(position);
+					((OnShowUserProfile)delegate.get()).onShowUserProfileFragment(ci.getUserId());
 					
 				}
 			});

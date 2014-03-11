@@ -254,6 +254,8 @@ implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDe
 	@Override
 	public void afterGetUserInfo(User user) {
 		mUser = user;
+		Toast.makeText(SimsContext.getContext(),
+				"afterGetUserInfo",Toast.LENGTH_SHORT).show();
 		if(mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
 			LoadPictureTask setImageTask = new LoadPictureTask(this);
 			setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());

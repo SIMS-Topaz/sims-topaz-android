@@ -11,7 +11,7 @@ public class User implements Serializable{
 	
 	private static final long serialVersionUID = 7526472295622776147L;
 	
-	@JsonProperty("picture_url")
+	@JsonProperty("user_picture")
 	private String pictureUrl;
 	
 	@JsonProperty("user_id")

@@ -64,6 +64,8 @@ public class CommentFragment extends Fragment
 	private NetworkRestModule restModule = new NetworkRestModule(this);
 	OnShowUserProfile mCallback;
 	
+	private static String ID_PREVIEW = "id_preview";
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -80,6 +82,15 @@ public class CommentFragment extends Fragment
 		super.onDetach();
 		mCallback = null;
 	}
+	public static CommentFragment newInstance(long id){
+		CommentFragment fragment = new CommentFragment();
+		Bundle args = new Bundle();
+		args.putLong(ID_PREVIEW, id);
+		fragment.setArguments(args);
+		return fragment;
+	}
+	
+	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

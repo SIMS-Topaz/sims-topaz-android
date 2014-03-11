@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
+import android.widget.HeaderViewListAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -110,6 +111,8 @@ public class CommentFragment extends Fragment
 		mShareButton = (ImageButton)v2.findViewById(R.id.comment_share);
 		mLikeButton = (ImageButton)v2.findViewById(R.id.comment_like);
 		mDislikeButton = (ImageButton)v2.findViewById(R.id.comment_dislike);
+		
+		v2.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT));
 		mListComments.addHeaderView(v2);
 
 		
@@ -348,7 +351,9 @@ public class CommentFragment extends Fragment
 	@Override
 	public void afterPostComment(Comment comment) {
 		CommentItem ci = new CommentItem(comment);
-		CommentAdapter ca = (CommentAdapter) mListComments.getAdapter();
+		
+		HeaderViewListAdapter headerAdapter = (HeaderViewListAdapter)mListComments.getAdapter();
+		CommentAdapter ca = (CommentAdapter)headerAdapter.getWrappedAdapter();
 		ca.addItem(ci);
 		mNewComment.setText("");
 		mNewComment.setEnabled(true);

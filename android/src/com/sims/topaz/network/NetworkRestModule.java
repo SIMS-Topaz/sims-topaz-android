@@ -105,7 +105,7 @@ public class NetworkRestModule {
 	 * @param nearRight : coordonnéesdu bord inférieur droit
 	 * @param tag: la string tag pour specifier 
 	 */
-	public void getPreviewsByTag(LatLng farLeft, LatLng nearRight, CharSequence tag) {
+	public void getPreviewsByTag(LatLng farLeft, LatLng nearRight, String tag) {
 		
 		Double minLat = Math.min(farLeft.latitude, nearRight.latitude);
 		Double maxLat = Math.max(farLeft.latitude, nearRight.latitude);

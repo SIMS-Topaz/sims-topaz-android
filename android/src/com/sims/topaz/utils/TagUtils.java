@@ -11,14 +11,14 @@ import com.sims.topaz.R;
  */
 public class TagUtils {
 	
-	public static final String TAG_SUN="tag_sun";
-	public static final String TAG_RESTAURANT="tag_restaurant";
-	public static final String TAG_PARTY="tag_party";
-	public static final String TAG_PIZZA="tag_pizza";
-	public static final String TAG_SHOPPING="tag_shopping";
-	public static final String TAG_SCHOOL="tag_school";
-	public static final String TAG_TOILETS="tag_toilet";
-	public static final String TAG_HOSPITAL="tag_hospital";
+	public static final String TAG_SUN="sun";
+	public static final String TAG_RESTAURANT="restaurant";
+	public static final String TAG_PARTY="party";
+	public static final String TAG_PIZZA="pizza";
+	public static final String TAG_SHOPPING="shopping";
+	public static final String TAG_SCHOOL="school";
+	public static final String TAG_TOILETS="toilet";
+	public static final String TAG_HOSPITAL="hospital";
 	public static final String TAG="tag";
 	
 	

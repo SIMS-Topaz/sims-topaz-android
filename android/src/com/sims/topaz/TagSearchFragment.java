@@ -1,5 +1,7 @@
 package com.sims.topaz;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -83,20 +85,29 @@ public class TagSearchFragment extends Fragment implements MessageDelegate, Erre
 			
 			@Override
 			public void onClick(View v) {
-				if( mMap != null && mNetworkModule != null ){
-
-					VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-					mNetworkModule.getPreviewsByTag(visibleRegion.farLeft, visibleRegion.nearRight, (CharSequence) text.getText());
-				}
-				
+				executeSearch(text.getText());
 			}
 		});
 		
 		ListView tagList = (ListView) view.findViewById(R.id.tag_list);
-		tagList.setAdapter(new TagSuggestionAdapter(SimsContext.getContext(), R.layout.tag_suggestion_item, TagUtils.getAllTags()));
+		tagList.setAdapter(new TagSuggestionAdapter(getActivity(), R.layout.tag_suggestion_item, TagUtils.getAllTags()));
 		return view;
 	}
-
+	
+	public void executeSearch(CharSequence tx) {
+		if( mMap != null && mNetworkModule != null ){
+			
+			VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+			try {
+				mNetworkModule.getPreviewsByTag(visibleRegion.farLeft, visibleRegion.nearRight, 
+						URLEncoder.encode(tx.toString(), "utf8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	@Override
 	public void afterPostMessage(Message message) {
 		// TODO Auto-generated method stub
@@ -129,5 +140,9 @@ public class TagSearchFragment extends Fragment implements MessageDelegate, Erre
 	@Override
 	public void networkError() {
 		Toast.makeText(SimsContext.getContext(), "networkError", Toast.LENGTH_SHORT).show();
+	}
+	
+	public EditText getEditText() {
+		return text;
 	}
 }

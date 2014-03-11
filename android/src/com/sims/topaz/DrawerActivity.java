@@ -281,5 +281,8 @@ public class DrawerActivity extends ActionBarActivity
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
-
+	
+	public Fragment getLastFragment() {
+		return mLastFragment;
+	}
 }

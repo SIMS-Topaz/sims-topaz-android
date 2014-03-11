@@ -13,6 +13,7 @@ import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
@@ -47,8 +48,7 @@ import android.widget.Toast;
 public class EditMessageFragment extends Fragment
 implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 
-	private final static int SELECT_FILE = 10;
-	private final static int REQUEST_CAMERA = 11;
+
 	
 	private final static int PICTURE_MAX_WIDTH = 1024;
 	private final static int PICTURE_QUALITY = 85;
@@ -215,12 +215,11 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (item == 0) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, REQUEST_CAMERA);
+                    startActivityForResult(CameraUtils.takePicture(), CameraUtils.REQUEST_CODE_TAKE_PICTURE);
                 } else if (item == 1) {
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
-                    startActivityForResult(Intent.createChooser(intent, ""), SELECT_FILE);
+                    startActivityForResult(Intent.createChooser(intent, ""), CameraUtils.REQUEST_CODE_GALLERY);
                 } else if (item == 2) {
                     dialog.dismiss();
                 }
@@ -236,7 +235,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 
         if (resultCode == Activity.RESULT_OK) {
         	
-            if (requestCode == SELECT_FILE) {
+            if (requestCode == CameraUtils.REQUEST_CODE_GALLERY) {
                 Uri selectedImageUri = data.getData();
                 String picturePath = getPath(selectedImageUri, this.getActivity());
                 Bitmap bm = BitmapFactory.decodeFile(picturePath);
@@ -258,14 +257,20 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
                 getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.VISIBLE);
                 getView().findViewById(R.id.button_send_message).setEnabled(false);
                 
-            } else if (requestCode == REQUEST_CAMERA) {
+            } else if (requestCode == CameraUtils.REQUEST_CODE_TAKE_PICTURE) {
             	
-                Bundle extras = data.getExtras();
-                Bitmap bm = (Bitmap) extras.get("data");
+                Bitmap bm = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath());
+                
+                DebugUtils.log("getHeight=" + bm.getHeight());
+                
                 editImageView.setImageBitmap(bm);
 
                 // Get data
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                double aspectRatio = (double) bm.getHeight() / (double) bm.getWidth();
+                int targetHeight = (int) (PICTURE_MAX_WIDTH * aspectRatio);
+                
+                //bm = Bitmap.createScaledBitmap(bm, PICTURE_MAX_WIDTH, targetHeight, true);
                 bm.compress(CompressFormat.JPEG, PICTURE_QUALITY, bos);
                 mRestModule.uploadPicture(bos.toByteArray());
 

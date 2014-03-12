@@ -30,7 +30,6 @@ public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate
 	private TextView mUserTitleTextView;
 	private TextView mUserSnippetTextView;
 	private ImageView mUserImage;
-	private ProgressBar mProgressBar;
 	private ListView mListMessagesListView;
 	private byte[] mImage;
 	
@@ -55,7 +54,7 @@ public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate
 		super.onCreate(savedInstanceState);
 
 		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
-		View v = inflater.inflate(R.layout.fragment_user_info, container, false);
+		View v = inflater.inflate(R.layout.fragment_user_info_general, container, false);
 		//username field
 		mUserTitleTextView = (TextView)v.findViewById(R.id.username);
 		mUserTitleTextView.setTypeface(face);
@@ -64,9 +63,6 @@ public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate
 		mUserSnippetTextView.setTypeface(face);
 		//user imgae
 		mUserImage = (ImageView)v.findViewById(R.id.username_image);
-		//Progress bar
-		mProgressBar = (ProgressBar)v.findViewById(R.id.progressBar);
-		mProgressBar.setVisibility(View.VISIBLE);
 		//listview
 		mListMessagesListView = (ListView)v.findViewById(R.id.fragment_user_comments__list);
 		if(mUser!=null){
@@ -99,7 +95,6 @@ public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate
 	@Override
 	public void loadPictureTaskOnPostExecute(Drawable image) {
 		mUserImage.setImageDrawable(image);
-		mProgressBar.setVisibility(View.GONE);
 	}
 
 	@Override

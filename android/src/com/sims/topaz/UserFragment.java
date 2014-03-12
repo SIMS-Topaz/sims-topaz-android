@@ -1,5 +1,6 @@
 package com.sims.topaz;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -7,8 +8,10 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.sims.topaz.EditMessageFragment.OnNewMessageListener;
 import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.interfaces.OnShowDefaultPage;
 import com.sims.topaz.network.NetworkRestModule;
@@ -31,12 +34,32 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage {
 	private boolean isMyProfile;
 	
 	private User mUser = null;
-
-
+	OnShowGeneralUserProfile mCallback;
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
-	private UserInfoFragment userInfoFragment;
-	private UserCommentFragment userCommentFragment;
-	private UserInfoGeneralFragment userInfoGeneralFragment;
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		// This makes sure that the container activity has implemented
+		// the callback interface. If not, it throws an exception
+		try {
+			mCallback = (OnShowGeneralUserProfile) activity;
+			
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnShowGeneralUserProfile");
+		}
+	}
+
+	/**
+	 * Set the callback to null so we don't accidentally leak the 
+	 * Activity instance.
+	 */
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mCallback = null;
+	}
 
 	public static UserFragment newInstance(boolean isMyProfile){
 		UserFragment fragment= new UserFragment();
@@ -123,28 +146,28 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage {
 	public void afterPostUserInfo(User user) {}
 
 	private void prepareFragments(){
-		userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
-		userCommentFragment =UserCommentFragment.newInstance(mUser, null);
-		userInfoGeneralFragment = UserInfoGeneralFragment.newInstance(mUser);
+
+		
 		//tabs
 		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 
+
 		if (!tabletSize) {
 			if(isMyProfile){
+				UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
+				UserCommentFragment userCommentFragment =UserCommentFragment.newInstance(mUser, null);
 				UserPageAdapter mTabsAdapter = 
 						new UserPageAdapter(getActivity().getSupportFragmentManager(),
 								userCommentFragment,
 								userInfoFragment);
 				mViewPager.setAdapter(mTabsAdapter);
 			}else{
-				mViewPager.setVisibility(View.GONE);
-				//conteneur
-				FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-						.beginTransaction();
-				transaction.replace(R.id.conteneur, userInfoGeneralFragment);
+				((OnShowGeneralUserProfile)mCallback).onShowGeneralUserProfileFragment(mUser);
 			}
 
 		} else {
+			UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
+			UserCommentFragment userCommentFragment =UserCommentFragment.newInstance(mUser, null);
 			FragmentTransaction transaction = getActivity().getSupportFragmentManager()
 					.beginTransaction();
 

@@ -107,8 +107,10 @@ PictureUploadDelegate{
 		super.onCreate(savedInstanceState);
 		if(getArguments()!=null){
 			mUser = (User) getArguments().getSerializable(USER);
-		}		
+		}	
+		setRetainInstance(true);
 	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, 

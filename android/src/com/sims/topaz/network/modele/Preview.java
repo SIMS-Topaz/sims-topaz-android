@@ -1,5 +1,8 @@
 package com.sims.topaz.network.modele;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,6 +28,8 @@ public class Preview {
 	@JsonProperty("date")
 	private Long timestamp;
 	
+	private List<String> tags;
+	
 	private final int MAX_CHAR = 20;
 	
 	private int likes = 0;
@@ -32,6 +37,7 @@ public class Preview {
 	private int dislikes = 0;
 	
 	public Preview() {
+		tags = new ArrayList<String>();
 	}
 	
 	public Preview(Message message) {
@@ -49,8 +55,13 @@ public class Preview {
 		this.timestamp = message.getTimestamp();
 		this.likes = message.getLikes();
 		this.dislikes = message.getDislikes();
+		this.tags = message.getTags();
 	}
 	
+	public List<String> getTags() {
+		return tags;
+	}
+
 	public Long getId() {
 		return id;
 	}

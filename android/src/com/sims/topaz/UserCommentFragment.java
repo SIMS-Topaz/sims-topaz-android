@@ -4,8 +4,10 @@ import com.sims.topaz.adapter.UserMessageAdapter;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
+import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -55,16 +57,19 @@ public class UserCommentFragment  extends Fragment  {
 					R.layout.fragment_comment_item,
 					mUser.getMessages(),
 					mImage);
+			
 			if(mUser.getMessages().size() == 0){
-				//mListMessagesListView user_tab_no_messages_me
+				Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 				View v2 = inflater.inflate(R.layout.header_list_messages, null); 
 				TextView text = (TextView)v2.findViewById(R.id.header_list_text);
 				if(AuthUtils.getSessionLongValue
 						(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID, (long)0) != mUser.getId()){
 					text.setText(getResources().getString(R.string.user_tab_no_messages));
+					
 				}else{
 					text.setText(getResources().getString(R.string.user_tab_no_messages_me));
 				}
+				text.setTypeface(face);
 				mListMessagesListView.addHeaderView(v2);
 			}
 			mListMessagesListView.setAdapter(adapter);	

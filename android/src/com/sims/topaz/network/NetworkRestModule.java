@@ -18,6 +18,7 @@ import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.bouncycastle.util.Strings;
 
 import android.os.AsyncTask;
 
@@ -116,7 +117,7 @@ public class NetworkRestModule {
 		Double maxLong = Math.max(farLeft.longitude, nearRight.longitude);		
 		
 		String url = SERVER_URL + "get_previews/" + minLat + "/" + minLong + "/" + maxLat + "/" + maxLong;
-		url += "/BY_TAG?tag=" + tag;
+		url += "/BY_TAG?tag=" + tag.replaceAll("#", "");
 		DebugUtils.log("Network getPreviews url="+ url);
 		RESTTask rest = new RESTTask(this, url, TypeRequest.GET_PREVIEW);
 		rest.execute();

@@ -213,11 +213,17 @@ PictureUploadDelegate{
 					Toast.LENGTH_SHORT).show();
 		}
 		//set text
-		mUserSnippetTextView.setText(mUser.getStatus());
-		mUserTextView.setText(mUser.getUserName());
+		if(mUser!=null){
+			if(mUser.getStatus()!=null){
+				mUserSnippetTextView.setText(mUser.getStatus());
+				mStatusEditText.setText(mUser.getStatus());
+			}
+			if(mUser.getUserName()!=null){
+				mUserTextView.setText(mUser.getUserName());
+				mUserTitleTextView.setText(mUser.getUserName());
+			}
+		}
 		mProgressBar.setVisibility(View.GONE);
-		mUserTitleTextView.setText(mUser.getUserName());
-		mStatusEditText.setText(mUser.getStatus());
 
 		mSaveNewPasswordButton.setOnClickListener(new View.OnClickListener() {
 			@Override

@@ -289,13 +289,16 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 	protected void sendComment() {
 		if(mMessage==null) return;
 		String comm = mNewComment.getText().toString();
-		mNewComment.setEnabled(false);
-		mSendCommentButton.setEnabled(false);
-		Comment comment = new Comment();
-		comment.setText(comm);
-		comment.setUserName(AuthUtils.getSessionStringValue
-				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
-		restModule.postComment(comment, mMessage);	
+		
+		if(comm.length() > 0) {
+			mNewComment.setEnabled(false);
+			mSendCommentButton.setEnabled(false);
+			Comment comment = new Comment();
+			comment.setText(comm);
+			comment.setUserName(AuthUtils.getSessionStringValue
+					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
+			restModule.postComment(comment, mMessage);
+		}
 	}
 
 	private void loadMessage() {

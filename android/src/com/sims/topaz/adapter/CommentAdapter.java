@@ -6,8 +6,6 @@ import java.util.List;
 
 import com.sims.topaz.R;
 import com.sims.topaz.interfaces.OnShowUserProfile;
-import com.sims.topaz.AsyncTask.LoadPictureTask;
-import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.modele.CommentItem;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 
@@ -18,9 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class CommentAdapter extends ArrayAdapter<CommentItem> {

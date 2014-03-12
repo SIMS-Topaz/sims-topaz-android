@@ -20,7 +20,6 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import android.os.AsyncTask;
-import android.support.v4.view.ViewPager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -50,7 +49,7 @@ public class NetworkRestModule {
 		POST_USER_INFO, PICTURE_UPLOAD
 	}
 
-	public static final String SERVER_IMG_BASEURL = "http://91.121.16.137:8081/";
+	public static final String SERVER_IMG_BASEURL = "http://91.121.16.137:8080/";
 	//public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
 	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";

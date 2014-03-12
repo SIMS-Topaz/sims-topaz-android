@@ -20,6 +20,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import android.os.AsyncTask;
+import android.support.v4.view.ViewPager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -44,12 +45,14 @@ import com.sims.topaz.utils.DebugUtils;
 public class NetworkRestModule {
 
 	enum TypeRequest {
-		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, POST_USER_INFO, PICTURE_UPLOAD
+		GET_MESSAGE, GET_PREVIEW, POST_MESSAGE, COMMENT_MESSAGE, 
+		POST_LIKE_STATUS, USER_SIGNUP, USER_LOGIN, GET_USER_INFO, 
+		POST_USER_INFO, PICTURE_UPLOAD
 	}
 
-	public static final String SERVER_IMG_BASEURL = "http://91.121.16.137:8080/";
+	public static final String SERVER_IMG_BASEURL = "http://91.121.16.137:8081/";
 	//public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
-	public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";
+	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
 	
 	
@@ -159,21 +162,6 @@ public class NetworkRestModule {
 	}
 	
 	/**
-	 * Poste une image
-	 * La fin de la requete appellera afterUploadUserPicture() (interface PictureUserUploadDelegate)
-	 * @param pictureData l'image
-	 */
-	public void uploadUserPicture(byte[] pictureData) {
-		String url = SERVER_URL + "upload_picture";
-		DebugUtils.log("Network uploadPicture url="+ url);
-		RESTTask rest = new RESTTask(this, url, TypeRequest.POST_USER_INFO);
-		rest.setByteData(pictureData);
-		rest.execute();
-		lastTask = rest;
-	}
-	
-	
-	/**
 	 * Poste d'un avis sur un message
 	 * @param message message dont on donne l'avis
 	 */
@@ -281,7 +269,7 @@ public class NetworkRestModule {
 	}
 	private void handleResponse(TypeRequest type, String response) {
 		ObjectMapper mapper = new ObjectMapper();
-
+		DebugUtils.log("handleResponse"+response);
 		switch (type) {
 			case GET_MESSAGE:
 				try {

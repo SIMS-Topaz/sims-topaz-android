@@ -17,8 +17,10 @@ public class TagUtils {
 	public static final String TAG_PIZZA="pizza";
 	public static final String TAG_SHOPPING="shopping";
 	public static final String TAG_SCHOOL="school";
-	public static final String TAG_TOILETS="toilet";
+	public static final String TAG_MUSIC="music";
 	public static final String TAG_HOSPITAL="hospital";
+	public static final String TAG_CAR="car";
+	public static final String TAG_CYCLE="cycle";
 	public static final String TAG="tag";
 	
 	
@@ -29,9 +31,11 @@ public class TagUtils {
 		tagList.add(TagUtils.TAG_PIZZA);
 		tagList.add(TagUtils.TAG_SHOPPING);
 		tagList.add(TagUtils.TAG_SCHOOL);
-		tagList.add(TagUtils.TAG_TOILETS);
+		tagList.add(TagUtils.TAG_MUSIC);
 		tagList.add(TagUtils.TAG_HOSPITAL);
 		tagList.add(TagUtils.TAG_SUN);
+		tagList.add(TagUtils.TAG_CAR);
+		tagList.add(TagUtils.TAG_CYCLE);
 		return tagList;
 	}
 	
@@ -61,10 +65,14 @@ public class TagUtils {
     		return R.drawable.tag_school;
     	if(tag.equals(TagUtils.TAG_SHOPPING))
     		return R.drawable.tag_shopping;
-    	if(tag.equals(TagUtils.TAG_TOILETS))
-    		return R.drawable.tag_toilet;
+    	if(tag.equals(TagUtils.TAG_MUSIC))
+    		return R.drawable.tag_music;
     	if(tag.equals(TagUtils.TAG_SUN))
     		return R.drawable.tag_sun;
+    	if(tag.equals(TagUtils.TAG_CAR))
+    		return R.drawable.tag_car;
+    	if(tag.equals(TagUtils.TAG_CYCLE))
+    		return R.drawable.tag_cycle;
     	return R.drawable.tag;
     }
 }

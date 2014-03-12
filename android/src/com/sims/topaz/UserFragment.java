@@ -35,7 +35,7 @@ import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
-import com.sims.topaz.network.interfaces.PictureUserUploadDelegate;
+import com.sims.topaz.network.interfaces.PictureUploadDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
@@ -51,29 +51,45 @@ import eu.janmuller.android.simplecropimage.CropImage;
 
 
 public class UserFragment  extends Fragment 
-implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTaskInterface {
+implements UserDelegate,ErreurDelegate, LoadPictureTaskInterface,PictureUploadDelegate {
 	private TextView mUserTextView;
 	private TextView mUserSnippetTextView;
 	private ImageButton mUserImage;
 	private ViewPager mViewPager;
 	private ProgressBar mProgressBar;
-	static String IS_MY_OWN_PROFILE = "is_my_own_profile";
-	static String USER_ID = "user_id";
+	private static String IS_MY_OWN_PROFILE = "user_fragment_is_my_own_profile";
+	private static String USER_ID = "user_fragment_user_id";
 	private boolean isMyProfile;
 	private byte[] pictureData;
 	private User mUser = null;
 	
 
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
+
+	public static UserFragment newInstance(boolean isMyProfile){
+		UserFragment fragment= new UserFragment();
+		Bundle bundle = new Bundle();
+		bundle.putBoolean(IS_MY_OWN_PROFILE, true);
+		fragment.setArguments(bundle);
+		return fragment;
+	}
+	
+	public static UserFragment newInstance(boolean isMyProfile, long id){
+		UserFragment fragment= new UserFragment();
+		Bundle bundle = new Bundle();
+		bundle.putBoolean(IS_MY_OWN_PROFILE, isMyProfile);
+		bundle.putLong(USER_ID, id);
+		fragment.setArguments(bundle);
+		return fragment;
+	}	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_user, container, false);
 		
 		
-		
 		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
-
 
 		//username field
 		mUserTextView = (TextView)v.findViewById(R.id.username);
@@ -211,7 +227,7 @@ implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTas
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bitmap.compress(CompressFormat.JPEG, 85, bos);
                 pictureData = bos.toByteArray();
-                mRestModule.uploadUserPicture(pictureData);
+                mRestModule.uploadPicture(pictureData);
                 break;
         }
         
@@ -238,9 +254,15 @@ implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTas
 	@Override
 	public void afterGetUserInfo(User user) {
 		mUser = user;
-		//TODO set picture image
-		LoadPictureTask setImageTask = new LoadPictureTask(this);
-		setImageTask.execute(mUser.getPictureUrl());
+		Toast.makeText(SimsContext.getContext(),
+				"afterGetUserInfo",Toast.LENGTH_SHORT).show();
+		if(mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
+			LoadPictureTask setImageTask = new LoadPictureTask(this);
+			setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());
+			Toast.makeText(SimsContext.getContext(), 
+					NetworkRestModule.SERVER_IMG_BASEURL+mUser.getPictureUrl(),
+					Toast.LENGTH_SHORT).show();
+		}
 		mUserSnippetTextView.setText(mUser.getStatus());
 		mUserTextView.setText(mUser.getUserName());
 		mProgressBar.setVisibility(View.GONE);
@@ -254,13 +276,8 @@ implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTas
 	}
 	
 	private void prepareFragments(){
-		Fragment userInfoFragment = new UserInfoFragment();
-		Fragment userCommentFragment = new UserCommentFragment();
-		Bundle b = new Bundle();
-		b.putSerializable("user", mUser);
-		b.putBoolean("isMyProfile", isMyProfile);
-		userInfoFragment.setArguments(b);
-		userCommentFragment.setArguments(b);
+		Fragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
+		Fragment userCommentFragment =UserCommentFragment.newInstance(mUser, pictureData);
 		
 		//tabs
 		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
@@ -283,15 +300,13 @@ implements UserDelegate,ErreurDelegate,PictureUserUploadDelegate, LoadPictureTas
 	}
 
 	@Override
-	public void afterUploadUserPicture(String pictureUrl) {
-		Toast.makeText(SimsContext.getContext(), "afterUploadUserPicture", Toast.LENGTH_SHORT).show();
-		
+	public void afterUploadPicture(String pictureUrl) {
+		mUser.setPictureUrl(pictureUrl);
+		Toast.makeText(SimsContext.getContext(), pictureUrl, Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void loadPictureTaskOnPostExecute(Drawable image) {
 		mUserImage.setImageDrawable(image);
-		Toast.makeText(SimsContext.getContext(), "loadPictureTaskOnPostExecute", Toast.LENGTH_SHORT).show();
 	}
-
 }

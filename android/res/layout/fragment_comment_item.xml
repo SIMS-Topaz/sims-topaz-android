@@ -11,12 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <ImageView
+        <ImageButton
             android:id="@+id/comment_item_image_first_comment"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:contentDescription="@string/comment_user_icon"
-            android:src="@drawable/ic_user"
+            android:background="@drawable/ic_user"
             android:scaleType="centerInside" />
 
         <TextView

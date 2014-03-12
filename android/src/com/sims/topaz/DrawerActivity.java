@@ -10,8 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.adapter.DrawerAdapter;
@@ -47,6 +44,12 @@ public class DrawerActivity extends ActionBarActivity
     private MapFragment mMapFragment;
     private Fragment mLastFragment;
 
+    private static String FRAGMENT_MAP = "fragment_map";
+    private static String FRAGMENT_USER = "fragment_user";
+    private static String FRAGMENT_SEARCH = "fragment_search_tag";
+    private static String FRAGMENT_ABOUT = "fragment_about";
+    private static String FRAGMENT_SETTINGS = "fragment_settings";
+    private static String FRAGMENT_COMMENT = "fragment_comment";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,29 +162,30 @@ public class DrawerActivity extends ActionBarActivity
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	fragmentManager.beginTransaction().remove(mLastFragment);
     	boolean change = true;
-    	
+    	String TAG = "";
     	switch (position) {
     	case 0:
-    		mLastFragment = new UserFragment();
-    		Bundle bundle = new Bundle();
-    		bundle.putBoolean(UserFragment.IS_MY_OWN_PROFILE, true);
-    		mLastFragment.setArguments(bundle);
+    		mLastFragment = UserFragment.newInstance(true);
+    		TAG = FRAGMENT_USER;
     		break;
 		case 1:
-			mLastFragment = new TagSearchFragment();
-			((TagSearchFragment) mLastFragment).setMap(mMapFragment.getMap());
+			mLastFragment = TagSearchFragment.newInstance(mMapFragment.getMap());
+			TAG = FRAGMENT_SEARCH;
 			break;
 		case 2:
 			if(mLastFragment instanceof MapFragment){
 				change = false;
 			}
-			mLastFragment = mMapFragment;		
+			mLastFragment = mMapFragment;	
+			TAG = FRAGMENT_MAP;
 			break;
 		case 3:
 			mLastFragment = new SettingsFragment();	
+			TAG = FRAGMENT_SETTINGS;
 			break;
 		case 4:
 			mLastFragment = new AboutFragment();
+			TAG = FRAGMENT_ABOUT;
 			break;
 		default:
 			break;
@@ -191,7 +195,7 @@ public class DrawerActivity extends ActionBarActivity
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.content_frame, mLastFragment)
-			.addToBackStack(null)
+			.addToBackStack(TAG)
 			.commit();
     	}
 
@@ -248,37 +252,29 @@ public class DrawerActivity extends ActionBarActivity
 
 
 	@Override
-	public void OnShowUserProfileFragment(long id) {
+	public void onShowUserProfileFragment(long id) {
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	fragmentManager.beginTransaction().remove(mLastFragment);
     	
-		mLastFragment = new UserFragment();
-		Bundle bundle = new Bundle();
-		bundle.putBoolean(UserFragment.IS_MY_OWN_PROFILE, false);
-		bundle.putLong(UserFragment.USER_ID, id);
-		mLastFragment.setArguments(bundle);		
+		mLastFragment = UserFragment.newInstance(false, id);
 		
 		fragmentManager
 		.beginTransaction()
 		.replace(R.id.content_frame, mLastFragment)
-		.addToBackStack(null)
+		.addToBackStack(FRAGMENT_USER)
 		.commit();
 	}
 	
 	@Override
 	public void onPreviewClick(Preview p) {
-		//set fragment
-		Bundle args = new Bundle();
-		args.putLong("id_preview", p.getId());
-		CommentFragment fragment = new CommentFragment();
-		fragment.setArguments(args);
+		CommentFragment fragment = CommentFragment.newInstance(p.getId());
 
 		//create transaction
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_slide_out_right);
-		transaction.replace(R.id.fragment_container, fragment);
-		transaction.addToBackStack(null);
+		transaction.replace(R.id.fragment_map_comment, fragment);
+		transaction.addToBackStack(FRAGMENT_COMMENT);
 		transaction.commit();
 	}
 	

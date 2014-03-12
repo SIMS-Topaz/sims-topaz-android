@@ -11,15 +11,20 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/user_tab_comments" />
-
+    
     <ListView
-        android:id="@+id/comment_list"
+        android:id="@+id/fragment_user_comments__list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="0dip"
         android:layout_weight="1"
         android:divider="@android:color/transparent"
+        android:background="@color/light_light_gray"
         android:dividerHeight="8dp"
-        android:paddingTop="8dp" >
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
+        tools:listitem="@layout/fragment_message_item" 
+         >
     </ListView>
 
 </LinearLayout>

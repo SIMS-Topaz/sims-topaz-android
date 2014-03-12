@@ -1,7 +1,9 @@
 package com.sims.topaz;
 
 import com.sims.topaz.network.NetworkRestModule;
+import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
+import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyTypefaceSingleton;
@@ -25,7 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UserInfoFragment  extends Fragment  implements UserDelegate{
+public class UserInfoFragment  extends Fragment  implements UserDelegate, ErreurDelegate{
 	private Button mUnConnectButton;
 	private Button mSaveNewPasswordButton;
 	private Button mCancelNewPasswordButton;
@@ -59,14 +61,25 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 	private Button mCancelUser;
 	private Button mCancelEmail;
 	private Button mCancelStatus;
+	private static String IS_MY_OWN_PROFILE = "user_info_fragment_is_my_own_profile";
+	private static String USER = "user_info_fragment_user";
 
+	public static UserInfoFragment newInstance(boolean isMyOwnProfile, User mUser){
+		UserInfoFragment fragment= new UserInfoFragment();
+		Bundle bundle = new Bundle();
+		bundle.putBoolean(IS_MY_OWN_PROFILE, isMyOwnProfile);
+		bundle.putSerializable(USER, mUser);
+		fragment.setArguments(bundle);
+		return fragment;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		isMyProfile = false;
 		if(getArguments()!=null){
-			mUser = (User) getArguments().getSerializable("user");
-			isMyProfile = getArguments().getBoolean("isMyProfile");
+			mUser = (User) getArguments().getSerializable(USER);
+			isMyProfile = getArguments().getBoolean(IS_MY_OWN_PROFILE);
 		}
 		
 		
@@ -186,7 +199,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 			@Override
 			public void onClick(View v) {
 				mErrorUserTextView.setVisibility(TextView.GONE);
-				mUserEditText.setText(mUser.getUserName());
+				mUserEditText.setText("");//or mUser.getUserName()?
 				
 			}
 		});
@@ -195,7 +208,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 			@Override
 			public void onClick(View v) {
 				mErrorEmailTextView.setVisibility(TextView.GONE);
-				mEmailEditText.setText(mUser.getEmail());
+				mEmailEditText.setText("");//or mUser.getEmail()?
 				
 			}
 		});
@@ -203,7 +216,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 			
 			@Override
 			public void onClick(View v) {
-				mStatusEditText.setText(mUser.getStatus());
+				mStatusEditText.setText("");//or mUser.getStatus()?
 				
 			}
 		});
@@ -379,6 +392,7 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 			mStatusEditText.setCursorVisible(false);
 			mStatusTextView.setFocusable(false);
 		}
+		
 		return v;
 	}
 
@@ -517,5 +531,17 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate{
 		mUserTextView.setText(mUser.getUserName());
 		
 		Toast.makeText(SimsContext.getContext(), getResources().getString(R.string.user_tab_save_ok), Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void apiError(ApiError error) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void networkError() {
+		// TODO Auto-generated method stub
+		
 	}
 }

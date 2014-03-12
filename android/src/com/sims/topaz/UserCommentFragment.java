@@ -1,9 +1,7 @@
 package com.sims.topaz;
 
-import java.util.List;
 
 import com.sims.topaz.adapter.UserMessageAdapter;
-import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.SimsContext;
 
@@ -17,6 +15,20 @@ import android.widget.ListView;
 public class UserCommentFragment  extends Fragment  {
 	private ListView mListMessagesListView;
 	private User mUser;
+	private byte[] mImage;
+	private static String USER = "user_comment_fragment_user";
+	private static String PICTURE = "user_comment_fragment_picture";
+
+	public static UserCommentFragment newInstance(User user, byte[] image){
+		UserCommentFragment fragment= new UserCommentFragment();
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(USER, user);
+		bundle.putByteArray(PICTURE, image);
+		fragment.setArguments(bundle);
+		return fragment;		
+	}
+	
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,13 +37,18 @@ public class UserCommentFragment  extends Fragment  {
 			if(mUser == null){
 				mUser = new User();
 			}
-			mUser = (User) getArguments().getSerializable("user");
+			mUser = (User) getArguments().getSerializable(USER);
+			mImage = (byte[]) getArguments().getByteArray(PICTURE);
 		}
 		
 		mListMessagesListView = (ListView)v.findViewById(R.id.fragment_user_comments__list);
-		mListMessagesListView.setAdapter(new UserMessageAdapter(SimsContext.getContext(),
-				R.layout.fragment_comment_item,
-				mUser.getMessages()));
+		if(mUser!=null && mUser.getMessages()!=null){
+			UserMessageAdapter adapter = new UserMessageAdapter(SimsContext.getContext(),
+					R.layout.fragment_comment_item,
+					mUser.getMessages(),
+					mImage);
+			mListMessagesListView.setAdapter(adapter);
+		}
 		return v;
     }
 }

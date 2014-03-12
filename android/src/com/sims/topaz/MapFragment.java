@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -69,6 +70,10 @@ OnCameraChangeListener,
 LocationListener,
 OnMapLoadedCallback
 {
+	
+	private static String FRAGMENT_PREVIEW = "fragment_preview";
+	public static String FRAGMENT_MESSAGE = "fragment_message";
+	private static String FRAGMENT_COMMENT = "fragment_comment";
 	
 	private GoogleMap mMap;
 	private static View mView;
@@ -158,7 +163,6 @@ OnMapLoadedCallback
 			/* map is already there, just return view as it is */
 			e.printStackTrace();
 		}
-		
 
 		// Account banner
 		//bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
@@ -254,14 +258,17 @@ OnMapLoadedCallback
 
 	@Override
 	public void onMapLongClick(LatLng point) {
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		FragmentManager fm = getFragmentManager();
+		fm.popBackStack(FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		
+		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
 		EditMessageFragment fragment = new EditMessageFragment();
 		fragment.setPosition(point);
 
 		transaction.replace(R.id.edit_text, fragment);
-		transaction.addToBackStack(null);
+		transaction.addToBackStack(FRAGMENT_MESSAGE);
 		transaction.commit();
 	}
 
@@ -324,8 +331,8 @@ OnMapLoadedCallback
 		timerSeconds.cancel();
 		timerOneMinute.cancel();
 	}
-
-
+	
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		// Choose what to do based on the request code
@@ -417,18 +424,14 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {		
-		//set fragment
-		Bundle args = new Bundle();
-		args.putLong("id_preview", item.getPreview().getId());
-		CommentFragment fragment = new CommentFragment();
-		fragment.setArguments(args);
-
-		//create transaction
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		CommentFragment fragment = CommentFragment.newInstance(item.getPreview().getId());
+		FragmentManager fm = getFragmentManager(); 
+		fm.popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_slide_out_right);
 		transaction.replace(R.id.fragment_container, fragment);
-		transaction.addToBackStack(null);
+		transaction.addToBackStack(FRAGMENT_COMMENT);
 		transaction.commit();
 	}
 	@Override
@@ -444,12 +447,16 @@ OnMapLoadedCallback
 		for (PreviewClusterItem pci : cluster.getItems()) {
 			previewList.add(pci.getPreview());
 		}
+		
+		FragmentManager fm = getFragmentManager(); 
 		Fragment f = PreviewListFragment.newInstance(previewList);
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		fm.popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
 		transaction.replace(R.id.fragment_container, f);
-		transaction.addToBackStack(null);
+		transaction.addToBackStack(FRAGMENT_PREVIEW);
+
 		transaction.commit();
 	}
 	//Location and map listeners----------------------------------------------------------------------------
@@ -524,5 +531,6 @@ OnMapLoadedCallback
 		}
 		return null;
 	}
+
 
 }

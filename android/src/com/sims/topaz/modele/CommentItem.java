@@ -10,6 +10,7 @@ public class CommentItem {
 	private String commentText;
 	private long date;
 	private Bitmap icon;
+	private long user_id;
 	private String pictureUrl;
 	private int likes = 0;
 	private int dislikes = 0;
@@ -72,13 +73,14 @@ public class CommentItem {
 	}
 	
 	public CommentItem(long id, String user, String commentText, long date,
-			Bitmap icon) {
+			Bitmap icon, long user_id) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.commentText = commentText;
 		this.date = date;
 		this.icon = icon;
+		this.user_id = user_id;
 	}
 	
 	public CommentItem(Comment comment) {
@@ -88,6 +90,10 @@ public class CommentItem {
 		this.commentText = comment.getText();
 		this.date = comment.getTimestamp();
 		this.icon = null;
+		this.user_id = comment.getUserId();
+	}
+	public long getUserId() {
+		return user_id;
 	}
 	
 		

@@ -9,6 +9,9 @@ import eu.janmuller.android.simplecropimage.CropImage;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -56,7 +59,7 @@ public class CameraUtils {
 			}	
 			intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
 			intent.putExtra("return-data", true);
-
+			intent.setFlags(intent.getFlags()|Intent.FLAG_ACTIVITY_NO_HISTORY);
 		} catch (ActivityNotFoundException e) {
 			DebugUtils.log("cannot take picture"+e);
 		}
@@ -66,6 +69,7 @@ public class CameraUtils {
 	public static Intent openGallery() {
 		Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 		photoPickerIntent.setType("image/*");
+		photoPickerIntent.setFlags(photoPickerIntent.getFlags()|Intent.FLAG_ACTIVITY_NO_HISTORY);
 		return photoPickerIntent;
 	}
 	
@@ -75,6 +79,7 @@ public class CameraUtils {
         intent.putExtra(CropImage.IMAGE_PATH, mFileTemp.getPath());
         intent.putExtra(CropImage.CIRCLE_CROP, circle);
         intent.putExtra(CropImage.ASPECT_X, 1);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(CropImage.ASPECT_Y, 1);
         return intent;
     }
@@ -90,8 +95,13 @@ public class CameraUtils {
         }
     }
     
-    public static byte getImageFromUrl(String url){
-		return 0;
-    	
-    }
+    
+    @SuppressWarnings("deprecation")
+	public static Drawable getDrwableFromBytes(byte[] imageBytes) {
+    	  if (imageBytes != null)
+    	   return new BitmapDrawable(BitmapFactory.decodeByteArray(imageBytes,
+    	     0, imageBytes.length));
+    	  else
+    	   return null;
+    	 }
 }

@@ -25,6 +25,9 @@ public class Message  implements Serializable {
 	
 	@JsonProperty("user_name")
 	private String user_name;
+
+	@JsonProperty("user_id")
+	private long user_id;
 	
 	private List<String> tags = null;
 	
@@ -54,6 +57,11 @@ public class Message  implements Serializable {
 		this.id = id;
 	}
 	
+
+	public long getUserId() {
+		return user_id;
+	}
+
 	public void setText(String text) {
 		this.text = text;
 		updateTags();

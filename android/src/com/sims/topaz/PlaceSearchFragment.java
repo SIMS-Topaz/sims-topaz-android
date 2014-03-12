@@ -138,7 +138,6 @@ public class PlaceSearchFragment extends Fragment{
 	
 	private class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 	    private ArrayList<String> resultList;
-	    private TextView mTextView;
 
 	    private HashMap<String,LatLngBounds> placeLocation = new HashMap<String,LatLngBounds>();
 	    
@@ -152,19 +151,28 @@ public class PlaceSearchFragment extends Fragment{
 	    	}
 	    }
 	    
+	    private class ViewHolder {
+	    	TextView mTextView;
+	    }
+	    
 	    @Override
 	    public View getView(int position, View convertView, ViewGroup parent) {
 	    	View view;
+	    	ViewHolder holder = null;
 	    	if (convertView == null) {
+	    		holder = new ViewHolder();
 	    		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    		view = inflater.inflate(R.layout.adapter_search_bar, null);
+	    		holder.mTextView = (TextView) view.findViewById(R.id.search_bar_text);
+		    	holder.mTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		    	view.setTag(holder);
 	    	} else {
 	    		view = convertView;
+	    		holder = (ViewHolder) view.getTag();
 	    	}
-	    	mTextView = (TextView) view.findViewById(R.id.search_bar_text);
-	    	mTextView.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+	    	
     		if (resultList.get(position) != null) {
-    			mTextView.setText(resultList.get(position));
+    			holder.mTextView.setText(resultList.get(position));
     		}
 	    	
 	    	view.setOnClickListener(new OnClickListener() {

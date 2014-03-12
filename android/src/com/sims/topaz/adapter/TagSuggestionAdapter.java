@@ -62,19 +62,20 @@ public class TagSuggestionAdapter extends ArrayAdapter<String> {
 			holder.mImageView = (ImageView) view.findViewById(R.id.tag_icon);
 			holder.mTextView = (TextView) view.findViewById(R.id.tag_suggestion);
 			holder.mTextView.setTypeface(face);
-			holder.mTextView.setOnClickListener(new OnClickListener() {
+			view.setTag(holder);
+			view.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					if (activity.getLastFragment() instanceof TagSearchFragment) {
 						TagSearchFragment fg = (TagSearchFragment) activity.getLastFragment();
-						CharSequence seq = ((TextView) v).getText();
+						CharSequence seq = ((ViewHolder) v.getTag()).mTextView.getText();
 						fg.executeSearch(seq);
 						fg.getEditText().setText(seq);
 					}
 				}
 			});
-			view.setTag(holder);
+			
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}

@@ -151,6 +151,10 @@ public class Message  implements Serializable {
 			if (s.charAt(0) == '#') tags.add(s);
 		}
 	}
+	
+	public List<String> getTags() {
+		return tags;
+	}
 
 	public List<Comment> getComments() {
 		return comments;

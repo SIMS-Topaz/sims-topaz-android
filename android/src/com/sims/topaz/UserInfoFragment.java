@@ -205,7 +205,7 @@ PictureUploadDelegate{
 		mCancelEmail = (Button)v.findViewById(R.id.view_cancel_email);
 		mCancelStatus = (Button)v.findViewById(R.id.view_cancel);	
 
-		if(mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
+		if(mUser!=null && mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
 			LoadPictureTask setImageTask = new LoadPictureTask(this);
 			setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());
 			Toast.makeText(SimsContext.getContext(), 

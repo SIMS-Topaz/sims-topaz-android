@@ -273,7 +273,7 @@ public class DrawerActivity extends ActionBarActivity
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_slide_out_right);
-		transaction.replace(R.id.fragment_map_comment, fragment);
+		transaction.replace(R.id.fragment_container, fragment);
 		transaction.addToBackStack(FRAGMENT_COMMENT);
 		transaction.commit();
 	}

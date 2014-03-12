@@ -122,11 +122,12 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 	}
 	
 	public void executeSearch(CharSequence tx) {
+
 		if( mFarLeft != null &&mNearRight !=null && mNetworkModule != null ){	
-					Toast.makeText(SimsContext.getContext(), text.getText(), Toast.LENGTH_SHORT).show();
+					Toast.makeText(SimsContext.getContext(), tx, Toast.LENGTH_SHORT).show();
 					try {
 						mNetworkModule.getPreviewsByTag(mNearRight, mNearRight, 
-								URLEncoder.encode(text.getText().toString(), "utf8"));
+								URLEncoder.encode(tx.toString(), "utf8"));
 					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 					}
@@ -159,6 +160,7 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 
 	@Override
 	public void apiError(ApiError error) {
+
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.erreur_gen),
 				Toast.LENGTH_SHORT).show();		

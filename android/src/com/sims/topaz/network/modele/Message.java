@@ -26,6 +26,8 @@ public class Message  implements Serializable {
 	@JsonProperty("user_name")
 	private String user_name;
 	
+	private List<String> tags = null;
+	
 	private int likes=0;
 	
 	private int dislikes=0;
@@ -45,6 +47,7 @@ public class Message  implements Serializable {
 	
 	public Message() {
 		comments = new ArrayList<Comment>();
+		tags = new ArrayList<String>();
 	}
 	
 	public Message(Long id) {
@@ -53,6 +56,7 @@ public class Message  implements Serializable {
 	
 	public void setText(String text) {
 		this.text = text;
+		updateTags();
 	}
 
 	public void setLatitude(Double latitude) {
@@ -138,6 +142,18 @@ public class Message  implements Serializable {
 			dislikes--;
 			likeStatus=eLikeStatus.NONE;
 		}
+	}
+	
+	private void updateTags() {
+		String delim = "[ ,.?!;:]+";
+		String[] tokens = text.split(delim);
+		for (String s : tokens) {
+			if (s.charAt(0) == '#') tags.add(s);
+		}
+	}
+	
+	public List<String> getTags() {
+		return tags;
 	}
 
 	public List<Comment> getComments() {

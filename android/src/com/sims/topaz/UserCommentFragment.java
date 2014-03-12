@@ -1,9 +1,7 @@
 package com.sims.topaz;
 
-
 import com.sims.topaz.adapter.UserMessageAdapter;
 import com.sims.topaz.network.modele.User;
-import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.SimsContext;
 
 import android.os.Bundle;

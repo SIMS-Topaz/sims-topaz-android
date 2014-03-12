@@ -1,6 +1,8 @@
 package com.sims.topaz;
 
 import android.app.Activity;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -8,8 +10,13 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sims.topaz.AsyncTask.LoadPictureTask;
+import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
+import com.sims.topaz.adapter.UserMessageAdapter;
 import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.interfaces.OnShowDefaultPage;
 import com.sims.topaz.network.NetworkRestModule;
@@ -18,13 +25,16 @@ import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.DebugUtils;
+import com.sims.topaz.utils.ListViewSizeHelper;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
+import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 
 public class UserFragment  extends Fragment 
-implements UserDelegate,ErreurDelegate, OnShowDefaultPage {
+implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterface {
 
 	private ViewPager mViewPager;
 	private static String IS_MY_OWN_PROFILE = "user_fragment_is_my_own_profile";
@@ -34,6 +44,7 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage {
 	private User mUser = null;
 	OnShowGeneralUserProfile mCallback;
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
+	private ListView mListMessagesListView;
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -170,14 +181,18 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage {
 
 		} else {
 			UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
-			UserCommentFragment userCommentFragment =UserCommentFragment.newInstance(mUser, null);
 			FragmentTransaction transaction = getActivity().getSupportFragmentManager()
 					.beginTransaction();
 
 			transaction.replace(R.id.user_info_fragment, userInfoFragment);
-			transaction.replace(R.id.user_info_comments_fragment, userCommentFragment);
 			transaction.commit();	
 			
+			mListMessagesListView = (ListView)getView().findViewById(R.id.fragment_user_comments__list); 
+			if(mUser!=null && mUser.getPictureUrl()!=null){
+				LoadPictureTask setImageTask = new LoadPictureTask(this);
+				setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());
+				
+			}
 		}	
 	}
 
@@ -186,6 +201,21 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage {
 	@Override
 	public void onShowDefaultPage() {
 		mViewPager.setCurrentItem(0);
+	}
+
+	@Override
+	public void loadPictureTaskOnPostExecute(Drawable image) {
+
+		UserMessageAdapter adapter = new UserMessageAdapter(SimsContext.getContext(),
+				R.layout.fragment_comment_item,
+				mUser.getMessages(),
+				CameraUtils.getBytesFromDrawable(image));
+		
+		if(mUser.getMessages().size() == 0){
+			//TODO put the fragment on the center
+		}
+		mListMessagesListView.setAdapter(adapter);
+		ListViewSizeHelper.getListViewSize(mListMessagesListView);
 	}
 
 

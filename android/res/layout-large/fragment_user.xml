@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -20,15 +21,19 @@
             class="com.sims.topaz.UserInfoFragment"
             android:orientation="vertical" />
 
-        <fragment
-            android:id="@+id/user_info_comments_fragment"
+        <ListView
+            android:id="@+id/fragment_user_comments__list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"
             android:layout_weight="1"
-            class="com.sims.topaz.UserCommentFragment"
-            android:orientation="vertical" />
+            android:background="@color/light_light_gray"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="8dp"
+            tools:listitem="@layout/fragment_message_item" >
+        </ListView>
     </LinearLayout>
 
 </ScrollView>

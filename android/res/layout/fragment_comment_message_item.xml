@@ -60,10 +60,18 @@
             android:layout_height="wrap_content"
             android:text="@string/comment_loading" />
 
+        <ProgressBar
+            android:id="@+id/progressBarPicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/comment_first_picture_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/desc_message_picture"
             android:layout_gravity="center" />
 
         <LinearLayout

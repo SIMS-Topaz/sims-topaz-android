@@ -37,6 +37,7 @@
     <string name="comment_send">like send</string>
     <string name="comment_dislike">unlike icon</string>
     <string name="comment_share">share icon</string>
+    <string name="desc_message_picture">Image du message</string>
     <string name="date_format">dd MMM yyyy - hh:mm</string>
     <!-- auth -->
     <string name="auth_banner_not_verified">Compte non confirmé</string>

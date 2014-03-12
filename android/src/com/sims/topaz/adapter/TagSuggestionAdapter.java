@@ -38,66 +38,82 @@ public class TagSuggestionAdapter extends ArrayAdapter<String> {
 		return list.size();
 	}
 	
+	
+	private class ViewHolder {
+		TextView mTextView;
+		ImageView mImageView;
+		
+	}
 	@Override
 	@SuppressWarnings("deprecation")
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
-		LayoutInflater inflater = 
-				(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
-		view = inflater.inflate(R.layout.tag_suggestion_item, null);
-		TextView textView = (TextView) view.findViewById(R.id.tag_suggestion);
-		textView.setTypeface(face);
+		ViewHolder holder = null;
+		if(view==null) {
+			holder = new ViewHolder();
+			LayoutInflater inflater = 
+					(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
+			view = inflater.inflate(R.layout.tag_suggestion_item, null);
+			holder.mImageView = (ImageView) view.findViewById(R.id.tag_icon);
+			holder.mTextView = (TextView) view.findViewById(R.id.tag_suggestion);
+			holder.mTextView.setTypeface(face);
+			holder.mTextView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if (activity.getLastFragment() instanceof TagSearchFragment) {
+						TagSearchFragment fg = (TagSearchFragment) activity.getLastFragment();
+						CharSequence seq = ((TextView) v).getText();
+						fg.executeSearch(seq);
+						fg.getEditText().setText(seq);
+					}
+				}
+			});
+			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
+		
 		if (list.get(position) != null) {
 			int resId = activity.getResources().getIdentifier(list.get(position), "string",  activity.getPackageName());
-			textView.setText("#" + SimsContext.getString(resId));
+			holder.mTextView.setText("#" + SimsContext.getString(resId));
 		}
-		textView.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if (activity.getLastFragment() instanceof TagSearchFragment) {
-					TagSearchFragment fg = (TagSearchFragment) activity.getLastFragment();
-					CharSequence seq = ((TextView) v).getText();
-					fg.executeSearch(seq);
-					fg.getEditText().setText(seq);
-				}
-			}
-		});
-		ImageView iv = (ImageView) view.findViewById(R.id.tag_icon);
+		
+		
 		switch (position) {
 		case 0:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_restaurant));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_restaurant));
 			break;
 		case 1:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_party));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_party));
 			break;
 		case 2:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_pizza));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_pizza));
 			break;
 		case 3:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_shopping));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_shopping));
 			break;
 		case 4:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_school));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_school));
 			break;
 		case 5:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_music));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_music));
 			break;
 		case 6:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_hospital));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_hospital));
 			break;
 		case 7:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_sun));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_sun));
 			break;
 		case 8:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_car));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_car));
 			break;
 		case 9:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_cycle));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_cycle));
 			break;
 		default:
-			iv.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.ic_search));
+			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.ic_search));
 			break;
 		}
 		return view;

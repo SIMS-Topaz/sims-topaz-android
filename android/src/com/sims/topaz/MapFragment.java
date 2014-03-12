@@ -392,7 +392,7 @@ OnMapLoadedCallback
 
 		@Override
 		protected void onBeforeClusterItemRendered(PreviewClusterItem item, MarkerOptions markerOptions) {
-			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(TagUtils.getDrawableForString(item.getTag()));
+			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(TagUtils.getDrawableForPreview(item.getPreview()));
 			markerOptions.icon(icon)
 			.title(item.getPreview().getTimestamp().toString())
 			.snippet(item.getPreview().getText());

@@ -8,9 +8,12 @@ import com.sims.topaz.R;
 import com.sims.topaz.TagSearchFragment;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
+import com.sims.topaz.utils.TagUtils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,8 +47,9 @@ public class TagSuggestionAdapter extends ArrayAdapter<String> {
 		ImageView mImageView;
 		
 	}
-	@Override
 	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
 		ViewHolder holder = null;
@@ -76,47 +80,23 @@ public class TagSuggestionAdapter extends ArrayAdapter<String> {
 		}
 		
 		if (list.get(position) != null) {
-			int resId = activity.getResources().getIdentifier(list.get(position), "string",  activity.getPackageName());
+			int resId = activity.getResources().getIdentifier(
+					//remove the '#' caracter
+					list.get(position).replace("#", ""), "string",  activity.getPackageName());
 			holder.mTextView.setText("#" + SimsContext.getString(resId));
+			
+			int drawableId = TagUtils.getDrawableForTag(list.get(position));
+			
+			if(android.os.Build.VERSION.SDK_INT >= 16) {
+				holder.mImageView.setBackground(delegate.get().getResources().getDrawable(drawableId));
+			} else {
+				holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(drawableId));
+			}
 		}
 		
-		
-		switch (position) {
-		case 0:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_restaurant));
-			break;
-		case 1:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_party));
-			break;
-		case 2:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_pizza));
-			break;
-		case 3:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_shopping));
-			break;
-		case 4:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_school));
-			break;
-		case 5:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_music));
-			break;
-		case 6:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_hospital));
-			break;
-		case 7:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_sun));
-			break;
-		case 8:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_car));
-			break;
-		case 9:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.tag_cycle));
-			break;
-		default:
-			holder.mImageView.setBackgroundDrawable(delegate.get().getResources().getDrawable(R.drawable.ic_search));
-			break;
-		}
+
 		return view;
 	}
+	
 
 }

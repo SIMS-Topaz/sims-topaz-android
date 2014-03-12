@@ -8,18 +8,18 @@
     <string name="drawer_search">Recherche image</string>
     <string name="drawer_search_hint">Recherche par #Tag</string>
     <string name="action_settings">Paramètres</string>
-    <string name="drawer_image">Icon du button</string>
+    <string name="drawer_image">Icône du bouton</string>
 
     <string-array name="views_array">
         <item>Utilisateur</item>
-        <item>Search</item>
+        <item>Recherche</item>
         <item>La carte</item>
         <item>Paramètres</item>
         <item>Au sujet de l\'equipe :D</item>
     </string-array>
 
-    <string name="drawer_open">Ouvrir le navigation drawer</string>
-    <string name="drawer_close">Fermer le navigation drawer</string>
+    <string name="drawer_open">Ouvrir le volet de navigation</string>
+    <string name="drawer_close">Fermer le volet  de navigation</string>
     <string name="app_not_available">Le navigateur n\'est pas disponible.</string>
 
     <!-- About -->
@@ -30,8 +30,8 @@
     <string name="bulle_says">dit:</string>
     <string name="bulle_anonyme"> Un utilisateur anonyme </string>
     <!-- comment -->
-    <string name="comment_user_icon">Icon de l\'utilisateur</string>
-    <string name="comment_hint">Write your comment here</string>
+    <string name="comment_user_icon">Icône de l\'utilisateur</string>
+    <string name="comment_hint">Écrivez votre commentaire</string>
     <string name="comment_loading">Chargement&#8230;</string> <!-- '...' -->
     <string name="comment_like">like icon</string>
     <string name="comment_send">like send</string>
@@ -40,7 +40,7 @@
     <string name="date_format">dd MMM yyyy - hh:mm</string>
     <!-- auth -->
     <string name="auth_banner_not_verified">Compte non confirmé</string>
-    <string name="auth_activity">Rester connecté..simple et efficace</string>
+    <string name="auth_activity">Rester connecté&#8230; simple et efficace</string>
     <string name="auth_sign_in">Login</string>
     <string name="auth_sign_up">Créer un compte</string>
     <string name="auth_username">Utilisateur</string>
@@ -66,8 +66,8 @@
     <string name="auth_camera">Camera</string>
     <!-- User page -->
     <string name="user_tab_info">Profil</string>
-    <string name="user_tab_comments">Commentaires</string>
-    <string name="user_tab_info_status">Status :</string>
+    <string name="user_tab_comments">Messages</string>
+    <string name="user_tab_info_status">Description :</string>
     <string name="user_tab_info_old_pass">Mot de passe actuel</string>
     <string name="user_tab_info_new_pass">Nouveau mot de passe</string>
     <string name="user_tab_save">Sauvgarder</string>
@@ -84,7 +84,7 @@
     <string name="settings_msg_text">Visibilité</string>
     <string name="comment_unlike">unlike icon</string>
     <!-- PlaceSearch -->
-    <string name="search_hint">Enter location</string>
+    <string name="search_hint">Rechercher un lieu</string>
     <!-- Pop Up -->
     <string name="ok">OK</string>
     <string name="warning_network">Erreur connexion reseaux.</string>

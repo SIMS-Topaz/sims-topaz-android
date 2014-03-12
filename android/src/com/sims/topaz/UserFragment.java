@@ -8,10 +8,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.sims.topaz.EditMessageFragment.OnNewMessageListener;
 import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.interfaces.OnShowDefaultPage;
 import com.sims.topaz.network.NetworkRestModule;

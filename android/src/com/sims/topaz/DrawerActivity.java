@@ -25,6 +25,8 @@ import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 
 
 public class DrawerActivity extends ActionBarActivity
@@ -258,8 +260,12 @@ public class DrawerActivity extends ActionBarActivity
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	fragmentManager.beginTransaction().remove(mLastFragment);
     	
-		mLastFragment = UserFragment.newInstance(false, id);
-		
+    	if(AuthUtils.getSessionLongValue
+				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID, (long)0) != id){
+    		mLastFragment = UserFragment.newInstance(false, id);
+    	}else{
+    		mLastFragment = UserFragment.newInstance(true);
+    	}
 		fragmentManager
 		.beginTransaction()
 		.replace(R.id.content_frame, mLastFragment)

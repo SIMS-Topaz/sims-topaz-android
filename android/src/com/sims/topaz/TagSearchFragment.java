@@ -5,7 +5,6 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.sims.topaz.adapter.TagSuggestionAdapter;
 import com.sims.topaz.network.NetworkRestModule;
@@ -102,7 +101,6 @@ public class TagSearchFragment extends Fragment implements MessageDelegate, Erre
 				mNetworkModule.getPreviewsByTag(visibleRegion.farLeft, visibleRegion.nearRight, 
 						URLEncoder.encode(tx.toString(), "utf8"));
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -133,7 +131,7 @@ public class TagSearchFragment extends Fragment implements MessageDelegate, Erre
 
 	@Override
 	public void apiError(ApiError error) {
-		NetworkRestModule.resetHttpClient();
+		//NetworkRestModule.resetHttpClient();
 		Toast.makeText(SimsContext.getContext(), "apiError", Toast.LENGTH_SHORT).show();
 	}
 

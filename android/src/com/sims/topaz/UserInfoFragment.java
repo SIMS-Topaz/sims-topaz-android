@@ -1,5 +1,8 @@
 package com.sims.topaz;
 
+
+import com.sims.topaz.AsyncTask.LoadPictureTask;
+import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
@@ -10,7 +13,10 @@ import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -23,11 +29,14 @@ import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UserInfoFragment  extends Fragment  implements UserDelegate, ErreurDelegate{
+public class UserInfoFragment  extends Fragment  
+	implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 	private Button mUnConnectButton;
 	private Button mSaveNewPasswordButton;
 	private Button mCancelNewPasswordButton;
@@ -61,6 +70,10 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 	private Button mCancelUser;
 	private Button mCancelEmail;
 	private Button mCancelStatus;
+	private TextView mUserTitleTextView;
+	private TextView mUserSnippetTextView;
+	private ImageButton mUserImage;
+	private ProgressBar mProgressBar;
 	private static String IS_MY_OWN_PROFILE = "user_info_fragment_is_my_own_profile";
 	private static String USER = "user_info_fragment_user";
 
@@ -85,6 +98,29 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 		
 		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 		View v = inflater.inflate(R.layout.fragment_user_info, container, false);
+		//username field
+		mUserTitleTextView = (TextView)v.findViewById(R.id.username);
+		mUserTitleTextView.setTypeface(face);
+		//message fiels
+		mUserSnippetTextView= (TextView)v.findViewById(R.id.username_snippet);
+		mUserSnippetTextView.setTypeface(face);
+		//user imgae
+		mUserImage = (ImageButton)v.findViewById(R.id.username_image);
+		//tabs
+		//Progress bar
+				mProgressBar = (ProgressBar)v.findViewById(R.id.progressBar);
+				mProgressBar.setVisibility(View.VISIBLE);
+
+				//change image
+				mUserImage.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						((UserFragment)getParentFragment()).onSelectPicture();
+
+					}
+				});
+		
 		
 		mUserButton = (Button) v.findViewById(R.id.user_info_username_button);
 		mUserButton.setTypeface(face);
@@ -157,6 +193,20 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 		mCancelUser = (Button)v.findViewById(R.id.view_cancel_username);
 		mCancelEmail = (Button)v.findViewById(R.id.view_cancel_email);
 		mCancelStatus = (Button)v.findViewById(R.id.view_cancel);	
+		
+		
+		if(mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
+			LoadPictureTask setImageTask = new LoadPictureTask(this);
+			setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());
+			Toast.makeText(SimsContext.getContext(), 
+					NetworkRestModule.SERVER_IMG_BASEURL+mUser.getPictureUrl(),
+					Toast.LENGTH_SHORT).show();
+		}
+		mUserSnippetTextView.setText(mUser.getStatus());
+		mUserTextView.setText(mUser.getUserName());
+		mProgressBar.setVisibility(View.GONE);
+		
+		
 		
 		mSaveNewPasswordButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -320,10 +370,14 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 			}
 		};
 		mConfirmEditText.setOnEditorActionListener(listenerConfirmPassword);
-		
-		mUserTextView.setText(mUser.getUserName());
-		mEmailTextView.setText(mUser.getEmail());
-		mStatusEditText.setText(mUser.getStatus());
+		if(mUser!=null){
+			if(mUser.getUserName()!=null)
+				mUserTextView.setText(mUser.getUserName());
+			if(mUser.getEmail()!=null)
+				mEmailTextView.setText(mUser.getEmail());
+			if(mUser.getStatus() != null)
+				mStatusEditText.setText(mUser.getStatus());
+		}
 		
 		mUserEditText.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -544,4 +598,13 @@ public class UserInfoFragment  extends Fragment  implements UserDelegate, Erreur
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void loadPictureTaskOnPostExecute(Drawable image) {
+		mUserImage.setImageDrawable(image);
+	}
+	
+	public void setImage(Bitmap bitmap){
+		mUserImage.setBackgroundDrawable(new BitmapDrawable(SimsContext.getContext().getResources(),bitmap));
+	}
+
 }

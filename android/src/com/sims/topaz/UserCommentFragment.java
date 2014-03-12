@@ -3,12 +3,15 @@ package com.sims.topaz;
 
 import com.sims.topaz.adapter.UserMessageAdapter;
 import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.SimsContext;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
@@ -18,7 +21,7 @@ public class UserCommentFragment  extends Fragment  {
 	private byte[] mImage;
 	private static String USER = "user_comment_fragment_user";
 	private static String PICTURE = "user_comment_fragment_picture";
-
+	
 	public static UserCommentFragment newInstance(User user, byte[] image){
 		UserCommentFragment fragment= new UserCommentFragment();
 		Bundle bundle = new Bundle();
@@ -27,6 +30,7 @@ public class UserCommentFragment  extends Fragment  {
 		fragment.setArguments(bundle);
 		return fragment;		
 	}
+	
 	
 	
     @Override
@@ -41,14 +45,36 @@ public class UserCommentFragment  extends Fragment  {
 			mImage = (byte[]) getArguments().getByteArray(PICTURE);
 		}
 		
+
+		
 		mListMessagesListView = (ListView)v.findViewById(R.id.fragment_user_comments__list);
 		if(mUser!=null && mUser.getMessages()!=null){
 			UserMessageAdapter adapter = new UserMessageAdapter(SimsContext.getContext(),
 					R.layout.fragment_comment_item,
 					mUser.getMessages(),
 					mImage);
-			mListMessagesListView.setAdapter(adapter);
+			mListMessagesListView.setAdapter(adapter);	
+			mListMessagesListView.setOnTouchListener(new OnTouchListener() {
+				
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if(!event.equals(MotionEvent.ACTION_SCROLL)){
+						if(getParentFragment()!=null){
+							((UserFragment)getParentFragment()).onShowDefaultPage();
+						}
+						return false;
+					}else{
+						v.onTouchEvent(event);
+						return true;
+					}
+					
+				}
+			});
 		}
+		
+		
 		return v;
     }
+    
+    
 }

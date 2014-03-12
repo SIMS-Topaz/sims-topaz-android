@@ -15,7 +15,7 @@
     <ListView
         android:id="@+id/fragment_user_comments__list"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:divider="@android:color/transparent"
         android:background="@color/light_light_gray"

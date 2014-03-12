@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sims.topaz.R;
+import com.sims.topaz.network.modele.Preview;
 /**
  * Get the image to use for a certain tag
  * Helps us know if a string is a tag or not
@@ -11,17 +12,17 @@ import com.sims.topaz.R;
  */
 public class TagUtils {
 	
-	public static final String TAG_SUN="sun";
-	public static final String TAG_RESTAURANT="restaurant";
-	public static final String TAG_PARTY="party";
-	public static final String TAG_PIZZA="pizza";
-	public static final String TAG_SHOPPING="shopping";
-	public static final String TAG_SCHOOL="school";
-	public static final String TAG_MUSIC="music";
-	public static final String TAG_HOSPITAL="hospital";
-	public static final String TAG_CAR="car";
-	public static final String TAG_CYCLE="cycle";
-	public static final String TAG="tag";
+	public static final String TAG_SUN="#sun";
+	public static final String TAG_RESTAURANT="#restaurant";
+	public static final String TAG_PARTY="#party";
+	public static final String TAG_PIZZA="#pizza";
+	public static final String TAG_SHOPPING="#shopping";
+	public static final String TAG_SCHOOL="#school";
+	public static final String TAG_MUSIC="#music";
+	public static final String TAG_HOSPITAL="#hospital";
+	public static final String TAG_CAR="#car";
+	public static final String TAG_CYCLE="#cycle";
+	public static final String TAG="#tag";
 	
 	
 	public static List<String> getAllTags(){
@@ -39,12 +40,12 @@ public class TagUtils {
 		return tagList;
 	}
 	
-	public static int getDrawableForString(String text){
+	public static int getDrawableForPreview(Preview p){
 		String finalTag=TagUtils.TAG;
-		if(text==null || text.equals(""))//isEmpty requires API 9 
+		if(p.getTags()==null || p.getTags().isEmpty())//isEmpty requires API 9 
 			return getDrawableForTag(TagUtils.TAG);
 		for(String tag:getAllTags()){
-			if(text.contains(tag) || tag.contains(text)){
+			if(p.getTags().contains(tag)){
 				finalTag = tag;
 				break;
 			}

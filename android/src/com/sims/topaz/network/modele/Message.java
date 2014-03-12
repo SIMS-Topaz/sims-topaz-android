@@ -145,10 +145,10 @@ public class Message  implements Serializable {
 	}
 	
 	private void updateTags() {
-		String delim = "[ ,.?!;:]+";
+		String delim = "[ ,.?!;:\t\n]+";
 		String[] tokens = text.split(delim);
 		for (String s : tokens) {
-			if (s.charAt(0) == '#') tags.add(s);
+			if (s.length()>1 && s.charAt(0) == '#') tags.add(s);
 		}
 	}
 	

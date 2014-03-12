@@ -22,13 +22,15 @@
 
         <ListView
             android:id="@+id/comment_list"
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="1"
             android:divider="@android:color/transparent"
             android:dividerHeight="8dp"
             android:paddingTop="8dp"
+            tools:listheader="@layout/fragment_comment_message_item"
             tools:listitem="@layout/fragment_comment_item" >
+
         </ListView>
 
         <LinearLayout

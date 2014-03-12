@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
@@ -60,6 +61,7 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 	private ImageButton mDislikeButton;
 	private ImageButton mSendCommentButton;
 	private ProgressBar mProgressBar;
+	private ProgressBar mProgressBarPicture;
 	// The main message
 	private Message mMessage=null;
 	//intelligence
@@ -108,6 +110,7 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 		mListComments = (ListView)v.findViewById(R.id.comment_list);
 		mProgressBar = (ProgressBar)v.findViewById(R.id.progressBar);
 		mProgressBar.setVisibility(View.VISIBLE);
+		
 		//Set Like, Dislike and Share Buttons
 		setButtons(v);
 		
@@ -123,6 +126,8 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 		mShareButton = (ImageButton)v2.findViewById(R.id.comment_share);
 		mLikeButton = (ImageButton)v2.findViewById(R.id.comment_like);
 		mDislikeButton = (ImageButton)v2.findViewById(R.id.comment_dislike);
+		mProgressBarPicture = (ProgressBar)v2.findViewById(R.id.progressBarPicture);
+		mProgressBarPicture.setVisibility(View.GONE);
 		
 		v2.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT));
 		mListComments.addHeaderView(v2);
@@ -284,13 +289,16 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 	protected void sendComment() {
 		if(mMessage==null) return;
 		String comm = mNewComment.getText().toString();
-		mNewComment.setEnabled(false);
-		mSendCommentButton.setEnabled(false);
-		Comment comment = new Comment();
-		comment.setText(comm);
-		comment.setUserName(AuthUtils.getSessionStringValue
-				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
-		restModule.postComment(comment, mMessage);	
+		
+		if(comm.length() > 0) {
+			mNewComment.setEnabled(false);
+			mSendCommentButton.setEnabled(false);
+			Comment comment = new Comment();
+			comment.setText(comm);
+			comment.setUserName(AuthUtils.getSessionStringValue
+					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
+			restModule.postComment(comment, mMessage);
+		}
 	}
 
 	private void loadMessage() {
@@ -321,6 +329,7 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 							new Date( message.getTimestamp() ) ) );
 			
 			if(message.getPictureUrl() != null && !message.getPictureUrl().isEmpty()) {
+				mProgressBarPicture.setVisibility(View.VISIBLE);
 				LoadPictureTask setImageTask = new LoadPictureTask(this);
 				setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + message.getPictureUrl());
 				DebugUtils.log(NetworkRestModule.SERVER_IMG_BASEURL + message.getPictureUrl());
@@ -391,6 +400,7 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 
 	@Override
 	public void loadPictureTaskOnPostExecute(Drawable image) {
+		mProgressBarPicture.setVisibility(View.GONE);
 		mFirstCommentPicture.setImageDrawable(image);
 		mFirstCommentPicture.setVisibility(View.VISIBLE);
 	}

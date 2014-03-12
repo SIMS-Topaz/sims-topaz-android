@@ -121,8 +121,6 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 		send.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				v.setEnabled(false);
-				closeKeyboard();
 				onSendButton(v);
 			}
 		});
@@ -173,16 +171,23 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 
 	public void onSendButton(View view) {
 		String text = editText.getText().toString();
-		// Create the message
-		Message message = new Message();
-		message.setText(text);
-		message.setLongitude(mPosition.longitude);
-		message.setLatitude(mPosition.latitude);
-		message.setTimestamp(new Date().getTime());
-		message.setUserName(AuthUtils.getSessionStringValue
-				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
-		message.setPictureUrl(pictureUrl);
-		mRestModule.postMessage(message);
+		
+		if(text.length() > 0) {
+			
+			view.setEnabled(false);
+			closeKeyboard();
+			
+			// Create the message
+			Message message = new Message();
+			message.setText(text);
+			message.setLongitude(mPosition.longitude);
+			message.setLatitude(mPosition.latitude);
+			message.setTimestamp(new Date().getTime());
+			message.setUserName(AuthUtils.getSessionStringValue
+					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
+			message.setPictureUrl(pictureUrl);
+			mRestModule.postMessage(message);
+		}
 	}
 
 	@Override

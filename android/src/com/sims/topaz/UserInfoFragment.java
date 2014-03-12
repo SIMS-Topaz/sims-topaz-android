@@ -9,6 +9,7 @@ import com.sims.topaz.AsyncTask.LoadPictureTask;
 import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
+import com.sims.topaz.network.interfaces.PictureUploadDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
@@ -53,7 +54,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserInfoFragment  extends Fragment  
-implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
+implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface,
+PictureUploadDelegate{
 	private Button mUnConnectButton;
 	private Button mSaveNewPasswordButton;
 	private Button mCancelNewPasswordButton;
@@ -79,7 +81,6 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 	private LinearLayout mPasswordLayout;
 
 	private User mUser;
-	private boolean isMyProfile;
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private byte[] pictureData;
 	private Button mSaveUser;
@@ -92,13 +93,11 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 	private TextView mUserSnippetTextView;
 	private ImageButton mUserImage;
 	private ProgressBar mProgressBar;
-	private static String IS_MY_OWN_PROFILE = "user_info_fragment_is_my_own_profile";
 	private static String USER = "user_info_fragment_user";
 
 	public static UserInfoFragment newInstance(boolean isMyOwnProfile, User mUser){
 		UserInfoFragment fragment= new UserInfoFragment();
 		Bundle bundle = new Bundle();
-		bundle.putBoolean(IS_MY_OWN_PROFILE, isMyOwnProfile);
 		bundle.putSerializable(USER, mUser);
 		fragment.setArguments(bundle);
 		return fragment;
@@ -106,15 +105,14 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		isMyProfile = false;
 		if(getArguments()!=null){
 			mUser = (User) getArguments().getSerializable(USER);
-			isMyProfile = getArguments().getBoolean(IS_MY_OWN_PROFILE);
 		}		
 	}
-	
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, 
+			ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
@@ -212,15 +210,17 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 					NetworkRestModule.SERVER_IMG_BASEURL+mUser.getPictureUrl(),
 					Toast.LENGTH_SHORT).show();
 		}
+		//set text
 		mUserSnippetTextView.setText(mUser.getStatus());
 		mUserTextView.setText(mUser.getUserName());
 		mProgressBar.setVisibility(View.GONE);
+		mUserTitleTextView.setText(mUser.getUserName());
+		mStatusEditText.setText(mUser.getStatus());
 
 		mSaveNewPasswordButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				saveNewPassword();
-
 			}
 		});
 		mSaveUser.setOnClickListener(new View.OnClickListener() {		
@@ -267,7 +267,6 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 			public void onClick(View v) {
 				mErrorEmailTextView.setVisibility(TextView.GONE);
 				mEmailEditText.setText("");//or mUser.getEmail()?
-
 			}
 		});
 		mCancelStatus.setOnClickListener(new View.OnClickListener() {
@@ -275,7 +274,6 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 			@Override
 			public void onClick(View v) {
 				mStatusEditText.setText("");//or mUser.getStatus()?
-
 			}
 		});
 
@@ -394,7 +392,7 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {}
 			@Override
-			public void afterTextChanged(Editable s) {checkNewUserName();}
+			public void afterTextChanged(Editable s) {if(!s.toString().equals(""))checkNewUserName();}
 		});
 		mEmailEditText.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -403,7 +401,7 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {}
 			@Override
-			public void afterTextChanged(Editable s) {checkNewEmail();}
+			public void afterTextChanged(Editable s) {if(!s.toString().equals(""))checkNewEmail();}
 		});
 		mPassEditText.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -440,21 +438,6 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 			}
 		});
 
-		if(!isMyProfile){
-			mPasswordLayout.setVisibility(View.GONE);
-			LinearLayout mUnconnectLayout = (LinearLayout)v.findViewById(R.id.user_info_unconnect_layout);
-			mUnconnectLayout.setVisibility(View.GONE);
-			mSaveStatus.setVisibility(View.GONE);
-			mCancelStatus.setVisibility(View.GONE);
-			mUserButton.setVisibility(View.GONE);
-			mEmailButton.setVisibility(View.GONE);
-			//Transform this edit text into a textView
-			mStatusEditText.setKeyListener(null);
-			mStatusEditText.setEnabled(false);
-			mStatusEditText.setCursorVisible(false);
-			mStatusTextView.setFocusable(false);
-		}
-
 		return v;
 	}
 
@@ -488,7 +471,7 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 
 	private void saveNewStatus(){
 		mUser.setStatus(mStatusEditText.getText().toString());
-		mRestModule.postUserInfo(mUser);			
+		mRestModule.postUserInfo(mUser);	
 	}
 	private void saveNewEmail(){
 		String email = mEmailEditText.getText().toString();
@@ -592,7 +575,9 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 		mUserEditText.setText(mUser.getUserName());
 		mUserTextView.setText(mUser.getUserName());
 
-		Toast.makeText(SimsContext.getContext(), getResources().getString(R.string.user_tab_save_ok), Toast.LENGTH_SHORT).show();
+		Toast.makeText(SimsContext.getContext(),
+				getResources().getString(R.string.user_tab_save_ok), 
+				Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -640,7 +625,7 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 		});
 		builder.show();
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -701,5 +686,11 @@ implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface{
 		inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 		String path = Images.Media.insertImage(SimsContext.getContext().getContentResolver(), inImage, "Title", null);
 		return Uri.parse(path);
+	}
+
+	@Override
+	public void afterUploadPicture(String pictureUrl) {
+		mUser.setPictureUrl(pictureUrl);
+		Toast.makeText(SimsContext.getContext(), "ok", Toast.LENGTH_SHORT).show();
 	}
 }

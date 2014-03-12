@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/blue" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,10 +73,10 @@
                     <EditText
                         android:id="@+id/user_info_status"
                         style="@style/text_dark_gray_normal"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/linearLayout1"
                         android:layout_toRightOf="@id/user_info_status_text"
-                        android:hint="@string/user_tab_info_status"
                         android:nextFocusDown="@+id/user_info_username"
                         android:padding="4dp" >
 
@@ -85,6 +84,7 @@
                     </EditText>
 
                     <LinearLayout
+                        android:id="@+id/linearLayout1"
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_alignParentRight="true"
@@ -125,6 +125,7 @@
                         android:text="@string/user_tab_edit" />
 
                     <LinearLayout
+                        android:id="@+id/layout_buttons_user"
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_alignParentRight="true"
@@ -160,6 +161,7 @@
                         style="@style/text_dark_gray_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/user_info_username_button"
                         android:layout_toRightOf="@id/user_info_username_text_static"
                         android:ems="10"
                         android:gravity="center_vertical"
@@ -168,11 +170,11 @@
                     <EditText
                         android:id="@+id/user_info_username"
                         style="@style/text_dark_gray_normal"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_toRightOf="@id/user_info_username_text_static"
-                        android:hint="@string/auth_username"
+                        android:layout_toLeftOf="@id/layout_buttons_user"
                         android:nextFocusDown="@+id/sign_up_mail"
                         android:padding="4dp"
                         android:visibility="gone" >
@@ -208,6 +210,7 @@
                         android:text="@string/user_tab_edit" />
 
                     <LinearLayout
+                        android:id="@+id/layout_buttons_email"
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:layout_alignParentRight="true"
@@ -243,6 +246,7 @@
                         style="@style/text_dark_gray_normal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/user_info_email_button"
                         android:layout_toRightOf="@id/user_info_email_text_static"
                         android:ems="10"
                         android:gravity="center_vertical"
@@ -251,11 +255,11 @@
                     <EditText
                         android:id="@+id/sign_up_mail"
                         style="@style/text_dark_gray_normal"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_toRightOf="@id/user_info_email_text_static"
-                        android:hint="@string/auth_email"
+                        android:layout_toLeftOf="@id/layout_buttons_email"
                         android:inputType="textEmailAddress"
                         android:nextFocusDown="@+id/user_info_old_password"
                         android:padding="4dp"

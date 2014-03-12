@@ -18,13 +18,11 @@ public class UserCommentFragment  extends Fragment  {
 	private User mUser;
 	private byte[] mImage;
 	private static String USER = "user_comment_fragment_user";
-	private static String PICTURE = "user_comment_fragment_picture";
 	
 	public static UserCommentFragment newInstance(User user, byte[] image){
 		UserCommentFragment fragment= new UserCommentFragment();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(USER, user);
-		bundle.putByteArray(PICTURE, image);
 		fragment.setArguments(bundle);
 		return fragment;		
 	}
@@ -40,7 +38,6 @@ public class UserCommentFragment  extends Fragment  {
 				mUser = new User();
 			}
 			mUser = (User) getArguments().getSerializable(USER);
-			mImage = (byte[]) getArguments().getByteArray(PICTURE);
 		}
 		
 

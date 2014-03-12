@@ -13,7 +13,6 @@ import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.interfaces.OnShowDefaultPage;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
-import com.sims.topaz.network.interfaces.PictureUploadDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
@@ -24,7 +23,7 @@ import com.sims.topaz.utils.SimsContext;
 
 
 public class UserFragment  extends Fragment 
-implements UserDelegate,ErreurDelegate,PictureUploadDelegate, OnShowDefaultPage {
+implements UserDelegate,ErreurDelegate, OnShowDefaultPage {
 
 	private ViewPager mViewPager;
 	private static String IS_MY_OWN_PROFILE = "user_fragment_is_my_own_profile";
@@ -37,6 +36,7 @@ implements UserDelegate,ErreurDelegate,PictureUploadDelegate, OnShowDefaultPage 
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private UserInfoFragment userInfoFragment;
 	private UserCommentFragment userCommentFragment;
+	private UserInfoGeneralFragment userInfoGeneralFragment;
 
 	public static UserFragment newInstance(boolean isMyProfile){
 		UserFragment fragment= new UserFragment();
@@ -125,16 +125,24 @@ implements UserDelegate,ErreurDelegate,PictureUploadDelegate, OnShowDefaultPage 
 	private void prepareFragments(){
 		userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
 		userCommentFragment =UserCommentFragment.newInstance(mUser, null);
-
+		userInfoGeneralFragment = UserInfoGeneralFragment.newInstance(mUser);
 		//tabs
 		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 
 		if (!tabletSize) {
-			UserPageAdapter mTabsAdapter = 
-					new UserPageAdapter(getActivity().getSupportFragmentManager(),
-							userCommentFragment,
-							userInfoFragment);
-			mViewPager.setAdapter(mTabsAdapter);
+			if(isMyProfile){
+				UserPageAdapter mTabsAdapter = 
+						new UserPageAdapter(getActivity().getSupportFragmentManager(),
+								userCommentFragment,
+								userInfoFragment);
+				mViewPager.setAdapter(mTabsAdapter);
+			}else{
+				mViewPager.setVisibility(View.GONE);
+				//conteneur
+				FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+						.beginTransaction();
+				transaction.replace(R.id.conteneur, userInfoGeneralFragment);
+			}
 
 		} else {
 			FragmentTransaction transaction = getActivity().getSupportFragmentManager()
@@ -143,15 +151,9 @@ implements UserDelegate,ErreurDelegate,PictureUploadDelegate, OnShowDefaultPage 
 			transaction.replace(R.id.user_info_fragment, userInfoFragment);
 			transaction.replace(R.id.user_info_comments_fragment, userCommentFragment);
 			transaction.commit();	
+			
 		}	
 	}
-
-	@Override
-	public void afterUploadPicture(String pictureUrl) {
-		mUser.setPictureUrl(pictureUrl);
-		Toast.makeText(SimsContext.getContext(), pictureUrl, Toast.LENGTH_SHORT).show();
-	}
-
 
 
 

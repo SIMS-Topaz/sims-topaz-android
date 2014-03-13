@@ -15,7 +15,7 @@ import android.os.ParcelFileDescriptor;
 public class InternalStorageContentProvider extends ContentProvider {
     public static final Uri CONTENT_URI = Uri.parse("content://eu.janmuller.android.simplecropimage.example/");
 	private static final HashMap<String, String> MIME_TYPES = new HashMap<String, String>();
-	
+	private static String photoName = "temp_photo.jpg";
 	static {
 		MIME_TYPES.put(".jpg", "image/jpeg");
 		MIME_TYPES.put(".jpeg", "image/jpeg");
@@ -24,7 +24,7 @@ public class InternalStorageContentProvider extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		try {
-			File mFile = new File(getContext().getFilesDir(), "temp_photo.jpg");
+			File mFile = new File(getContext().getFilesDir(), photoName);
 			if(!mFile.exists()) {
 				mFile.createNewFile();
 				getContext().getContentResolver().notifyChange(CONTENT_URI, null);
@@ -49,7 +49,7 @@ public class InternalStorageContentProvider extends ContentProvider {
 	
 	@Override
 	public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
-		File f = new File(getContext().getFilesDir(), "temp_photo.jpg");
+		File f = new File(getContext().getFilesDir(), photoName);
 		if (f.exists()) {
 			return (ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_WRITE));
 		}

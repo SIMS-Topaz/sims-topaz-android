@@ -623,9 +623,12 @@ PictureUploadDelegate{
 		final CharSequence[] items = { getString(R.string.select_img_take_photo),
 				getString(R.string.select_img_from_lib),
 				getString(R.string.select_img_close) };
+		
+		CameraUtils.removeTempFile();
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 		builder.setTitle(R.string.edit_add_image);
-
+		
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int item) {
@@ -667,7 +670,6 @@ PictureUploadDelegate{
 			break;
 		case CameraUtils.REQUEST_CODE_CROP_IMAGE:
 			if(data == null) {
-				Toast.makeText(SimsContext.getContext(), getResources().getString(R.string.erreur_gen), Toast.LENGTH_SHORT).show();
 				return;}
 			String path = data.getStringExtra(CropImage.IMAGE_PATH);
 			if (path == null) {return;}

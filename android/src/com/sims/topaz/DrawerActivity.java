@@ -33,8 +33,7 @@ public class DrawerActivity extends ActionBarActivity
 	implements EditMessageFragment.OnNewMessageListener,
 				OnMoveCamera, 
 				OnShowUserProfile,
-				PreviewListFragment.OnPreviewClickListener,
-				OnShowGeneralUserProfile
+				PreviewListFragment.OnPreviewClickListener
 				{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
@@ -293,33 +292,5 @@ public class DrawerActivity extends ActionBarActivity
 		return mLastFragment;
 	}
 
-
-	@Override
-	public void onShowGeneralUserProfileFragment(User user) {
-		UserInfoGeneralFragment fragment = UserInfoGeneralFragment.newInstance(user);
-
-		//create transaction
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(R.id.fragment_container, fragment);
-		transaction.addToBackStack(FRAGMENT_COMMENT);
-		transaction.commit();		
-	}
-	
-	//Override due to bug https://code.google.com/p/android/issues/detail?id=40323
-	//related to nested fragments and backstack
-	 @Override
-	 public void onBackPressed() {
-
-	     // If the fragment exists and has some back-stack entry
-	     if ( mLastFragment!= null && mLastFragment.getChildFragmentManager().getBackStackEntryCount() > 0){
-	         // Get the fragment fragment manager - and pop the backstack
-	    	 mLastFragment.getChildFragmentManager().popBackStack();
-	     }
-	     // Else, nothing in the direct fragment back stack
-	     else{
-	         // Let super handle the back press
-	         super.onBackPressed();          
-	     }
-	 }
 
 }

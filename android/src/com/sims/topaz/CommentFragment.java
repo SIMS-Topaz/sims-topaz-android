@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +69,7 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 	OnShowUserProfile mCallback;
 	
 	private static String ID_PREVIEW = "id_preview";
+	private static String FRAGMENT_USER = "fragment_user";
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -87,11 +89,6 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 		mCallback = null;
 	}
 	
-	@Override
-	public void onStart(){
-		super.onStart();
-		getChildFragmentManager().popBackStack();
-	}
 	public static CommentFragment newInstance(long id){
 		CommentFragment fragment = new CommentFragment();
 		Bundle args = new Bundle();
@@ -421,8 +418,20 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 
 	@Override
 	public void onShowUserProfileFragment(long id) {
-		mCallback.onShowUserProfileFragment(id);
-		
+    	FragmentManager fragmentManager = getChildFragmentManager();
+    	UserFragment fragment;
+    	if(AuthUtils.getSessionLongValue
+				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID, (long)0) != id){
+    		fragment = UserFragment.newInstance(false, id);
+    	}else{
+    		fragment = UserFragment.newInstance(true);
+    	}
+		fragmentManager
+		.beginTransaction()
+		.replace(R.id.content_frame, fragment)
+		.addToBackStack(FRAGMENT_USER)
+		.commit();		
 	}
+
 
 }

@@ -50,6 +50,7 @@ import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.InternetConnectionUtils;
 import com.sims.topaz.utils.LocationUtils;
@@ -319,24 +320,6 @@ OnMapLoadedCallback
 		timerSeconds.cancel();
 		timerOneMinute.cancel();
 	}
-
-
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		// Choose what to do based on the request code
-		switch (requestCode) {
-		// If the request code matches the code sent in onConnectionFailed
-		case LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST :
-			DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));            	
-			// If any other request code was received
-		default:
-			// Report that this Activity received an unknown requestCode
-			DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));
-			break;
-		}
-	}
-
 
 	@Override
 	public void networkError() {

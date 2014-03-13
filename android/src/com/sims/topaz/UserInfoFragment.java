@@ -644,7 +644,6 @@ PictureUploadDelegate{
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
 		Bitmap bitmap;
 
 		switch (requestCode) {
@@ -683,9 +682,6 @@ PictureUploadDelegate{
 			mRestModule.uploadPicture(pictureData);
 			break;
 		}
-
-		super.onActivityResult(requestCode, resultCode, data);
-
 	}
 
 

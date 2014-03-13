@@ -148,7 +148,7 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 				mViewPager.setAdapter(mTabsAdapter);
 			} else {
 				UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
-				FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+				FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
 				transaction.replace(R.id.user_info_fragment, userInfoFragment);
 				transaction.commit();	

@@ -203,7 +203,7 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 					}
 					mListMessagesListView.setAdapter(adapter);
 					int h = ListViewSizeHelper.getListViewSize(mListMessagesListView);
-					if(h>userInfoFragment.getView().getLayoutParams().height){
+					if(userInfoFragment.getView()!=null && h>userInfoFragment.getView().getLayoutParams().height){
 						ListViewSizeHelper.setListViewSize(h, mListMessagesListView);
 					}
 				}

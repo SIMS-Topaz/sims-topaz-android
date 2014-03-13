@@ -270,7 +270,6 @@ public class NetworkRestModule {
 	}
 	private void handleResponse(TypeRequest type, String response) {
 		ObjectMapper mapper = new ObjectMapper();
-		DebugUtils.log("handleResponse"+response);
 		switch (type) {
 			case GET_MESSAGE:
 				try {

@@ -1,65 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_frame"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
-    android:orientation="vertical"
-    android:padding="8dp" >
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:indeterminate="true"
-        android:visibility="gone" />
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:background="@drawable/background_gradient"
+        android:orientation="vertical"
+        android:padding="8dp" >
 
-        <ListView
-            android:id="@+id/comment_list"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="8dp"
-            android:paddingTop="8dp"
-            tools:listheader="@layout/fragment_comment_message_item"
-            tools:listitem="@layout/fragment_comment_item" >
-
-        </ListView>
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:indeterminate="true"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp" >
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-            <EditText
-                android:id="@+id/write_comment_text"
-                style="@style/text_gray_normal"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+            <ListView
+                android:id="@+id/comment_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:hint="@string/comment_hint"
-                android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
-                android:padding="8dp" >
+                android:divider="@android:color/transparent"
+                android:dividerHeight="8dp"
+                android:paddingTop="8dp"
+                tools:listheader="@layout/fragment_comment_message_item"
+                tools:listitem="@layout/fragment_comment_item" >
+            </ListView>
 
-                <requestFocus />
-            </EditText>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp" >
 
-            <ImageButton
-                android:id="@+id/send_comment_button"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/transparent"
-                android:contentDescription="@string/comment_send"
-                android:src="@drawable/ic_arrow" />
+                <EditText
+                    android:id="@+id/write_comment_text"
+                    style="@style/text_gray_normal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="@string/comment_hint"
+                    android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
+                    android:padding="8dp" >
+
+                    <requestFocus />
+                </EditText>
+
+                <ImageButton
+                    android:id="@+id/send_comment_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@color/transparent"
+                    android:contentDescription="@string/comment_send"
+                    android:src="@drawable/ic_arrow" />
+            </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

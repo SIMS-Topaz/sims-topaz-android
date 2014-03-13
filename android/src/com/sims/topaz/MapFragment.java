@@ -318,9 +318,6 @@ OnMapLoadedCallback
 			mLocationClient.connect();
 		timerSeconds.start();
 		timerOneMinute.start();
-		getChildFragmentManager().popBackStack(FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		getChildFragmentManager().popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		getChildFragmentManager().popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
 	/**
@@ -432,7 +429,6 @@ OnMapLoadedCallback
 		//http://developer.android.com/reference/android/app/Fragment.html
 		//We have to user getChildFragmentManager
 		FragmentManager fm = getChildFragmentManager(); 
-		fm.popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_none);
@@ -458,7 +454,6 @@ OnMapLoadedCallback
 		//We have to user getChildFragmentManager for nested fragments
 		FragmentManager fm = getChildFragmentManager(); 
 		Fragment f = PreviewListFragment.newInstance(previewList);
-		fm.popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_none);
@@ -540,6 +535,6 @@ OnMapLoadedCallback
 		return null;
 	}
 	
-
+	
 
 }

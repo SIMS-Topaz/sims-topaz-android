@@ -455,6 +455,7 @@ PictureUploadDelegate{
 			mConfirmEditText.setVisibility(View.VISIBLE);
 			mNewPassEditText.setVisibility(View.VISIBLE);
 			mSaveNewPasswordButton.setVisibility(View.VISIBLE);
+			mSaveNewPasswordButton.setEnabled(true);
 			mCancelNewPasswordButton.setVisibility(View.VISIBLE);
 
 		}else{
@@ -584,6 +585,7 @@ PictureUploadDelegate{
 		mUserEditText.setText(mUser.getUserName());
 		mUserTextView.setText(mUser.getUserName());
 
+		mSaveNewPasswordButton.setEnabled(true);
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.user_tab_save_ok), 
 				Toast.LENGTH_SHORT).show();

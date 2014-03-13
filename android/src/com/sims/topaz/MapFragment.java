@@ -71,11 +71,11 @@ OnCameraChangeListener,
 LocationListener,
 OnMapLoadedCallback
 {
-	
+
 	public static String FRAGMENT_PREVIEW = "fragment_preview";
 	public static String FRAGMENT_MESSAGE = "fragment_message";
 	public static String FRAGMENT_COMMENT = "fragment_comment";
-	
+
 	private GoogleMap mMap;
 	private static View mView;
 
@@ -163,20 +163,7 @@ OnMapLoadedCallback
 			e.printStackTrace();
 		}
 
-		// Account banner
-		//bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
 
-		//bannerNotVerified.setVisibility(TextView.GONE);
-		/*if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)) {
-			if(AuthUtils.getSessionBoolValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED, false)) {
-				bannerNotVerified.setVisibility(TextView.GONE);
-			} else {
-				bannerNotVerified.setVisibility(TextView.VISIBLE);
-			}
-		} else {
-			bannerNotVerified.setVisibility(TextView.VISIBLE);
-		}*/
-		
 		return mView;
 
 	}
@@ -222,7 +209,7 @@ OnMapLoadedCallback
 					mMap.setOnMapLoadedCallback(this);
 					UiSettings settings = mMap.getUiSettings();
 					settings.setMyLocationButtonEnabled(false);
-					
+
 				}else{
 					Toast.makeText(SimsContext.getContext(),
 							getResources().getString(R.string.connection_error_unknown), 
@@ -260,7 +247,7 @@ OnMapLoadedCallback
 		//http://developer.android.com/reference/android/app/Fragment.html
 		//We have to user getChildFragmentManager for nested fragments
 		FragmentManager fm = getFragmentManager(); 
-		
+
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
@@ -318,6 +305,8 @@ OnMapLoadedCallback
 			mLocationClient.connect();
 		timerSeconds.start();
 		timerOneMinute.start();
+		
+
 	}
 
 	/**
@@ -332,8 +321,8 @@ OnMapLoadedCallback
 		timerOneMinute.cancel();
 	}
 
-	
-	
+
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		// Choose what to do based on the request code
@@ -449,7 +438,7 @@ OnMapLoadedCallback
 		for (PreviewClusterItem pci : cluster.getItems()) {
 			previewList.add(pci.getPreview());
 		}
-		
+
 		//http://developer.android.com/reference/android/app/Fragment.html
 		//We have to user getChildFragmentManager for nested fragments
 		FragmentManager fm = getFragmentManager(); 
@@ -521,21 +510,18 @@ OnMapLoadedCallback
 			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,0));
 		}
 	}
-	
+
 	public void onMyLocation(){
 		if(mMap!=null){
 			LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
 		}
 	}
-	
+
 	public GoogleMap getMap() {
 		if (mMap != null) {
 			return mMap;
 		}
 		return null;
 	}
-	
-
-	
 
 }

@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.android.gms.internal.fr;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.interfaces.OnMoveCamera;
@@ -302,4 +301,22 @@ public class DrawerActivity extends ActionBarActivity
 		transaction.addToBackStack(FRAGMENT_COMMENT);
 		transaction.commit();		
 	}
+	
+	//Override due to bug https://code.google.com/p/android/issues/detail?id=40323
+	//related to nested fragments and backstack
+	 @Override
+	 public void onBackPressed() {
+
+	     // If the fragment exists and has some back-stack entry
+	     if ( mLastFragment!= null && mLastFragment.getChildFragmentManager().getBackStackEntryCount() > 0){
+	         // Get the fragment fragment manager - and pop the backstack
+	    	 mLastFragment.getChildFragmentManager().popBackStack();
+	     }
+	     // Else, nothing in the direct fragment back stack
+	     else{
+	         // Let super handle the back press
+	         super.onBackPressed();          
+	     }
+	 }
+
 }

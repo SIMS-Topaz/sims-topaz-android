@@ -318,10 +318,7 @@ OnMapLoadedCallback
 			mLocationClient.connect();
 		timerSeconds.start();
 		timerOneMinute.start();
-		getChildFragmentManager().popBackStack(FRAGMENT_COMMENT, 
-				FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		getChildFragmentManager().popBackStack(FRAGMENT_PREVIEW,
-				FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		getChildFragmentManager().popBackStack();
 	}
 
 	/**
@@ -540,6 +537,7 @@ OnMapLoadedCallback
 		}
 		return null;
 	}
+	
 
 
 }

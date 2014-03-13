@@ -178,8 +178,7 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 		} else {
 			if(isMyProfile){
 				UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
-				FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-						.beginTransaction();
+				FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 	
 				transaction.replace(R.id.user_info_fragment, userInfoFragment);
 				transaction.commit();	

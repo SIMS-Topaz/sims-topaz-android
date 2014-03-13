@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
@@ -75,6 +74,7 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 		super.onAttach(activity);
 		try {
 			mCallback = (OnShowUserProfile) activity;
+			
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnShowUserProfile");
@@ -85,6 +85,12 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 	public void onDetach() {
 		super.onDetach();
 		mCallback = null;
+	}
+	
+	@Override
+	public void onStart(){
+		super.onStart();
+		getChildFragmentManager().popBackStack();
 	}
 	public static CommentFragment newInstance(long id){
 		CommentFragment fragment = new CommentFragment();

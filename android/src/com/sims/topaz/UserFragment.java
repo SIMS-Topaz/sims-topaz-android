@@ -1,6 +1,5 @@
 package com.sims.topaz;
 
-import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,38 +32,14 @@ public class UserFragment  extends Fragment
 implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterface {
 
 	private ViewPager mViewPager;
+	private static String FRAGMENT_GENERAL_USER = "fragment_user_general";
 	private static String IS_MY_OWN_PROFILE = "user_fragment_is_my_own_profile";
 	private static String USER_ID = "user_fragment_user_id";
 	private boolean isMyProfile;
-	
+
 	private User mUser = null;
-	OnShowGeneralUserProfile mCallback;
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private ListView mListMessagesListView;
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-
-		// This makes sure that the container activity has implemented
-		// the callback interface. If not, it throws an exception
-		try {
-			mCallback = (OnShowGeneralUserProfile) activity;
-			
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnShowGeneralUserProfile");
-		}
-	}
-
-	/**
-	 * Set the callback to null so we don't accidentally leak the 
-	 * Activity instance.
-	 */
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mCallback = null;
-	}
 
 	public static UserFragment newInstance(boolean isMyProfile){
 		UserFragment fragment= new UserFragment();
@@ -151,19 +126,19 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 				"afterGetUserInfo",Toast.LENGTH_SHORT).show();
 		prepareFragments();
 	}
-	
+
 	@Override
 	public void afterPostUserInfo(User user) {}
 
 	private void prepareFragments(){
 
-		
+
 		//tabs
 		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 
 
-		if (!tabletSize) {
-			if(isMyProfile){
+		if(!isMyProfile){
+			if (!tabletSize) {
 				UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
 				UserCommentFragment userCommentFragment =UserCommentFragment.newInstance(mUser, null);
 				UserPageAdapter mTabsAdapter = 
@@ -171,18 +146,13 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 								userCommentFragment,
 								userInfoFragment);
 				mViewPager.setAdapter(mTabsAdapter);
-			}else{
-				((OnShowGeneralUserProfile)mCallback).onShowGeneralUserProfileFragment(mUser);
-			}
-
-		} else {
-			if(isMyProfile){
+			} else {
 				UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
 				FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-	
+
 				transaction.replace(R.id.user_info_fragment, userInfoFragment);
 				transaction.commit();	
-				
+
 				mListMessagesListView = (ListView)getView().findViewById(R.id.fragment_user_comments__list); 
 				if(mUser!=null){
 					if(mUser.getPictureUrl()!=null){
@@ -193,16 +163,21 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 								R.layout.fragment_comment_item,
 								mUser.getMessages(),
 								null);
-						
+
 						if(mUser.getMessages().size() == 0){
 							//TODO put the fragment on the center
 						}
 						mListMessagesListView.setAdapter(adapter);
 					}
 				}
-			}else{
-				((OnShowGeneralUserProfile)mCallback).onShowGeneralUserProfileFragment(mUser);			
 			}
+		}else{
+			UserInfoGeneralFragment userInfoGeneralFragment = UserInfoGeneralFragment.newInstance(mUser);
+			FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+			transaction.addToBackStack(FRAGMENT_GENERAL_USER);
+			transaction.replace(R.id.fragment_container, userInfoGeneralFragment);
+			transaction.commit();			
+			
 		}	
 	}
 
@@ -220,12 +195,15 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 				R.layout.fragment_comment_item,
 				mUser.getMessages(),
 				CameraUtils.getBytesFromDrawable(image));
-		
+
 		if(mUser.getMessages().size() == 0){
 			//TODO put the fragment on the center
 		}
 		mListMessagesListView.setAdapter(adapter);
 	}
+
+
+
 
 
 

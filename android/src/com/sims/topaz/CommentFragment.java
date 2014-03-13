@@ -423,7 +423,7 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 
 	@Override
 	public void onShowUserProfileFragment(long id) {
-    	FragmentManager fragmentManager = getChildFragmentManager();
+    	FragmentManager fragmentManager = getFragmentManager();
     	UserFragment fragment;
     	if(AuthUtils.getSessionLongValue
 				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID, (long)0) != id){

@@ -180,31 +180,35 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 			}
 
 		} else {
-			UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
-			FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-					.beginTransaction();
-
-			transaction.replace(R.id.user_info_fragment, userInfoFragment);
-			transaction.commit();	
-			
-			mListMessagesListView = (ListView)getView().findViewById(R.id.fragment_user_comments__list); 
-			if(mUser!=null && mUser.getPictureUrl()!=null){
-				LoadPictureTask setImageTask = new LoadPictureTask(this);
-				setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());				
-			}else{
-				UserMessageAdapter adapter = new UserMessageAdapter(SimsContext.getContext(),
-						R.layout.fragment_comment_item,
-						mUser.getMessages(),
-						CameraUtils.getBytesFromDrawable(null));
+			if(isMyProfile){
+				UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
+				FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+						.beginTransaction();
+	
+				transaction.replace(R.id.user_info_fragment, userInfoFragment);
+				transaction.commit();	
 				
-				if(mUser.getMessages().size() == 0){
-					//TODO put the fragment on the center
+				mListMessagesListView = (ListView)getView().findViewById(R.id.fragment_user_comments__list); 
+				if(mUser!=null && mUser.getPictureUrl()!=null){
+					LoadPictureTask setImageTask = new LoadPictureTask(this);
+					setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());				
+				}else{
+					UserMessageAdapter adapter = new UserMessageAdapter(SimsContext.getContext(),
+							R.layout.fragment_comment_item,
+							mUser.getMessages(),
+							CameraUtils.getBytesFromDrawable(null));
+					
+					if(mUser.getMessages().size() == 0){
+						//TODO put the fragment on the center
+					}
+					mListMessagesListView.setAdapter(adapter);
+					int h = ListViewSizeHelper.getListViewSize(mListMessagesListView);
+					if(h>userInfoFragment.getView().getLayoutParams().height){
+						ListViewSizeHelper.setListViewSize(h, mListMessagesListView);
+					}
 				}
-				mListMessagesListView.setAdapter(adapter);
-				int h = ListViewSizeHelper.getListViewSize(mListMessagesListView);
-				if(h>userInfoFragment.getView().getLayoutParams().height){
-					ListViewSizeHelper.setListViewSize(h, mListMessagesListView);
-				}
+			}else{
+				((OnShowGeneralUserProfile)mCallback).onShowGeneralUserProfileFragment(mUser);			
 			}
 		}	
 	}

@@ -65,6 +65,11 @@ public class PreviewListFragment extends Fragment implements
 	}
 
 	@Override
+	public void onStart(){
+		super.onStart();
+		getChildFragmentManager().popBackStack();
+	}
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 

@@ -179,6 +179,9 @@ public class DrawerActivity extends ActionBarActivity
 		case 2:
 			if(mLastFragment instanceof MapFragment){
 				change = false;
+				mLastFragment.getChildFragmentManager().popBackStack(MapFragment.FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+				mLastFragment.getChildFragmentManager().popBackStack(MapFragment.FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+				mLastFragment.getChildFragmentManager().popBackStack(MapFragment.FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			}
 			mLastFragment = mMapFragment;	
 			TAG = FRAGMENT_MAP;

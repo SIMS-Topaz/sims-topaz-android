@@ -14,6 +14,7 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,9 +72,9 @@ LocationListener,
 OnMapLoadedCallback
 {
 	
-	private static String FRAGMENT_PREVIEW = "fragment_preview";
+	public static String FRAGMENT_PREVIEW = "fragment_preview";
 	public static String FRAGMENT_MESSAGE = "fragment_message";
-	private static String FRAGMENT_COMMENT = "fragment_comment";
+	public static String FRAGMENT_COMMENT = "fragment_comment";
 	
 	private GoogleMap mMap;
 	private static View mView;
@@ -317,7 +318,9 @@ OnMapLoadedCallback
 			mLocationClient.connect();
 		timerSeconds.start();
 		timerOneMinute.start();
-		getChildFragmentManager().popBackStack();
+		getChildFragmentManager().popBackStack(FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		getChildFragmentManager().popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		getChildFragmentManager().popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
 	/**

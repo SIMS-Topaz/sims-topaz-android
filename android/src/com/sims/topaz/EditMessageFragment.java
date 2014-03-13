@@ -242,36 +242,19 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 
         if (resultCode == Activity.RESULT_OK) {
         	
+        	Bitmap bm = null;
+        	
             if (requestCode == CameraUtils.REQUEST_CODE_GALLERY) {
                 Uri selectedImageUri = data.getData();
                 String picturePath = getPath(selectedImageUri, this.getActivity());
-                Bitmap bm = BitmapFactory.decodeFile(picturePath);
-                editImageView.setImageBitmap(bm);
-                
-                // Get data
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                
-                if(bm.getHeight() > PICTURE_MAX_WIDTH) {
-	                double aspectRatio = (double) bm.getHeight() / (double) bm.getWidth();
-	                int targetHeight = (int) (PICTURE_MAX_WIDTH * aspectRatio);
-	                bm = Bitmap.createScaledBitmap(bm, PICTURE_MAX_WIDTH, targetHeight, true);
-                }
-                
-                bm.compress(CompressFormat.JPEG, PICTURE_QUALITY, bos);
-                mRestModule.uploadPicture(bos.toByteArray());
-                
-                // Start loader, disable send button
-                pictureUrl = null;
-                editImageView.setVisibility(View.INVISIBLE);
-                getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.VISIBLE);
-                getView().findViewById(R.id.button_send_message).setEnabled(false);
-                
+                bm = BitmapFactory.decodeFile(picturePath);   
             } else if (requestCode == CameraUtils.REQUEST_CODE_TAKE_PICTURE) {
-            	
-                Bitmap bm = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath());
-                
+                bm = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath());
                 DebugUtils.log("getHeight=" + bm.getHeight());
-                
+            }
+            
+            if(bm != null) {
+            	
                 editImageView.setImageBitmap(bm);
 
                 // Get data
@@ -291,8 +274,8 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
                 editImageView.setVisibility(View.INVISIBLE);
                 getView().findViewById(R.id.edit_message_picture_loader).setVisibility(View.VISIBLE);
                 getView().findViewById(R.id.button_send_message).setEnabled(false);
-                
             }
+
         }
     }
 	

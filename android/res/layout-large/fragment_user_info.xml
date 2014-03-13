@@ -89,7 +89,6 @@
                     android:layout_toRightOf="@id/user_info_status_text"
                     android:ems="10"
                     android:hint="@string/user_tab_info_status"
-                    android:nextFocusDown="@+id/user_info_username"
                     android:padding="4dp" >
 
                     <requestFocus />
@@ -189,7 +188,6 @@
                     android:layout_toLeftOf="@id/layout_buttons_username"
                     android:ems="15"
                     android:singleLine="true"
-                    android:nextFocusDown="@+id/sign_up_mail"
                     android:padding="4dp"
                     android:visibility="gone" >
 
@@ -277,7 +275,6 @@
                     android:ems="15"
                     android:singleLine="true"
                     android:inputType="textEmailAddress"
-                    android:nextFocusDown="@+id/user_info_old_password"
                     android:padding="4dp"
                     android:visibility="gone" />
             </RelativeLayout>
@@ -321,7 +318,6 @@
                 android:hint="@string/user_tab_info_old_pass"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
-                android:nextFocusUp="@id/sign_in_username"
                 android:padding="4dp"
                 android:singleLine="true" />
 
@@ -365,7 +361,6 @@
                 android:hint="@string/auth_confirm_password"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
-                android:nextFocusUp="@id/sign_in_username"
                 android:padding="4dp"
                 android:singleLine="true" />
 

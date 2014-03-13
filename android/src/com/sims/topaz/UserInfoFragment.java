@@ -577,14 +577,19 @@ PictureUploadDelegate{
 		mUser = user;
 		//We are setting the fields with the fields received from the server
 		mStatusEditText.setText(mUser.getStatus());
-
+		mUserSnippetTextView.setText(mUser.getStatus());
+		
 		mEmailEditText.setText(mUser.getEmail());
 		mEmailTextView.setText(mUser.getEmail());
 
 		mUserEditText.setText(mUser.getUserName());
 		mUserTextView.setText(mUser.getUserName());
-
+		mUserTitleTextView.setText(mUser.getUserName());
+		
 		mSaveNewPasswordButton.setEnabled(true);
+		
+		
+		
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.user_tab_save_ok), 
 				Toast.LENGTH_SHORT).show();

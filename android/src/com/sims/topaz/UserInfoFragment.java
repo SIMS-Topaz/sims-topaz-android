@@ -108,7 +108,6 @@ PictureUploadDelegate{
 		if(getArguments()!=null){
 			mUser = (User) getArguments().getSerializable(USER);
 		}	
-		setRetainInstance(true);
 	}
 
 

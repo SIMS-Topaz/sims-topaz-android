@@ -259,7 +259,6 @@ OnMapLoadedCallback
 		//http://developer.android.com/reference/android/app/Fragment.html
 		//We have to user getChildFragmentManager for nested fragments
 		FragmentManager fm = getChildFragmentManager(); 
-		fm.popBackStack(FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,

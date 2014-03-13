@@ -189,22 +189,20 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 				transaction.commit();	
 				
 				mListMessagesListView = (ListView)getView().findViewById(R.id.fragment_user_comments__list); 
-				if(mUser!=null && mUser.getPictureUrl()!=null){
-					LoadPictureTask setImageTask = new LoadPictureTask(this);
-					setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());				
-				}else{
-					UserMessageAdapter adapter = new UserMessageAdapter(SimsContext.getContext(),
-							R.layout.fragment_comment_item,
-							mUser.getMessages(),
-							CameraUtils.getBytesFromDrawable(null));
-					
-					if(mUser.getMessages().size() == 0){
-						//TODO put the fragment on the center
-					}
-					mListMessagesListView.setAdapter(adapter);
-					int h = ListViewSizeHelper.getListViewSize(mListMessagesListView);
-					if(userInfoFragment.getView()!=null && h>userInfoFragment.getView().getLayoutParams().height){
-						ListViewSizeHelper.setListViewSize(h, mListMessagesListView);
+				if(mUser!=null){
+					if(mUser.getPictureUrl()!=null){
+						LoadPictureTask setImageTask = new LoadPictureTask(this);
+						setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());				
+					}else{
+						UserMessageAdapter adapter = new UserMessageAdapter(SimsContext.getContext(),
+								R.layout.fragment_comment_item,
+								mUser.getMessages(),
+								null);
+						
+						if(mUser.getMessages().size() == 0){
+							//TODO put the fragment on the center
+						}
+						mListMessagesListView.setAdapter(adapter);
 					}
 				}
 			}else{
@@ -232,7 +230,6 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 			//TODO put the fragment on the center
 		}
 		mListMessagesListView.setAdapter(adapter);
-		ListViewSizeHelper.getListViewSize(mListMessagesListView);
 	}
 
 

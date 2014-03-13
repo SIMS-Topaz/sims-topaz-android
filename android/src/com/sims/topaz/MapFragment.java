@@ -305,11 +305,7 @@ OnMapLoadedCallback
 			mLocationClient.connect();
 		timerSeconds.start();
 		timerOneMinute.start();
-		
-		getFragmentManager().popBackStack(MapFragment.FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		getFragmentManager().popBackStack(MapFragment.FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		getFragmentManager().popBackStack(MapFragment.FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		 			
+
 	}
 
 	/**

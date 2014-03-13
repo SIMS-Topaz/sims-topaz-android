@@ -52,8 +52,8 @@ public class NetworkRestModule {
 
 
 	public static final String SERVER_IMG_BASEURL = "http://91.121.16.137:8080/";
-	public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
-	//public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.3/";
+	//public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
+	public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.3/";
 	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
 	
 	

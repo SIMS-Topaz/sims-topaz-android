@@ -7,18 +7,17 @@
     <LinearLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:baselineAligned="false"
         android:orientation="horizontal" >
 
-        <fragment
+        <LinearLayout
             android:id="@+id/user_info_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_margin="8dp"
             android:layout_weight="1"
-            class="com.sims.topaz.UserInfoFragment"
             android:orientation="vertical" />
 
         <ListView

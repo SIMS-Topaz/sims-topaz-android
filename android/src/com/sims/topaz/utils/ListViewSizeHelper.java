@@ -21,15 +21,19 @@ public class ListViewSizeHelper {
 	            totalHeight += listItem.getMeasuredHeight();
             }
         }
-      //setting listview item in adapter
-        ViewGroup.LayoutParams params = myListView.getLayoutParams();
-        params.height = totalHeight + (myListView.getDividerHeight() * (myListAdapter.getCount() - 1));
-        myListView.setLayoutParams(params);
         // print height of adapter on log
         DebugUtils.log("height of listItem:"+ String.valueOf(totalHeight));
         return totalHeight;
         
     }
 
+	public static void setListViewSize(int totalHeight, ListView myListView){
+		ListAdapter myListAdapter = myListView.getAdapter();
+	      //setting listview item in adapter
+        ViewGroup.LayoutParams params = myListView.getLayoutParams();
+        params.height = totalHeight + (myListView.getDividerHeight() * (myListAdapter.getCount() - 1));
+        myListView.setLayoutParams(params);
+	}
+	
 // http://www.androidhub4you.com/2012/12/listview-into-scrollview-in-android.html#ixzz2vjpd6Ax0
 }

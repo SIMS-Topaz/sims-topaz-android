@@ -7,6 +7,7 @@ import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.SignUpDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 import com.sims.topaz.utils.AuthUtils;
@@ -228,8 +229,11 @@ public class SignUpFragment extends Fragment implements SignUpDelegate, ErreurDe
 	public void networkError() {
 		mSignupButton.setEnabled(true);
 		mCallback.onHideProgressBar();
-		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
-	}
+		DebugUtils.log("Signin_networkError");
+
+		Toast.makeText(SimsContext.getContext(),
+				getResources().getString(R.string.erreur_gen),
+				Toast.LENGTH_SHORT).show();		}
 
 	@Override
 	public void afterSignUp(User user) {

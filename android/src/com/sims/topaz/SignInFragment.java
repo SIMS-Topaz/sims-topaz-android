@@ -8,6 +8,7 @@ import com.sims.topaz.network.interfaces.SignInDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
@@ -172,8 +173,9 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 		NetworkRestModule.resetHttpClient();
 		mLoginButton.setEnabled(true);
 		mCallback.onHideProgressBar();
-		Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
+		DebugUtils.log("Signin_apiError");
 
+		
 		// Auth error
 		if(error.getCode().equals(401)) {
 			if(error.getMsg().equals("USER_ERR")) {
@@ -184,7 +186,9 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 				mPasswordErrorTextView.setVisibility(TextView.VISIBLE);
 			}
 		} else {
-			Toast.makeText(getActivity(), "apiError", Toast.LENGTH_SHORT).show();
+			Toast.makeText(SimsContext.getContext(),
+					getResources().getString(R.string.erreur_gen),
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -194,8 +198,12 @@ implements SignInDelegate, ErreurDelegate, TextWatcher{
 		if(mCallback!=null){
 			mCallback.onHideProgressBar();
 		}
-		Toast.makeText(getActivity(), "networkError", Toast.LENGTH_SHORT).show();
-	}
+		DebugUtils.log("Signin_networkError");
+
+		Toast.makeText(SimsContext.getContext(),
+				getResources().getString(R.string.erreur_gen),
+				Toast.LENGTH_SHORT).show();	
+		}
 
 	private void signInAction(){
 		checkInput(mUserNameEditText.getText().toString(),

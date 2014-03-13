@@ -126,8 +126,8 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 		if( mFarLeft != null &&mNearRight !=null && mNetworkModule != null ){	
 					Toast.makeText(SimsContext.getContext(), tx, Toast.LENGTH_SHORT).show();
 					try {
-						mNetworkModule.getPreviewsByTag(mNearRight, mNearRight, 
-								URLEncoder.encode(tx.toString(), "utf8"));
+						mNetworkModule.getPreviewsByTag(mFarLeft, mNearRight, 
+								URLEncoder.encode(tx.toString().replaceAll("#", ""), "utf8"));
 					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 					}

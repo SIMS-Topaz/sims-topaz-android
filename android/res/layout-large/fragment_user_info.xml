@@ -84,6 +84,7 @@
                     style="@style/text_dark_gray_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:layout_toLeftOf="@id/linearLayout1"
                     android:layout_toRightOf="@id/user_info_status_text"
                     android:ems="10"
@@ -187,6 +188,7 @@
                     android:layout_toRightOf="@id/user_info_username_text_static"
                     android:layout_toLeftOf="@id/layout_buttons_username"
                     android:ems="15"
+                    android:singleLine="true"
                     android:nextFocusDown="@+id/sign_up_mail"
                     android:padding="4dp"
                     android:visibility="gone" >
@@ -273,6 +275,7 @@
                     android:layout_toRightOf="@id/user_info_email_text_static"
                     android:layout_toLeftOf="@id/layout_buttons_email"
                     android:ems="15"
+                    android:singleLine="true"
                     android:inputType="textEmailAddress"
                     android:nextFocusDown="@+id/user_info_old_password"
                     android:padding="4dp"

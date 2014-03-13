@@ -259,7 +259,7 @@ OnMapLoadedCallback
 	public void onMapLongClick(LatLng point) {
 		//http://developer.android.com/reference/android/app/Fragment.html
 		//We have to user getChildFragmentManager for nested fragments
-		FragmentManager fm = getChildFragmentManager(); 
+		FragmentManager fm = getFragmentManager(); 
 		
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
@@ -428,7 +428,7 @@ OnMapLoadedCallback
 		CommentFragment fragment = CommentFragment.newInstance(item.getPreview().getId());
 		//http://developer.android.com/reference/android/app/Fragment.html
 		//We have to user getChildFragmentManager
-		FragmentManager fm = getChildFragmentManager(); 
+		FragmentManager fm = getFragmentManager(); 
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_none);
@@ -452,7 +452,7 @@ OnMapLoadedCallback
 		
 		//http://developer.android.com/reference/android/app/Fragment.html
 		//We have to user getChildFragmentManager for nested fragments
-		FragmentManager fm = getChildFragmentManager(); 
+		FragmentManager fm = getFragmentManager(); 
 		Fragment f = PreviewListFragment.newInstance(previewList);
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,

@@ -137,7 +137,7 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
 
 
-		if(!isMyProfile){
+		if(isMyProfile){
 			if (!tabletSize) {
 				UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
 				UserCommentFragment userCommentFragment =UserCommentFragment.newInstance(mUser, null);

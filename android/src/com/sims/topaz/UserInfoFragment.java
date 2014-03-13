@@ -493,12 +493,13 @@ PictureUploadDelegate{
 	private void saveNewPassword(){
 
 		String password = mNewPassEditText.getText().toString();
+		String  oldPassword = mPassEditText.getText().toString();
 		boolean checkPass = mPasswordLayout.getVisibility()== View.VISIBLE;
 
 		if(checkPass && checkConfirmPassword()){
 			mSaveNewPasswordButton.setEnabled(false);
 			mUser.setPassword(password);
-			mUser.setStatus(mStatusEditText.getText().toString());
+			mUser.setOldPassword(oldPassword);
 			mRestModule.postUserInfo(mUser);
 		}
 	}

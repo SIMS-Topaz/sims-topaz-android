@@ -8,12 +8,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements Serializable{
-	
+
 	private static final long serialVersionUID = 7526472295622776147L;
-	
+
 	@JsonProperty("user_picture")
 	private String pictureUrl;
-	
+
 	@JsonProperty("user_id")
 	private Long id;
 
@@ -23,6 +23,11 @@ public class User implements Serializable{
 	@JsonProperty("user_password")
 	private String password;
 
+	@JsonProperty("user_old_password")
+	private String old_password;
+
+
+
 	@JsonProperty("user_email")
 	private String email;
 
@@ -31,14 +36,17 @@ public class User implements Serializable{
 
 	@JsonProperty("user_messages")
 	private List<Message> messages;	
-	
+
 	@JsonProperty("user_likes")
 	private List<Comment> likes;	
-	
+
 	@JsonProperty("user_status")
 	private String status;		
 
-	
+
+	public void setOldPassword(String old_password) {
+		this.old_password = old_password;
+	}
 	
 	public void setPictureUrl(String pictureUrl) {
 		this.pictureUrl = pictureUrl;

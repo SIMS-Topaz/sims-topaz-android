@@ -24,13 +24,17 @@ import com.sims.topaz.interfaces.OnMoveCamera;
 import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.network.modele.User;
+import com.sims.topaz.utils.AuthUtils;
+import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 
 
 public class DrawerActivity extends ActionBarActivity
 	implements EditMessageFragment.OnNewMessageListener,
 				OnMoveCamera, 
 				OnShowUserProfile,
-				PreviewListFragment.OnPreviewClickListener
+				PreviewListFragment.OnPreviewClickListener,
+				OnShowGeneralUserProfile
 				{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
@@ -256,8 +260,12 @@ public class DrawerActivity extends ActionBarActivity
     	FragmentManager fragmentManager = getSupportFragmentManager();
     	fragmentManager.beginTransaction().remove(mLastFragment);
     	
-		mLastFragment = UserFragment.newInstance(false, id);
-		
+    	if(AuthUtils.getSessionLongValue
+				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID, (long)0) != id){
+    		mLastFragment = UserFragment.newInstance(false, id);
+    	}else{
+    		mLastFragment = UserFragment.newInstance(true);
+    	}
 		fragmentManager
 		.beginTransaction()
 		.replace(R.id.content_frame, mLastFragment)
@@ -280,5 +288,17 @@ public class DrawerActivity extends ActionBarActivity
 	
 	public Fragment getLastFragment() {
 		return mLastFragment;
+	}
+
+
+	@Override
+	public void onShowGeneralUserProfileFragment(User user) {
+		UserInfoGeneralFragment fragment = UserInfoGeneralFragment.newInstance(user);
+
+		//create transaction
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(R.id.fragment_container, fragment);
+		transaction.addToBackStack(FRAGMENT_COMMENT);
+		transaction.commit();		
 	}
 }

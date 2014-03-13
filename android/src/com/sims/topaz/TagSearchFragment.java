@@ -76,8 +76,8 @@ public class TagSearchFragment extends Fragment implements MessageDelegate,Erreu
 			mNearRight = new LatLng(getArguments().getDouble(KEY_VISIBLE_REGION_RIGHT_LAT), 
 					getArguments().getDouble(KEY_VISIBLE_REGION_RIGHT_LNG));
 		}
+		setRetainInstance(true);
 	}
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {

@@ -1,47 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     android:background="@color/white"
+    android:orientation="vertical"
     android:padding="8dp" >
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/message_item_linear_layout_first"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/message_item_image"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:contentDescription="@string/comment_user_icon"
-            android:src="@drawable/ic_user"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_user" />
 
         <TextView
-            style="@style/text_gray_big"
             android:id="@+id/message_item_person_name"
+            style="@style/text_gray_big"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/message_item_image"
             android:text="Name" />
 
         <TextView
-            style="@style/text_gray_big"
             android:id="@+id/message_item_time"
+            style="@style/text_gray_big"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:text="time: 15:52" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <TextView
-        style="@style/text_gray_normal"
         android:id="@+id/message_item_text"
+        style="@style/text_gray_normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/message_item_linear_layout_first"
         android:text="This is a fake comment" />
 
-</RelativeLayout>
+</LinearLayout>

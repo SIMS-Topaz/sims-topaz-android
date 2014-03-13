@@ -128,6 +128,15 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 		mDislikeButton = (ImageButton)v2.findViewById(R.id.comment_dislike);
 		mProgressBarPicture = (ProgressBar)v2.findViewById(R.id.progressBarPicture);
 		mProgressBarPicture.setVisibility(View.GONE);
+		ImageButton mImageMessage = (ImageButton) v2.findViewById(R.id.comment_image_first_comment);
+		mImageMessage.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(mCallback!=null){
+					mCallback.onShowUserProfileFragment(mMessage.getUserId());
+				}
+			}
+		});
 		
 		v2.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT));
 		mListComments.addHeaderView(v2);
@@ -289,13 +298,16 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 	protected void sendComment() {
 		if(mMessage==null) return;
 		String comm = mNewComment.getText().toString();
-		mNewComment.setEnabled(false);
-		mSendCommentButton.setEnabled(false);
-		Comment comment = new Comment();
-		comment.setText(comm);
-		comment.setUserName(AuthUtils.getSessionStringValue
-				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
-		restModule.postComment(comment, mMessage);	
+		
+		if(comm.length() > 0) {
+			mNewComment.setEnabled(false);
+			mSendCommentButton.setEnabled(false);
+			Comment comment = new Comment();
+			comment.setText(comm);
+			comment.setUserName(AuthUtils.getSessionStringValue
+					(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_USERNAME));
+			restModule.postComment(comment, mMessage);
+		}
 	}
 
 	private void loadMessage() {

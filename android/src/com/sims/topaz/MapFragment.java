@@ -86,8 +86,6 @@ OnMapLoadedCallback
 	private NetworkRestModule mNetworkModule; 
 	//bulle
 	private BulleAdapter mBulleAdapter;
-	// banner
-	private TextView bannerNotVerified;
 	//clusters
 	private ClusterManager<PreviewClusterItem> mClusterManager;
 	//current values
@@ -259,7 +257,7 @@ OnMapLoadedCallback
 	@Override
 	public void onMapLongClick(LatLng point) {
 		//http://developer.android.com/reference/android/app/Fragment.html
-		//We have to user getChildFragmentManager
+		//We have to user getChildFragmentManager for nested fragments
 		FragmentManager fm = getChildFragmentManager(); 
 		fm.popBackStack(FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		
@@ -322,6 +320,8 @@ OnMapLoadedCallback
 		timerOneMinute.start();
 		getChildFragmentManager().popBackStack(FRAGMENT_COMMENT, 
 				FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		getChildFragmentManager().popBackStack(FRAGMENT_PREVIEW,
+				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 
 	/**
@@ -335,6 +335,7 @@ OnMapLoadedCallback
 		timerSeconds.cancel();
 		timerOneMinute.cancel();
 	}
+
 	
 	
 	@Override
@@ -435,7 +436,7 @@ OnMapLoadedCallback
 		fm.popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
-				R.drawable.animation_slide_out_right);
+				R.drawable.animation_none);
 		transaction.replace(R.id.fragment_container, fragment);
 		transaction.addToBackStack(FRAGMENT_COMMENT);
 		transaction.commit();
@@ -461,7 +462,7 @@ OnMapLoadedCallback
 		fm.popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
-				R.drawable.animation_bottom_down);
+				R.drawable.animation_none);
 		transaction.replace(R.id.fragment_container, f);
 		transaction.addToBackStack(FRAGMENT_PREVIEW);
 

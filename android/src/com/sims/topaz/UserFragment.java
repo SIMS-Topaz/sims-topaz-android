@@ -1,7 +1,6 @@
 package com.sims.topaz;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sims.topaz.AsyncTask.LoadPictureTask;
@@ -27,9 +25,7 @@ import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.DebugUtils;
-import com.sims.topaz.utils.ListViewSizeHelper;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
-import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 

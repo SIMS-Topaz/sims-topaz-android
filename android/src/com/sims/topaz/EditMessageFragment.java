@@ -243,37 +243,16 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK) {
-        	
+        //if (resultCode == Activity.RESULT_OK)
+        {
         	Bitmap bm = null;
         	
             if (requestCode == CameraUtils.REQUEST_CODE_GALLERY) {
                 Uri selectedImageUri = data.getData();
                 String picturePath = getPath(selectedImageUri, this.getActivity());
-                bm = BitmapFactory.decodeFile(picturePath);   
-   
+                bm = CameraUtils.imgRotation(picturePath);
             } else if (requestCode == CameraUtils.REQUEST_CODE_TAKE_PICTURE) {
-                bm = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath());
-                DebugUtils.log("getHeight=" + bm.getHeight());
-
-                // Rotation
-				try {
-					ExifInterface exif = new ExifInterface(CameraUtils.getTempFile().getPath());
-	                DebugUtils.log("EXIF TAG_ORIENTATION value = " + exif.getAttribute(ExifInterface.TAG_ORIENTATION));
-	                
-	                Matrix matrix = new Matrix();
-					if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("6")){
-						matrix.postRotate(90);
-	                }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("8")){
-	                	matrix.postRotate(270);
-	                }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("3")){
-	                	matrix.postRotate(180);
-	                }
-
-	                bm = Bitmap.createBitmap(bm , 0, 0, bm .getWidth(), bm .getHeight(), matrix, true);
-				} catch (IOException e) {
-					DebugUtils.log("ExifInterface Error "+ e);
-				}
+                bm = CameraUtils.imgRotation(CameraUtils.getTempFile().getPath());
             }
             
             if(bm != null) {

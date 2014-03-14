@@ -7,13 +7,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import eu.janmuller.android.simplecropimage.CropImage;
-
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -117,5 +118,28 @@ public class CameraUtils {
 		else{
 			return null;
 		}
+	}
+	
+	public static Bitmap imgRotation(String fileName) {
+
+		Bitmap bm = BitmapFactory.decodeFile(fileName);
+		
+		try {
+			ExifInterface exif = new ExifInterface(fileName);
+	        DebugUtils.log("EXIF TAG_ORIENTATION value = " + exif.getAttribute(ExifInterface.TAG_ORIENTATION));
+	        Matrix matrix = new Matrix();
+			if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("6")){
+				matrix.postRotate(90);
+	        }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("8")){
+	        	matrix.postRotate(270);
+	        }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("3")){
+	        	matrix.postRotate(180);
+	        }
+			bm = Bitmap.createBitmap(bm , 0, 0, bm .getWidth(), bm .getHeight(), matrix, true);
+		} catch (IOException e) {
+			DebugUtils.log("ExifInterface Error "+ e);
+		}
+
+        return bm;
 	}
 }

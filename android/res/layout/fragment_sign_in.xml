@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="8dp"
+        android:singleLine="true"
         android:ems="10"
         android:hint="@string/auth_username"
         android:nextFocusDown="@+id/sign_in_password"
@@ -44,12 +45,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="8dp"
+        android:singleLine="true"
         android:hint="@string/auth_password"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:nextFocusUp="@id/sign_in_username"
-        android:padding="4dp"
-        android:singleLine="true" />
+        android:padding="4dp" />
 
     <TextView
         android:id="@+id/sign_in_password_error"

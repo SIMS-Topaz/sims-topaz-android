@@ -1,6 +1,7 @@
 package com.sims.topaz;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
@@ -248,9 +251,29 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
                 Uri selectedImageUri = data.getData();
                 String picturePath = getPath(selectedImageUri, this.getActivity());
                 bm = BitmapFactory.decodeFile(picturePath);   
+   
             } else if (requestCode == CameraUtils.REQUEST_CODE_TAKE_PICTURE) {
                 bm = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath());
                 DebugUtils.log("getHeight=" + bm.getHeight());
+
+                // Rotation
+				try {
+					ExifInterface exif = new ExifInterface(CameraUtils.getTempFile().getPath());
+	                DebugUtils.log("EXIF TAG_ORIENTATION value = " + exif.getAttribute(ExifInterface.TAG_ORIENTATION));
+	                
+	                Matrix matrix = new Matrix();
+					if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("6")){
+						matrix.postRotate(90);
+	                }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("8")){
+	                	matrix.postRotate(270);
+	                }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("3")){
+	                	matrix.postRotate(180);
+	                }
+
+	                bm = Bitmap.createBitmap(bm , 0, 0, bm .getWidth(), bm .getHeight(), matrix, true);
+				} catch (IOException e) {
+					DebugUtils.log("ExifInterface Error "+ e);
+				}
             }
             
             if(bm != null) {

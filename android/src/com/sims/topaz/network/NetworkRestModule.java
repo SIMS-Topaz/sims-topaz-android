@@ -18,7 +18,6 @@ import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.bouncycastle.util.Strings;
 
 import android.os.AsyncTask;
 
@@ -52,10 +51,8 @@ public class NetworkRestModule {
 
 
 	public static final String SERVER_IMG_BASEURL = "http://91.121.16.137:8080/";
-	public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
-	//public static final String SERVER_URL = "http://91.121.16.137:8080/api/v1.3/";
-	//public static final String SERVER_URL = "http://192.168.56.1:8888/";
-	
+	//public static final String SERVER_URL = "http://topaz13.apiary.io/api/v1.3/";
+	public static final String SERVER_URL = "https://91.121.16.137:8081/api/v1.3/";	
 	
 	private Object delegate;
 	private static HttpClient httpclient;

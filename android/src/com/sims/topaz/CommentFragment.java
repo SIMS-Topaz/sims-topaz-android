@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
@@ -126,6 +127,8 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 		mFirstComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mFirstCommentNameUser = (TextView) v2.findViewById(R.id.comment_person_name);
 		mFirstCommentNameUser.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+		mFirstCommentNameUser.setPaintFlags(mFirstCommentNameUser.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+		
 		mFirstCommentTimestamp = (TextView) v2.findViewById(R.id.comment_time);
 		mFirstCommentTimestamp.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 		mFirstCommentPicture = (ImageView) v2.findViewById(R.id.comment_first_picture_view);
@@ -135,15 +138,18 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 		mDislikeButton = (ImageButton)v2.findViewById(R.id.comment_dislike);
 		mProgressBarPicture = (ProgressBar)v2.findViewById(R.id.progressBarPicture);
 		mProgressBarPicture.setVisibility(View.GONE);
-		ImageButton mImageMessage = (ImageButton) v2.findViewById(R.id.comment_image_first_comment);
-		mImageMessage.setOnClickListener(new View.OnClickListener() {
+		View.OnClickListener clickListener = new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if(mCallback!=null){
 					mCallback.onShowUserProfileFragment(mMessage.getUserId());
 				}
 			}
-		});
+		};
+		
+		ImageButton mImageMessage = (ImageButton) v2.findViewById(R.id.comment_image_first_comment);
+		mImageMessage.setOnClickListener(clickListener);
+		mFirstCommentNameUser.setOnClickListener(clickListener);
 		
 		v2.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT));
 		mListComments.addHeaderView(v2);

@@ -40,6 +40,8 @@
                 style="@style/text_dark_gray_big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/blue"
+                android:clickable="true"
                 android:text="@string/comment_loading" />
 
             <TextView

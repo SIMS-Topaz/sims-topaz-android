@@ -10,6 +10,7 @@ import com.sims.topaz.modele.CommentItem;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,7 @@ public class CommentAdapter extends ArrayAdapter<CommentItem> {
 				view = inflater.inflate(R.layout.fragment_comment_item, null);
 				holder.mUserName = (TextView) view.findViewById(R.id.comment_item_person_name);
 				holder.mUserName.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+				holder.mUserName.setPaintFlags(holder.mUserName.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
 	
 				holder.mUserComment = (TextView) view.findViewById(R.id.comment_item_text);
 				holder.mUserComment.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
@@ -59,7 +61,8 @@ public class CommentAdapter extends ArrayAdapter<CommentItem> {
 				holder.mCommentDate.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 				
 				holder.mUserImage = (ImageButton) view.findViewById(R.id.comment_item_image_first_comment);
-				holder.mUserImage.setOnClickListener(new View.OnClickListener() {
+				
+				View.OnClickListener mClickListener = new View.OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
@@ -67,7 +70,11 @@ public class CommentAdapter extends ArrayAdapter<CommentItem> {
 						((OnShowUserProfile)delegate.get()).onShowUserProfileFragment(ci.getUserId());
 						
 					}
-				});
+				};
+				
+				holder.mUserImage.setOnClickListener(mClickListener);
+				holder.mUserName.setOnClickListener(mClickListener);
+				
 				view.setTag(holder);
 			} else {
 				holder = (ViewHolder) view.getTag();

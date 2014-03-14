@@ -36,7 +36,8 @@ public class DrawerActivity extends ActionBarActivity
 	implements EditMessageFragment.OnNewMessageListener,
 				OnMoveCamera, 
 				OnShowUserProfile,
-				PreviewListFragment.OnPreviewClickListener
+				PreviewListFragment.OnPreviewClickListener,
+				UserCommentFragment.OnMessageClickListener
 				{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
@@ -296,6 +297,19 @@ public class DrawerActivity extends ActionBarActivity
 	
 	public Fragment getLastFragment() {
 		return mLastFragment;
+	}
+
+
+	@Override
+	public void onMessageClick(Message message) {
+		CommentFragment fragment = CommentFragment.newInstance(message.getId());
+		//create transaction
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
+				R.drawable.animation_slide_out_right);
+		transaction.replace(R.id.fragment_container, fragment);
+		transaction.addToBackStack(FRAGMENT_COMMENT);
+		transaction.commit();		
 	}
 
 

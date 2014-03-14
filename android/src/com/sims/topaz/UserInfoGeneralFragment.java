@@ -1,5 +1,6 @@
 package com.sims.topaz;
 
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -8,12 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sims.topaz.AsyncTask.LoadPictureTask;
 import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
+import com.sims.topaz.UserCommentFragment.OnMessageClickListener;
 import com.sims.topaz.adapter.UserMessageAdapter;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
@@ -22,7 +26,8 @@ import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
-public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate, LoadPictureTaskInterface{
+public class UserInfoGeneralFragment extends Fragment 
+implements  ErreurDelegate, LoadPictureTaskInterface,AbsListView.OnItemClickListener  {
 	private static String USER = "user_info_general_fragment_user";
 	private User mUser;
 	private TextView mUserTitleTextView;
@@ -30,6 +35,7 @@ public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate
 	private ImageView mUserImage;
 	private AbsListView mListMessagesListView;
 	private byte[] mImage;
+	private OnMessageClickListener mListener;
 	
 	public static UserInfoGeneralFragment newInstance(User mUser){
 		UserInfoGeneralFragment fragment= new UserInfoGeneralFragment();
@@ -63,6 +69,7 @@ public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate
 		mUserImage = (ImageView)v.findViewById(R.id.username_image);
 		//listview
 		mListMessagesListView = (AbsListView)v.findViewById(R.id.fragment_user_comments__list);
+		mListMessagesListView.setOnItemClickListener(this);
 		if(mUser!=null){
 			if(mUser.getUserName()!=null)
 				mUserTitleTextView.setText(mUser.getUserName());
@@ -106,6 +113,31 @@ public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.erreur_gen),
 				Toast.LENGTH_SHORT).show();		
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		if (null != mListener) {
+			mListener.onMessageClick(mUser.getMessages().get(position));
+		}		
+		Toast.makeText(getActivity(), "onItemClick", Toast.LENGTH_SHORT).show();
+	}
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mListener = (OnMessageClickListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnMessageClickListener");
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mListener = null;
 	}
 }
 

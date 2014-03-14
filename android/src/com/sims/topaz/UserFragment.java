@@ -1,5 +1,6 @@
 package com.sims.topaz;
 
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,9 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.sims.topaz.UserCommentFragment.OnMessageClickListener;
 import com.sims.topaz.AsyncTask.LoadPictureTask;
 import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.adapter.UserMessageAdapter;
@@ -20,6 +23,7 @@ import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
 import com.sims.topaz.network.modele.ApiError;
+import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.CameraUtils;
@@ -29,7 +33,8 @@ import com.sims.topaz.utils.SimsContext;
 
 
 public class UserFragment  extends Fragment 
-implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterface {
+implements UserDelegate,ErreurDelegate, OnShowDefaultPage,
+LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener {
 
 	private ViewPager mViewPager;
 	private static String FRAGMENT_GENERAL_USER = "fragment_user_general";
@@ -40,6 +45,7 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 	private User mUser = null;
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private ListView mListMessagesListView;
+	private OnMessageClickListener mListener;
 
 	public static UserFragment newInstance(boolean isMyProfile){
 		UserFragment fragment= new UserFragment();
@@ -57,6 +63,22 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 		fragment.setArguments(bundle);
 		return fragment;
 	}	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mListener = (OnMessageClickListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnMessageClickListener");
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mListener = null;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -153,7 +175,8 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 				transaction.replace(R.id.user_info_fragment, userInfoFragment);
 				transaction.commit();	
 
-				mListMessagesListView = (ListView)getView().findViewById(R.id.fragment_user_comments__list); 
+				mListMessagesListView = (ListView)getView().findViewById(R.id.fragment_user_comments__list);
+				mListMessagesListView.setOnItemClickListener(this);
 				if(mUser!=null){
 					if(mUser.getPictureUrl()!=null){
 						LoadPictureTask setImageTask = new LoadPictureTask(this);
@@ -202,9 +225,20 @@ implements UserDelegate,ErreurDelegate, OnShowDefaultPage,LoadPictureTaskInterfa
 		mListMessagesListView.setAdapter(adapter);
 	}
 
+	@Override
+	public void onMessageClick(Message message) {
+		if (null != mListener) {
+			mListener.onMessageClick(message);
+		}				
+	}
 
-
-
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		if (null != mListener) {
+			mListener.onMessageClick(mUser.getMessages().get(position));
+		}				
+	}
 
 
 }

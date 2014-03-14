@@ -1,12 +1,14 @@
 package com.sims.topaz;
 
 import com.sims.topaz.adapter.UserMessageAdapter;
+import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,15 +17,23 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class UserCommentFragment  extends Fragment  {
+public class UserCommentFragment  extends Fragment implements ListView.OnItemClickListener  {
 	private ListView mListMessagesListView;
 	private User mUser;
 	private byte[] mImage;
 	private static String USER = "user_comment_fragment_user";
-
+	private OnMessageClickListener mListener;
+	public interface OnMessageClickListener {
+		public void onMessageClick(Message message);
+	}
+	
+	
+	
 	public static UserCommentFragment newInstance(User user, byte[] image){
 		UserCommentFragment fragment= new UserCommentFragment();
 		Bundle bundle = new Bundle();
@@ -47,6 +57,7 @@ public class UserCommentFragment  extends Fragment  {
 
 
 		mListMessagesListView = (ListView)v.findViewById(R.id.fragment_user_comments__list);
+		mListMessagesListView.setOnItemClickListener(this);
 		if(mUser!=null && mUser.getMessages()!=null){
 			UserMessageAdapter adapter = new UserMessageAdapter(SimsContext.getContext(),
 					R.layout.fragment_comment_item,
@@ -91,5 +102,31 @@ public class UserCommentFragment  extends Fragment  {
 		return v;
 	}
 
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		if (null != mListener) {
+			mListener.onMessageClick(mUser.getMessages().get(position));
+		}		
+		Toast.makeText(getActivity(), "onItemClick", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mListener = (OnMessageClickListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnMessageClickListener");
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mListener = null;
+	}
 
 }

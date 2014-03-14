@@ -38,7 +38,7 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal" />
 
-    <ListView
+    <GridView
         android:id="@+id/fragment_user_comments__list"
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -46,9 +46,10 @@
         android:background="@color/light_light_gray"
         android:divider="@android:color/transparent"
         android:dividerHeight="8dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="8dp" >
-    </ListView>
+        android:numColumns="2"
+        android:paddingTop="8dp"
+        android:horizontalSpacing="8dp"
+        android:verticalSpacing="8dp" >
+    </GridView>
 
 </LinearLayout>

@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +19,6 @@ import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.User;
-import com.sims.topaz.utils.ListViewSizeHelper;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
@@ -29,7 +28,7 @@ public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate
 	private TextView mUserTitleTextView;
 	private TextView mUserSnippetTextView;
 	private ImageView mUserImage;
-	private ListView mListMessagesListView;
+	private AbsListView mListMessagesListView;
 	private byte[] mImage;
 	
 	public static UserInfoGeneralFragment newInstance(User mUser){
@@ -63,7 +62,7 @@ public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate
 		//user imgae
 		mUserImage = (ImageView)v.findViewById(R.id.username_image);
 		//listview
-		mListMessagesListView = (ListView)v.findViewById(R.id.fragment_user_comments__list);
+		mListMessagesListView = (AbsListView)v.findViewById(R.id.fragment_user_comments__list);
 		if(mUser!=null){
 			if(mUser.getUserName()!=null)
 				mUserTitleTextView.setText(mUser.getUserName());
@@ -85,7 +84,6 @@ public class UserInfoGeneralFragment extends Fragment implements  ErreurDelegate
 					mUser.getMessages(),
 					mImage);
 			mListMessagesListView.setAdapter(adapter);
-			ListViewSizeHelper.getListViewSize(mListMessagesListView);
 		}
 
 		return v;

@@ -5,6 +5,7 @@
     android:layout_margin="8dp"
     android:background="@color/white"
     android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants"
     android:padding="8dp" >
 
     <RelativeLayout
@@ -12,53 +13,55 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <ImageView
+        <ImageButton
             android:id="@+id/preview_item_image_first_comment"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:contentDescription="@string/comment_user_icon"
-            android:src="@drawable/ic_user"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            android:background="@drawable/ic_user" />
 
         <TextView
-            style="@style/text_gray_big"
             android:id="@+id/preview_item_username"
+            style="@style/text_gray_big"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/preview_item_image_first_comment"
-            android:text="Name" />
+            android:clickable="true"
+            android:text="Name"
+            android:textColor="@color/blue" />
 
         <TextView
-            style="@style/text_gray_big"
             android:id="@+id/preview_item_time"
+            style="@style/text_gray_big"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/preview_item_username"
             android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/preview_item_username"
             android:text="time: 15:52" />
     </RelativeLayout>
 
     <TextView
-        style="@style/text_gray_normal"
         android:id="@+id/preview_item_text"
+        style="@style/text_gray_normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This is a fake comment" />
-    
+
     <ProgressBar
         android:id="@+id/preview_item_like_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    
+
     <TextView
         android:id="@+id/preview_item_note"
         style="@style/text_gray_small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:gravity="right"
         android:padding="5dp"
-        android:text="@string/bulle_note"
-        android:gravity="right" />
+        android:text="@string/bulle_note" />
 
 </LinearLayout>

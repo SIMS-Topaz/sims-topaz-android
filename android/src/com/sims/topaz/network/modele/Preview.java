@@ -22,6 +22,10 @@ public class Preview {
 	@JsonProperty("user_name")
 	private String user_name;
 	
+	@JsonProperty("user_id")
+	private long user_id;
+
+	
 	@JsonProperty("is_full")
 	private Boolean isFull;
 	
@@ -58,6 +62,12 @@ public class Preview {
 		this.tags = message.getTags();
 	}
 	
+	
+	
+	public long getUserId() {
+		return user_id;
+	}
+
 	public List<String> getTags() {
 		return tags;
 	}

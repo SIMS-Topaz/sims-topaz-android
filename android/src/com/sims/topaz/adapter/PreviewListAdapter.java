@@ -1,18 +1,23 @@
 package com.sims.topaz.adapter;
 
+import java.lang.ref.WeakReference;
 import java.sql.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.sims.topaz.R;
+import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
@@ -20,10 +25,13 @@ import com.sims.topaz.utils.SimsContext;
 public class PreviewListAdapter extends ArrayAdapter<Preview> {
 
 	private int count = 0;
-	public PreviewListAdapter(Context context, int resource,
+	private WeakReference<Context> delegate;
+
+	public PreviewListAdapter(Context mDelegate, int resource,
 			List<Preview> objects) {
-		super(context, resource, objects);
+		super(mDelegate, resource, objects);
 		count = objects.size();
+		this.delegate = new WeakReference<Context>(mDelegate);
 	}
 	
 	@Override
@@ -31,7 +39,7 @@ public class PreviewListAdapter extends ArrayAdapter<Preview> {
 		return count;
 	}
 	
-	public View getView(int position, View convertView, ViewGroup parent){
+	public View getView(final int position, View convertView, ViewGroup parent){
 		View view = convertView;
 		ViewHolder holder = null; 
 		if(view == null){
@@ -39,8 +47,11 @@ public class PreviewListAdapter extends ArrayAdapter<Preview> {
 			LayoutInflater inflater = 
 					(LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.adapter_preview_item, null);
+			holder.mUserImage = (ImageButton)view.findViewById(R.id.preview_item_image_first_comment);
+						
 			holder.mUserName = (TextView) view.findViewById(R.id.preview_item_username);
 			holder.mUserName.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+			holder.mUserName.setPaintFlags(holder.mUserName.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
 			
 			holder.mText = (TextView) view.findViewById(R.id.preview_item_text);
 			holder.mText.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
@@ -52,6 +63,20 @@ public class PreviewListAdapter extends ArrayAdapter<Preview> {
 			
 			holder.mNote = (TextView) view.findViewById(R.id.preview_item_note);
 			holder.mNote.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
+			
+			OnClickListener mClickListener = new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Preview p = getItem(position);
+					((OnShowUserProfile)delegate.get()).onShowUserProfileFragment(p.getUserId());
+					
+				}
+			};
+			
+			holder.mUserImage.setOnClickListener(mClickListener);
+			holder.mUserName.setOnClickListener(mClickListener);
+			
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
@@ -82,6 +107,7 @@ public class PreviewListAdapter extends ArrayAdapter<Preview> {
 	}
 	
 	class ViewHolder {
+		ImageButton mUserImage;
 		TextView mUserName;
 		TextView mDate;
 		TextView mText;

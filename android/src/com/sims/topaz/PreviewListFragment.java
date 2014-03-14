@@ -16,6 +16,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.sims.topaz.adapter.PreviewListAdapter;
+import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.utils.DebugUtils;
 
@@ -29,7 +30,7 @@ import com.sims.topaz.utils.DebugUtils;
  * interface.
  */
 public class PreviewListFragment extends Fragment implements
-		AbsListView.OnItemClickListener {
+		AbsListView.OnItemClickListener, OnShowUserProfile {
 
 
 	private List<Preview> previews;
@@ -46,6 +47,7 @@ public class PreviewListFragment extends Fragment implements
 	 * Views.
 	 */
 	private ListAdapter mAdapter;
+	private OnShowUserProfile mCallback;
 
 	public static PreviewListFragment newInstance(List<Preview> param1) {
 		PreviewListFragment fragment = new PreviewListFragment();
@@ -63,17 +65,19 @@ public class PreviewListFragment extends Fragment implements
 	 */
 	public PreviewListFragment() {
 	}
+	
 
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		if(previews==null) DebugUtils.logException(
 				new Exception("preview list is null"));
-
 		mAdapter = new PreviewListAdapter(getActivity(),
 				R.layout.adapter_preview_item, 
 				previews);
+
 		setRetainInstance(true);
 
 	}
@@ -86,7 +90,8 @@ public class PreviewListFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_preview, container,
 				false);
-
+		
+		
 		// Set the adapter
 		mListView = (AbsListView) view.findViewById(android.R.id.list);
 		((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
@@ -102,6 +107,7 @@ public class PreviewListFragment extends Fragment implements
 		super.onAttach(activity);
 		try {
 			mListener = (OnPreviewClickListener) activity;
+			mCallback = (OnShowUserProfile) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnFragmentInteractionListener");
@@ -112,6 +118,7 @@ public class PreviewListFragment extends Fragment implements
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+		mCallback = null;
 	}
 
 	@Override
@@ -171,6 +178,14 @@ public class PreviewListFragment extends Fragment implements
 		public int compare(Preview lhs, Preview rhs) {
 			Long diff = rhs.getTimestamp() - lhs.getTimestamp();
 			return Long.signum(diff); 
+		}
+		
+	}
+
+	@Override
+	public void onShowUserProfileFragment(long id) {
+		if(mCallback != null){
+			mCallback.onShowUserProfileFragment(id);
 		}
 		
 	}

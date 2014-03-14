@@ -108,7 +108,6 @@ PictureUploadDelegate{
 		if(getArguments()!=null){
 			mUser = (User) getArguments().getSerializable(USER);
 		}	
-		setRetainInstance(true);
 	}
 
 
@@ -578,14 +577,19 @@ PictureUploadDelegate{
 		mUser = user;
 		//We are setting the fields with the fields received from the server
 		mStatusEditText.setText(mUser.getStatus());
-
+		mUserSnippetTextView.setText(mUser.getStatus());
+		
 		mEmailEditText.setText(mUser.getEmail());
 		mEmailTextView.setText(mUser.getEmail());
 
 		mUserEditText.setText(mUser.getUserName());
 		mUserTextView.setText(mUser.getUserName());
-
+		mUserTitleTextView.setText(mUser.getUserName());
+		
 		mSaveNewPasswordButton.setEnabled(true);
+		
+		
+		
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.user_tab_save_ok), 
 				Toast.LENGTH_SHORT).show();
@@ -619,9 +623,12 @@ PictureUploadDelegate{
 		final CharSequence[] items = { getString(R.string.select_img_take_photo),
 				getString(R.string.select_img_from_lib),
 				getString(R.string.select_img_close) };
+		
+		CameraUtils.removeTempFile();
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 		builder.setTitle(R.string.edit_add_image);
-
+		
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int item) {
@@ -640,7 +647,6 @@ PictureUploadDelegate{
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
 		Bitmap bitmap;
 
 		switch (requestCode) {
@@ -664,7 +670,6 @@ PictureUploadDelegate{
 			break;
 		case CameraUtils.REQUEST_CODE_CROP_IMAGE:
 			if(data == null) {
-				Toast.makeText(SimsContext.getContext(), getResources().getString(R.string.erreur_gen), Toast.LENGTH_SHORT).show();
 				return;}
 			String path = data.getStringExtra(CropImage.IMAGE_PATH);
 			if (path == null) {return;}
@@ -679,9 +684,6 @@ PictureUploadDelegate{
 			mRestModule.uploadPicture(pictureData);
 			break;
 		}
-
-		super.onActivityResult(requestCode, resultCode, data);
-
 	}
 
 

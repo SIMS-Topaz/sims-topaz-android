@@ -77,7 +77,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/linearLayout1"
                         android:layout_toRightOf="@id/user_info_status_text"
-                        android:nextFocusDown="@+id/user_info_username"
+                        android:singleLine="true"
                         android:padding="4dp" >
 
                         <requestFocus />
@@ -175,7 +175,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_toRightOf="@id/user_info_username_text_static"
                         android:layout_toLeftOf="@id/layout_buttons_user"
-                        android:nextFocusDown="@+id/sign_up_mail"
+                        android:singleLine="true"
                         android:padding="4dp"
                         android:visibility="gone" >
 
@@ -257,11 +257,11 @@
                         style="@style/text_dark_gray_normal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:singleLine="true"
                         android:layout_gravity="center_horizontal"
                         android:layout_toRightOf="@id/user_info_email_text_static"
                         android:layout_toLeftOf="@id/layout_buttons_email"
                         android:inputType="textEmailAddress"
-                        android:nextFocusDown="@+id/user_info_old_password"
                         android:padding="4dp"
                         android:visibility="gone" />
                 </RelativeLayout>
@@ -305,7 +305,6 @@
                     android:hint="@string/user_tab_info_old_pass"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:nextFocusUp="@id/sign_in_username"
                     android:padding="4dp"
                     android:singleLine="true" />
 
@@ -327,7 +326,6 @@
                     android:hint="@string/user_tab_info_new_pass"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:nextFocusUp="@id/sign_in_username"
                     android:padding="4dp"
                     android:singleLine="true" />
 
@@ -349,7 +347,6 @@
                     android:hint="@string/auth_confirm_password"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:nextFocusUp="@id/sign_in_username"
                     android:padding="4dp"
                     android:singleLine="true" />
 

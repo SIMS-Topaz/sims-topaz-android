@@ -74,7 +74,12 @@ public class PreviewListFragment extends Fragment implements
 		mAdapter = new PreviewListAdapter(getActivity(),
 				R.layout.adapter_preview_item, 
 				previews);
+		setRetainInstance(true);
+
 	}
+
+
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

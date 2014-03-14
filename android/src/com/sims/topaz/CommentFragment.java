@@ -9,9 +9,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,12 +69,14 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 	OnShowUserProfile mCallback;
 	
 	private static String ID_PREVIEW = "id_preview";
+	private static String FRAGMENT_USER = "fragment_user";
 	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
 			mCallback = (OnShowUserProfile) activity;
+			
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
 					+ " must implement OnShowUserProfile");
@@ -86,6 +88,7 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 		super.onDetach();
 		mCallback = null;
 	}
+	
 	public static CommentFragment newInstance(long id){
 		CommentFragment fragment = new CommentFragment();
 		Bundle args = new Bundle();
@@ -94,8 +97,12 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 		return fragment;
 	}
 	
-	
-	
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -416,8 +423,20 @@ implements MessageDelegate,CommentDelegate,OnShowUserProfile,LoadPictureTaskInte
 
 	@Override
 	public void onShowUserProfileFragment(long id) {
-		mCallback.onShowUserProfileFragment(id);
-		
+    	FragmentManager fragmentManager = getFragmentManager();
+    	UserFragment fragment;
+    	if(AuthUtils.getSessionLongValue
+				(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID, (long)0) != id){
+    		fragment = UserFragment.newInstance(false, id);
+    	}else{
+    		fragment = UserFragment.newInstance(true);
+    	}
+		fragmentManager
+		.beginTransaction()
+		.replace(R.id.content_frame, fragment)
+		.addToBackStack(FRAGMENT_USER)
+		.commit();		
 	}
+
 
 }

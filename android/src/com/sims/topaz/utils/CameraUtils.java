@@ -29,7 +29,6 @@ public class CameraUtils {
 
 	public static File getTempFile(){
 		String state = Environment.getExternalStorageState();			
-
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 			mFileTemp = new File(Environment.getExternalStorageDirectory(), TEMP_PHOTO_FILE_NAME);
 		}
@@ -39,6 +38,10 @@ public class CameraUtils {
 		return mFileTemp;
 
 	}
+	
+	public static void removeTempFile(){
+		if(mFileTemp!=null)	mFileTemp.delete();
+	}
 
 	public static Intent takePicture() {
 
@@ -47,8 +50,6 @@ public class CameraUtils {
 		try {
 			Uri mImageCaptureUri = null;
 			String state = Environment.getExternalStorageState();			
-
-
 
 			if (Environment.MEDIA_MOUNTED.equals(state)) {
 				mImageCaptureUri = Uri.fromFile(getTempFile());
@@ -79,7 +80,6 @@ public class CameraUtils {
 
 		Intent intent = new Intent(SimsContext.getContext(), CropImage.class);
 		intent.putExtra(CropImage.IMAGE_PATH, mFileTemp.getPath());
-		intent.putExtra(CropImage.CIRCLE_CROP, circle);
 		intent.putExtra(CropImage.ASPECT_X, 1);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra(CropImage.ASPECT_Y, 1);

@@ -1,6 +1,7 @@
 package com.sims.topaz;
 
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -27,14 +29,14 @@ import com.sims.topaz.network.modele.Preview;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
+import com.sims.topaz.utils.SimsContext;
 
 
 public class DrawerActivity extends ActionBarActivity
 	implements EditMessageFragment.OnNewMessageListener,
 				OnMoveCamera, 
 				OnShowUserProfile,
-				PreviewListFragment.OnPreviewClickListener,
-				OnShowGeneralUserProfile
+				PreviewListFragment.OnPreviewClickListener
 				{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
@@ -105,7 +107,13 @@ public class DrawerActivity extends ActionBarActivity
 					super.onDrawerOpened(drawerView);
             		getSupportActionBar().setTitle(mDrawerTitle);
             		supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
+            		//hide kyboard
+            		InputMethodManager mgr = (InputMethodManager) 
+            				SimsContext.getContext()
+            				.getSystemService(Context.INPUT_METHOD_SERVICE);
+            	    mgr.hideSoftInputFromWindow(
+            	    		getCurrentFocus().getWindowToken(), 0);
+			}
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         
@@ -291,14 +299,4 @@ public class DrawerActivity extends ActionBarActivity
 	}
 
 
-	@Override
-	public void onShowGeneralUserProfileFragment(User user) {
-		UserInfoGeneralFragment fragment = UserInfoGeneralFragment.newInstance(user);
-
-		//create transaction
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(R.id.fragment_container, fragment);
-		transaction.addToBackStack(FRAGMENT_COMMENT);
-		transaction.commit();		
-	}
 }

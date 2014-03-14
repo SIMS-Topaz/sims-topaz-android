@@ -14,6 +14,7 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
+import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.InternetConnectionUtils;
 import com.sims.topaz.utils.LocationUtils;
@@ -70,11 +72,11 @@ OnCameraChangeListener,
 LocationListener,
 OnMapLoadedCallback
 {
-	
-	private static String FRAGMENT_PREVIEW = "fragment_preview";
+
+	public static String FRAGMENT_PREVIEW = "fragment_preview";
 	public static String FRAGMENT_MESSAGE = "fragment_message";
-	private static String FRAGMENT_COMMENT = "fragment_comment";
-	
+	public static String FRAGMENT_COMMENT = "fragment_comment";
+
 	private GoogleMap mMap;
 	private static View mView;
 
@@ -86,8 +88,6 @@ OnMapLoadedCallback
 	private NetworkRestModule mNetworkModule; 
 	//bulle
 	private BulleAdapter mBulleAdapter;
-	// banner
-	private TextView bannerNotVerified;
 	//clusters
 	private ClusterManager<PreviewClusterItem> mClusterManager;
 	//current values
@@ -164,20 +164,7 @@ OnMapLoadedCallback
 			e.printStackTrace();
 		}
 
-		// Account banner
-		//bannerNotVerified = (TextView) mView.findViewById(R.id.banner_not_verified);
 
-		//bannerNotVerified.setVisibility(TextView.GONE);
-		/*if(AuthUtils.sessionHasKey(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED)) {
-			if(AuthUtils.getSessionBoolValue(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_VERIFIED, false)) {
-				bannerNotVerified.setVisibility(TextView.GONE);
-			} else {
-				bannerNotVerified.setVisibility(TextView.VISIBLE);
-			}
-		} else {
-			bannerNotVerified.setVisibility(TextView.VISIBLE);
-		}*/
-		
 		return mView;
 
 	}
@@ -223,7 +210,7 @@ OnMapLoadedCallback
 					mMap.setOnMapLoadedCallback(this);
 					UiSettings settings = mMap.getUiSettings();
 					settings.setMyLocationButtonEnabled(false);
-					
+
 				}else{
 					Toast.makeText(SimsContext.getContext(),
 							getResources().getString(R.string.connection_error_unknown), 
@@ -258,9 +245,10 @@ OnMapLoadedCallback
 
 	@Override
 	public void onMapLongClick(LatLng point) {
-		FragmentManager fm = getFragmentManager();
-		fm.popBackStack(FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		
+		//http://developer.android.com/reference/android/app/Fragment.html
+		//We have to user getChildFragmentManager for nested fragments
+		FragmentManager fm = getFragmentManager(); 
+
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
@@ -318,6 +306,7 @@ OnMapLoadedCallback
 			mLocationClient.connect();
 		timerSeconds.start();
 		timerOneMinute.start();
+
 	}
 
 	/**
@@ -331,23 +320,6 @@ OnMapLoadedCallback
 		timerSeconds.cancel();
 		timerOneMinute.cancel();
 	}
-	
-	
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		// Choose what to do based on the request code
-		switch (requestCode) {
-		// If the request code matches the code sent in onConnectionFailed
-		case LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST :
-			DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));            	
-			// If any other request code was received
-		default:
-			// Report that this Activity received an unknown requestCode
-			DebugUtils.log(getString(R.string.unknown_activity_request_code, requestCode));
-			break;
-		}
-	}
-
 
 	@Override
 	public void networkError() {
@@ -425,11 +397,12 @@ OnMapLoadedCallback
 	@Override
 	public void onClusterItemInfoWindowClick(PreviewClusterItem item) {		
 		CommentFragment fragment = CommentFragment.newInstance(item.getPreview().getId());
+		//http://developer.android.com/reference/android/app/Fragment.html
+		//We have to user getChildFragmentManager
 		FragmentManager fm = getFragmentManager(); 
-		fm.popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
-				R.drawable.animation_slide_out_right);
+				R.drawable.animation_none);
 		transaction.replace(R.id.fragment_container, fragment);
 		transaction.addToBackStack(FRAGMENT_COMMENT);
 		transaction.commit();
@@ -447,13 +420,14 @@ OnMapLoadedCallback
 		for (PreviewClusterItem pci : cluster.getItems()) {
 			previewList.add(pci.getPreview());
 		}
-		
+
+		//http://developer.android.com/reference/android/app/Fragment.html
+		//We have to user getChildFragmentManager for nested fragments
 		FragmentManager fm = getFragmentManager(); 
 		Fragment f = PreviewListFragment.newInstance(previewList);
-		fm.popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
-				R.drawable.animation_bottom_down);
+				R.drawable.animation_none);
 		transaction.replace(R.id.fragment_container, f);
 		transaction.addToBackStack(FRAGMENT_PREVIEW);
 
@@ -518,19 +492,18 @@ OnMapLoadedCallback
 			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,0));
 		}
 	}
-	
+
 	public void onMyLocation(){
 		if(mMap!=null){
 			LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
 		}
 	}
-	
+
 	public GoogleMap getMap() {
 		if (mMap != null) {
 			return mMap;
 		}
 		return null;
 	}
-
 
 }

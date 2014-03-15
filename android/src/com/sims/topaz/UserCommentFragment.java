@@ -1,6 +1,7 @@
 package com.sims.topaz;
 
 import com.sims.topaz.adapter.UserMessageAdapter;
+import com.sims.topaz.interfaces.OnUserFilledInListener;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
@@ -22,18 +23,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UserCommentFragment  extends Fragment implements ListView.OnItemClickListener  {
+public class UserCommentFragment  extends Fragment implements ListView.OnItemClickListener, OnUserFilledInListener  {
 	private ListView mListMessagesListView;
 	private User mUser;
 	private byte[] mImage;
 	private static String USER = "user_comment_fragment_user";
 	private OnMessageClickListener mListener;
+	private View mViewHeader;
+	private TextView mTextHeader;
 	public interface OnMessageClickListener {
 		public void onMessageClick(Message message);
 	}
-	
-	
-	
+
+
+
 	public static UserCommentFragment newInstance(User user, byte[] image){
 		UserCommentFragment fragment= new UserCommentFragment();
 		Bundle bundle = new Bundle();
@@ -54,52 +57,54 @@ public class UserCommentFragment  extends Fragment implements ListView.OnItemCli
 			mUser = (User) getArguments().getSerializable(USER);
 		}
 
-
-
 		mListMessagesListView = (ListView)v.findViewById(R.id.fragment_user_comments__list);
 		mListMessagesListView.setOnItemClickListener(this);
+		mViewHeader = inflater.inflate(R.layout.header_list_messages, null); 
+		mTextHeader = (TextView)mViewHeader.findViewById(R.id.header_list_text);
+
+		mListMessagesListView.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(!event.equals(MotionEvent.ACTION_SCROLL)){
+					if(getParentFragment()!=null){
+						((UserFragment)getParentFragment()).onShowDefaultPage();
+					}
+					return false;
+				}else{
+					v.onTouchEvent(event);
+					return true;
+				}
+
+			}
+		});
+		
+
+		return v;
+	}
+
+
+	private void onPrepareList(){
 		if(mUser!=null && mUser.getMessages()!=null){
 			UserMessageAdapter adapter = new UserMessageAdapter(SimsContext.getContext(),
 					R.layout.fragment_comment_item,
 					mUser.getMessages(),
 					mImage);
-			
+
 			if(mUser.getMessages().size() == 0){
 				Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
-				View v2 = inflater.inflate(R.layout.header_list_messages, null); 
-				TextView text = (TextView)v2.findViewById(R.id.header_list_text);
 				if(AuthUtils.getSessionLongValue
 						(MyPreferencesUtilsSingleton.SHARED_PREFERENCES_AUTH_ID, (long)0) != mUser.getId()){
-					text.setText(getResources().getString(R.string.user_tab_no_messages));
-					
+					mTextHeader.setText(getResources().getString(R.string.user_tab_no_messages));
+
 				}else{
-					text.setText(getResources().getString(R.string.user_tab_no_messages_me));
+					mTextHeader.setText(getResources().getString(R.string.user_tab_no_messages_me));
 				}
-				text.setTypeface(face);
-				mListMessagesListView.addHeaderView(v2);
+				mTextHeader.setTypeface(face);
+				mListMessagesListView.addHeaderView(mViewHeader);
 			}
 			mListMessagesListView.setAdapter(adapter);	
-			mListMessagesListView.setOnTouchListener(new OnTouchListener() {
-
-				@Override
-				public boolean onTouch(View v, MotionEvent event) {
-					if(!event.equals(MotionEvent.ACTION_SCROLL)){
-						if(getParentFragment()!=null){
-							((UserFragment)getParentFragment()).onShowDefaultPage();
-						}
-						return false;
-					}else{
-						v.onTouchEvent(event);
-						return true;
-					}
-
-				}
-			});
-
 		}
-
-
-		return v;
 	}
 
 
@@ -127,6 +132,13 @@ public class UserCommentFragment  extends Fragment implements ListView.OnItemCli
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+	}
+
+
+	@Override
+	public void onUserFilledIn(User user) {
+		mUser = user;
+		onPrepareList();
 	}
 
 }

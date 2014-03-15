@@ -7,6 +7,7 @@ import java.io.InputStream;
 
 import com.sims.topaz.AsyncTask.LoadPictureTask;
 import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
+import com.sims.topaz.interfaces.OnUserFilledInListener;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.PictureUploadDelegate;
@@ -55,7 +56,7 @@ import android.widget.Toast;
 
 public class UserInfoFragment  extends Fragment  
 implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface,
-PictureUploadDelegate{
+PictureUploadDelegate,OnUserFilledInListener{
 	private Button mUnConnectButton;
 	private Button mSaveNewPasswordButton;
 	private Button mCancelNewPasswordButton;
@@ -212,17 +213,6 @@ PictureUploadDelegate{
 						NetworkRestModule.SERVER_IMG_BASEURL+mUser.getPictureUrl(),
 						Toast.LENGTH_SHORT).show();
 			}
-			//set text
-			if(mUser.getStatus()!=null){
-				mUserSnippetTextView.setText(mUser.getStatus());
-				mStatusEditText.setText(mUser.getStatus());
-			}
-			if(mUser.getUserName()!=null){
-				mUserTextView.setText(mUser.getUserName());
-				mUserTitleTextView.setText(mUser.getUserName());
-			}
-			
-			mProgressBar.setVisibility(View.GONE);
 
 			mSaveNewPasswordButton.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -705,5 +695,22 @@ PictureUploadDelegate{
 	public void afterUploadPicture(String pictureUrl) {
 		mUser.setPictureUrl(pictureUrl);
 		Toast.makeText(SimsContext.getContext(), "ok", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onUserFilledIn(User user) {
+		mUser = user;
+		//set text
+		if(mUser.getStatus()!=null){
+			mUserSnippetTextView.setText(mUser.getStatus());
+			mStatusEditText.setText(mUser.getStatus());
+		}
+		if(mUser.getUserName()!=null){
+			mUserTextView.setText(mUser.getUserName());
+			mUserTitleTextView.setText(mUser.getUserName());
+		}
+		
+		mProgressBar.setVisibility(View.GONE);
+
 	}
 }

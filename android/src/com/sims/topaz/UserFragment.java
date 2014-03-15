@@ -19,6 +19,7 @@ import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.adapter.UserMessageAdapter;
 import com.sims.topaz.adapter.UserPageAdapter;
 import com.sims.topaz.interfaces.OnShowDefaultPage;
+import com.sims.topaz.interfaces.OnUserFilledInListener;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.interfaces.UserDelegate;
@@ -34,7 +35,7 @@ import com.sims.topaz.utils.SimsContext;
 
 public class UserFragment  extends Fragment 
 implements UserDelegate,ErreurDelegate, OnShowDefaultPage,
-LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener {
+LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener, OnUserFilledInListener {
 
 	private ViewPager mViewPager;
 	private static String FRAGMENT_GENERAL_USER = "fragment_user_general";
@@ -46,6 +47,10 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener {
 	private NetworkRestModule mRestModule = new NetworkRestModule(this);
 	private ListView mListMessagesListView;
 	private OnMessageClickListener mListener;
+	
+	private UserInfoFragment userInfoFragment;
+	private UserCommentFragment userCommentFragment ;
+	private UserInfoGeneralFragment userInfoGeneralFragment;
 
 	public static UserFragment newInstance(boolean isMyProfile){
 		UserFragment fragment= new UserFragment();
@@ -83,6 +88,8 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -119,8 +126,8 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener {
 		}else{
 			Toast.makeText(SimsContext.getContext(), getResources().getString(R.string.erreur_gen), Toast.LENGTH_SHORT).show();
 		}
-		// Retain this fragment across configuration changes.
-		setRetainInstance(true);
+		createNeededFragments(v);
+
 		return v;
 	}
 
@@ -143,38 +150,58 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener {
 	@Override
 	public void afterGetUserInfo(User user) {
 		mUser = user;
-		Toast.makeText(SimsContext.getContext(),
-				"afterGetUserInfo",Toast.LENGTH_SHORT).show();
-		prepareFragments();
+		onUserFilledIn(mUser);
 	}
 
 	@Override
 	public void afterPostUserInfo(User user) {}
 
-	private void prepareFragments(){
 
-
+	private void createNeededFragments(View view){
 		//tabs
 		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
-
-
 		if(isMyProfile){
 			if (!tabletSize) {
-				UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
-				UserCommentFragment userCommentFragment =UserCommentFragment.newInstance(mUser, null);
+				userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
+				userCommentFragment  =UserCommentFragment.newInstance(mUser, null);
 				UserPageAdapter mTabsAdapter = 
 						new UserPageAdapter(getActivity().getSupportFragmentManager(),
 								userCommentFragment,
 								userInfoFragment);
 				mViewPager.setAdapter(mTabsAdapter);
 			} else {
-				UserInfoFragment userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
+				userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
 				FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
 				transaction.replace(R.id.user_info_fragment, userInfoFragment);
 				transaction.commit();	
 
-				mListMessagesListView = (ListView)getView().findViewById(R.id.fragment_user_comments__list);
+				mListMessagesListView = (ListView)view.findViewById(R.id.fragment_user_comments__list);
+			}
+		}else{
+			userInfoGeneralFragment = UserInfoGeneralFragment.newInstance(mUser);
+			FragmentTransaction transaction = getFragmentManager().beginTransaction();
+			transaction.addToBackStack(FRAGMENT_GENERAL_USER);
+			transaction.replace(R.id.fragment_container, userInfoGeneralFragment);
+			transaction.commit();			
+
+		}	
+
+	}
+	
+	
+	@Override
+	public void onUserFilledIn(User user) {
+		mUser = user;
+		//tabs
+		boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+
+		if(isMyProfile){
+			if (!tabletSize) {
+				userInfoFragment.onUserFilledIn(mUser);
+				userCommentFragment.onUserFilledIn(mUser);
+			} else {
+				userInfoFragment.onUserFilledIn(mUser);
 				mListMessagesListView.setOnItemClickListener(this);
 				if(mUser!=null){
 					if(mUser.getPictureUrl()!=null){
@@ -185,24 +212,14 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener {
 								R.layout.fragment_comment_item,
 								mUser.getMessages(),
 								null);
-
-						if(mUser.getMessages().size() == 0){
-							//TODO put the fragment on the center
-						}
 						mListMessagesListView.setAdapter(adapter);
 					}
 				}
 			}
 		}else{
-			UserInfoGeneralFragment userInfoGeneralFragment = UserInfoGeneralFragment.newInstance(mUser);
-			FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-			transaction.addToBackStack(FRAGMENT_GENERAL_USER);
-			transaction.replace(R.id.fragment_container, userInfoGeneralFragment);
-			transaction.commit();			
-			
+			userInfoGeneralFragment.onUserFilledIn(mUser);			
 		}	
-		
-		setRetainInstance(true);
+
 
 	}
 
@@ -221,9 +238,6 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener {
 				mUser.getMessages(),
 				CameraUtils.getBytesFromDrawable(image));
 
-		if(mUser.getMessages().size() == 0){
-			//TODO put the fragment on the center
-		}
 		mListMessagesListView.setAdapter(adapter);
 	}
 
@@ -241,6 +255,9 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener {
 			mListener.onMessageClick(mUser.getMessages().get(position));
 		}				
 	}
+
+
+
 
 
 }

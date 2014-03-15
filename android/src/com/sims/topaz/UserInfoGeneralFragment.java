@@ -19,6 +19,7 @@ import com.sims.topaz.AsyncTask.LoadPictureTask;
 import com.sims.topaz.AsyncTask.LoadPictureTask.LoadPictureTaskInterface;
 import com.sims.topaz.UserCommentFragment.OnMessageClickListener;
 import com.sims.topaz.adapter.UserMessageAdapter;
+import com.sims.topaz.interfaces.OnUserFilledInListener;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
 import com.sims.topaz.network.modele.ApiError;
@@ -27,7 +28,7 @@ import com.sims.topaz.utils.MyTypefaceSingleton;
 import com.sims.topaz.utils.SimsContext;
 
 public class UserInfoGeneralFragment extends Fragment 
-implements  ErreurDelegate, LoadPictureTaskInterface,AbsListView.OnItemClickListener  {
+implements  ErreurDelegate, LoadPictureTaskInterface,AbsListView.OnItemClickListener, OnUserFilledInListener  {
 	private static String USER = "user_info_general_fragment_user";
 	private User mUser;
 	private TextView mUserTitleTextView;
@@ -70,6 +71,12 @@ implements  ErreurDelegate, LoadPictureTaskInterface,AbsListView.OnItemClickList
 		//listview
 		mListMessagesListView = (AbsListView)v.findViewById(R.id.fragment_user_comments__list);
 		mListMessagesListView.setOnItemClickListener(this);
+		onFillFields();
+
+		return v;
+	}
+
+	private void onFillFields(){
 		if(mUser!=null){
 			if(mUser.getUserName()!=null)
 				mUserTitleTextView.setText(mUser.getUserName());
@@ -92,10 +99,7 @@ implements  ErreurDelegate, LoadPictureTaskInterface,AbsListView.OnItemClickList
 					mImage);
 			mListMessagesListView.setAdapter(adapter);
 		}
-
-		return v;
 	}
-
 	@Override
 	public void loadPictureTaskOnPostExecute(Drawable image) {
 		mUserImage.setImageDrawable(image);
@@ -138,6 +142,12 @@ implements  ErreurDelegate, LoadPictureTaskInterface,AbsListView.OnItemClickList
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+	}
+
+	@Override
+	public void onUserFilledIn(User user) {
+		mUser = user;
+		onFillFields();
 	}
 }
 

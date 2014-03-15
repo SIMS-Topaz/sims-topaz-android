@@ -71,7 +71,7 @@
     <string name="user_tab_info_status">Description :</string>
     <string name="user_tab_info_old_pass">Mot de passe actuel</string>
     <string name="user_tab_info_new_pass">Nouveau mot de passe</string>
-    <string name="user_tab_save">Sauvgarder</string>
+    <string name="user_tab_save">Sauvegarder</string>
     <string name="user_tab_cancel">Annuler</string>
     <string name="user_tab_change_pass">Changer le mot de passe</string>
     <string name="user_tab_edit">changer</string>

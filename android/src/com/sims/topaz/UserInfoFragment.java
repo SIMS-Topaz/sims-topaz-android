@@ -659,9 +659,12 @@ PictureUploadDelegate,OnUserFilledInListener{
 			String path = data.getStringExtra(CropImage.IMAGE_PATH);
 			if (path == null) {return;}
 
-			bitmap = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath());
-			//Note: we cannot user setBackground since is available only from api 16
-			//mUserImage.setBackgroundDrawable(new BitmapDrawable(SimsContext.getContext().getResources(),bitmap));
+			
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			options.inSampleSize = CameraUtils.calculateInSampleSize(options, 100, 100);
+		
+			bitmap = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath(),options);
 			setImage(bitmap);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			bitmap.compress(CompressFormat.JPEG, 85, bos);

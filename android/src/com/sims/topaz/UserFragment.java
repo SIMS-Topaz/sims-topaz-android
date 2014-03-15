@@ -180,6 +180,10 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener, On
 				mListMessagesListView = (ListView)view.findViewById(R.id.fragment_user_comments__list);
 			}
 		}else{
+			if (tabletSize) {
+				View v = (View)view.findViewById(R.id.fragment_user_comments__list);
+				v.setVisibility(View.GONE);
+			}
 			userInfoGeneralFragment = UserInfoGeneralFragment.newInstance(mUser);
 			FragmentTransaction transaction = getFragmentManager().beginTransaction();
 			transaction.addToBackStack(FRAGMENT_GENERAL_USER);

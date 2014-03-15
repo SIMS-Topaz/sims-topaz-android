@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.sims.topaz.R;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.MyTypefaceSingleton;
+import com.sims.topaz.utils.SimsContext;
 
 public class UserMessageAdapter extends ArrayAdapter<Message>  {
 
@@ -56,9 +58,9 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 			if(image!=null){
 				BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inJustDecodeBounds = true;
-				options.inSampleSize = CameraUtils.calculateInSampleSize(options, 100, 100);
+				options.inSampleSize = CameraUtils.calculateInSampleSize(options, 32, 32);
 				Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length,options);
-				holder.mUserImage.setImageBitmap(bmp);
+				holder.mUserImage.setBackgroundDrawable(new BitmapDrawable(SimsContext.getContext().getResources(),bmp));
 			}			
 			view.setTag(holder);
 		} else {

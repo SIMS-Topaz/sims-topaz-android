@@ -128,11 +128,11 @@ public class CameraUtils {
 			ExifInterface exif = new ExifInterface(fileName);
 	        DebugUtils.log("EXIF TAG_ORIENTATION value = " + exif.getAttribute(ExifInterface.TAG_ORIENTATION));
 	        Matrix matrix = new Matrix();
-			if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("6")){
+			if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase(ExifInterface.ORIENTATION_ROTATE_90+"")){
 				matrix.postRotate(90);
-	        }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("8")){
+	        }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase(ExifInterface.ORIENTATION_ROTATE_270+"")){
 	        	matrix.postRotate(270);
-	        }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("3")){
+	        }else if(exif.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase(ExifInterface.ORIENTATION_ROTATE_180+"")){
 	        	matrix.postRotate(180);
 	        }
 			bm = Bitmap.createBitmap(bm , 0, 0, bm .getWidth(), bm .getHeight(), matrix, true);

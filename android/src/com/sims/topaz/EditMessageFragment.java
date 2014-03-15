@@ -246,9 +246,9 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
             if (requestCode == CameraUtils.REQUEST_CODE_GALLERY) {
                 Uri selectedImageUri = data.getData();
                 String picturePath = getPath(selectedImageUri, this.getActivity());
-                bm = CameraUtils.imgRotation(picturePath);
+                bm = BitmapFactory.decodeFile(picturePath);
             } else if (requestCode == CameraUtils.REQUEST_CODE_TAKE_PICTURE) {
-                bm = CameraUtils.imgRotation(CameraUtils.getTempFile().getPath());
+                bm = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath());
             }
             
             if(bm != null) {

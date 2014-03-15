@@ -253,7 +253,7 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener, On
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		if (null != mListener) {
-			mListener.onMessageClick(mUser.getMessages().get(position));
+			//mListener.onMessageClick(mUser.getMessages().get(position));
 		}				
 	}
 

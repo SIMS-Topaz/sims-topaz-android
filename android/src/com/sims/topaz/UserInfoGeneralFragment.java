@@ -123,7 +123,7 @@ implements  ErreurDelegate, LoadPictureTaskInterface,AbsListView.OnItemClickList
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		if (null != mListener) {
-			mListener.onMessageClick(mUser.getMessages().get(position));
+			//mListener.onMessageClick(mUser.getMessages().get(position));
 		}		
 	}
 	@Override

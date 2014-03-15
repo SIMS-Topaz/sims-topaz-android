@@ -574,7 +574,6 @@ PictureUploadDelegate,OnUserFilledInListener{
 		mSaveNewPasswordButton.setEnabled(true);
 
 
-
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.user_tab_save_ok), 
 				Toast.LENGTH_SHORT).show();
@@ -583,138 +582,145 @@ PictureUploadDelegate,OnUserFilledInListener{
 	@Override
 	public void apiError(ApiError error) {
 		DebugUtils.log("UserInfoFragment_apiError");
-		Toast.makeText(SimsContext.getContext(),
-				getResources().getString(R.string.erreur_gen),
-				Toast.LENGTH_SHORT).show();	
-	}
-
-	@Override
-	public void networkError() {
-		DebugUtils.log("UserInfoFragment_networkError");
-		Toast.makeText(SimsContext.getContext(),
-				getResources().getString(R.string.erreur_gen),
-				Toast.LENGTH_SHORT).show();	
-	}
-	@Override
-	public void loadPictureTaskOnPostExecute(Drawable image) {
-		mUserImage.setImageDrawable(image);
-	}
-
-	@SuppressWarnings("deprecation")
-	public void setImage(Bitmap bitmap){
-		mUserImage.setBackgroundDrawable(new BitmapDrawable(SimsContext.getContext().getResources(),bitmap));
-	}
-	public void onSelectPicture() {
-		final CharSequence[] items = { getString(R.string.select_img_take_photo),
-				getString(R.string.select_img_from_lib),
-				getString(R.string.select_img_close) };
-
-		CameraUtils.removeTempFile();
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-		builder.setTitle(R.string.edit_add_image);
-
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int item) {
-				if (item == 0) {
-					startActivityForResult(CameraUtils.takePicture(), CameraUtils.REQUEST_CODE_TAKE_PICTURE);
-				} else if (item == 1) {
-					startActivityForResult(CameraUtils.openGallery(), CameraUtils.REQUEST_CODE_GALLERY);
-				} else if (item == 2) {
-					dialog.dismiss();
-				}
-			}
-		});
-		builder.show();
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		Bitmap bitmap;
-
-		switch (requestCode) {
-
-		case CameraUtils.REQUEST_CODE_GALLERY:
-
-			try {
-				InputStream inputStream = SimsContext.getContext().getContentResolver().openInputStream(data.getData());
-				FileOutputStream fileOutputStream = new FileOutputStream(CameraUtils.getTempFile());
-				CameraUtils.copyStream(inputStream, fileOutputStream);
-				fileOutputStream.close();
-				inputStream.close();
-				startActivityForResult(CameraUtils.startCropImage(100,100,true), CameraUtils.REQUEST_CODE_CROP_IMAGE);
-			} catch (Exception e) {
-				DebugUtils.log("Error while creating temp file"+ e);
-			}
-
-			break;
-		case CameraUtils.REQUEST_CODE_TAKE_PICTURE:
-			startActivityForResult(CameraUtils.startCropImage(100,100,true), CameraUtils.REQUEST_CODE_CROP_IMAGE);
-			break;
-		case CameraUtils.REQUEST_CODE_CROP_IMAGE:
-			if(data == null) {
-				return;}
-			String path = data.getStringExtra(CropImage.IMAGE_PATH);
-			if (path == null) {return;}
-
-			
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inJustDecodeBounds = true;
-			options.inSampleSize = CameraUtils.calculateInSampleSize(options, 100, 100);
-		
-			bitmap = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath(),options);
-			setImage(bitmap);
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			bitmap.compress(CompressFormat.JPEG, 85, bos);
-			pictureData = bos.toByteArray();
-			mRestModule.uploadPicture(pictureData);
-			break;
+		if(error.getCode().equals(401)) {
+			mErrorPassTextView.setText(R.string.erreur_wrong_pass);
+			mErrorPassTextView.setVisibility(TextView.VISIBLE);
+		} else {
+			Toast.makeText(SimsContext.getContext(),
+					getResources().getString(R.string.erreur_gen),
+					Toast.LENGTH_SHORT).show();	
 		}
+		mSaveNewPasswordButton.setEnabled(true);
+}
+
+@Override
+public void networkError() {
+	DebugUtils.log("UserInfoFragment_networkError");
+	Toast.makeText(SimsContext.getContext(),
+			getResources().getString(R.string.erreur_gen),
+			Toast.LENGTH_SHORT).show();	
+	mSaveNewPasswordButton.setEnabled(true);
+}
+@Override
+public void loadPictureTaskOnPostExecute(Drawable image) {
+	mUserImage.setImageDrawable(image);
+}
+
+@SuppressWarnings("deprecation")
+public void setImage(Bitmap bitmap){
+	mUserImage.setBackgroundDrawable(new BitmapDrawable(SimsContext.getContext().getResources(),bitmap));
+}
+public void onSelectPicture() {
+	final CharSequence[] items = { getString(R.string.select_img_take_photo),
+			getString(R.string.select_img_from_lib),
+			getString(R.string.select_img_close) };
+
+	CameraUtils.removeTempFile();
+
+	AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+	builder.setTitle(R.string.edit_add_image);
+
+	builder.setItems(items, new DialogInterface.OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int item) {
+			if (item == 0) {
+				startActivityForResult(CameraUtils.takePicture(), CameraUtils.REQUEST_CODE_TAKE_PICTURE);
+			} else if (item == 1) {
+				startActivityForResult(CameraUtils.openGallery(), CameraUtils.REQUEST_CODE_GALLERY);
+			} else if (item == 2) {
+				dialog.dismiss();
+			}
+		}
+	});
+	builder.show();
+}
+
+@Override
+public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	super.onActivityResult(requestCode, resultCode, data);
+	Bitmap bitmap;
+
+	switch (requestCode) {
+
+	case CameraUtils.REQUEST_CODE_GALLERY:
+
+		try {
+			InputStream inputStream = SimsContext.getContext().getContentResolver().openInputStream(data.getData());
+			FileOutputStream fileOutputStream = new FileOutputStream(CameraUtils.getTempFile());
+			CameraUtils.copyStream(inputStream, fileOutputStream);
+			fileOutputStream.close();
+			inputStream.close();
+			startActivityForResult(CameraUtils.startCropImage(100,100,true), CameraUtils.REQUEST_CODE_CROP_IMAGE);
+		} catch (Exception e) {
+			DebugUtils.log("Error while creating temp file"+ e);
+		}
+
+		break;
+	case CameraUtils.REQUEST_CODE_TAKE_PICTURE:
+		startActivityForResult(CameraUtils.startCropImage(100,100,true), CameraUtils.REQUEST_CODE_CROP_IMAGE);
+		break;
+	case CameraUtils.REQUEST_CODE_CROP_IMAGE:
+		if(data == null) {
+			return;}
+		String path = data.getStringExtra(CropImage.IMAGE_PATH);
+		if (path == null) {return;}
+
+		bitmap = BitmapFactory.decodeFile(CameraUtils.getTempFile().getPath());
+		setImage(bitmap);
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		bitmap.compress(CompressFormat.JPEG, 85, bos);
+		pictureData = bos.toByteArray();
+		mRestModule.uploadPicture(pictureData);
+		break;
 	}
+}
 
 
-	public String getPath(Uri uri, Activity activity) {
-		String[] projection = { MediaColumns.DATA };
-		Cursor cursor = activity.getContentResolver().query(uri, projection, null, null, null);
-		int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
-		cursor.moveToFirst();
-		return cursor.getString(column_index);
+public String getPath(Uri uri, Activity activity) {
+	String[] projection = { MediaColumns.DATA };
+	Cursor cursor = activity.getContentResolver().query(uri, projection, null, null, null);
+	int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
+	cursor.moveToFirst();
+	return cursor.getString(column_index);
+}
+public Uri getImageUri(Bitmap inImage) {
+	ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+	String path = Images.Media.insertImage(SimsContext.getContext().getContentResolver(), inImage, "Title", null);
+	return Uri.parse(path);
+}
+
+@Override
+public void afterUploadPicture(String pictureUrl) {
+	mUser.setPictureUrl(pictureUrl);
+	mRestModule.postUserInfo(mUser);
+	LoadPictureTask setImageTask = new LoadPictureTask(this);
+	setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());	
+}
+
+@Override
+public void onUserFilledIn(User user) {
+	mUser = user;
+	//set text
+	if(mUser!=null && mUser.getStatus()!=null){
+		mUserSnippetTextView.setText(mUser.getStatus());
+		mStatusEditText.setText(mUser.getStatus());
 	}
-	public Uri getImageUri(Bitmap inImage) {
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-		String path = Images.Media.insertImage(SimsContext.getContext().getContentResolver(), inImage, "Title", null);
-		return Uri.parse(path);
+	if(mUser!=null && mUser.getUserName()!=null){
+		mUserTextView.setText(mUser.getUserName());
+		mUserTitleTextView.setText(mUser.getUserName());
+		mUserEditText.setText(mUser.getUserName());
+	}
+	if(mUser != null && mUser.getEmail()!=null){
+		mEmailTextView.setText(mUser.getEmail());
 	}
 
-	@Override
-	public void afterUploadPicture(String pictureUrl) {
-		mUser.setPictureUrl(pictureUrl);
-		mRestModule.postUserInfo(mUser);
+	if(user.getPictureUrl()!=null){
 		LoadPictureTask setImageTask = new LoadPictureTask(this);
 		setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());	
 	}
+	if(mProgressBar!=null)
+		mProgressBar.setVisibility(View.GONE);
 
-	@Override
-	public void onUserFilledIn(User user) {
-		mUser = user;
-		//set text
-		if(mUser!=null && mUser.getStatus()!=null){
-			mUserSnippetTextView.setText(mUser.getStatus());
-			mStatusEditText.setText(mUser.getStatus());
-		}
-		if(mUser!=null && mUser.getUserName()!=null){
-			mUserTextView.setText(mUser.getUserName());
-			mUserTitleTextView.setText(mUser.getUserName());
-		}
-		if(user.getPictureUrl()!=null){
-			LoadPictureTask setImageTask = new LoadPictureTask(this);
-			setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());	
-		}
-		if(mProgressBar!=null)
-			mProgressBar.setVisibility(View.GONE);
-
-	}
+}
 }

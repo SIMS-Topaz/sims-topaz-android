@@ -198,6 +198,7 @@ public class PlaceSearchFragment extends Fragment{
 
 	    @Override
 	    public int getCount() {
+	    	if(resultList==null) return 0;
 	        return resultList.size();
 	    }
 

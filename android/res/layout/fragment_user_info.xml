@@ -374,7 +374,7 @@
                         android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:contentDescription="@string/user_tab_cancel"
-                        android:drawableRight="@drawable/selector_save"
+                        android:drawableRight="@drawable/selector_cancel"
                         android:gravity="center_horizontal|center_vertical"
                         android:text="@string/user_tab_cancel" />
 
@@ -386,7 +386,7 @@
                         android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:contentDescription="@string/user_tab_save"
-                        android:drawableRight="@drawable/selector_cancel"
+                        android:drawableRight="@drawable/selector_save"
                         android:gravity="center_horizontal|center_vertical"
                         android:text="@string/user_tab_save" />
                 </LinearLayout>

@@ -114,7 +114,6 @@ public class UserCommentFragment  extends Fragment implements ListView.OnItemCli
 		if (null != mListener) {
 			mListener.onMessageClick(mUser.getMessages().get(position));
 		}		
-		Toast.makeText(getActivity(), "onItemClick", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

@@ -30,7 +30,11 @@ public class PreviewListAdapter extends ArrayAdapter<Preview> {
 	public PreviewListAdapter(Context mDelegate, int resource,
 			List<Preview> objects) {
 		super(mDelegate, resource, objects);
-		count = objects.size();
+		if(objects!=null){
+			count = objects.size();
+		}else{
+			count = 0;
+		}
 		this.delegate = new WeakReference<Context>(mDelegate);
 	}
 	

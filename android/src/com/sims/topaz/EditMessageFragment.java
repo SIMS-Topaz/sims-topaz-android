@@ -254,7 +254,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
             
             if(bm != null) {
             	
-                editImageView.setImageBitmap(bm);
+                
 
                 // Get data
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -264,7 +264,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 	                int targetHeight = (int) (PICTURE_MAX_WIDTH * aspectRatio);
 	                bm = Bitmap.createScaledBitmap(bm, PICTURE_MAX_WIDTH, targetHeight, true);
                 }
-                
+                editImageView.setImageBitmap(bm);
                 bm.compress(CompressFormat.JPEG, PICTURE_QUALITY, bos);
                 mRestModule.uploadPicture(bos.toByteArray());
 

@@ -47,6 +47,12 @@ public class UserCommentFragment  extends Fragment implements ListView.OnItemCli
 
 
 	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+
+	}
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_user_comments, container, false);
@@ -112,7 +118,7 @@ public class UserCommentFragment  extends Fragment implements ListView.OnItemCli
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		if (null != mListener) {
-			mListener.onMessageClick(mUser.getMessages().get(position));
+			//mListener.onMessageClick(mUser.getMessages().get(position));
 		}		
 	}
 

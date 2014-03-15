@@ -585,7 +585,15 @@ PictureUploadDelegate,OnUserFilledInListener{
 		if(error.getCode().equals(401)) {
 			mErrorPassTextView.setText(R.string.erreur_wrong_pass);
 			mErrorPassTextView.setVisibility(TextView.VISIBLE);
-		} else {
+		}else if(error.getCode().equals(409)) {
+			if(error.getMsg().equals("EMAIL_ERR")) {
+				mErrorEmailTextView.setText(R.string.auth_conflictusermail_error);
+				mErrorEmailTextView.setVisibility(TextView.VISIBLE);
+			} else if(error.getMsg().equals("USERNAME_ERR")) {
+				mErrorUserTextView.setText(R.string.auth_conflictusername_error);
+				mErrorUserTextView.setVisibility(TextView.VISIBLE);
+			}
+		}else {
 			Toast.makeText(SimsContext.getContext(),
 					getResources().getString(R.string.erreur_gen),
 					Toast.LENGTH_SHORT).show();	

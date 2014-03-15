@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,8 +54,13 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 
 			holder.mUserImage = (ImageView) view.findViewById(R.id.message_item_image);
 			if(image!=null){
-				holder.mUserImage.setImageDrawable(CameraUtils.getDrwableFromBytes(image));
-			}			view.setTag(holder);
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inJustDecodeBounds = true;
+				options.inSampleSize = CameraUtils.calculateInSampleSize(options, 100, 100);
+				Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length,options);
+				holder.mUserImage.setImageBitmap(bmp);
+			}			
+			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
@@ -77,4 +84,6 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 		TextView mMessageDate;
 		ImageView mUserImage;
 	}  
+	
+	
 }

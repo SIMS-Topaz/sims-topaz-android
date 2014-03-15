@@ -38,6 +38,7 @@ import android.os.Bundle;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.IntentCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -349,10 +350,7 @@ PictureUploadDelegate,OnUserFilledInListener{
 		mUnConnectButton.setOnClickListener(new View.OnClickListener() {	
 			@Override
 			public void onClick(View v) {
-				NetworkRestModule.resetHttpClient();
-				AuthUtils.unsetSession();
-				Intent intent = new Intent(SimsContext.getContext(), AuthActivity.class);
-				startActivity(intent);
+				onUnconnect();
 			}
 		});
 
@@ -431,6 +429,15 @@ PictureUploadDelegate,OnUserFilledInListener{
 		});
 
 		return v;
+	}
+
+	protected void onUnconnect() {
+		NetworkRestModule.resetHttpClient();
+		AuthUtils.unsetSession();
+		Intent intent = new Intent(SimsContext.getContext(), AuthActivity.class);
+		intent.setFlags(
+				Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+		startActivity(intent);		
 	}
 
 	private void onShowHidePassword(){

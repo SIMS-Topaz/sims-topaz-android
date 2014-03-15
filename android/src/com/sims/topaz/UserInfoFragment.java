@@ -205,13 +205,7 @@ PictureUploadDelegate,OnUserFilledInListener{
 		mCancelEmail = (Button)v.findViewById(R.id.view_cancel_email);
 		mCancelStatus = (Button)v.findViewById(R.id.view_cancel);	
 
-		if(mUser!=null && mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
-			LoadPictureTask setImageTask = new LoadPictureTask(this);
-			setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());
-			Toast.makeText(SimsContext.getContext(), 
-					NetworkRestModule.SERVER_IMG_BASEURL+mUser.getPictureUrl(),
-					Toast.LENGTH_SHORT).show();
-		}
+
 
 		mSaveNewPasswordButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -693,22 +687,27 @@ PictureUploadDelegate,OnUserFilledInListener{
 	@Override
 	public void afterUploadPicture(String pictureUrl) {
 		mUser.setPictureUrl(pictureUrl);
-		Toast.makeText(SimsContext.getContext(), "ok", Toast.LENGTH_SHORT).show();
+		mRestModule.postUserInfo(mUser);
+		LoadPictureTask setImageTask = new LoadPictureTask(this);
+		setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());	
 	}
 
 	@Override
 	public void onUserFilledIn(User user) {
 		mUser = user;
 		//set text
-		if(mUser.getStatus()!=null){
+		if(mUser!=null && mUser.getStatus()!=null){
 			mUserSnippetTextView.setText(mUser.getStatus());
 			mStatusEditText.setText(mUser.getStatus());
 		}
-		if(mUser.getUserName()!=null){
+		if(mUser!=null && mUser.getUserName()!=null){
 			mUserTextView.setText(mUser.getUserName());
 			mUserTitleTextView.setText(mUser.getUserName());
 		}
-
+		if(user.getPictureUrl()!=null){
+			LoadPictureTask setImageTask = new LoadPictureTask(this);
+			setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());	
+		}
 		if(mProgressBar!=null)
 			mProgressBar.setVisibility(View.GONE);
 

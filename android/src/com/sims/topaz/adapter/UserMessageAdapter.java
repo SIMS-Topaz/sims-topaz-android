@@ -36,6 +36,7 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 		return count;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public View getView(int position, View convertView, ViewGroup parent){
 		View view = convertView;
 		ViewHolder holder = null; 

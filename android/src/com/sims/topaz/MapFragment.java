@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -14,8 +13,6 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -50,7 +47,6 @@ import com.sims.topaz.network.interfaces.MessageDelegate;
 import com.sims.topaz.network.modele.ApiError;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
-import com.sims.topaz.utils.CameraUtils;
 import com.sims.topaz.utils.DebugUtils;
 import com.sims.topaz.utils.InternetConnectionUtils;
 import com.sims.topaz.utils.LocationUtils;

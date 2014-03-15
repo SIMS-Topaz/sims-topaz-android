@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class UserCommentFragment  extends Fragment implements ListView.OnItemClickListener, OnUserFilledInListener  {
 	private ListView mListMessagesListView;

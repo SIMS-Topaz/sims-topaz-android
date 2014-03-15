@@ -26,7 +26,6 @@ import com.sims.topaz.interfaces.OnMoveCamera;
 import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
-import com.sims.topaz.network.modele.User;
 import com.sims.topaz.utils.AuthUtils;
 import com.sims.topaz.utils.MyPreferencesUtilsSingleton;
 import com.sims.topaz.utils.SimsContext;
@@ -311,6 +310,7 @@ public class DrawerActivity extends ActionBarActivity
 		transaction.addToBackStack(FRAGMENT_COMMENT);
 		transaction.commit();		
 	}
+	
 
 
 }

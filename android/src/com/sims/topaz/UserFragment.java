@@ -150,6 +150,7 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener, On
 	@Override
 	public void afterGetUserInfo(User user) {
 		mUser = user;
+
 		onUserFilledIn(mUser);
 	}
 
@@ -165,7 +166,7 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener, On
 				userInfoFragment = UserInfoFragment.newInstance(isMyProfile, mUser);
 				userCommentFragment  =UserCommentFragment.newInstance(mUser, null);
 				UserPageAdapter mTabsAdapter = 
-						new UserPageAdapter(getActivity().getSupportFragmentManager(),
+						new UserPageAdapter(getFragmentManager(),
 								userCommentFragment,
 								userInfoFragment);
 				mViewPager.setAdapter(mTabsAdapter);
@@ -256,6 +257,8 @@ LoadPictureTaskInterface,OnMessageClickListener,ListView.OnItemClickListener, On
 		}				
 	}
 
+
+	
 
 
 

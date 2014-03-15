@@ -119,322 +119,321 @@ PictureUploadDelegate,OnUserFilledInListener{
 
 		Typeface face = MyTypefaceSingleton.getInstance().getTypeFace();
 		View v = inflater.inflate(R.layout.fragment_user_info, container, false);
-		if(mUser!=null){
-			//username field
-			mUserTitleTextView = (TextView)v.findViewById(R.id.username);
-			mUserTitleTextView.setTypeface(face);
-			//message fiels
-			mUserSnippetTextView= (TextView)v.findViewById(R.id.username_snippet);
-			mUserSnippetTextView.setTypeface(face);
-			//user imgae
-			mUserImage = (ImageButton)v.findViewById(R.id.username_image);
-			//Progress bar
-			mProgressBar = (ProgressBar)v.findViewById(R.id.progressBar);
-			mProgressBar.setVisibility(View.VISIBLE);
-			//change image
-			mUserImage.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					onSelectPicture();
-				}
-			});
-
-			mUserButton = (Button) v.findViewById(R.id.user_info_username_button);
-			mUserButton.setTypeface(face);
-			mEmailButton = (Button) v.findViewById(R.id.user_info_email_button);
-			mEmailButton.setTypeface(face);
-
-			mUserTextView = (TextView) v.findViewById(R.id.user_info_username_text);
-			mUserTextView.setTypeface(face);
-
-
-			mEmailTextView = (TextView) v.findViewById(R.id.user_info_email_text);
-			mEmailTextView.setTypeface(face);
-
-			TextView mStatusTextView = (TextView)v.findViewById(R.id.user_info_status_text);
-			mStatusTextView.setTypeface(face);
-
-			mUserEditText = (EditText) v.findViewById(R.id.user_info_username);
-			mUserEditText.setTypeface(face);
-			mUserEditText.setVisibility(View.GONE);
-
-			mStatusEditText = (EditText) v.findViewById(R.id.user_info_status);
-			mStatusEditText.setTypeface(face);
-
-			mEmailEditText =(EditText)  v.findViewById(R.id.sign_up_mail);
-			mEmailEditText.setTypeface(face);
-			mEmailEditText.setVisibility(View.GONE);
-
-			mPassEditText =(EditText)  v.findViewById(R.id.user_info_old_password);
-			mPassEditText.setTypeface(face);
-			mPassEditText.setVisibility(View.GONE);
-
-			mNewPassEditText =(EditText)  v.findViewById(R.id.user_info_new_password);
-			mNewPassEditText.setTypeface(face);
-			mNewPassEditText.setVisibility(View.GONE);
-
-			mConfirmEditText =(EditText)  v.findViewById(R.id.user_info_confirm_new_password);
-			mConfirmEditText.setTypeface(face);
-			mConfirmEditText.setVisibility(View.GONE);
-
-			mErrorUserTextView = (TextView) v.findViewById(R.id.user_info_username_error);
-			mErrorUserTextView.setTypeface(face);
-			mErrorEmailTextView = (TextView) v.findViewById(R.id.signup_email_error);
-			mErrorEmailTextView.setTypeface(face);
-			mErrorPassTextView = (TextView) v.findViewById(R.id.user_info_password_error);
-			mErrorPassTextView.setTypeface(face);
-			mErrorNewPassTextView = (TextView) v.findViewById(R.id.user_info_new_password_error);
-			mErrorNewPassTextView.setTypeface(face);
-			mErrorConfirmPassTextView = (TextView) v.findViewById(R.id.user_info_confirm_new_password_error);
-			mErrorConfirmPassTextView.setTypeface(face);
-			mShowPasswordTextView = (TextView)v.findViewById(R.id.user_info_show_pass);
-			mShowPasswordTextView.setTypeface(face);
-
-			mSaveNewPasswordButton = (Button)v.findViewById(R.id.user_save);
-			mSaveNewPasswordButton.setTypeface(face);
-			mSaveNewPasswordButton.setVisibility(View.GONE);
-			mCancelNewPasswordButton = (Button)v.findViewById(R.id.user_cancel);
-			mCancelNewPasswordButton.setTypeface(face);
-			mCancelNewPasswordButton.setVisibility(View.GONE);
-
-			mPasswordLayout = (LinearLayout)v.findViewById(R.id.user_info_password_layout);
-
-			mSaveUser = (Button)v.findViewById(R.id.view_save_username);
-			mSaveEmail = (Button)v.findViewById(R.id.view_save_email);
-			mSaveStatus = (Button)v.findViewById(R.id.view_save);
-			mCancelUser = (Button)v.findViewById(R.id.view_cancel_username);
-			mCancelEmail = (Button)v.findViewById(R.id.view_cancel_email);
-			mCancelStatus = (Button)v.findViewById(R.id.view_cancel);	
-
-			if(mUser!=null && mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
-				LoadPictureTask setImageTask = new LoadPictureTask(this);
-				setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());
-				Toast.makeText(SimsContext.getContext(), 
-						NetworkRestModule.SERVER_IMG_BASEURL+mUser.getPictureUrl(),
-						Toast.LENGTH_SHORT).show();
+		//username field
+		mUserTitleTextView = (TextView)v.findViewById(R.id.username);
+		mUserTitleTextView.setTypeface(face);
+		//message fiels
+		mUserSnippetTextView= (TextView)v.findViewById(R.id.username_snippet);
+		mUserSnippetTextView.setTypeface(face);
+		//user imgae
+		mUserImage = (ImageButton)v.findViewById(R.id.username_image);
+		//Progress bar
+		mProgressBar = (ProgressBar)v.findViewById(R.id.progressBar);
+		mProgressBar.setVisibility(View.VISIBLE);
+		//change image
+		mUserImage.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onSelectPicture();
 			}
+		});
 
-			mSaveNewPasswordButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					saveNewPassword();
-				}
-			});
-			mSaveUser.setOnClickListener(new View.OnClickListener() {		
-				@Override
-				public void onClick(View v) {
-					saveNewUserName();
-				}
-			});
+		mUserButton = (Button) v.findViewById(R.id.user_info_username_button);
+		mUserButton.setTypeface(face);
+		mEmailButton = (Button) v.findViewById(R.id.user_info_email_button);
+		mEmailButton.setTypeface(face);
 
-			mSaveEmail.setOnClickListener(new View.OnClickListener() {		
-				@Override
-				public void onClick(View v) {
-					saveNewEmail();
-				}
-			});
-			mSaveStatus.setOnClickListener(new View.OnClickListener() {		
-				@Override
-				public void onClick(View v) {
-					saveNewStatus();
-				}
-			});
-			mCancelNewPasswordButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {		
-					mConfirmEditText.setText("");
-					mPassEditText.setText("");
-					mNewPassEditText.setText("");
-					onShowHidePassword();
+		mUserTextView = (TextView) v.findViewById(R.id.user_info_username_text);
+		mUserTextView.setTypeface(face);
 
-				}
-			});
-			mCancelUser.setOnClickListener(new View.OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
-					mErrorUserTextView.setVisibility(TextView.GONE);
-					mUserEditText.setText("");//or mUser.getUserName()?
+		mEmailTextView = (TextView) v.findViewById(R.id.user_info_email_text);
+		mEmailTextView.setTypeface(face);
 
-				}
-			});
-			mCancelEmail.setOnClickListener(new View.OnClickListener() {
+		TextView mStatusTextView = (TextView)v.findViewById(R.id.user_info_status_text);
+		mStatusTextView.setTypeface(face);
 
-				@Override
-				public void onClick(View v) {
-					mErrorEmailTextView.setVisibility(TextView.GONE);
-					mEmailEditText.setText("");//or mUser.getEmail()?
-				}
-			});
-			mCancelStatus.setOnClickListener(new View.OnClickListener() {
+		mUserEditText = (EditText) v.findViewById(R.id.user_info_username);
+		mUserEditText.setTypeface(face);
+		mUserEditText.setVisibility(View.GONE);
 
-				@Override
-				public void onClick(View v) {
-					mStatusEditText.setText("");//or mUser.getStatus()?
-				}
-			});
+		mStatusEditText = (EditText) v.findViewById(R.id.user_info_status);
+		mStatusEditText.setTypeface(face);
 
-			mUserButton.setOnClickListener(new View.OnClickListener() {
+		mEmailEditText =(EditText)  v.findViewById(R.id.sign_up_mail);
+		mEmailEditText.setTypeface(face);
+		mEmailEditText.setVisibility(View.GONE);
 
-				@Override
-				public void onClick(View v) {
-					mUserEditText.setVisibility(View.VISIBLE);
-					mCancelUser.setVisibility(View.VISIBLE);
-					mSaveUser.setVisibility(View.VISIBLE);
+		mPassEditText =(EditText)  v.findViewById(R.id.user_info_old_password);
+		mPassEditText.setTypeface(face);
+		mPassEditText.setVisibility(View.GONE);
 
-					mUserTextView.setVisibility(View.GONE);
-					mUserButton.setVisibility(View.GONE);
+		mNewPassEditText =(EditText)  v.findViewById(R.id.user_info_new_password);
+		mNewPassEditText.setTypeface(face);
+		mNewPassEditText.setVisibility(View.GONE);
 
-				}
-			});
+		mConfirmEditText =(EditText)  v.findViewById(R.id.user_info_confirm_new_password);
+		mConfirmEditText.setTypeface(face);
+		mConfirmEditText.setVisibility(View.GONE);
 
-			mEmailButton.setOnClickListener(new View.OnClickListener() {
+		mErrorUserTextView = (TextView) v.findViewById(R.id.user_info_username_error);
+		mErrorUserTextView.setTypeface(face);
+		mErrorEmailTextView = (TextView) v.findViewById(R.id.signup_email_error);
+		mErrorEmailTextView.setTypeface(face);
+		mErrorPassTextView = (TextView) v.findViewById(R.id.user_info_password_error);
+		mErrorPassTextView.setTypeface(face);
+		mErrorNewPassTextView = (TextView) v.findViewById(R.id.user_info_new_password_error);
+		mErrorNewPassTextView.setTypeface(face);
+		mErrorConfirmPassTextView = (TextView) v.findViewById(R.id.user_info_confirm_new_password_error);
+		mErrorConfirmPassTextView.setTypeface(face);
+		mShowPasswordTextView = (TextView)v.findViewById(R.id.user_info_show_pass);
+		mShowPasswordTextView.setTypeface(face);
 
-				@Override
-				public void onClick(View v) {
-					mEmailEditText.setVisibility(View.VISIBLE);
-					mCancelEmail.setVisibility(View.VISIBLE);
-					mSaveEmail.setVisibility(View.VISIBLE);
+		mSaveNewPasswordButton = (Button)v.findViewById(R.id.user_save);
+		mSaveNewPasswordButton.setTypeface(face);
+		mSaveNewPasswordButton.setVisibility(View.GONE);
+		mCancelNewPasswordButton = (Button)v.findViewById(R.id.user_cancel);
+		mCancelNewPasswordButton.setTypeface(face);
+		mCancelNewPasswordButton.setVisibility(View.GONE);
 
-					mEmailTextView.setVisibility(View.GONE);
-					mEmailButton.setVisibility(View.GONE);
-				}
-			});
+		mPasswordLayout = (LinearLayout)v.findViewById(R.id.user_info_password_layout);
 
-			mShowPasswordTextView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					onShowHidePassword();
-				}
-			});
-			mConfirmEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
-				public void onFocusChange(View v, boolean hasFocus) {
-					if(!hasFocus) {
-						String password = mConfirmEditText.getText().toString();
-						String confirmPassword = mConfirmEditText.getText().toString();
-						if(!confirmPassword.isEmpty() && !AuthUtils.isValidPassword(password, confirmPassword, 6)) {
-							mErrorConfirmPassTextView.setText(R.string.auth_userconfirmpwd_error);
-							mErrorConfirmPassTextView.setVisibility(TextView.VISIBLE);
-						} else {
-							mErrorConfirmPassTextView.setVisibility(TextView.GONE);
-						}
-					}
-				}
-			});
+		mSaveUser = (Button)v.findViewById(R.id.view_save_username);
+		mSaveEmail = (Button)v.findViewById(R.id.view_save_email);
+		mSaveStatus = (Button)v.findViewById(R.id.view_save);
+		mCancelUser = (Button)v.findViewById(R.id.view_cancel_username);
+		mCancelEmail = (Button)v.findViewById(R.id.view_cancel_email);
+		mCancelStatus = (Button)v.findViewById(R.id.view_cancel);	
 
-			mNewPassEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
-				public void onFocusChange(View v, boolean hasFocus) {
-					if(!hasFocus) {
-						String password = mNewPassEditText.getText().toString();
-						if(!password.isEmpty() && !AuthUtils.isValidPassword(password, 6)) {
-							mErrorNewPassTextView.setText(R.string.auth_userpwd_error);
-							mErrorNewPassTextView.setVisibility(TextView.VISIBLE);
-						} else {
-							mErrorNewPassTextView.setVisibility(TextView.GONE);
-						}
-					}
-				}
-			});
-			mEmailEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
-				public void onFocusChange(View v, boolean hasFocus) {
-					if(!hasFocus) {
-						String email = mEmailEditText.getText().toString();
-						if(!email.isEmpty() && !AuthUtils.isValidEmail(email)) {
-							mErrorUserTextView.setText(R.string.auth_usermail_error);
-							mErrorUserTextView.setVisibility(TextView.VISIBLE);
-						} else {
-							mErrorUserTextView.setVisibility(TextView.GONE);
-						}
-					}
-				}
-			});		
-			//unconnect button
-			mUnConnectButton = (Button) v.findViewById(R.id.user_unconnect);
-			//unconnect action
-			mUnConnectButton.setOnClickListener(new View.OnClickListener() {	
-				@Override
-				public void onClick(View v) {
-					NetworkRestModule.resetHttpClient();
-					AuthUtils.unsetSession();
-					Intent intent = new Intent(SimsContext.getContext(), AuthActivity.class);
-					startActivity(intent);
-				}
-			});
-
-			// When user tap DONE key
-			TextView.OnEditorActionListener listenerConfirmPassword = new TextView.OnEditorActionListener() {
-				@Override
-				public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-					if (event==null) {
-						if (actionId==EditorInfo.IME_ACTION_DONE){saveNewPassword();}
-						return false;  // Let system handle all other null KeyEvents
-					} ;
-					return false;
-				}
-			};
-			mConfirmEditText.setOnEditorActionListener(listenerConfirmPassword);
-			if(mUser!=null){
-				if(mUser.getUserName()!=null)
-					mUserTextView.setText(mUser.getUserName());
-				if(mUser.getEmail()!=null)
-					mEmailTextView.setText(mUser.getEmail());
-				if(mUser.getStatus() != null)
-					mStatusEditText.setText(mUser.getStatus());
-			}
-
-			mUserEditText.addTextChangedListener(new TextWatcher() {
-				@Override
-				public void onTextChanged(CharSequence s, int start, int before, int count) {}
-				@Override
-				public void beforeTextChanged(CharSequence s, int start, int count,
-						int after) {}
-				@Override
-				public void afterTextChanged(Editable s) {if(!s.toString().equals(""))checkNewUserName();}
-			});
-			mEmailEditText.addTextChangedListener(new TextWatcher() {
-				@Override
-				public void onTextChanged(CharSequence s, int start, int before, int count) {}
-				@Override
-				public void beforeTextChanged(CharSequence s, int start, int count,
-						int after) {}
-				@Override
-				public void afterTextChanged(Editable s) {if(!s.toString().equals(""))checkNewEmail();}
-			});
-			mPassEditText.addTextChangedListener(new TextWatcher() {
-				@Override
-				public void onTextChanged(CharSequence s, int start, int before, int count) {}
-				@Override
-				public void beforeTextChanged(CharSequence s, int start, int count,
-						int after) {}
-				@Override
-				public void afterTextChanged(Editable s) {
-					checkOldPassword();					
-				}
-			});
-			mNewPassEditText.addTextChangedListener(new TextWatcher() {
-				@Override
-				public void onTextChanged(CharSequence s, int start, int before, int count) {}
-				@Override
-				public void beforeTextChanged(CharSequence s, int start, int count,
-						int after) {}
-				@Override
-				public void afterTextChanged(Editable s) {
-					checkNewPassword();
-
-				}
-			});
-			mConfirmEditText.addTextChangedListener(new TextWatcher() {
-				@Override
-				public void onTextChanged(CharSequence s, int start, int before, int count) {}
-				@Override
-				public void beforeTextChanged(CharSequence s, int start, int count,
-						int after) {}
-				@Override
-				public void afterTextChanged(Editable s) {
-					checkConfirmPassword();
-				}
-			});
+		if(mUser!=null && mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
+			LoadPictureTask setImageTask = new LoadPictureTask(this);
+			setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());
+			Toast.makeText(SimsContext.getContext(), 
+					NetworkRestModule.SERVER_IMG_BASEURL+mUser.getPictureUrl(),
+					Toast.LENGTH_SHORT).show();
 		}
+
+		mSaveNewPasswordButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				saveNewPassword();
+			}
+		});
+		mSaveUser.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				saveNewUserName();
+			}
+		});
+
+		mSaveEmail.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				saveNewEmail();
+			}
+		});
+		mSaveStatus.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				saveNewStatus();
+			}
+		});
+		mCancelNewPasswordButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {		
+				mConfirmEditText.setText("");
+				mPassEditText.setText("");
+				mNewPassEditText.setText("");
+				onShowHidePassword();
+
+			}
+		});
+		mCancelUser.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mErrorUserTextView.setVisibility(TextView.GONE);
+				mUserEditText.setText("");//or mUser.getUserName()?
+
+			}
+		});
+		mCancelEmail.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mErrorEmailTextView.setVisibility(TextView.GONE);
+				mEmailEditText.setText("");//or mUser.getEmail()?
+			}
+		});
+		mCancelStatus.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mStatusEditText.setText("");//or mUser.getStatus()?
+			}
+		});
+
+		mUserButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mUserEditText.setVisibility(View.VISIBLE);
+				mCancelUser.setVisibility(View.VISIBLE);
+				mSaveUser.setVisibility(View.VISIBLE);
+
+				mUserTextView.setVisibility(View.GONE);
+				mUserButton.setVisibility(View.GONE);
+
+			}
+		});
+
+		mEmailButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mEmailEditText.setVisibility(View.VISIBLE);
+				mCancelEmail.setVisibility(View.VISIBLE);
+				mSaveEmail.setVisibility(View.VISIBLE);
+
+				mEmailTextView.setVisibility(View.GONE);
+				mEmailButton.setVisibility(View.GONE);
+			}
+		});
+
+		mShowPasswordTextView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onShowHidePassword();
+			}
+		});
+		mConfirmEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus) {
+					String password = mConfirmEditText.getText().toString();
+					String confirmPassword = mConfirmEditText.getText().toString();
+					if(!confirmPassword.isEmpty() && !AuthUtils.isValidPassword(password, confirmPassword, 6)) {
+						mErrorConfirmPassTextView.setText(R.string.auth_userconfirmpwd_error);
+						mErrorConfirmPassTextView.setVisibility(TextView.VISIBLE);
+					} else {
+						mErrorConfirmPassTextView.setVisibility(TextView.GONE);
+					}
+				}
+			}
+		});
+
+		mNewPassEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus) {
+					String password = mNewPassEditText.getText().toString();
+					if(!password.isEmpty() && !AuthUtils.isValidPassword(password, 6)) {
+						mErrorNewPassTextView.setText(R.string.auth_userpwd_error);
+						mErrorNewPassTextView.setVisibility(TextView.VISIBLE);
+					} else {
+						mErrorNewPassTextView.setVisibility(TextView.GONE);
+					}
+				}
+			}
+		});
+		mEmailEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus) {
+					String email = mEmailEditText.getText().toString();
+					if(!email.isEmpty() && !AuthUtils.isValidEmail(email)) {
+						mErrorUserTextView.setText(R.string.auth_usermail_error);
+						mErrorUserTextView.setVisibility(TextView.VISIBLE);
+					} else {
+						mErrorUserTextView.setVisibility(TextView.GONE);
+					}
+				}
+			}
+		});		
+		//unconnect button
+		mUnConnectButton = (Button) v.findViewById(R.id.user_unconnect);
+		//unconnect action
+		mUnConnectButton.setOnClickListener(new View.OnClickListener() {	
+			@Override
+			public void onClick(View v) {
+				NetworkRestModule.resetHttpClient();
+				AuthUtils.unsetSession();
+				Intent intent = new Intent(SimsContext.getContext(), AuthActivity.class);
+				startActivity(intent);
+			}
+		});
+
+		// When user tap DONE key
+		TextView.OnEditorActionListener listenerConfirmPassword = new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+				if (event==null) {
+					if (actionId==EditorInfo.IME_ACTION_DONE){saveNewPassword();}
+					return false;  // Let system handle all other null KeyEvents
+				} ;
+				return false;
+			}
+		};
+		mConfirmEditText.setOnEditorActionListener(listenerConfirmPassword);
+		if(mUser!=null){
+			if(mUser.getUserName()!=null)
+				mUserTextView.setText(mUser.getUserName());
+			if(mUser.getEmail()!=null)
+				mEmailTextView.setText(mUser.getEmail());
+			if(mUser.getStatus() != null)
+				mStatusEditText.setText(mUser.getStatus());
+		}
+
+		mUserEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {if(!s.toString().equals(""))checkNewUserName();}
+		});
+		mEmailEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {if(!s.toString().equals(""))checkNewEmail();}
+		});
+		mPassEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {
+				checkOldPassword();					
+			}
+		});
+		mNewPassEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {
+				checkNewPassword();
+
+			}
+		});
+		mConfirmEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {
+				checkConfirmPassword();
+			}
+		});
+
 		return v;
 	}
 
@@ -568,18 +567,18 @@ PictureUploadDelegate,OnUserFilledInListener{
 		//We are setting the fields with the fields received from the server
 		mStatusEditText.setText(mUser.getStatus());
 		mUserSnippetTextView.setText(mUser.getStatus());
-		
+
 		mEmailEditText.setText(mUser.getEmail());
 		mEmailTextView.setText(mUser.getEmail());
 
 		mUserEditText.setText(mUser.getUserName());
 		mUserTextView.setText(mUser.getUserName());
 		mUserTitleTextView.setText(mUser.getUserName());
-		
+
 		mSaveNewPasswordButton.setEnabled(true);
-		
-		
-		
+
+
+
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.user_tab_save_ok), 
 				Toast.LENGTH_SHORT).show();
@@ -613,12 +612,12 @@ PictureUploadDelegate,OnUserFilledInListener{
 		final CharSequence[] items = { getString(R.string.select_img_take_photo),
 				getString(R.string.select_img_from_lib),
 				getString(R.string.select_img_close) };
-		
+
 		CameraUtils.removeTempFile();
-		
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 		builder.setTitle(R.string.edit_add_image);
-		
+
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int item) {
@@ -709,8 +708,9 @@ PictureUploadDelegate,OnUserFilledInListener{
 			mUserTextView.setText(mUser.getUserName());
 			mUserTitleTextView.setText(mUser.getUserName());
 		}
-		
-		mProgressBar.setVisibility(View.GONE);
+
+		if(mProgressBar!=null)
+			mProgressBar.setVisibility(View.GONE);
 
 	}
 }

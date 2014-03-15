@@ -125,7 +125,6 @@ implements  ErreurDelegate, LoadPictureTaskInterface,AbsListView.OnItemClickList
 		if (null != mListener) {
 			mListener.onMessageClick(mUser.getMessages().get(position));
 		}		
-		Toast.makeText(getActivity(), "onItemClick", Toast.LENGTH_SHORT).show();
 	}
 	@Override
 	public void onAttach(Activity activity) {

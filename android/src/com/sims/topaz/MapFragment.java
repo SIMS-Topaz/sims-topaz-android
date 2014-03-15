@@ -244,7 +244,7 @@ OnMapLoadedCallback
 		//http://developer.android.com/reference/android/app/Fragment.html
 		//We have to user getChildFragmentManager for nested fragments
 		FragmentManager fm = getFragmentManager(); 
-
+		fm.popBackStack(FRAGMENT_MESSAGE, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,
 				R.drawable.animation_bottom_down);
@@ -396,6 +396,7 @@ OnMapLoadedCallback
 		//http://developer.android.com/reference/android/app/Fragment.html
 		//We have to user getChildFragmentManager
 		FragmentManager fm = getFragmentManager(); 
+		fm.popBackStack(FRAGMENT_COMMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_slide_in_right,
 				R.drawable.animation_none);
@@ -420,6 +421,7 @@ OnMapLoadedCallback
 		//http://developer.android.com/reference/android/app/Fragment.html
 		//We have to user getChildFragmentManager for nested fragments
 		FragmentManager fm = getFragmentManager(); 
+		fm.popBackStack(FRAGMENT_PREVIEW, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		Fragment f = PreviewListFragment.newInstance(previewList);
 		FragmentTransaction transaction = fm.beginTransaction();
 		transaction.setCustomAnimations(R.drawable.animation_bottom_up,

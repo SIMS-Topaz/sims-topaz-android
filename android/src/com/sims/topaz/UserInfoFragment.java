@@ -58,6 +58,9 @@ import android.widget.Toast;
 public class UserInfoFragment  extends Fragment  
 implements UserDelegate, ErreurDelegate, LoadPictureTaskInterface,
 PictureUploadDelegate,OnUserFilledInListener{
+	
+	private enum CHANGED_FIELD {STATUS,USER,EMAIL,PASSWORD,IMAGE};
+	private CHANGED_FIELD mChangedField;
 	private Button mUnConnectButton;
 	private Button mSaveNewPasswordButton;
 	private Button mCancelNewPasswordButton;
@@ -465,25 +468,31 @@ PictureUploadDelegate,OnUserFilledInListener{
 		boolean checkUserName = mUserEditText.getVisibility()== View.VISIBLE;
 		if(checkUserName && checkNewUserName()){
 			mUser.setUserName(username);
+			mChangedField = CHANGED_FIELD.USER;
+			mSaveUser.setEnabled(false);
 			mRestModule.postUserInfo(mUser);
 		}
 	}	
 
 	private void saveNewStatus(){
+		mChangedField = CHANGED_FIELD.STATUS;
 		mUser.setStatus(mStatusEditText.getText().toString());
+		mSaveStatus.setEnabled(false);
 		mRestModule.postUserInfo(mUser);	
 	}
 	private void saveNewEmail(){
+		mChangedField = CHANGED_FIELD.EMAIL;
 		String email = mEmailEditText.getText().toString();
 		boolean checkEmail = mEmailEditText.getVisibility()== View.VISIBLE;
 		if(checkEmail && checkNewEmail()){
 			mUser.setEmail(email);
+			mSaveEmail.setEnabled(false);
 			mRestModule.postUserInfo(mUser);					
 		}
 	}
 
 	private void saveNewPassword(){
-
+		mChangedField = CHANGED_FIELD.PASSWORD;
 		String password = mNewPassEditText.getText().toString();
 		String  oldPassword = mPassEditText.getText().toString();
 		boolean checkPass = mPasswordLayout.getVisibility()== View.VISIBLE;
@@ -568,18 +577,24 @@ PictureUploadDelegate,OnUserFilledInListener{
 	public void afterPostUserInfo(User user) {
 		mUser = user;
 		//We are setting the fields with the fields received from the server
-		mStatusEditText.setText(mUser.getStatus());
-		mUserSnippetTextView.setText(mUser.getStatus());
-
-		mEmailEditText.setText(mUser.getEmail());
-		mEmailTextView.setText(mUser.getEmail());
-
-		mUserEditText.setText(mUser.getUserName());
-		mUserTextView.setText(mUser.getUserName());
-		mUserTitleTextView.setText(mUser.getUserName());
-
-		mSaveNewPasswordButton.setEnabled(true);
-
+		if(mChangedField == CHANGED_FIELD.STATUS){
+			mStatusEditText.setText(mUser.getStatus());
+			mUserSnippetTextView.setText(mUser.getStatus());
+			mSaveStatus.setEnabled(true);
+		}else if(mChangedField == CHANGED_FIELD.EMAIL){
+			mEmailEditText.setText(mUser.getEmail());
+			mEmailTextView.setText(mUser.getEmail());
+			mSaveEmail.setEnabled(true);
+		}else if(mChangedField == CHANGED_FIELD.USER){
+			mUserEditText.setText(mUser.getUserName());
+			mUserTextView.setText(mUser.getUserName());
+			mUserTitleTextView.setText(mUser.getUserName());
+			mSaveUser.setEnabled(true);
+		}else if(mChangedField == CHANGED_FIELD.PASSWORD){
+			mSaveNewPasswordButton.setEnabled(true);
+		}else if(mChangedField == CHANGED_FIELD.IMAGE){
+			mUserImage.setEnabled(true);
+		}
 
 		Toast.makeText(SimsContext.getContext(),
 				getResources().getString(R.string.user_tab_save_ok), 
@@ -685,6 +700,8 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		bitmap.compress(CompressFormat.JPEG, 85, bos);
 		pictureData = bos.toByteArray();
+		mChangedField = CHANGED_FIELD.IMAGE;
+		mUserImage.setEnabled(false);
 		mRestModule.uploadPicture(pictureData);
 		break;
 	}

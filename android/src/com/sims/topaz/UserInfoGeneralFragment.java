@@ -85,9 +85,6 @@ implements  ErreurDelegate, LoadPictureTaskInterface,AbsListView.OnItemClickList
 			if(mUser.getPictureUrl()!=null && !mUser.getPictureUrl().isEmpty()){
 				LoadPictureTask setImageTask = new LoadPictureTask(this);
 				setImageTask.execute(NetworkRestModule.SERVER_IMG_BASEURL + mUser.getPictureUrl());
-				Toast.makeText(SimsContext.getContext(), 
-						NetworkRestModule.SERVER_IMG_BASEURL+mUser.getPictureUrl(),
-						Toast.LENGTH_SHORT).show();
 			}
 		}
 		

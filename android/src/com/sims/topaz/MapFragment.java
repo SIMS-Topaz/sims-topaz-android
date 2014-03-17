@@ -92,7 +92,7 @@ OnMapLoadedCallback
 	//constants
 	private int mZoomLevel = 12; // the zoom of the map (initially)
 	//timers
-	private CountDownTimer timerSeconds =  new CountDownTimer(3000, 1000) {   	
+	private CountDownTimer timerSeconds =  new CountDownTimer(1000, 1000) {   	
 		public void onFinish() {
 			if(mMap!=null && mNetworkModule!=null){
 				VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();

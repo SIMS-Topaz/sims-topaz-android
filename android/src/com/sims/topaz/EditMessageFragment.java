@@ -214,6 +214,9 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 	}
 
 	private void selectImage() {
+		
+		CameraUtils.removeTempFile();
+		
         final CharSequence[] items = { getString(R.string.select_img_take_photo), getString(R.string.select_img_from_lib), getString(R.string.select_img_close) };
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
         builder.setTitle(R.string.edit_add_image);
@@ -224,9 +227,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
                 if (item == 0) {
                     startActivityForResult(CameraUtils.takePicture(), CameraUtils.REQUEST_CODE_TAKE_PICTURE);
                 } else if (item == 1) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setType("image/*");
-                    startActivityForResult(Intent.createChooser(intent, ""), CameraUtils.REQUEST_CODE_GALLERY);
+                    startActivityForResult(CameraUtils.openGallery(), CameraUtils.REQUEST_CODE_GALLERY);
                 } else if (item == 2) {
                     dialog.dismiss();
                 }
@@ -240,7 +241,7 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //if (resultCode == Activity.RESULT_OK)
+        if (resultCode == Activity.RESULT_OK)
         {
         	Bitmap bm = null;
         	
@@ -254,8 +255,6 @@ implements MessageDelegate,PictureUploadDelegate, ErreurDelegate{
             
             if(bm != null) {
             	
-                
-
                 // Get data
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 

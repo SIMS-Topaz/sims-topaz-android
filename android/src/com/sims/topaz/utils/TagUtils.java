@@ -3,6 +3,9 @@ package com.sims.topaz.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import com.sims.topaz.R;
 import com.sims.topaz.network.modele.Preview;
 /**
@@ -12,17 +15,33 @@ import com.sims.topaz.network.modele.Preview;
  */
 public class TagUtils {
 	
-	public static final String TAG_SUN="#sun";
-	public static final String TAG_RESTAURANT="#restaurant";
-	public static final String TAG_PARTY="#party";
-	public static final String TAG_PIZZA="#pizza";
-	public static final String TAG_SHOPPING="#shopping";
-	public static final String TAG_SCHOOL="#school";
-	public static final String TAG_MUSIC="#music";
-	public static final String TAG_HOSPITAL="#hospital";
-	public static final String TAG_CAR="#car";
-	public static final String TAG_CYCLE="#cycle";
-	public static final String TAG="#tag";
+	public static void setTagUtils() {
+		Resources mResources = SimsContext.getContext().getResources(); 
+		TagUtils.TAG_SUN = mResources.getString(R.string.sun);
+		TagUtils.TAG_RESTAURANT = mResources.getString(R.string.restaurant);
+		TagUtils.TAG_PARTY = mResources.getString(R.string.party);
+		TagUtils.TAG_PIZZA = mResources.getString(R.string.pizza);
+		TagUtils.TAG_SHOPPING = mResources.getString(R.string.shopping);
+		TagUtils.TAG_SCHOOL = mResources.getString(R.string.school);
+		TagUtils.TAG_MUSIC = mResources.getString(R.string.music);
+		TagUtils.TAG_HOSPITAL = mResources.getString(R.string.hospital);
+		TagUtils.TAG_CAR = mResources.getString(R.string.car);
+		TagUtils.TAG_CYCLE = mResources.getString(R.string.cycle);
+		TagUtils.TAG = mResources.getString(R.string.tag);
+	}
+
+	  
+	public static String TAG_SUN = "";
+	public static String TAG_RESTAURANT = "";
+	public static String TAG_PARTY = "";
+	public static String TAG_PIZZA = "";
+	public static String TAG_SHOPPING = "";
+	public static String TAG_SCHOOL = "";
+	public static String TAG_MUSIC = "";
+	public static String TAG_HOSPITAL = "";
+	public static String TAG_CAR = "";
+	public static String TAG_CYCLE = "";
+	public static String TAG = "";
 	
 	
 	public static List<String> getAllTags(){

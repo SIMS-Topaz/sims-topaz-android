@@ -80,10 +80,8 @@ public class TagSuggestionAdapter extends ArrayAdapter<String> {
 		}
 		
 		if (list.get(position) != null) {
-			int resId = activity.getResources().getIdentifier(
-					//remove the '#' caracter
-					list.get(position).replace("#", ""), "string",  activity.getPackageName());
-			holder.mTextView.setText("#" + SimsContext.getString(resId));
+			
+			holder.mTextView.setText(list.get(position).replace("#", ""));
 			
 			int drawableId = TagUtils.getDrawableForTag(list.get(position));
 			

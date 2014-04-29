@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="restaurant">restaurant</string>
-    <string name="party">soirée</string>
-    <string name="pizza">pizza</string>
-    <string name="shopping">shopping</string>
-    <string name="school">école</string>
-    <string name="music">musique</string>
-    <string name="hospital">hôpital</string>
-    <string name="sun">soleil</string>
-    <string name="car">transport</string>
-    <string name="cycle">vélo</string>
+    <string name="restaurant">#restaurant</string>
+    <string name="party">#soiree</string>
+    <string name="pizza">#pizza</string>
+    <string name="shopping">#shopping</string>
+    <string name="school">#ecole</string>
+    <string name="music">#musique</string>
+    <string name="hospital">#hopital</string>
+    <string name="sun">#soleil</string>
+    <string name="car">#transport</string>
+    <string name="cycle">#velo</string>
+     <string name="tag">#tag</string>
 </resources>

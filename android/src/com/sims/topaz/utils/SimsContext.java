@@ -10,6 +10,7 @@ public class SimsContext {
 
 	public static void setContext(Context context) {
 		SimsContext.context = context;
+		TagUtils.setTagUtils();
 	}
 	public static Context getContext() {
 		return context;

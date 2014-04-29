@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.util.LruCache;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +26,14 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 
 	private int count = 0;
 	private byte[] image;
+	//tutorial: https://developer.android.com/training/displaying-bitmaps/display-bitmap.html
+	private Bitmap mImageBitmap = null;
+	
 	public UserMessageAdapter(Context mDelegate, int resource, List<Message> messagesList,byte[] mImage) {
 		super(mDelegate, resource, messagesList);
 		this.image = mImage;
 		count = messagesList.size();
+		
 	}	
 	
 	@Override
@@ -56,12 +61,15 @@ public class UserMessageAdapter extends ArrayAdapter<Message>  {
 			holder.mMessageDate.setTypeface(MyTypefaceSingleton.getInstance().getTypeFace());
 
 			holder.mUserImage = (ImageView) view.findViewById(R.id.message_item_image);
+
 			if(image!=null){
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inJustDecodeBounds = true;
-				options.inSampleSize = CameraUtils.calculateInSampleSize(options, 32, 32);
-				Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length,options);
-				holder.mUserImage.setBackgroundDrawable(new BitmapDrawable(SimsContext.getContext().getResources(),bmp));
+				if(mImageBitmap==null){
+					BitmapFactory.Options options = new BitmapFactory.Options();
+					options.inJustDecodeBounds = true;
+					options.inSampleSize = CameraUtils.calculateInSampleSize(options, 32, 32);
+					mImageBitmap = BitmapFactory.decodeByteArray(image, 0, image.length,options);
+				}
+				holder.mUserImage.setBackgroundDrawable(new BitmapDrawable(SimsContext.getContext().getResources(),mImageBitmap));
 			}			
 			view.setTag(holder);
 		} else {

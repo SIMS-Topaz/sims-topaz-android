@@ -1,6 +1,8 @@
 package com.sims.topaz;
 
 
+import java.util.List;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.interfaces.OnMoveCamera;
+import com.sims.topaz.interfaces.OnSetTagFilterListener;
 import com.sims.topaz.interfaces.OnShowUserProfile;
 import com.sims.topaz.network.modele.Message;
 import com.sims.topaz.network.modele.Preview;
@@ -38,7 +41,7 @@ public class DrawerActivity extends ActionBarActivity
 				OnShowUserProfile,
 				PreviewListFragment.OnPreviewClickListener,
 				UserCommentFragment.OnMessageClickListener,
-				PlaceSearchFragment.onGetMapListener
+				OnSetTagFilterListener
 				{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
@@ -300,10 +303,6 @@ public class DrawerActivity extends ActionBarActivity
 		return mLastFragment;
 	}
 
-	@Override
-	public GoogleMap onGetMap(){
-		return mMapFragment.getMap();
-	}
 
 	@Override
 	public void onMessageClick(Message message) {
@@ -315,6 +314,15 @@ public class DrawerActivity extends ActionBarActivity
 		transaction.replace(R.id.fragment_container, fragment);
 		transaction.addToBackStack(FRAGMENT_COMMENT);
 		transaction.commit();		
+	}
+
+
+	@Override
+	public void onSetTagFilter(List<String> tagFilterList) {
+		if(mMapFragment!=null){
+			mMapFragment.onSetTagFilter(tagFilterList);
+		}
+		
 	}
 	
 

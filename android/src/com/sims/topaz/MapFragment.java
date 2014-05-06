@@ -1,4 +1,6 @@
 package com.sims.topaz;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.ClusterManager.OnClusterInfoWindowClickListener;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.sims.topaz.adapter.BulleAdapter;
+import com.sims.topaz.interfaces.OnSetTagFilterListener;
 import com.sims.topaz.modele.PreviewClusterItem;
 import com.sims.topaz.network.NetworkRestModule;
 import com.sims.topaz.network.interfaces.ErreurDelegate;
@@ -66,15 +69,17 @@ ClusterManager.OnClusterItemClickListener<PreviewClusterItem>,
 OnClusterInfoWindowClickListener<PreviewClusterItem>,
 OnCameraChangeListener,
 LocationListener,
-OnMapLoadedCallback
+OnMapLoadedCallback,
+OnSetTagFilterListener
 {
 
 	public static String FRAGMENT_PREVIEW = "fragment_preview";
 	public static String FRAGMENT_MESSAGE = "fragment_message";
 	public static String FRAGMENT_COMMENT = "fragment_comment";
-	
+
 	private GoogleMap mMap;
 	private static View mView;
+	private List<String> mFilterTagList = null;
 
 	// A request to connect to Location Services
 	private LocationRequest mLocationRequest;
@@ -94,10 +99,7 @@ OnMapLoadedCallback
 	//timers
 	private CountDownTimer timerSeconds =  new CountDownTimer(1000, 1000) {   	
 		public void onFinish() {
-			if(mMap!=null && mNetworkModule!=null){
-				VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-				mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
-			}
+			getPreviews();
 		}
 
 		@Override
@@ -106,10 +108,7 @@ OnMapLoadedCallback
 	};
 	private CountDownTimer timerOneMinute =  new CountDownTimer(60000, 1000) {
 		public void onFinish() {
-			if(mMap!=null && mNetworkModule!=null){
-				VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-				mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
-			}
+			getPreviews();
 		}
 
 		@Override
@@ -117,7 +116,23 @@ OnMapLoadedCallback
 		}
 	};
 
-
+	private void getPreviews(){
+		if(mMap!=null && mNetworkModule!=null){
+			if(mFilterTagList == null || mFilterTagList.isEmpty()){
+				VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+				mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+			}else{
+				//TODO: there is at least one filter (onely the first is taken into consideration)
+				VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+				try {
+					mNetworkModule.getPreviewsByTag(visibleRegion.farLeft, visibleRegion.nearRight, 
+							URLEncoder.encode(mFilterTagList.get(0).replaceAll("#", ""), "utf8"));
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	/**
 	 * This method will only be called once when the retained
 	 * Fragment is first created.
@@ -441,8 +456,7 @@ OnMapLoadedCallback
 	}
 	@Override
 	public void onLocationChanged(Location location) {
-		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 	
+		getPreviews();	
 		if(mCurrentLocation==null){
 			LocationUtils.onChangeCameraZoom(mCurrentLocation, mZoomLevel, mMap);
 		}
@@ -451,8 +465,7 @@ OnMapLoadedCallback
 	@Override
 	public void onMapLoaded() {	
 		mCurrentCameraPosition = mMap.getCameraPosition();
-		VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-		mNetworkModule.getPreviews(visibleRegion.farLeft, visibleRegion.nearRight); 
+		getPreviews();
 		LocationUtils.onChangeCameraZoom(mMap.getMyLocation(), mZoomLevel, mMap);
 	}
 	/**
@@ -504,4 +517,16 @@ OnMapLoadedCallback
 		return null;
 	}
 
+	@Override
+	public void onSetTagFilter(List<String> tagFilterList) {
+		if(mFilterTagList == null){
+			mFilterTagList = new ArrayList<String>();
+		}
+		this.mFilterTagList.clear();
+		mFilterTagList.addAll(tagFilterList);
+		getPreviews();
+	}
+
+
 }
+

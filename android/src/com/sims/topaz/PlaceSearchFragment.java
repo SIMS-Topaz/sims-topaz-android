@@ -55,11 +55,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class PlaceSearchFragment extends Fragment implements MessageDelegate,ErreurDelegate {
+public class PlaceSearchFragment extends Fragment  {
 
 	private AutoCompleteTextView autoCompView;
 	private Button clearText;
-	private NetworkRestModule mNetworkModule;
 	OnMoveCamera mCallback;
 
 	@Override
@@ -83,7 +82,6 @@ public class PlaceSearchFragment extends Fragment implements MessageDelegate,Err
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		mNetworkModule = new NetworkRestModule(this);
 	}
 
 	@Override
@@ -150,9 +148,7 @@ public class PlaceSearchFragment extends Fragment implements MessageDelegate,Err
 		});
 	}
 
-	public interface onGetMapListener {
-		public GoogleMap onGetMap();
-	}
+
 
 	//Adapter
 	private class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
@@ -226,19 +222,9 @@ public class PlaceSearchFragment extends Fragment implements MessageDelegate,Err
 		}
 
 		private void onExecuteSearch(String input){
-			VisibleRegion visibleRegion = ((DrawerActivity)mCallback).onGetMap().getProjection().getVisibleRegion();
-			LatLng mFarLeft = new LatLng(visibleRegion.farLeft.latitude, visibleRegion.farLeft.longitude);
-			LatLng mNearRight = new LatLng(visibleRegion.farRight.latitude, visibleRegion.farRight.longitude);
-
-			if( mFarLeft != null &&mNearRight !=null && mNetworkModule != null ){	
-				try {
-					mNetworkModule.getPreviewsByTag(mFarLeft, mNearRight, 
-							URLEncoder.encode(input.replaceAll("#", ""), "utf8"));
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-
-			}	
+			List<String> listTags = new ArrayList<String>();
+			listTags.add(input);
+			((DrawerActivity)mCallback).onSetTagFilter(listTags);
 		}
 
 		@Override
@@ -372,38 +358,5 @@ public class PlaceSearchFragment extends Fragment implements MessageDelegate,Err
 		}
 	}
 
-	@Override
-	public void apiError(ApiError error) {
 
-		Toast.makeText(SimsContext.getContext(),
-				getResources().getString(R.string.erreur_gen),
-				Toast.LENGTH_SHORT).show();		
-
-	}
-
-	@Override
-	public void networkError() {
-		Toast.makeText(SimsContext.getContext(),
-				getResources().getString(R.string.erreur_gen),
-				Toast.LENGTH_SHORT).show();
-
-	}
-
-	@Override
-	public void afterPostMessage(Message message) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void afterGetMessage(Message message) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void afterGetPreviews(List<Preview> list) {
-		//TODO
-		Toast.makeText(SimsContext.getContext(), "TODO filer messages on the map", Toast.LENGTH_SHORT).show();
-	}	
 }

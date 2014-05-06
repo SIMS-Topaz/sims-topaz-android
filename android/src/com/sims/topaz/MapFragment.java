@@ -72,7 +72,7 @@ OnMapLoadedCallback
 	public static String FRAGMENT_PREVIEW = "fragment_preview";
 	public static String FRAGMENT_MESSAGE = "fragment_message";
 	public static String FRAGMENT_COMMENT = "fragment_comment";
-
+	
 	private GoogleMap mMap;
 	private static View mView;
 

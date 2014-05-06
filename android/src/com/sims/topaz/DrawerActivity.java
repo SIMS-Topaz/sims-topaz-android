@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.sims.topaz.adapter.DrawerAdapter;
 import com.sims.topaz.interfaces.OnMoveCamera;
@@ -36,7 +37,8 @@ public class DrawerActivity extends ActionBarActivity
 				OnMoveCamera, 
 				OnShowUserProfile,
 				PreviewListFragment.OnPreviewClickListener,
-				UserCommentFragment.OnMessageClickListener
+				UserCommentFragment.OnMessageClickListener,
+				PlaceSearchFragment.onGetMapListener
 				{
 	//see http://developer.android.com/guide/topics/ui/actionbar.html
 	//in order 
@@ -298,6 +300,10 @@ public class DrawerActivity extends ActionBarActivity
 		return mLastFragment;
 	}
 
+	@Override
+	public GoogleMap onGetMap(){
+		return mMapFragment.getMap();
+	}
 
 	@Override
 	public void onMessageClick(Message message) {
